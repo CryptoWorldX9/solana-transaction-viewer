@@ -1,7 +1,7 @@
 const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2';
 const coingeckoUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd';
 const coingeckoTokenUrl = 'https://api.coingecko.com/api/v3/simple/token_price/solana?contract_addresses={ADDRESSES}&vs_currencies=usd';
-const dexscreenerApiUrl = 'https://api.dexscreener.com/latest/dex/pairs/solana'; // API simulada
+const coingeckoMarketsUrl = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=meme-token&order=volume_desc&per_page=10&page=1&sparkline=false';
 
 const tokenNames = {
     'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDC',
@@ -335,37 +335,33 @@ function displayTransactions(transactions, container) {
     });
 }
 
-// Carrusel de memecoins
+// Carrusel de memecoins con CoinGecko
 async function updateMemecoinCarousel() {
     try {
-        // Simulación de datos de DexScreener (API real requiere integración)
-        const response = await fetch(dexscreenerApiUrl);
-        const data = await response.json();
-        const topMemecoins = data.pairs
-            .filter(pair => pair.chainId === 'solana' && pair.volume.h1 > 100000) // Ejemplo: volumen > $100k en la última hora
-            .sort((a, b) => b.volume.h1 - a.volume.h1)
-            .slice(0, 5); // Top 5
+        const response = await fetch(coingeckoMarketsUrl);
+        const topMemecoins = await response.json();
 
         const carousel = document.getElementById('memecoinCarousel');
         carousel.innerHTML = '';
 
-        topMemecoins.forEach((coin, index) => {
+        topMemecoins.forEach((coin) => {
             const item = document.createElement('div');
             item.className = 'carousel-item';
             item.innerHTML = `
-                <img src="${coin.info?.imageUrl || 'https://via.placeholder.com/30?text=' + coin.baseToken.symbol}" alt="${coin.baseToken.symbol}">
-                <span>${coin.baseToken.symbol}</span>
+                <img src="${coin.image || 'https://via.placeholder.com/30?text=' + coin.symbol}" alt="${coin.symbol}">
+                <span>${coin.symbol.toUpperCase()}</span>
             `;
             item.addEventListener('click', () => {
                 const iframe = document.getElementById('dexscreenerFrame');
-                iframe.src = `https://dexscreener.com/solana/${coin.pairAddress}`;
+                // Aproximación: usamos coin.id para DexScreener (puede no ser exacto para Solana)
+                iframe.src = `https://dexscreener.com/solana/${coin.id}`;
                 iframe.style.display = 'block';
                 iframe.scrollIntoView({ behavior: 'smooth' });
             });
             carousel.appendChild(item);
         });
 
-        // Animación simple del carrusel
+        // Animación del carrusel
         let offset = 0;
         setInterval(() => {
             offset -= 1;
@@ -373,12 +369,12 @@ async function updateMemecoinCarousel() {
             carousel.style.transform = `translateX(${offset}px)`;
         }, 50);
     } catch (error) {
-        console.error('Error fetching memecoins:', error);
+        console.error('Error fetching memecoins from CoinGecko:', error);
         const carousel = document.getElementById('memecoinCarousel');
         carousel.innerHTML = '<span>Error loading memecoins</span>';
     }
 }
 
-// Actualizar cada minuto
+// Actualizar cada 5 minutos
 updateMemecoinCarousel();
-setInterval(updateMemecoinCarousel, 60000);
+setInterval(updateMemecoinCarousel, 300000); // 5 minutos
