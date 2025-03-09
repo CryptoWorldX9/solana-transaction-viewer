@@ -1,6 +1,7 @@
 const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2';
 const coingeckoUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd';
 const coingeckoTokenUrl = 'https://api.coingecko.com/api/v3/simple/token_price/solana?contract_addresses={ADDRESSES}&vs_currencies=usd';
+const dexscreenerApiUrl = 'https://api.dexscreener.com/latest/dex/pairs/solana'; // API simulada
 
 const tokenNames = {
     'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDC',
@@ -223,7 +224,7 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
             labels: ['SOL', 'SPL Tokens'],
             datasets: [{
                 data: [solBalance, tokenBalances],
-                backgroundColor: ['#00D4FF', '#007ACC'], /* Colores de Arkham */
+                backgroundColor: ['#00D4FF', '#007ACC'],
                 borderWidth: 2,
                 borderColor: '#FFFFFF',
                 shadowOffsetX: 5,
@@ -264,11 +265,11 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
             datasets: [{
                 label: 'Current Wallet',
                 data: [{ x: 0, y: 0, r: 20 }],
-                backgroundColor: '#00D4FF', /* Azul eléctrico */
+                backgroundColor: '#00D4FF',
             }, {
                 label: 'Related Wallets',
                 data: totalTxData.slice(0, 5).map((_, i) => ({ x: Math.random() * 10 - 5, y: Math.random() * 10 - 5, r: 10 })),
-                backgroundColor: '#007ACC', /* Azul más oscuro */
+                backgroundColor: '#007ACC',
             }]
         },
         options: {
@@ -282,14 +283,6 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
                 y: { display: false }
             }
         }
-    });
-
-    document.querySelectorAll('.ticker-items a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const tokenId = link.getAttribute('data-token');
-            window.open(`https://www.coingecko.com/en/coins/${tokenId}`, '_blank');
-        });
     });
 }
 
@@ -341,3 +334,51 @@ function displayTransactions(transactions, container) {
         window.URL.revokeObjectURL(url);
     });
 }
+
+// Carrusel de memecoins
+async function updateMemecoinCarousel() {
+    try {
+        // Simulación de datos de DexScreener (API real requiere integración)
+        const response = await fetch(dexscreenerApiUrl);
+        const data = await response.json();
+        const topMemecoins = data.pairs
+            .filter(pair => pair.chainId === 'solana' && pair.volume.h1 > 100000) // Ejemplo: volumen > $100k en la última hora
+            .sort((a, b) => b.volume.h1 - a.volume.h1)
+            .slice(0, 5); // Top 5
+
+        const carousel = document.getElementById('memecoinCarousel');
+        carousel.innerHTML = '';
+
+        topMemecoins.forEach((coin, index) => {
+            const item = document.createElement('div');
+            item.className = 'carousel-item';
+            item.innerHTML = `
+                <img src="${coin.info?.imageUrl || 'https://via.placeholder.com/30?text=' + coin.baseToken.symbol}" alt="${coin.baseToken.symbol}">
+                <span>${coin.baseToken.symbol}</span>
+            `;
+            item.addEventListener('click', () => {
+                const iframe = document.getElementById('dexscreenerFrame');
+                iframe.src = `https://dexscreener.com/solana/${coin.pairAddress}`;
+                iframe.style.display = 'block';
+                iframe.scrollIntoView({ behavior: 'smooth' });
+            });
+            carousel.appendChild(item);
+        });
+
+        // Animación simple del carrusel
+        let offset = 0;
+        setInterval(() => {
+            offset -= 1;
+            if (offset <= -110 * topMemecoins.length) offset = 0;
+            carousel.style.transform = `translateX(${offset}px)`;
+        }, 50);
+    } catch (error) {
+        console.error('Error fetching memecoins:', error);
+        const carousel = document.getElementById('memecoinCarousel');
+        carousel.innerHTML = '<span>Error loading memecoins</span>';
+    }
+}
+
+// Actualizar cada minuto
+updateMemecoinCarousel();
+setInterval(updateMemecoinCarousel, 60000);
