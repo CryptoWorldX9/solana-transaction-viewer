@@ -3,32 +3,9 @@ const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3NDE0Nz
 
 // Función principal para obtener datos de la wallet
 async function fetchWalletData() {
-    async function fetchWalletData() {
-        const walletAddress = document.getElementById('walletAddress').value.trim();
-        const walletInfoDiv = document.getElementById('walletInfo');
-        const transactionListDiv = document.getElementById('transactionList');
-    
-        if (!walletAddress) {
-            alert('Por favor, ingresa una dirección de wallet válida.');
-            return;
-        }
-    
-        walletInfoDiv.innerHTML = '<div class="loader"></div>';
-        transactionListDiv.innerHTML = '<div class="loader"></div>';
-    
-        // Resto del código...
-    }
-
-    if (!walletAddress) {
-        alert('Por favor, ingresa una dirección de wallet válida.');
-        return;
-    }
-
-    walletInfoDiv.innerHTML = '<div class="loader"></div>';
-    transactionListDiv.innerHTML = '<div class="loader"></div>';
-
-    // Resto del código...
-}
+    const walletAddress = document.getElementById('walletAddress').value.trim();
+    const walletInfoDiv = document.getElementById('walletInfo');
+    const transactionListDiv = document.getElementById('transactionList');
 
     if (!walletAddress) {
         alert('Por favor, ingresa una dirección de wallet válida.');
