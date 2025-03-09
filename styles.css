@@ -86,13 +86,13 @@ body {
     right: 0;
     z-index: 10;
     box-sizing: border-box;
-    max-width: calc(100% - 250px); /* Limita el ancho máximo */
+    max-width: calc(100% - 250px);
 }
 
 .token-ticker {
     display: flex;
     align-items: center;
-    flex-shrink: 1; /* Permite que se ajuste */
+    flex-shrink: 1;
     overflow: hidden;
 }
 
@@ -102,28 +102,44 @@ body {
     white-space: nowrap;
 }
 
-.ticker-items {
+.carousel {
     display: flex;
     overflow: hidden;
+    width: 300px; /* Ancho fijo para 5 elementos */
+    height: 50px;
+    position: relative;
 }
 
-.ticker-items a {
+.carousel-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px; /* Ancho mínimo por elemento */
+    height: 100%;
+    background: #2A2A2A;
+    margin-right: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item img {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+.carousel-item span {
     color: #00D4FF;
-    margin-right: 15px;
-    text-decoration: none;
     font-weight: bold;
-    white-space: nowrap;
-}
-
-.ticker-items a:hover {
-    color: #007ACC;
+    font-size: 14px;
 }
 
 .top-icons {
     display: flex;
     align-items: center;
-    flex-shrink: 0; /* Evita que se comprima */
-    padding-right: 10px; /* Espacio extra a la derecha */
+    flex-shrink: 0;
+    padding-right: 10px;
 }
 
 .top-icons i {
@@ -287,7 +303,6 @@ tr:hover {
     display: block;
 }
 
-/* Media Queries para responsividad */
 @media (max-width: 768px) {
     .top-bar {
         padding: 10px;
@@ -296,6 +311,14 @@ tr:hover {
     .token-ticker {
         flex-wrap: nowrap;
         overflow-x: auto;
+    }
+
+    .carousel {
+        width: 200px; /* Reduce el ancho en pantallas pequeñas */
+    }
+
+    .carousel-item {
+        min-width: 80px; /* Reduce el ancho de los ítems */
     }
 
     .top-icons i {
