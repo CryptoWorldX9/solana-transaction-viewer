@@ -220,7 +220,7 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
         <h3>Distribución del Saldo</h3>
         <canvas id="balanceChart" width="300" height="150"></canvas>
         <h3>Mapa de Relaciones (Simulación)</h3>
-        <canvas id="bubbleMap" width="300" height="150"></canvas>
+        <canvas id="bubbleMap" width="400" height="200"></canvas>
     `;
 
     container.innerHTML = html;
