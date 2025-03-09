@@ -30,12 +30,8 @@
     <div class="main-content">
         <div class="top-bar">
             <div class="token-ticker">
-                <span>Top Tokens: </span>
-                <div class="ticker-items">
-                    <a href="#" data-token="solana">SOL</a>
-                    <a href="#" data-token="usdc">USDC</a>
-                    <a href="#" data-token="usdt">USDT</a>
-                </div>
+                <span>Top Memecoins (Last Hour):</span>
+                <div class="carousel" id="memecoinCarousel"></div>
             </div>
             <div class="top-icons">
                 <i class="fas fa-user"></i>
@@ -53,6 +49,7 @@
                 <div id="walletInfo"></div>
                 <div id="transactionList"></div>
             </div>
+            <iframe id="dexscreenerFrame" style="display: none; width: 100%; max-width: 800px; height: 600px; border: none; margin-top: 20px;"></iframe>
         </div>
     </div>
     <script src="script.js"></script>
