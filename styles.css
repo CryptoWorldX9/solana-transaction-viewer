@@ -117,9 +117,16 @@ tr:hover {
     color: #333;
 }
 
-#balanceChart, #bubbleMap {
-    max-width: 400px;
-    max-height: 200px;
+#balanceChart {
+    max-width: 500px; /* Aumenta el tamaño máximo */
+    max-height: 300px;
+    margin: 20px auto;
+    display: block;
+}
+
+#bubbleMap {
+    max-width: 300px;
+    max-height: 150px;
     margin: 20px auto;
     display: block;
 }
