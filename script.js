@@ -2,6 +2,15 @@ const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-
 const coingeckoUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd';
 const coingeckoTokenUrl = 'https://api.coingecko.com/api/v3/simple/token_price/solana?contract_addresses={ADDRESSES}&vs_currencies=usd';
 
+// Lista de tokens populares (mint -> nombre)
+const tokenNames = {
+    'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDC',
+    'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': 'USDT',
+    'So11111111111111111111111111111111111111112': 'SOL',
+    '7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj': 'stSOL',
+    // Agrega más tokens según necesites
+};
+
 async function fetchWalletData() {
     const walletAddress = document.getElementById('walletAddress').value.trim();
     const walletInfoDiv = document.getElementById('walletInfo');
@@ -16,12 +25,10 @@ async function fetchWalletData() {
     transactionListDiv.innerHTML = '<p>Cargando transacciones...</p>';
 
     try {
-        // Precio de SOL
         const priceResponse = await fetch(coingeckoUrl);
         const priceData = await priceResponse.json();
         const solPriceUSD = priceData.solana.usd;
 
-        // Información de la wallet
         const walletResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -34,7 +41,6 @@ async function fetchWalletData() {
         });
         const walletData = await walletResponse.json();
 
-        // Tokens SPL
         const tokenResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -47,7 +53,6 @@ async function fetchWalletData() {
         });
         const tokenData = await tokenResponse.json();
 
-        // Precios de tokens SPL
         let tokenPrices = {};
         if (tokenData.result.value && tokenData.result.value.length > 0) {
             const tokenAddresses = tokenData.result.value.map(t => t.account.data.parsed.info.mint).join(',');
@@ -55,7 +60,6 @@ async function fetchWalletData() {
             tokenPrices = await tokenPriceResponse.json();
         }
 
-        // Transacciones recientes
         const txResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -68,7 +72,6 @@ async function fetchWalletData() {
         });
         const txData = await txResponse.json();
 
-        // Total de transacciones
         const totalTxResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -81,7 +84,6 @@ async function fetchWalletData() {
         });
         const totalTxData = await totalTxResponse.json();
 
-        // TPS de la red
         const tpsResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -130,20 +132,24 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
                         <th>Token</th>
                         <th>Cantidad</th>
                         <th>Valor USD</th>
+                        <th>% del Supply</th>
                     </tr>
                 </thead>
                 <tbody>
         `;
         tokenAccounts.forEach(t => {
             const mint = t.account.data.parsed.info.mint;
+            const tokenName = tokenNames[mint] || `${mint.slice(0, 8)}...`;
             const amount = t.account.data.parsed.info.tokenAmount.uiAmount;
             const priceUSD = tokenPrices[mint] ? tokenPrices[mint].usd : 'N/A';
             const totalUSD = priceUSD !== 'N/A' ? (amount * priceUSD).toFixed(2) : 'N/A';
+            const supplyPercent = t.account.data.parsed.info.tokenAmount.uiAmount / 1e9 * 100; // Ejemplo simplificado
             tokenHtml += `
                 <tr>
-                    <td><span class="token-${mint.slice(0, 8)}">${mint.slice(0, 8)}...</span></td>
-                    <td>${amount}</td>
+                    <td>${tokenName}</td>
+                    <td>${amount.toFixed(4)}</td>
                     <td>$${totalUSD}</td>
+                    <td>${supplyPercent.toFixed(2)}%</td>
                 </tr>
             `;
         });
@@ -202,7 +208,8 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
         </table>
         <h3>Distribución del Saldo</h3>
         <canvas id="balanceChart" width="300" height="150"></canvas>
-        <a href="https://app.bubblemaps.io/sol/address/${walletAddress}" target="_blank" class="bubblemaps-link">Ver en BubbleMaps</a>
+        <h3>Mapa de Relaciones (Simulación)</h3>
+        <canvas id="bubbleMap" width="300" height="150"></canvas>
     `;
 
     container.innerHTML = html;
@@ -222,6 +229,34 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
             plugins: {
                 legend: { position: 'top' },
                 title: { display: true, text: 'Proporción de Activos' }
+            }
+        }
+    });
+
+    // Simulación de BubbleMaps
+    const bubbleCtx = document.getElementById('bubbleMap').getContext('2d');
+    new Chart(bubbleCtx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Wallet Actual',
+                data: [{ x: 0, y: 0, r: 20 }],
+                backgroundColor: '#00C4B4',
+            }, {
+                label: 'Wallets Relacionadas',
+                data: totalTxData.slice(0, 5).map((_, i) => ({ x: Math.random() * 10 - 5, y: Math.random() * 10 - 5, r: 10 })),
+                backgroundColor: '#1E88E5',
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: true, text: 'Relaciones Simuladas' }
+            },
+            scales: {
+                x: { display: false },
+                y: { display: false }
             }
         }
     });
