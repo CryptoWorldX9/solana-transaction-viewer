@@ -17,7 +17,7 @@ body {
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centra el contenido verticalmente */
+    justify-content: center;
 }
 
 .logo {
@@ -36,7 +36,7 @@ body {
 .menu {
     list-style: none;
     padding: 0;
-    margin: 0 auto; /* Centra el menú horizontalmente */
+    margin: 0 auto;
     width: 100%;
 }
 
@@ -69,12 +69,13 @@ body {
 
 .main-content {
     margin-left: 250px;
-    padding: 20px;
+    padding: 0; /* Quitamos padding para usar el espacio completo */
     background-color: #0A0A0A;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra el contenido horizontalmente */
+    align-items: center;
+    justify-content: center; /* Centra verticalmente todo el contenido */
 }
 
 .top-bar {
@@ -86,6 +87,11 @@ body {
     border-bottom: 1px solid #00D4FF;
     width: 100%;
     max-width: 1200px;
+    position: fixed;
+    top: 0;
+    left: 250px;
+    right: 0;
+    z-index: 10;
 }
 
 .token-ticker {
@@ -147,18 +153,20 @@ body {
     align-items: center;
     width: 100%;
     max-width: 1200px;
-    flex-grow: 1; /* Permite que el contenido ocupe el espacio disponible */
+    padding-top: 60px; /* Espacio para la barra superior fija */
+    flex-grow: 1;
+    justify-content: center; /* Centra verticalmente el contenido */
 }
 
 .viewer-section {
-    margin-top: 100px; /* Mueve el buscador más abajo */
-    text-align: center;
+    text-align: center; /* Centra el título y el buscador */
 }
 
 h1 {
     color: #00D4FF;
     font-size: 36px;
     margin-bottom: 20px;
+    text-align: center; /* Asegura que el título esté centrado */
 }
 
 .input-section {
@@ -207,72 +215,4 @@ button:hover {
     background: #1A1A1A;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    margin-bottom: 20px;
-    width: 100%;
-    max-width: 800px; /* Limita el ancho para mejor centrado */
-}
-
-h3 {
-    color: #00D4FF;
-    margin-bottom: 10px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #2A2A2A;
-}
-
-th {
-    background: linear-gradient(135deg, #00D4FF, #007ACC);
-    color: #FFFFFF;
-}
-
-tr:nth-child(even) {
-    background-color: #2A2A2A;
-}
-
-tr:hover {
-    background-color: #3A3A3A;
-}
-
-.token-table {
-    width: 100%;
-    margin-top: 5px;
-    border-collapse: collapse;
-    background: #1A1A1A;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-}
-
-.token-table th, .token-table td {
-    padding: 10px;
-    border: 1px solid #2A2A2A;
-    color: #FFFFFF;
-}
-
-.token-table th {
-    background: linear-gradient(135deg, #00D4FF, #007ACC);
-    color: #FFFFFF;
-}
-
-#balanceChart {
-    max-width: 500px;
-    max-height: 300px;
-    margin: 20px auto;
-    display: block;
-}
-
-#bubbleMap {
-    max-width: 300px;
-    max-height: 150px;
-    margin: 20px auto;
-    display: block;
-}
+    box-shadow: 0 2px 5px rgba(0,
