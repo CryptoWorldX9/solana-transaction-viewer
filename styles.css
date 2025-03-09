@@ -44,6 +44,17 @@ button:hover {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
+.copy-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    background: #00C4B4;
+    margin-left: 10px;
+}
+
+.copy-btn:hover {
+    background: #1E88E5;
+}
+
 #walletInfo, #transactionList {
     background-color: white;
     padding: 20px;
@@ -107,8 +118,8 @@ tr:hover {
 }
 
 #balanceChart, #bubbleMap {
-    max-width: 300px;
-    max-height: 150px;
+    max-width: 400px;
+    max-height: 200px;
     margin: 20px auto;
     display: block;
 }
