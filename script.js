@@ -128,7 +128,7 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, con
             </tbody>
         </table>
         <h3>Distribución del Saldo</h3>
-        <canvas id="balanceChart" width="400" height="200"></canvas>
+        <canvas id="balanceChart" width="200" height="100"></canvas>
     `;
 
     container.innerHTML = html;
