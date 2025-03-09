@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,25 +8,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <header>
+    <div class="container">
         <h1>Solana Transaction Viewer</h1>
-        <p>Explora transacciones y detalles de wallets en la red Solana</p>
-    </header>
-    <main>
-        <section class="input-section">
-            <h2>Ingresa la dirección de la wallet</h2>
-            <input type="text" id="walletAddress" placeholder="Ejemplo: 5JLcGJQfZjEEuh1bSDqyw2iEfLuFRoYRJY1paoSwrZC8c8zZFW3VqvxsJgjW3bsUjTrpEUDEtvs83PxsuR6hUWqz">
-            <button onclick="fetchWalletData()">Buscar</button>
-        </section>
-        <section class="results-section" id="results">
-            <h2>Resultados</h2>
-            <div id="walletInfo"></div>
-            <div id="transactionList"></div>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2025 Solana Transaction Viewer. Todos los derechos reservados.</p>
-    </footer>
+        <div class="input-section">
+            <input type="text" id="walletAddress" placeholder="Enter a Solana wallet address (e.g., 7gFvUbRt7fW4QeNipXb63gS4xETngbG9RuXw5YviFzSF)">
+            <button onclick="fetchWalletData()">Search</button>
+        </div>
+        <div id="walletInfo"></div>
+        <div id="transactionList"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
