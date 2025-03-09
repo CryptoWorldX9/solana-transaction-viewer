@@ -1,5 +1,6 @@
 // API Key de Solscan
 const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3NDE0NzA4MjAwNjksImVtYWlsIjoiY3J5cHRvd29ybGR4OUBnbWFpbC5jb20iLCJhY3Rpb24iOiJ0b2tlbi1hcGkiLCJhcGlWZXJzaW9uIjoidjIiLCJpYXQiOjE3NDE0NzA4MjB9.rGwXpbL2WoMCDp6DplM0eoXXuTnEUANxQvFhKZQcv1c';
+const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 
 // Función principal para obtener datos de la wallet
 async function fetchWalletData() {
@@ -17,7 +18,7 @@ async function fetchWalletData() {
 
     try {
         // Obtener información de la wallet
-        const walletResponse = await fetch(`https://api.solscan.io/account?address=${walletAddress}`, {
+        const walletResponse = await fetch(`${proxyUrl}https://api.solscan.io/account?address=${walletAddress}`, {
             headers: {
                 'Authorization': `Bearer ${API_KEY}`
             }
@@ -31,7 +32,7 @@ async function fetchWalletData() {
         }
 
         // Obtener transacciones de la wallet
-        const txResponse = await fetch(`https://api.solscan.io/account/transactions?address=${walletAddress}&limit=10`, {
+        const txResponse = await fetch(`${proxyUrl}https://api.solscan.io/account/transactions?address=${walletAddress}&limit=10`, {
             headers: {
                 'Authorization': `Bearer ${API_KEY}`
             }
