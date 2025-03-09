@@ -223,9 +223,9 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
             labels: ['SOL', 'SPL Tokens'],
             datasets: [{
                 data: [solBalance, tokenBalances],
-                backgroundColor: ['#00C4B4', '#1E88E5'],
+                backgroundColor: ['#00D4FF', '#007ACC'], /* Colores de Arkham */
                 borderWidth: 2,
-                borderColor: '#fff',
+                borderColor: '#FFFFFF',
                 shadowOffsetX: 5,
                 shadowOffsetY: 5,
                 shadowBlur: 15,
@@ -237,8 +237,8 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
             cutout: '60%',
             rotation: -45,
             plugins: {
-                legend: { position: 'top' },
-                title: { display: true, text: 'Balance Distribution' }
+                legend: { position: 'top', labels: { color: '#FFFFFF' } },
+                title: { display: true, text: 'Balance Distribution', color: '#FFFFFF' }
             },
             animation: {
                 animateRotate: true,
@@ -247,7 +247,7 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
             elements: {
                 arc: {
                     borderWidth: 2,
-                    borderColor: '#fff',
+                    borderColor: '#FFFFFF',
                     shadowOffsetX: 5,
                     shadowOffsetY: 5,
                     shadowBlur: 15,
@@ -264,18 +264,18 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
             datasets: [{
                 label: 'Current Wallet',
                 data: [{ x: 0, y: 0, r: 20 }],
-                backgroundColor: '#00C4B4',
+                backgroundColor: '#00D4FF', /* Azul eléctrico */
             }, {
                 label: 'Related Wallets',
                 data: totalTxData.slice(0, 5).map((_, i) => ({ x: Math.random() * 10 - 5, y: Math.random() * 10 - 5, r: 10 })),
-                backgroundColor: '#1E88E5',
+                backgroundColor: '#007ACC', /* Azul más oscuro */
             }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: { position: 'top' },
-                title: { display: true, text: 'Relationship Map (Simulation)' }
+                legend: { position: 'top', labels: { color: '#FFFFFF' } },
+                title: { display: true, text: 'Relationship Map (Simulation)', color: '#FFFFFF' }
             },
             scales: {
                 x: { display: false },
@@ -284,7 +284,6 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
         }
     });
 
-    // Ticker functionality
     document.querySelectorAll('.ticker-items a').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
