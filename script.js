@@ -15,12 +15,10 @@ async function fetchWalletData() {
     transactionListDiv.innerHTML = '<p>Cargando transacciones...</p>';
 
     try {
-        // Obtener precio de SOL en USD
         const priceResponse = await fetch(coingeckoUrl);
         const priceData = await priceResponse.json();
         const solPriceUSD = priceData.solana.usd;
 
-        // Obtener información de la wallet
         const walletResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -33,7 +31,6 @@ async function fetchWalletData() {
         });
         const walletData = await walletResponse.json();
 
-        // Obtener tokens SPL
         const tokenResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -46,7 +43,6 @@ async function fetchWalletData() {
         });
         const tokenData = await tokenResponse.json();
 
-        // Obtener transacciones
         const txResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -59,9 +55,20 @@ async function fetchWalletData() {
         });
         const txData = await txResponse.json();
 
-        // Mostrar datos
+        const tpsResponse = await fetch(rpcUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'getRecentPerformanceSamples',
+                params: [1]
+            })
+        });
+        const tpsData = await tpsResponse.json();
+
         if (walletData.result) {
-            displayWalletInfo(walletData.result.value, tokenData.result, solPriceUSD, walletInfoDiv);
+            displayWalletInfo(walletData.result.value, tokenData.result, solPriceUSD, tpsData.result, walletInfoDiv);
         } else {
             walletInfoDiv.innerHTML = '<p>Error al obtener datos de la wallet. Verifica la dirección.</p>';
         }
@@ -78,10 +85,11 @@ async function fetchWalletData() {
     }
 }
 
-function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, container) {
-    const solBalance = accountData.lamports ? (accountData.lamports / 1e9).toFixed(4) : '0';
+function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, container) {
+    const solBalance = accountData.lamports ? (accountData.lamports / 1e9) : 0;
     const usdBalance = (solBalance * solPriceUSD).toFixed(2);
-    const lastTx = tokenAccounts.length > 0 ? tokenAccounts[0].account.data.parsed.info.tokenAmount.uiAmount : 'N/A';
+    const tokenBalances = tokenAccounts.map(t => t.account.data.parsed.info.tokenAmount.uiAmount).reduce((a, b) => a + b, 0);
+    const tps = tpsData && tpsData[0] ? tpsData[0].numTransactions / tpsData[0].samplePeriodSecs : 'N/A';
 
     let html = `
         <h3>Información de la Wallet</h3>
@@ -99,7 +107,7 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, container) {
                 </tr>
                 <tr>
                     <td>Saldo SOL</td>
-                    <td>${solBalance} SOL</td>
+                    <td>${solBalance.toFixed(4)} SOL</td>
                 </tr>
                 <tr>
                     <td>Valor en USD</td>
@@ -107,21 +115,48 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, container) {
                 </tr>
                 <tr>
                     <td>Tokens SPL</td>
-                    <td>${tokenAccounts.length > 0 ? tokenAccounts.map(t => `${t.account.data.parsed.info.tokenAmount.uiAmount} ${t.account.data.parsed.info.mint.slice(0, 8)}...`).join(', ') : 'Ninguno'}</td>
+                    <td>${tokenAccounts.length > 0 ? tokenAccounts.map(t => `<span class="token-${t.account.data.parsed.info.mint.slice(0, 8)}">${t.account.data.parsed.info.tokenAmount.uiAmount} ${t.account.data.parsed.info.mint.slice(0, 8)}...</span>`).join(', ') : 'Ninguno'}</td>
                 </tr>
                 <tr>
                     <td>Tamaño de la cuenta</td>
                     <td>${accountData.space || 'N/A'} bytes</td>
                 </tr>
+                <tr>
+                    <td>TPS de la red</td>
+                    <td>${tps} transacciones/seg</td>
+                </tr>
             </tbody>
         </table>
+        <h3>Distribución del Saldo</h3>
+        <canvas id="balanceChart" width="400" height="200"></canvas>
     `;
+
     container.innerHTML = html;
+
+    // Crear gráfico con Chart.js
+    const ctx = document.getElementById('balanceChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['SOL', 'Tokens SPL'],
+            datasets: [{
+                data: [solBalance, tokenBalances],
+                backgroundColor: ['#4CAF50', '#FF6384'],
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: true, text: 'Proporción de Activos' }
+            }
+        }
+    });
 }
 
 function displayTransactions(transactions, container) {
     if (transactions.length === 0) {
-        container.innerHTML = '<p>No hay transacciones recientes.</p>';
+        container.innerHTML = '<p>No hay transacciones recientes.</p><button id="exportCSV" disabled>Exportar a CSV</button>';
         return;
     }
 
@@ -146,6 +181,25 @@ function displayTransactions(transactions, container) {
             </tr>
         `;
     });
-    html += '</tbody></table>';
+    html += `
+            </tbody>
+        </table>
+        <button id="exportCSV">Exportar a CSV</button>
+    `;
     container.innerHTML = html;
+
+    // Exportar a CSV
+    document.getElementById('exportCSV').addEventListener('click', () => {
+        let csv = 'Hash,Fecha,Confirmaciones\n';
+        transactions.forEach(tx => {
+            csv += `"${tx.signature}","${new Date(tx.blockTime * 1000).toLocaleString()}","${tx.confirmationStatus || 'N/A'}"\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'transacciones.csv';
+        a.click();
+        window.URL.revokeObjectURL(url);
+    });
 }
