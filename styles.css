@@ -2,14 +2,14 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #1a1a2e; /* Fondo oscuro profesional */
+    background-color: #1a1a2e;
     color: #fff;
 }
 
 .sidebar {
     width: 250px;
     height: 100vh;
-    background: #16213e; /* Azul oscuro de FlorkTools */
+    background: #16213e;
     position: fixed;
     top: 0;
     left: 0;
@@ -19,25 +19,19 @@ body {
 
 .logo {
     display: flex;
-    align-items: center;
+    justify-content: center;
     margin-bottom: 40px;
 }
 
 .logo img {
-    width: 60px;
-    height: 40px;
-    margin-right: 10px;
-}
-
-.logo span {
-    font-size: 24px;
-    font-weight: bold;
-    color: #00C4B4; /* Verde de FlorkTools */
+    width: 80px; /* Ajustado para el nuevo tamaño */
+    height: 60px;
 }
 
 .menu {
     list-style: none;
     padding: 0;
+    margin: 0; /* Asegura que el menú sea visible */
 }
 
 .menu li {
@@ -58,7 +52,7 @@ body {
 }
 
 .menu li.active a {
-    color: #00C4B4; /* Verde activo */
+    color: #00C4B4;
     font-weight: bold;
 }
 
@@ -70,7 +64,7 @@ body {
 .main-content {
     margin-left: 250px;
     padding: 20px;
-    background-color: #2a2a4e; /* Fondo sólido para Solana Transaction Viewer */
+    background-color: #2a2a4e;
     min-height: 100vh;
 }
 
@@ -98,7 +92,7 @@ body {
 }
 
 .ticker-items a {
-    color: #1E88E5; /* Azul de FlorkTools */
+    color: #1E88E5;
     margin-right: 15px;
     text-decoration: none;
     font-weight: bold;
