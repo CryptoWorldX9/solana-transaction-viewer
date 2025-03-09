@@ -80,18 +80,18 @@ body {
     padding: 10px 20px;
     background: #1A1A1A;
     border-bottom: 1px solid #00D4FF;
-    width: 100%;
-    max-width: 1200px;
+    width: calc(100% - 250px); /* Ajusta el ancho para el sidebar */
     position: fixed;
     top: 0;
     left: 250px;
-    right: 0;
     z-index: 10;
+    box-sizing: border-box; /* Incluye padding en el ancho */
 }
 
 .token-ticker {
     display: flex;
     align-items: center;
+    flex-shrink: 0; /* Evita que se encoja demasiado */
 }
 
 .token-ticker span {
@@ -118,6 +118,7 @@ body {
 .top-icons {
     display: flex;
     align-items: center;
+    flex-shrink: 0; /* Evita que los iconos se compriman */
 }
 
 .top-icons i {
@@ -136,6 +137,7 @@ body {
     cursor: pointer;
     font-weight: bold;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    white-space: nowrap; /* Evita que el texto se divida */
 }
 
 .connect-wallet:hover {
@@ -146,11 +148,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Centra verticalmente el contenido */
+    justify-content: center;
     width: 100%;
     max-width: 1200px;
-    padding-top: 60px; /* Espacio para la barra superior fija */
-    min-height: calc(100vh - 60px); /* Asegura que ocupe el espacio restante */
+    padding-top: 60px;
+    min-height: calc(100vh - 60px);
 }
 
 .viewer-section {
