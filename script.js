@@ -1,7 +1,7 @@
 const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2';
 const coingeckoUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd';
 const coingeckoTokenUrl = 'https://api.coingecko.com/api/v3/simple/token_price/solana?contract_addresses={ADDRESSES}&vs_currencies=usd';
-const coingeckoMarketsUrl = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=meme-token&order=volume_desc&per_page=10&page=1&sparkline=false';
+const coingeckoMarketsUrl = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=solana-ecosystem&order=volume_desc&per_page=10&page=1&sparkline=false';
 
 const tokenNames = {
     'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDC',
@@ -344,7 +344,8 @@ async function updateMemecoinCarousel() {
         const carousel = document.getElementById('memecoinCarousel');
         carousel.innerHTML = '';
 
-        topMemecoins.forEach((coin) => {
+        // Aseguramos que se muestren 10 memecoins
+        topMemecoins.slice(0, 10).forEach((coin) => {
             const item = document.createElement('div');
             item.className = 'carousel-item';
             item.innerHTML = `
@@ -352,11 +353,8 @@ async function updateMemecoinCarousel() {
                 <span>${coin.symbol.toUpperCase()}</span>
             `;
             item.addEventListener('click', () => {
-                const iframe = document.getElementById('dexscreenerFrame');
-                // Aproximación: usamos coin.id para DexScreener (puede no ser exacto para Solana)
-                iframe.src = `https://dexscreener.com/solana/${coin.id}`;
-                iframe.style.display = 'block';
-                iframe.scrollIntoView({ behavior: 'smooth' });
+                // Abrir en la misma ventana en lugar de iframe
+                window.location.href = `https://dexscreener.com/solana/${coin.id}`;
             });
             carousel.appendChild(item);
         });
@@ -365,7 +363,7 @@ async function updateMemecoinCarousel() {
         let offset = 0;
         setInterval(() => {
             offset -= 1;
-            if (offset <= -110 * topMemecoins.length) offset = 0;
+            if (offset <= -110 * 10) offset = 0; // Ajustado para 10 elementos
             carousel.style.transform = `translateX(${offset}px)`;
         }, 50);
     } catch (error) {
