@@ -80,23 +80,26 @@ body {
     padding: 10px 20px;
     background: #1A1A1A;
     border-bottom: 1px solid #00D4FF;
-    width: calc(100% - 250px); /* Ajusta el ancho para el sidebar */
     position: fixed;
     top: 0;
     left: 250px;
+    right: 0;
     z-index: 10;
-    box-sizing: border-box; /* Incluye padding en el ancho */
+    box-sizing: border-box;
+    max-width: calc(100% - 250px); /* Limita el ancho máximo */
 }
 
 .token-ticker {
     display: flex;
     align-items: center;
-    flex-shrink: 0; /* Evita que se encoja demasiado */
+    flex-shrink: 1; /* Permite que se ajuste */
+    overflow: hidden;
 }
 
 .token-ticker span {
     margin-right: 10px;
     color: #A0A0A0;
+    white-space: nowrap;
 }
 
 .ticker-items {
@@ -109,6 +112,7 @@ body {
     margin-right: 15px;
     text-decoration: none;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .ticker-items a:hover {
@@ -118,7 +122,8 @@ body {
 .top-icons {
     display: flex;
     align-items: center;
-    flex-shrink: 0; /* Evita que los iconos se compriman */
+    flex-shrink: 0; /* Evita que se comprima */
+    padding-right: 10px; /* Espacio extra a la derecha */
 }
 
 .top-icons i {
@@ -137,7 +142,7 @@ body {
     cursor: pointer;
     font-weight: bold;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-    white-space: nowrap; /* Evita que el texto se divida */
+    white-space: nowrap;
 }
 
 .connect-wallet:hover {
@@ -280,4 +285,25 @@ tr:hover {
     max-height: 150px;
     margin: 20px auto;
     display: block;
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+    .top-bar {
+        padding: 10px;
+    }
+
+    .token-ticker {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+
+    .top-icons i {
+        margin: 0 10px;
+    }
+
+    .connect-wallet {
+        padding: 6px 15px;
+        font-size: 14px;
+    }
 }
