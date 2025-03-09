@@ -1,8 +1,7 @@
-const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2'; // Reemplaza con tu clave si es necesario
+const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2';
 const coingeckoUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd';
 const coingeckoTokenUrl = 'https://api.coingecko.com/api/v3/simple/token_price/solana?contract_addresses={ADDRESSES}&vs_currencies=usd';
 
-// Lista de tokens populares (mint -> nombre)
 const tokenNames = {
     'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDC',
     'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': 'USDT',
@@ -53,9 +52,8 @@ async function fetchWalletData() {
         const tokenData = await tokenResponse.json();
 
         let tokenPrices = {};
-        let tokenAddresses = '';
         if (tokenData.result?.value?.length > 0) {
-            tokenAddresses = tokenData.result.value.map(t => t.account.data.parsed.info.mint).join(',');
+            const tokenAddresses = tokenData.result.value.map(t => t.account.data.parsed.info.mint).join(',');
             const tokenPriceResponse = await fetch(coingeckoTokenUrl.replace('{ADDRESSES}', tokenAddresses));
             if (tokenPriceResponse.ok) {
                 tokenPrices = await tokenPriceResponse.json();
@@ -228,16 +226,16 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
                 backgroundColor: ['#00C4B4', '#1E88E5'],
                 borderWidth: 2,
                 borderColor: '#fff',
-                shadowOffsetX: 3,
-                shadowOffsetY: 3,
-                shadowBlur: 10,
+                shadowOffsetX: 5,
+                shadowOffsetY: 5,
+                shadowBlur: 15,
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
             }]
         },
         options: {
             responsive: true,
-            cutout: '60%', // Aumenta el efecto 3D
-            rotation: -45, // Rota para perspectiva
+            cutout: '60%',
+            rotation: -45,
             plugins: {
                 legend: { position: 'top' },
                 title: { display: true, text: 'Balance Distribution' }
@@ -284,6 +282,15 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
                 y: { display: false }
             }
         }
+    });
+
+    // Ticker functionality
+    document.querySelectorAll('.ticker-items a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const tokenId = link.getAttribute('data-token');
+            window.open(`https://www.coingecko.com/en/coins/${tokenId}`, '_blank');
+        });
     });
 }
 
