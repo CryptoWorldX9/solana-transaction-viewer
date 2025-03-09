@@ -211,7 +211,7 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
             </tbody>
         </table>
         <h3>Balance Distribution</h3>
-        <canvas id="balanceChart" width="400" height="200"></canvas>
+        <canvas id="balanceChart" width="500" height="300"></canvas>
         <h3>Relationship Map (Simulation)</h3>
         <canvas id="bubbleMap" width="300" height="150"></canvas>
     `;
@@ -220,18 +220,24 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
 
     const ctx = document.getElementById('balanceChart').getContext('2d');
     new Chart(ctx, {
-        type: 'doughnut', // Cambia a doughnut para un efecto 3D básico
+        type: 'doughnut',
         data: {
             labels: ['SOL', 'SPL Tokens'],
             datasets: [{
                 data: [solBalance, tokenBalances],
                 backgroundColor: ['#00C4B4', '#1E88E5'],
                 borderWidth: 2,
+                borderColor: '#fff',
+                shadowOffsetX: 3,
+                shadowOffsetY: 3,
+                shadowBlur: 10,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
             }]
         },
         options: {
             responsive: true,
-            cutout: '50%', // Hace el doughnut más 3D
+            cutout: '60%', // Aumenta el efecto 3D
+            rotation: -45, // Rota para perspectiva
             plugins: {
                 legend: { position: 'top' },
                 title: { display: true, text: 'Balance Distribution' }
@@ -239,6 +245,16 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
             animation: {
                 animateRotate: true,
                 animateScale: true
+            },
+            elements: {
+                arc: {
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                    shadowOffsetX: 5,
+                    shadowOffsetY: 5,
+                    shadowBlur: 15,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
             }
         }
     });
