@@ -96,8 +96,37 @@ tr:hover {
 }
 
 #balanceChart {
-    max-width: 300px; /* Tamaño máximo del gráfico */
+    max-width: 300px;
     max-height: 150px;
-    margin: 20px auto; /* Centrado */
+    margin: 20px auto;
     display: block;
+}
+
+.bubblemaps-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.bubblemaps-link:hover {
+    text-decoration: underline;
+}
+
+.token-table {
+    width: 100%;
+    margin-top: 5px;
+    border-collapse: collapse;
+}
+
+.token-table th, .token-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.token-table th {
+    background-color: #f0f0f0;
+    color: #333;
 }
