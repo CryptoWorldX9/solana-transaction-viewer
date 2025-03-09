@@ -44,12 +44,15 @@
             </div>
         </div>
         <div class="content">
-            <div class="input-section">
-                <input type="text" id="walletAddress" placeholder="Enter a Solana wallet address (e.g., 7gFvUbRt7fW4QeNipXb63gS4xETngbG9RuXw5YviFzSF)">
-                <button onclick="fetchWalletData()">Search</button>
+            <div class="viewer-section">
+                <h1>Solana Transaction Viewer</h1>
+                <div class="input-section">
+                    <input type="text" id="walletAddress" placeholder="Enter a Solana wallet address (e.g., 7gFvUbRt7fW4QeNipXb63gS4xETngbG9RuXw5YviFzSF)">
+                    <button onclick="fetchWalletData()">Search</button>
+                </div>
+                <div id="walletInfo"></div>
+                <div id="transactionList"></div>
             </div>
-            <div id="walletInfo"></div>
-            <div id="transactionList"></div>
         </div>
     </div>
     <script src="script.js"></script>
