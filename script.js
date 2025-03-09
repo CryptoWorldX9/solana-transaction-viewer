@@ -16,20 +16,18 @@ async function fetchWalletData() {
     const transactionListDiv = document.getElementById('transactionList');
 
     if (!walletAddress) {
-        alert('Por favor, ingresa una dirección de wallet válida.');
+        alert('Please enter a valid wallet address.');
         return;
     }
 
-    walletInfoDiv.innerHTML = '<p>Cargando datos de la wallet...</p>';
-    transactionListDiv.innerHTML = '<p>Cargando transacciones...</p>';
+    walletInfoDiv.innerHTML = '<p>Loading wallet data...</p>';
+    transactionListDiv.innerHTML = '<p>Loading transactions...</p>';
 
     try {
-        // Precio de SOL
         const priceResponse = await fetch(coingeckoUrl);
         const priceData = await priceResponse.json();
         const solPriceUSD = priceData.solana.usd;
 
-        // Información de la wallet
         const walletResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -42,7 +40,6 @@ async function fetchWalletData() {
         });
         const walletData = await walletResponse.json();
 
-        // Tokens SPL
         const tokenResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -55,7 +52,6 @@ async function fetchWalletData() {
         });
         const tokenData = await tokenResponse.json();
 
-        // Precios de tokens SPL
         let tokenPrices = {};
         let tokenAddresses = '';
         if (tokenData.result?.value?.length > 0) {
@@ -64,11 +60,10 @@ async function fetchWalletData() {
             if (tokenPriceResponse.ok) {
                 tokenPrices = await tokenPriceResponse.json();
             } else {
-                console.warn('Error al obtener precios de tokens:', tokenPriceResponse.status);
+                console.warn('Error fetching token prices:', tokenPriceResponse.status);
             }
         }
 
-        // Transacciones recientes
         const txResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -81,7 +76,6 @@ async function fetchWalletData() {
         });
         const txData = await txResponse.json();
 
-        // Total de transacciones
         const totalTxResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -94,7 +88,6 @@ async function fetchWalletData() {
         });
         const totalTxData = await totalTxResponse.json();
 
-        // TPS de la red
         const tpsResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -110,17 +103,17 @@ async function fetchWalletData() {
         if (walletData.result) {
             displayWalletInfo(walletData.result.value, tokenData.result?.value || [], solPriceUSD, tpsData.result, totalTxData.result || [], tokenPrices, walletAddress, walletInfoDiv);
         } else {
-            walletInfoDiv.innerHTML = '<p>Error al obtener datos de la wallet. Verifica la dirección.</p>';
+            walletInfoDiv.innerHTML = '<p>Error fetching wallet data. Please verify the address.</p>';
         }
 
         if (txData.result) {
             displayTransactions(txData.result, transactionListDiv);
         } else {
-            transactionListDiv.innerHTML = '<p>No se encontraron transacciones o hubo un error.</p>';
+            transactionListDiv.innerHTML = '<p>No recent transactions found or an error occurred.</p>';
         }
     } catch (error) {
         console.error('Error:', error);
-        walletInfoDiv.innerHTML = '<p>Error al conectar con la API. Intenta de nuevo más tarde.</p>';
+        walletInfoDiv.innerHTML = '<p>Error connecting to the API. Please try again later.</p>';
         transactionListDiv.innerHTML = '';
     }
 }
@@ -132,7 +125,7 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
     const tps = tpsData && tpsData[0] ? (tpsData[0].numTransactions / tpsData[0].samplePeriodSecs).toFixed(2) : 'N/A';
     const lastActivity = totalTxData && totalTxData[0] ? new Date(totalTxData[0].blockTime * 1000).toLocaleString() : 'N/A';
     const totalTransactions = totalTxData ? totalTxData.length : 'N/A';
-    const rentExempt = accountData.rentExempt ? 'Sí' : 'No';
+    const rentExempt = accountData.rentExempt ? 'Yes' : 'No';
 
     let tokenHtml = '';
     if (Array.isArray(tokenAccounts) && tokenAccounts.length > 0) {
@@ -141,20 +134,20 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
                 <thead>
                     <tr>
                         <th>Token</th>
-                        <th>Cantidad</th>
-                        <th>Valor USD</th>
-                        <th>% del Supply</th>
+                        <th>Amount</th>
+                        <th>Value USD</th>
+                        <th>% of Supply</th>
                     </tr>
                 </thead>
                 <tbody>
         `;
         tokenAccounts.forEach(t => {
-            const mint = t.account.data.parsed.info.mint || 'Desconocido';
+            const mint = t.account.data.parsed.info.mint || 'Unknown';
             const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
             const amount = t.account.data.parsed.info.tokenAmount.uiAmount || 0;
             const priceUSD = tokenPrices[mint]?.usd || 'N/A';
             const totalUSD = priceUSD !== 'N/A' ? (amount * priceUSD).toFixed(2) : 'N/A';
-            const supplyPercent = amount / 1e9 * 100; // Simplificado
+            const supplyPercent = amount / 1e9 * 100;
             tokenHtml += `
                 <tr>
                     <td>${tokenName}</td>
@@ -166,50 +159,50 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
         });
         tokenHtml += '</tbody></table>';
     } else {
-        tokenHtml = 'Ninguno';
+        tokenHtml = 'None';
     }
 
     let html = `
-        <h3>Información de la Wallet</h3>
+        <h3>Wallet Information</h3>
         <table>
             <thead>
                 <tr>
-                    <th>Dato</th>
-                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>Value</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Dirección</td>
-                    <td>${accountData.owner || 'N/A'}</td>
+                    <td>Address</td>
+                    <td>${walletAddress} <button class="copy-btn" onclick="navigator.clipboard.writeText('${walletAddress}')">Copy</button></td>
                 </tr>
                 <tr>
-                    <td>Saldo SOL</td>
+                    <td>SOL Balance</td>
                     <td>${solBalance.toFixed(4)} SOL</td>
                 </tr>
                 <tr>
-                    <td>Valor en USD</td>
+                    <td>Value in USD</td>
                     <td>$${usdBalance}</td>
                 </tr>
                 <tr>
-                    <td>Tokens SPL</td>
+                    <td>SPL Tokens</td>
                     <td>${tokenHtml}</td>
                 </tr>
                 <tr>
-                    <td>Tamaño de la cuenta</td>
+                    <td>Account Size</td>
                     <td>${accountData.space || 'N/A'} bytes</td>
                 </tr>
                 <tr>
-                    <td>TPS de la red</td>
-                    <td>${tps} transacciones/seg</td>
+                    <td>Network TPS</td>
+                    <td>${tps} transactions/sec</td>
                 </tr>
                 <tr>
-                    <td>Última actividad</td>
+                    <td>Last Activity</td>
                     <td>${lastActivity}</td>
                 </tr>
                 <tr>
-                    <td>Total de transacciones</td>
-                    <td>${totalTransactions} (últimas 1000)</td>
+                    <td>Total Transactions</td>
+                    <td>${totalTransactions} (last 1000)</td>
                 </tr>
                 <tr>
                     <td>Rent Exempt</td>
@@ -217,29 +210,35 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
                 </tr>
             </tbody>
         </table>
-        <h3>Distribución del Saldo</h3>
-        <canvas id="balanceChart" width="300" height="150"></canvas>
-        <h3>Mapa de Relaciones (Simulación)</h3>
-        <canvas id="bubbleMap" width="400" height="200"></canvas>
+        <h3>Balance Distribution</h3>
+        <canvas id="balanceChart" width="400" height="200"></canvas>
+        <h3>Relationship Map (Simulation)</h3>
+        <canvas id="bubbleMap" width="300" height="150"></canvas>
     `;
 
     container.innerHTML = html;
 
     const ctx = document.getElementById('balanceChart').getContext('2d');
     new Chart(ctx, {
-        type: 'pie',
+        type: 'doughnut', // Cambia a doughnut para un efecto 3D básico
         data: {
-            labels: ['SOL', 'Tokens SPL'],
+            labels: ['SOL', 'SPL Tokens'],
             datasets: [{
                 data: [solBalance, tokenBalances],
-                backgroundColor: ['#4CAF50', '#FF6384'],
+                backgroundColor: ['#00C4B4', '#1E88E5'],
+                borderWidth: 2,
             }]
         },
         options: {
             responsive: true,
+            cutout: '50%', // Hace el doughnut más 3D
             plugins: {
                 legend: { position: 'top' },
-                title: { display: true, text: 'Proporción de Activos' }
+                title: { display: true, text: 'Balance Distribution' }
+            },
+            animation: {
+                animateRotate: true,
+                animateScale: true
             }
         }
     });
@@ -249,11 +248,11 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
         type: 'scatter',
         data: {
             datasets: [{
-                label: 'Wallet Actual',
+                label: 'Current Wallet',
                 data: [{ x: 0, y: 0, r: 20 }],
                 backgroundColor: '#00C4B4',
             }, {
-                label: 'Wallets Relacionadas',
+                label: 'Related Wallets',
                 data: totalTxData.slice(0, 5).map((_, i) => ({ x: Math.random() * 10 - 5, y: Math.random() * 10 - 5, r: 10 })),
                 backgroundColor: '#1E88E5',
             }]
@@ -262,7 +261,7 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
             responsive: true,
             plugins: {
                 legend: { position: 'top' },
-                title: { display: true, text: 'Relaciones Simuladas' }
+                title: { display: true, text: 'Relationship Map (Simulation)' }
             },
             scales: {
                 x: { display: false },
@@ -274,18 +273,18 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
 
 function displayTransactions(transactions, container) {
     if (transactions.length === 0) {
-        container.innerHTML = '<p>No hay transacciones recientes.</p><button id="exportCSV" disabled>Exportar a CSV</button>';
+        container.innerHTML = '<p>No recent transactions found.</p><button id="exportCSV" disabled>Export to CSV</button>';
         return;
     }
 
     let html = `
-        <h3>Últimas Transacciones</h3>
+        <h3>Recent Transactions</h3>
         <table>
             <thead>
                 <tr>
                     <th>Hash</th>
-                    <th>Fecha</th>
-                    <th>Confirmaciones</th>
+                    <th>Date</th>
+                    <th>Confirmations</th>
                 </tr>
             </thead>
             <tbody>
@@ -302,12 +301,12 @@ function displayTransactions(transactions, container) {
     html += `
             </tbody>
         </table>
-        <button id="exportCSV">Exportar a CSV</button>
+        <button id="exportCSV">Export to CSV</button>
     `;
     container.innerHTML = html;
 
     document.getElementById('exportCSV').addEventListener('click', () => {
-        let csv = 'Hash,Fecha,Confirmaciones\n';
+        let csv = 'Hash,Date,Confirmations\n';
         transactions.forEach(tx => {
             csv += `"${tx.signature}","${new Date(tx.blockTime * 1000).toLocaleString()}","${tx.confirmationStatus || 'N/A'}"\n`;
         });
@@ -315,7 +314,7 @@ function displayTransactions(transactions, container) {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'transacciones.csv';
+        a.download = 'transactions.csv';
         a.click();
         window.URL.revokeObjectURL(url);
     });
