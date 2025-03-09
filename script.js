@@ -1,4 +1,4 @@
-const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2';
+const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2'; // Reemplaza con tu clave si es necesario
 const coingeckoUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd';
 const coingeckoTokenUrl = 'https://api.coingecko.com/api/v3/simple/token_price/solana?contract_addresses={ADDRESSES}&vs_currencies=usd';
 
@@ -7,8 +7,7 @@ const tokenNames = {
     'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDC',
     'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': 'USDT',
     'So11111111111111111111111111111111111111112': 'SOL',
-    '7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj': 'stSOL',
-    // Agrega más tokens según necesites
+    '7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj': 'stSOL'
 };
 
 async function fetchWalletData() {
@@ -25,10 +24,12 @@ async function fetchWalletData() {
     transactionListDiv.innerHTML = '<p>Cargando transacciones...</p>';
 
     try {
+        // Precio de SOL
         const priceResponse = await fetch(coingeckoUrl);
         const priceData = await priceResponse.json();
         const solPriceUSD = priceData.solana.usd;
 
+        // Información de la wallet
         const walletResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -41,6 +42,7 @@ async function fetchWalletData() {
         });
         const walletData = await walletResponse.json();
 
+        // Tokens SPL
         const tokenResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -53,13 +55,20 @@ async function fetchWalletData() {
         });
         const tokenData = await tokenResponse.json();
 
+        // Precios de tokens SPL
         let tokenPrices = {};
-        if (tokenData.result.value && tokenData.result.value.length > 0) {
-            const tokenAddresses = tokenData.result.value.map(t => t.account.data.parsed.info.mint).join(',');
+        let tokenAddresses = '';
+        if (tokenData.result?.value?.length > 0) {
+            tokenAddresses = tokenData.result.value.map(t => t.account.data.parsed.info.mint).join(',');
             const tokenPriceResponse = await fetch(coingeckoTokenUrl.replace('{ADDRESSES}', tokenAddresses));
-            tokenPrices = await tokenPriceResponse.json();
+            if (tokenPriceResponse.ok) {
+                tokenPrices = await tokenPriceResponse.json();
+            } else {
+                console.warn('Error al obtener precios de tokens:', tokenPriceResponse.status);
+            }
         }
 
+        // Transacciones recientes
         const txResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -72,6 +81,7 @@ async function fetchWalletData() {
         });
         const txData = await txResponse.json();
 
+        // Total de transacciones
         const totalTxResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -84,6 +94,7 @@ async function fetchWalletData() {
         });
         const totalTxData = await totalTxResponse.json();
 
+        // TPS de la red
         const tpsResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -97,7 +108,7 @@ async function fetchWalletData() {
         const tpsData = await tpsResponse.json();
 
         if (walletData.result) {
-            displayWalletInfo(walletData.result.value, tokenData.result.value || [], solPriceUSD, tpsData.result, totalTxData.result, tokenPrices, walletAddress, walletInfoDiv);
+            displayWalletInfo(walletData.result.value, tokenData.result?.value || [], solPriceUSD, tpsData.result, totalTxData.result || [], tokenPrices, walletAddress, walletInfoDiv);
         } else {
             walletInfoDiv.innerHTML = '<p>Error al obtener datos de la wallet. Verifica la dirección.</p>';
         }
@@ -138,12 +149,12 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
                 <tbody>
         `;
         tokenAccounts.forEach(t => {
-            const mint = t.account.data.parsed.info.mint;
-            const tokenName = tokenNames[mint] || `${mint.slice(0, 8)}...`;
-            const amount = t.account.data.parsed.info.tokenAmount.uiAmount;
-            const priceUSD = tokenPrices[mint] ? tokenPrices[mint].usd : 'N/A';
+            const mint = t.account.data.parsed.info.mint || 'Desconocido';
+            const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
+            const amount = t.account.data.parsed.info.tokenAmount.uiAmount || 0;
+            const priceUSD = tokenPrices[mint]?.usd || 'N/A';
             const totalUSD = priceUSD !== 'N/A' ? (amount * priceUSD).toFixed(2) : 'N/A';
-            const supplyPercent = t.account.data.parsed.info.tokenAmount.uiAmount / 1e9 * 100; // Ejemplo simplificado
+            const supplyPercent = amount / 1e9 * 100; // Simplificado
             tokenHtml += `
                 <tr>
                     <td>${tokenName}</td>
@@ -233,7 +244,6 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
         }
     });
 
-    // Simulación de BubbleMaps
     const bubbleCtx = document.getElementById('bubbleMap').getContext('2d');
     new Chart(bubbleCtx, {
         type: 'scatter',
