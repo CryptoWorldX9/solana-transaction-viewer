@@ -68,7 +68,7 @@ async function fetchWalletData() {
         const tpsData = await tpsResponse.json();
 
         if (walletData.result) {
-            displayWalletInfo(walletData.result.value, tokenData.result, solPriceUSD, tpsData.result, walletInfoDiv);
+            displayWalletInfo(walletData.result.value, tokenData.result.value || [], solPriceUSD, tpsData.result, walletInfoDiv);
         } else {
             walletInfoDiv.innerHTML = '<p>Error al obtener datos de la wallet. Verifica la dirección.</p>';
         }
@@ -88,8 +88,8 @@ async function fetchWalletData() {
 function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, container) {
     const solBalance = accountData.lamports ? (accountData.lamports / 1e9) : 0;
     const usdBalance = (solBalance * solPriceUSD).toFixed(2);
-    const tokenBalances = tokenAccounts.map(t => t.account.data.parsed.info.tokenAmount.uiAmount).reduce((a, b) => a + b, 0);
-    const tps = tpsData && tpsData[0] ? tpsData[0].numTransactions / tpsData[0].samplePeriodSecs : 'N/A';
+    const tokenBalances = Array.isArray(tokenAccounts) && tokenAccounts.length > 0 ? tokenAccounts.map(t => t.account.data.parsed.info.tokenAmount.uiAmount).reduce((a, b) => a + b, 0) : 0;
+    const tps = tpsData && tpsData[0] ? (tpsData[0].numTransactions / tpsData[0].samplePeriodSecs).toFixed(2) : 'N/A';
 
     let html = `
         <h3>Información de la Wallet</h3>
@@ -115,7 +115,7 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, con
                 </tr>
                 <tr>
                     <td>Tokens SPL</td>
-                    <td>${tokenAccounts.length > 0 ? tokenAccounts.map(t => `<span class="token-${t.account.data.parsed.info.mint.slice(0, 8)}">${t.account.data.parsed.info.tokenAmount.uiAmount} ${t.account.data.parsed.info.mint.slice(0, 8)}...</span>`).join(', ') : 'Ninguno'}</td>
+                    <td>${Array.isArray(tokenAccounts) && tokenAccounts.length > 0 ? tokenAccounts.map(t => `<span class="token-${t.account.data.parsed.info.mint.slice(0, 8)}">${t.account.data.parsed.info.tokenAmount.uiAmount} ${t.account.data.parsed.info.mint.slice(0, 8)}...</span>`).join(', ') : 'Ninguno'}</td>
                 </tr>
                 <tr>
                     <td>Tamaño de la cuenta</td>
@@ -133,7 +133,6 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, con
 
     container.innerHTML = html;
 
-    // Crear gráfico con Chart.js
     const ctx = document.getElementById('balanceChart').getContext('2d');
     new Chart(ctx, {
         type: 'pie',
@@ -188,7 +187,6 @@ function displayTransactions(transactions, container) {
     `;
     container.innerHTML = html;
 
-    // Exportar a CSV
     document.getElementById('exportCSV').addEventListener('click', () => {
         let csv = 'Hash,Fecha,Confirmaciones\n';
         transactions.forEach(tx => {
