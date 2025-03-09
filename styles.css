@@ -15,6 +15,7 @@ body {
     left: 0;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    z-index: 10;
 }
 
 .logo {
@@ -84,7 +85,7 @@ body {
     top: 0;
     left: 250px;
     right: 0;
-    z-index: 10;
+    z-index: 5;
     box-sizing: border-box;
     max-width: calc(100% - 250px);
 }
@@ -93,22 +94,27 @@ body {
     display: flex;
     align-items: center;
     flex-shrink: 1;
+    position: relative;
 }
 
 .token-ticker span {
     margin-right: 10px;
     color: #A0A0A0;
     white-space: nowrap;
-    z-index: 2; /* Asegura que el título esté encima del carrusel */
+    z-index: 15;
+    position: relative;
+    padding: 5px 10px;
+    background: #1A1A1A; /* Fondo para evitar superposición */
 }
 
 .carousel {
     display: flex;
     overflow: hidden;
-    width: 600px; /* Ajustado para 10 elementos */
+    width: 1000px; /* Para 10 elementos */
     height: 50px;
     position: relative;
-    margin-left: 10px; /* Espacio para el título */
+    margin-left: 200px; /* Espacio para el título */
+    z-index: 1;
 }
 
 .carousel-item {
@@ -121,7 +127,7 @@ body {
     margin-right: 10px;
     border-radius: 8px;
     cursor: pointer;
-    transition: transform 0.5s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .carousel-item img {
@@ -230,7 +236,7 @@ button:hover {
     background: #007ACC;
 }
 
-#walletInfo, #transactionList {
+#walletInfo, #transactionList, #memecoinDetails {
     background: #1A1A1A;
     padding: 20px;
     border-radius: 8px;
@@ -315,7 +321,8 @@ tr:hover {
     }
 
     .carousel {
-        width: 300px;
+        width: 400px;
+        margin-left: 150px;
     }
 
     .carousel-item {
