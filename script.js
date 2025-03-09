@@ -345,7 +345,8 @@ async function updateMemecoinCarousel() {
         carousel.innerHTML = '';
 
         // Aseguramos que se muestren 10 memecoins
-        topMemecoins.slice(0, 10).forEach((coin) => {
+        const memecoinsToShow = topMemecoins.slice(0, 10);
+        memecoinsToShow.forEach((coin) => {
             const item = document.createElement('div');
             item.className = 'carousel-item';
             item.innerHTML = `
@@ -353,18 +354,39 @@ async function updateMemecoinCarousel() {
                 <span>${coin.symbol.toUpperCase()}</span>
             `;
             item.addEventListener('click', () => {
-                // Abrir en la misma ventana en lugar de iframe
-                window.location.href = `https://dexscreener.com/solana/${coin.id}`;
+                const detailsDiv = document.getElementById('memecoinDetails');
+                detailsDiv.style.display = 'block';
+                detailsDiv.innerHTML = `
+                    <h3>${coin.name} (${coin.symbol.toUpperCase()})</h3>
+                    <img src="${coin.image}" alt="${coin.symbol}" style="width: 50px; height: 50px;">
+                    <p>Price: $${coin.current_price.toFixed(6)}</p>
+                    <p>Market Cap: $${coin.market_cap.toLocaleString()}</p>
+                    <p>24H Volume: $${coin.total_volume.toLocaleString()}</p>
+                    <p>24H Change: ${coin.price_change_percentage_24h.toFixed(2)}%</p>
+                    <a href="https://www.coingecko.com/en/coins/${coin.id}" target="_blank">View on CoinGecko</a>
+                `;
+                detailsDiv.scrollIntoView({ behavior: 'smooth' });
             });
             carousel.appendChild(item);
         });
 
-        // Animación del carrusel
+        // Animación del carrusel con desvanecimiento
         let offset = 0;
+        const fadeStart = -200; // Punto donde empieza a desvanecerse
         setInterval(() => {
             offset -= 1;
             if (offset <= -110 * 10) offset = 0; // Ajustado para 10 elementos
             carousel.style.transform = `translateX(${offset}px)`;
+
+            document.querySelectorAll('.carousel-item').forEach(item => {
+                const itemOffset = item.getBoundingClientRect().left - carousel.getBoundingClientRect().left;
+                if (itemOffset <= fadeStart) {
+                    const opacity = Math.max(0, (itemOffset + 300) / 100); // Desvanecimiento gradual
+                    item.style.opacity = opacity;
+                } else {
+                    item.style.opacity = 1;
+                }
+            });
         }, 50);
     } catch (error) {
         console.error('Error fetching memecoins from CoinGecko:', error);
