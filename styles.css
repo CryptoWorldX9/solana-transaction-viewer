@@ -93,21 +93,22 @@ body {
     display: flex;
     align-items: center;
     flex-shrink: 1;
-    overflow: hidden;
 }
 
 .token-ticker span {
     margin-right: 10px;
     color: #A0A0A0;
     white-space: nowrap;
+    z-index: 2; /* Asegura que el título esté encima del carrusel */
 }
 
 .carousel {
     display: flex;
     overflow: hidden;
-    width: 500px; /* Ajustado para 10 elementos */
+    width: 600px; /* Ajustado para 10 elementos */
     height: 50px;
     position: relative;
+    margin-left: 10px; /* Espacio para el título */
 }
 
 .carousel-item {
@@ -314,7 +315,7 @@ tr:hover {
     }
 
     .carousel {
-        width: 300px; /* Reducido para pantallas pequeñas */
+        width: 300px;
     }
 
     .carousel-item {
