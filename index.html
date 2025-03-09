@@ -3,19 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solana Transaction Viewer</title>
+    <title>Crypto Tools - Solana Transaction Viewer</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Solana Transaction Viewer</h1>
-        <div class="input-section">
-            <input type="text" id="walletAddress" placeholder="Enter a Solana wallet address (e.g., 7gFvUbRt7fW4QeNipXb63gS4xETngbG9RuXw5YviFzSF)">
-            <button onclick="fetchWalletData()">Search</button>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="https://via.placeholder.com/40x40?text=C" alt="Crypto Tools Logo">
+            <span>Crypto Tools</span>
         </div>
-        <div id="walletInfo"></div>
-        <div id="transactionList"></div>
+        <ul class="menu">
+            <li><i class="fas fa-home"></i> <a href="#" class="disabled">Home</a></li>
+            <li><i class="fas fa-chart-line"></i> <a href="#" class="disabled">Sentiment Tracker</a></li>
+            <li class="active"><i class="fas fa-exchange-alt"></i> <a href="#">Solana Transaction Viewer</a></li>
+            <li><i class="fas fa-coins"></i> <a href="#" class="disabled">Token Tracker</a></li>
+            <li><i class="fas fa-leaf"></i> <a href="#" class="disabled">Detox & Reclaim</a></li>
+            <li><i class="fas fa-wallet"></i> <a href="#" class="disabled">Wallet Tracker</a></li>
+            <li><i class="fas fa-map-marker-alt"></i> <a href="#" class="disabled">Positioning</a></li>
+            <li><i class="fas fa-fire"></i> <a href="#" class="disabled">Token Burner</a></li>
+            <li><i class="fas fa-briefcase"></i> <a href="#" class="disabled">Portfolio</a></li>
+            <li><i class="fas fa-book"></i> <a href="#" class="disabled">Guide</a></li>
+            <li><i class="fas fa-headset"></i> <a href="#" class="disabled">Support</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="token-ticker">
+                <span>Top Tokens: </span>
+                <div class="ticker-items">
+                    <a href="#" data-token="solana">SOL</a>
+                    <a href="#" data-token="usdc">USDC</a>
+                    <a href="#" data-token="usdt">USDT</a>
+                </div>
+            </div>
+            <div class="top-icons">
+                <i class="fas fa-user"></i>
+                <i class="fas fa-search"></i>
+                <button class="connect-wallet">Connect Wallet</button>
+            </div>
+        </div>
+        <div class="content">
+            <div class="input-section">
+                <input type="text" id="walletAddress" placeholder="Enter a Solana wallet address (e.g., 7gFvUbRt7fW4QeNipXb63gS4xETngbG9RuXw5YviFzSF)">
+                <button onclick="fetchWalletData()">Search</button>
+            </div>
+            <div id="walletInfo"></div>
+            <div id="transactionList"></div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
