@@ -80,7 +80,6 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Colores por token (ejemplos basados en mint) */
 .token-FPz { /* USDC */
     color: #2775CA;
     font-weight: bold;
@@ -96,7 +95,9 @@ tr:hover {
     font-weight: bold;
 }
 
-canvas {
-    margin-top: 20px;
-    max-width: 100%;
+#balanceChart {
+    max-width: 300px; /* Tamaño máximo del gráfico */
+    max-height: 150px;
+    margin: 20px auto; /* Centrado */
+    display: block;
 }
