@@ -344,7 +344,7 @@ async function updateMemecoinCarousel() {
         const carousel = document.getElementById('memecoinCarousel');
         carousel.innerHTML = '';
 
-        // Aseguramos que se muestren 10 memecoins
+        // Aseguramos que se muestren exactamente 10 memecoins
         const memecoinsToShow = topMemecoins.slice(0, 10);
         memecoinsToShow.forEach((coin) => {
             const item = document.createElement('div');
@@ -363,7 +363,7 @@ async function updateMemecoinCarousel() {
                     <p>Market Cap: $${coin.market_cap.toLocaleString()}</p>
                     <p>24H Volume: $${coin.total_volume.toLocaleString()}</p>
                     <p>24H Change: ${coin.price_change_percentage_24h.toFixed(2)}%</p>
-                    <a href="https://www.coingecko.com/en/coins/${coin.id}" target="_blank">View on CoinGecko</a>
+                    <button onclick="window.location.href='https://www.coingecko.com/en/coins/${coin.id}'">Go to CoinGecko</button>
                 `;
                 detailsDiv.scrollIntoView({ behavior: 'smooth' });
             });
@@ -372,16 +372,16 @@ async function updateMemecoinCarousel() {
 
         // Animación del carrusel con desvanecimiento
         let offset = 0;
-        const fadeStart = -200; // Punto donde empieza a desvanecerse
+        const fadeStart = -200;
         setInterval(() => {
             offset -= 1;
-            if (offset <= -110 * 10) offset = 0; // Ajustado para 10 elementos
+            if (offset <= -1200) offset = 0; // Ajustado para 10 elementos completos (120px cada uno)
             carousel.style.transform = `translateX(${offset}px)`;
 
             document.querySelectorAll('.carousel-item').forEach(item => {
                 const itemOffset = item.getBoundingClientRect().left - carousel.getBoundingClientRect().left;
                 if (itemOffset <= fadeStart) {
-                    const opacity = Math.max(0, (itemOffset + 300) / 100); // Desvanecimiento gradual
+                    const opacity = Math.max(0, (itemOffset + 300) / 100);
                     item.style.opacity = opacity;
                 } else {
                     item.style.opacity = 1;
