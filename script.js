@@ -129,13 +129,13 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
     let tokenHtml = '';
     if (Array.isArray(tokenAccounts) && tokenAccounts.length > 0) {
         tokenHtml = `
-            <table class="token-table">
+            <table class="token-table" role="grid" aria-label="SPL Tokens in Wallet">
                 <thead>
                     <tr>
-                        <th>Token</th>
-                        <th>Amount</th>
-                        <th>Value USD</th>
-                        <th>% of Supply</th>
+                        <th scope="col">Token</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Value USD</th>
+                        <th scope="col">% of Supply</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -163,11 +163,11 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
 
     let html = `
         <h3>Wallet Information</h3>
-        <table>
+        <table role="grid" aria-label="Wallet Information">
             <thead>
                 <tr>
-                    <th>Data</th>
-                    <th>Value</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Value</th>
                 </tr>
             </thead>
             <tbody>
@@ -294,12 +294,12 @@ function displayTransactions(transactions, container) {
 
     let html = `
         <h3>Recent Transactions</h3>
-        <table>
+        <table role="grid" aria-label="Recent Transactions">
             <thead>
                 <tr>
-                    <th>Hash</th>
-                    <th>Date</th>
-                    <th>Confirmations</th>
+                    <th scope="col">Hash</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Confirmations</th>
                 </tr>
             </thead>
             <tbody>
@@ -335,7 +335,6 @@ function displayTransactions(transactions, container) {
     });
 }
 
-// Carrusel de memecoins con CoinGecko
 async function updateMemecoinCarousel() {
     try {
         const response = await fetch(coingeckoMarketsUrl);
@@ -344,7 +343,6 @@ async function updateMemecoinCarousel() {
         const carousel = document.getElementById('memecoinCarousel');
         carousel.innerHTML = '';
 
-        // Aseguramos que se muestren exactamente 10 memecoins
         const memecoinsToShow = topMemecoins.slice(0, 10);
         memecoinsToShow.forEach((coin) => {
             const item = document.createElement('div');
@@ -363,19 +361,18 @@ async function updateMemecoinCarousel() {
                     <p>Market Cap: $${coin.market_cap.toLocaleString()}</p>
                     <p>24H Volume: $${coin.total_volume.toLocaleString()}</p>
                     <p>24H Change: ${coin.price_change_percentage_24h.toFixed(2)}%</p>
-                    <button onclick="window.location.href='https://www.coingecko.com/en/coins/${coin.id}'">Go to CoinGecko</button>
+                    <a href="https://www.coingecko.com/en/coins/${coin.id}" target="_blank">View on CoinGecko</a>
                 `;
                 detailsDiv.scrollIntoView({ behavior: 'smooth' });
             });
             carousel.appendChild(item);
         });
 
-        // Animación del carrusel con desvanecimiento
         let offset = 0;
         const fadeStart = -200;
         setInterval(() => {
             offset -= 1;
-            if (offset <= -1200) offset = 0; // Ajustado para 10 elementos completos (120px cada uno)
+            if (offset <= -1200) offset = 0;
             carousel.style.transform = `translateX(${offset}px)`;
 
             document.querySelectorAll('.carousel-item').forEach(item => {
@@ -395,6 +392,5 @@ async function updateMemecoinCarousel() {
     }
 }
 
-// Actualizar cada 5 minutos
 updateMemecoinCarousel();
-setInterval(updateMemecoinCarousel, 300000); // 5 minutos
+setInterval(updateMemecoinCarousel, 300000);
