@@ -60,3 +60,43 @@ async function updateMemecoinCarousel() {
 }
 
 updateMemecoinCarousel();
+
+// 🔍 Buscar transacciones de Solana
+async function fetchWalletData() {
+    const address = document.getElementById("walletAddress").value;
+    if (!address) {
+        alert("Por favor, escribe una dirección de Solana");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${rpcUrl}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                jsonrpc: "2.0",
+                id: 1,
+                method: "getSignaturesForAddress",
+                params: [address, { limit: 5 }]
+            })
+        });
+        const data = await response.json();
+        
+        if (data.result) {
+            const transactionList = document.getElementById("transactionList");
+            transactionList.innerHTML = "<h2>Últimas 5 transacciones:</h2>";
+            data.result.forEach(tx => {
+                transactionList.innerHTML += `<p>Transacción: ${tx.signature}</p>`;
+            });
+        } else {
+            document.getElementById("transactionList").innerHTML = "<p>No se encontraron transacciones.</p>";
+        }
+    } catch (error) {
+        alert("Error al buscar transacciones: " + error.message);
+    }
+}
+
+// 📜 Abrir/Cerrar el menú lateral
+document.getElementById("menu-toggle").addEventListener("click", function() {
+    document.querySelector(".sidebar").classList.toggle("active");
+});
