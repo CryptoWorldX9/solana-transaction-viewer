@@ -10,7 +10,7 @@
 </head>
 <body>
     <button id="menu-toggle" class="menu-toggle"><i class="fas fa-bars"></i></button>
-    <div class="sidebar">
+    <div class="sidebar active">
         <ul class="menu">
             <li><i class="fas fa-home"></i> <a href="#" class="disabled">Home</a></li>
             <li><i class="fas fa-chart-line"></i> <a href="#" class="disabled">Sentiment Tracker</a></li>
@@ -30,10 +30,7 @@
             <div class="logo">
                 <span>CRYPTO TOOLS</span>
             </div>
-            <div class="token-ticker">
-                <span>Top Solana Memecoins (24H):</span>
-                <div class="memecoin-list" id="memecoinList"></div>
-            </div>
+            <div class="memecoin-list" id="memecoinList"></div>
             <div class="top-icons">
                 <i class="fas fa-user"></i>
                 <i class="fas fa-search"></i>
@@ -52,6 +49,9 @@
             </div>
             <div id="memecoinDetails" style="display: none; width: 100%; max-width: 800px; margin-top: 20px; background: #1A1A1A; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);"></div>
         </div>
+        <footer class="footer">
+            <div class="crypto-prices" id="cryptoPrices"></div>
+        </footer>
     </div>
     <script src="script.js"></script>
 </body>
