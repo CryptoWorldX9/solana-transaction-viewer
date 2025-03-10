@@ -359,27 +359,36 @@ function displayTransactions(transactions, container) {
     });
 }
 
+// Limpiar datos mostrados
+function clearData() {
+    const walletInfoDiv = document.getElementById('walletInfo');
+    const transactionListDiv = document.getElementById('transactionList');
+    walletInfoDiv.innerHTML = ''; // Completamente vacío
+    transactionListDiv.innerHTML = ''; // Completamente vacío
+    document.getElementById("walletAddress").value = "";
+}
+
 // 🎡 Lista estática de memecoins específicas
 function updateMemecoinList() {
     const memecoinList = document.getElementById('memecoinList');
     memecoinList.innerHTML = '';
 
     const memecoins = [
-        { name: 'Flork', img: 'https://via.placeholder.com/20?text=Flork', dex: 'https://jup.ag/swap/FLORK-SOL' },
-        { name: 'Brett', img: 'https://via.placeholder.com/20?text=Brett', dex: 'https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=BRETT' },
-        { name: 'Lofi', img: 'https://via.placeholder.com/20?text=Lofi', dex: 'https://sui.dexscreener.com/' },
-        { name: 'SPX', img: 'https://via.placeholder.com/20?text=SPX', dex: 'https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=SPX' }
+        { name: 'Flork', img: 'https://dexscreener.com/static/images/coins/solana/FLORK.png', dex: 'https://dexscreener.com/solana/8qGaDX78hK2h8XU8JxsNfeX2uZrgwP2uTCSsUGU5Kdwf' },
+        { name: 'Brett', img: 'https://dexscreener.com/static/images/coins/base/BRETT.png', dex: 'https://dexscreener.com/base/0x532f27101965dd16442e59d40670faf5ebb142e4' },
+        { name: 'Lofi', img: 'https://dexscreener.com/static/images/coins/sui/LOFI.png', dex: 'https://dexscreener.com/sui/0x4e5e11f0c9ab8a4e57329bf0b8a6e2c4e43d0b9e684db01f990c8e24c657d8e0' },
+        { name: 'SPX', img: 'https://dexscreener.com/static/images/coins/ethereum/SPX.png', dex: 'https://dexscreener.com/ethereum/0x50c0def242b8546c596cdda757fb78d7ad66f18b' }
     ];
 
     memecoins.forEach(coin => {
         const item = document.createElement('div');
         item.className = 'memecoin-item';
         item.innerHTML = `
-            <img src="${coin.img}" alt="${coin.name}">
+            <img src="${coin.img}" alt="${coin.name}" onerror="this.src='https://via.placeholder.com/20?text=${coin.name}'">
             <span>${coin.name}</span>
         `;
         item.addEventListener('click', () => {
-            window.location.href = coin.dex;
+            window.location.href = coin.dex; // Redirige a DexScreener
         });
         memecoinList.appendChild(item);
     });
@@ -389,11 +398,15 @@ updateMemecoinList();
 
 // 📈 Precios y gráficos en el footer
 async function updateCryptoPrices() {
+    const cryptoPrices = document.getElementById('cryptoPrices');
+    cryptoPrices.innerHTML = '<span>Loading prices...</span>';
+
     try {
         const priceResponse = await fetch(coingeckoUrl);
+        if (!priceResponse.ok) throw new Error('API request failed');
         const priceData = await priceResponse.json();
-        const cryptoPrices = document.getElementById('cryptoPrices');
-        cryptoPrices.innerHTML = '';
+
+        cryptoPrices.innerHTML = ''; // Limpiar mensaje de carga
 
         const coins = [
             { id: 'bitcoin', name: 'Bitcoin' },
@@ -440,7 +453,7 @@ async function updateCryptoPrices() {
         }
     } catch (error) {
         console.error('Error fetching crypto prices:', error);
-        document.getElementById('cryptoPrices').innerHTML = '<span>Error loading prices</span>';
+        cryptoPrices.innerHTML = '<span>Prices unavailable, retrying soon...</span>';
     }
 }
 
@@ -450,4 +463,7 @@ setInterval(updateCryptoPrices, 60000); // Actualiza cada minuto
 // 📜 Abrir/Cerrar menú lateral
 document.getElementById("menu-toggle").addEventListener("click", function() {
     document.querySelector(".sidebar").classList.toggle("active");
+    document.querySelector(".main-content").classList.toggle("menu-closed");
+    document.querySelector(".footer").classList.toggle("menu-closed");
+    document.querySelector(".menu-toggle").classList.toggle("menu-closed");
 });
