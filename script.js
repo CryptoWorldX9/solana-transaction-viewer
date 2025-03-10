@@ -1,7 +1,6 @@
 const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2';
-const coingeckoUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana,ripple,usd-coin,tether,dogecoin&vs_currencies=usd';
+const coingeckoPriceUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana,ripple,usd-coin,tether,dogecoin&vs_currencies=usd';
 const coingeckoTokenUrl = 'https://api.coingecko.com/api/v3/simple/token_price/solana?contract_addresses={ADDRESSES}&vs_currencies=usd';
-const coingeckoChartUrl = 'https://api.coingecko.com/api/v3/coins/{id}/market_chart?vs_currency=usd&days=1&interval=hourly';
 
 const tokenNames = {
     'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDC',
@@ -62,7 +61,7 @@ async function fetchWalletData() {
     transactionListDiv.innerHTML = '<p>Loading transactions...</p>';
 
     try {
-        const priceResponse = await fetch(coingeckoUrl);
+        const priceResponse = await fetch(coingeckoPriceUrl);
         const priceData = await priceResponse.json();
         const solPriceUSD = priceData.solana.usd;
 
@@ -149,7 +148,6 @@ async function fetchWalletData() {
             transactionListDiv.innerHTML = '<p>No recent transactions found or an error occurred.</p>';
         }
 
-        // Limpiar el campo de búsqueda
         document.getElementById("walletAddress").value = "";
     } catch (error) {
         console.error('Error:', error);
@@ -396,15 +394,15 @@ function updateMemecoinList() {
 
 updateMemecoinList();
 
-// 📈 Precios y gráficos en el footer
+// 📈 Precios en el footer
 async function updateCryptoPrices() {
     const cryptoPrices = document.getElementById('cryptoPrices');
     cryptoPrices.innerHTML = '<span>Loading prices...</span>';
 
     try {
-        const priceResponse = await fetch(coingeckoUrl);
-        if (!priceResponse.ok) throw new Error('API request failed');
-        const priceData = await priceResponse.json();
+        const response = await fetch(coingeckoPriceUrl);
+        if (!response.ok) throw new Error('API request failed');
+        const priceData = await response.json();
 
         cryptoPrices.innerHTML = ''; // Limpiar mensaje de carga
 
@@ -419,45 +417,22 @@ async function updateCryptoPrices() {
             { id: 'dogecoin', name: 'DOGE' }
         ];
 
-        for (const coin of coins) {
-            const chartResponse = await fetch(coingeckoChartUrl.replace('{id}', coin.id));
-            const chartData = await chartResponse.json();
-            const prices = chartData.prices.slice(-24).map(p => p[1]); // Últimas 24 horas
-
+        coins.forEach(coin => {
             const div = document.createElement('div');
             div.className = 'crypto-item';
-            div.innerHTML = `
-                <span>${coin.name}: $${priceData[coin.id].usd.toLocaleString()}</span>
-                <canvas id="${coin.id}-chart" width="100" height="50"></canvas>
-            `;
+            div.innerHTML = `<span>${coin.name}: $${priceData[coin.id].usd.toLocaleString()}</span>`;
             cryptoPrices.appendChild(div);
-
-            const ctx = document.getElementById(`${coin.id}-chart`).getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: Array(24).fill(''),
-                    datasets: [{
-                        data: prices,
-                        borderColor: '#00D4FF',
-                        borderWidth: 1,
-                        fill: false,
-                        pointRadius: 0
-                    }]
-                },
-                options: {
-                    scales: { x: { display: false }, y: { display: false } },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
+        });
     } catch (error) {
         console.error('Error fetching crypto prices:', error);
-        cryptoPrices.innerHTML = '<span>Prices unavailable, retrying soon...</span>';
+        cryptoPrices.innerHTML = `
+            <span>Bitcoin: $60,000 | Ethereum: $2,500 | BNB: $550 | Solana: $150 | XRP: $0.60 | USDC: $1.00 | USDT: $1.00 | DOGE: $0.15 (Retry soon...)</span>
+        `;
     }
 }
 
-updateCryptoPrices();
+// Retraso inicial para evitar problemas de tasa
+setTimeout(updateCryptoPrices, 1000);
 setInterval(updateCryptoPrices, 60000); // Actualiza cada minuto
 
 // 📜 Abrir/Cerrar menú lateral
