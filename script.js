@@ -210,9 +210,11 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
             </tbody>
         </table>
         <h3>Balance Distribution</h3>
-        <canvas id="balanceChart" width="500" height="300"></canvas>
+        <canvas id="balanceChart" width="500" height="300" aria-label="Chart showing the distribution of SOL and SPL tokens in the wallet"></canvas>
+        <p class="sr-only">This chart shows the balance distribution: ${solBalance.toFixed(4)} SOL and ${tokenBalances.toFixed(4)} SPL tokens.</p>
         <h3>Relationship Map (Simulation)</h3>
-        <canvas id="bubbleMap" width="300" height="150"></canvas>
+        <canvas id="bubbleMap" width="300" height="150" aria-label="Chart simulating relationships between wallets"></canvas>
+        <p class="sr-only">This chart simulates relationships between the current wallet and related wallets as bubbles.</p>
     `;
 
     container.innerHTML = html;
