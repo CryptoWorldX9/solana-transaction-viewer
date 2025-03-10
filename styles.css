@@ -11,8 +11,8 @@ body {
     height: calc(100vh - 60px);
     background: #1A1A1A;
     position: fixed;
-    top: 60px; /* Debajo del top-bar */
-    left: 0; /* Visible por defecto */
+    top: 60px;
+    left: 0;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     z-index: 15;
@@ -236,12 +236,12 @@ button:hover {
     margin-bottom: 20px;
     width: 100%;
     max-width: 800px;
-    margin-left: 20px; /* Desplazado a la derecha */
+    margin-left: 20px;
 }
 
 .sidebar.active ~ .main-content #walletInfo,
 .sidebar.active ~ .main-content #transactionList {
-    margin-left: 270px; /* Más desplazado cuando el menú está activo */
+    margin-left: 270px;
 }
 
 h3 {
@@ -436,7 +436,8 @@ tr:hover {
     }
 
     .menu-toggle {
-        left: 10px;
+        left: auto;
+        right: 10px;
         top: 10px;
     }
 
@@ -453,11 +454,6 @@ tr:hover {
         font-size: 10px;
     }
 
-    .crypto-item canvas {
-        width: 80px !important;
-        height: 40px !important;
-    }
-
     th, td {
         padding: 8px;
         font-size: 14px;
@@ -469,7 +465,7 @@ tr:hover {
     }
 
     #walletInfo, #transactionList {
-        margin-left: 0; /* Sin desplazamiento adicional en móvil */
+        margin-left: 0;
     }
 }
 
