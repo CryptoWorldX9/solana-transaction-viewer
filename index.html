@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <button id="menu-toggle" class="menu-toggle"><i class="fas fa-bars"></i></button>
-    
     <div class="sidebar">
         <div class="logo">
             <span>CRYPTO TOOLS</span>
@@ -29,7 +27,6 @@
             <li><i class="fas fa-headset"></i> <a href="#" class="disabled">Support</a></li>
         </ul>
     </div>
-
     <div class="main-content">
         <div class="top-bar">
             <div class="token-ticker">
@@ -37,23 +34,24 @@
                 <div class="carousel" id="memecoinCarousel"></div>
             </div>
             <div class="top-icons">
-                <button class="connect-wallet" id="connect-wallet">Connect Wallet</button>
+                <i class="fas fa-user"></i>
+                <i class="fas fa-search"></i>
+                <button class="connect-wallet">Connect Wallet</button>
             </div>
         </div>
-        
         <div class="content">
             <div class="viewer-section">
                 <h1>Solana Transaction Viewer</h1>
                 <div class="input-section">
-                    <input type="text" id="walletAddress" placeholder="Enter a Solana wallet address">
+                    <input type="text" id="walletAddress" placeholder="Enter a Solana wallet address (e.g., 7gFvUbRt7fW4QeNipXb63gS4xETngbG9RuXw5YviFzSF)">
                     <button onclick="fetchWalletData()">Search</button>
                 </div>
                 <div id="walletInfo"></div>
                 <div id="transactionList"></div>
             </div>
+            <div id="memecoinDetails" style="display: none; width: 100%; max-width: 800px; margin-top: 20px; background: #1A1A1A; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);"></div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
