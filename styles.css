@@ -17,10 +17,15 @@ body {
     background: #1A1A1A;
     position: fixed;
     top: 0;
-    left: 0;
+    left: -250px; /* Escondido por defecto */
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     z-index: 1000;
+    transition: left 0.3s ease; /* Suave deslizamiento */
+}
+
+.sidebar.active {
+    left: 0; /* Visible cuando está activo */
 }
 
 .logo {
@@ -51,41 +56,14 @@ body {
     width: calc(100% - 250px);
 }
 
-/* 📌 Ajuste del buscador de wallet */
-.viewer-section {
-    margin-top: 120px;
-    text-align: center;
-}
-
-.input-section {
+/* 🎡 Carrusel de Memecoins */
+.carousel {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+    overflow-x: auto; /* Desplazable horizontalmente */
     gap: 10px;
-    margin-top: 10px;
+    padding: 10px;
 }
 
-/* 📌 Botón de conectar wallet más visible */
-.connect-wallet {
-    padding: 10px 15px;
-    background: linear-gradient(135deg, #00D4FF, #007ACC);
-    color: #FFFFFF;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-    white-space: nowrap;
-    margin-left: auto;
-    margin-right: 20px;
-}
-
-.connect-wallet:hover {
-    background: linear-gradient(135deg, #007ACC, #00D4FF);
-}
-
-/* 🎡 Carrusel de Memecoins con interacción */
 .carousel-item {
     display: flex;
     align-items: center;
@@ -104,10 +82,78 @@ body {
     transform: scale(1.1);
 }
 
+/* 📌 Ajuste del buscador de wallet */
+.viewer-section {
+    margin-top: 120px;
+    text-align: center;
+}
+
+.input-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.input-section button {
+    padding: 10px 15px;
+    background: linear-gradient(135deg, #00D4FF, #007ACC);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* 📌 Botón de conectar wallet */
+.connect-wallet {
+    padding: 10px 15px;
+    background: linear-gradient(135deg, #00D4FF, #007ACC);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+.connect-wallet:hover {
+    background: linear-gradient(135deg, #007ACC, #00D4FF);
+}
+
+/* 📜 Estilos para la información y transacciones */
+#walletInfo, #transactionList {
+    background: #1A1A1A;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+/* 🔧 Botón del menú */
+.menu-toggle {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: #00D4FF;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
 /* 📱 Ajustes para dispositivos móviles */
 @media (max-width: 768px) {
     .sidebar {
         display: none;
+    }
+
+    .sidebar.active {
+        display: block; /* Visible en móviles cuando está activo */
     }
 
     .top-bar {
