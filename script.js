@@ -398,3 +398,14 @@ async function updateMemecoinCarousel() {
 // Actualizar cada 5 minutos
 updateMemecoinCarousel();
 setInterval(updateMemecoinCarousel, 300000); // 5 minutos
+document.addEventListener("DOMContentLoaded", function () {
+    const menuToggle = document.createElement("button");
+    menuToggle.innerText = "☰";
+    menuToggle.classList.add("menu-toggle");
+    document.body.appendChild(menuToggle);
+
+    const sidebar = document.querySelector(".sidebar");
+    menuToggle.addEventListener("click", function () {
+        sidebar.classList.toggle("show");
+    });
+});
