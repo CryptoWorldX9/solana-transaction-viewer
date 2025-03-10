@@ -12,10 +12,15 @@ body {
     background: #1A1A1A;
     position: fixed;
     top: 0;
-    left: 0;
+    left: -250px; /* Escondido por defecto */
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     z-index: 10;
+    transition: left 0.3s ease;
+}
+
+.sidebar.active {
+    left: 0; /* Visible cuando activo */
 }
 
 .logo {
@@ -65,7 +70,7 @@ body {
 }
 
 .main-content {
-    margin-left: 250px;
+    margin-left: 0; /* Ajustado porque el menú está oculto por defecto */
     padding: 0;
     background-color: #0A0A0A;
     min-height: 100vh;
@@ -83,11 +88,11 @@ body {
     border-bottom: 1px solid #00D4FF;
     position: fixed;
     top: 0;
-    left: 250px;
+    left: 0; /* Ajustado porque el menú no ocupa espacio fijo */
     right: 0;
     z-index: 5;
     box-sizing: border-box;
-    width: calc(100% - 250px);
+    width: 100%;
 }
 
 .token-ticker {
@@ -95,7 +100,7 @@ body {
     align-items: center;
     flex-shrink: 1;
     position: relative;
-    max-width: 60%; /* Reducido para dejar más espacio a .top-icons */
+    max-width: 60%;
 }
 
 .token-ticker span {
@@ -110,19 +115,26 @@ body {
 
 .carousel {
     display: flex;
-    overflow: hidden;
-    width: 1200px; /* Ajustado para 10 elementos completos (110px cada uno + márgenes) */
+    overflow-x: auto;
+    width: 100%;
+    max-width: 1200px;
     height: 50px;
     position: relative;
-    margin-left: 200px;
-    z-index: 1;
+    margin-left: 0;
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+.carousel-inner {
+    display: flex;
+    overflow-x: auto;
 }
 
 .carousel-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 110px; /* Ajustado para asegurar espacio completo */
+    min-width: 110px;
     height: 100%;
     background: #2A2A2A;
     margin-right: 10px;
@@ -142,6 +154,21 @@ body {
     font-weight: bold;
     font-size: 14px;
 }
+
+.carousel-prev, .carousel-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #00D4FF;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.carousel-prev { left: 0; }
+.carousel-next { right: 0; }
 
 .top-icons {
     display: flex;
@@ -312,6 +339,17 @@ tr:hover {
     display: block;
 }
 
+.menu-toggle {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: #00D4FF;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 11;
+}
+
 @media (max-width: 768px) {
     .top-bar {
         padding: 5px 10px;
@@ -320,16 +358,15 @@ tr:hover {
     }
 
     .token-ticker {
-        max-width: 45%; /* Más espacio para .top-icons */
+        max-width: 45%;
     }
 
     .carousel {
-        width: 500px; /* Ajustado para 10 elementos en pantallas pequeñas */
-        margin-left: 150px;
+        max-width: 500px;
     }
 
     .carousel-item {
-        min-width: 90px; /* Reducido para que quepan 10 */
+        min-width: 90px;
     }
 
     .top-icons {
@@ -357,7 +394,7 @@ tr:hover {
     }
 
     .carousel {
-        width: 1200px;
+        max-width: 1200px;
     }
 
     .top-icons i {
