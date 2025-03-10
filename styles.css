@@ -21,11 +21,6 @@ body {
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     z-index: 1000;
-    transition: transform 0.3s ease-in-out;
-}
-
-.sidebar.hidden {
-    transform: translateX(-100%);
 }
 
 .logo {
@@ -56,9 +51,9 @@ body {
     width: calc(100% - 250px);
 }
 
-/* 📌 Mejoras en el buscador de wallet */
+/* 📌 Ajuste del buscador de wallet */
 .viewer-section {
-    margin-top: 80px;
+    margin-top: 120px;
     text-align: center;
 }
 
@@ -68,9 +63,10 @@ body {
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
+    margin-top: 10px;
 }
 
-/* 📌 Botón de conectar wallet ahora es visible y centrado */
+/* 📌 Botón de conectar wallet más visible */
 .connect-wallet {
     padding: 10px 15px;
     background: linear-gradient(135deg, #00D4FF, #007ACC);
@@ -82,7 +78,7 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
     white-space: nowrap;
     margin-left: auto;
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 .connect-wallet:hover {
@@ -100,38 +96,33 @@ body {
     margin-right: 10px;
     border-radius: 8px;
     cursor: pointer;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out, transform 0.2s;
 }
 
 .carousel-item:hover {
     background: #007ACC;
+    transform: scale(1.1);
 }
 
 /* 📱 Ajustes para dispositivos móviles */
 @media (max-width: 768px) {
     .sidebar {
-        transform: translateX(-100%);
-        position: fixed;
-    }
-
-    .sidebar.show {
-        transform: translateX(0);
+        display: none;
     }
 
     .top-bar {
         left: 0;
         width: 100%;
-        padding: 5px 10px;
         flex-direction: column;
         align-items: center;
     }
 
     .connect-wallet {
-        margin: 10px 0;
+        margin-top: 10px;
     }
 
     .viewer-section {
-        margin-top: 100px;
+        margin-top: 140px;
     }
 }
 
