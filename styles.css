@@ -8,14 +8,14 @@ body {
 
 .sidebar {
     width: 250px;
-    height: 100vh;
+    height: calc(100vh - 60px); /* Altura ajustada para no tapar top-bar */
     background: #1A1A1A;
     position: fixed;
-    top: 0;
+    top: 60px; /* Debajo del top-bar */
     left: 0; /* Visible por defecto */
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    z-index: 15; /* Encima del top-bar */
+    z-index: 15; /* Encima del footer */
     transition: left 0.3s ease;
 }
 
@@ -30,7 +30,7 @@ body {
 .menu {
     list-style: none;
     padding: 0;
-    margin: 40px 0 0 0;
+    margin: 0;
 }
 
 .menu li {
@@ -86,9 +86,10 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 10; /* Debajo del menú */
+    z-index: 20; /* Encima del menú */
     box-sizing: border-box;
     width: 100%;
+    height: 60px;
 }
 
 .logo {
@@ -160,7 +161,7 @@ body {
     align-items: center;
     width: 100%;
     max-width: 1200px;
-    padding-top: 60px;
+    padding-top: 80px; /* Más espacio para el top-bar */
     padding-bottom: 100px; /* Espacio para el footer */
     min-height: calc(100vh - 60px);
 }
@@ -181,6 +182,7 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 10px;
 }
 
 input[type="text"] {
@@ -200,7 +202,6 @@ button {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-left: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -217,6 +218,14 @@ button:hover {
 
 .copy-btn:hover {
     background: #007ACC;
+}
+
+.clear-btn {
+    background: #FF5555;
+}
+
+.clear-btn:hover {
+    background: #CC4444;
 }
 
 #walletInfo, #transactionList, #memecoinDetails {
@@ -295,7 +304,7 @@ tr:hover {
 
 .menu-toggle {
     position: fixed;
-    top: 10px;
+    top: 15px;
     left: 260px; /* A la derecha del menú */
     background: #00D4FF;
     border: none;
@@ -354,6 +363,7 @@ tr:hover {
     .sidebar {
         width: 200px;
         left: -200px; /* Escondido por defecto en móvil */
+        top: 60px; /* Debajo del top-bar */
     }
 
     .sidebar.active {
@@ -398,7 +408,7 @@ tr:hover {
 
     .content {
         padding-top: 80px;
-        padding-bottom: 120px; /* Más espacio para el footer */
+        padding-bottom: 120px;
         width: 100%;
     }
 
@@ -408,7 +418,7 @@ tr:hover {
     }
 
     input[type="text"] {
-        width: 60%;
+        width: 50%;
         font-size: 14px;
     }
 
@@ -418,7 +428,8 @@ tr:hover {
     }
 
     .menu-toggle {
-        left: 10px; /* Siempre a la izquierda en móvil */
+        left: 10px;
+        top: 10px;
     }
 
     .footer {
@@ -437,6 +448,16 @@ tr:hover {
     .crypto-item canvas {
         width: 80px !important;
         height: 40px !important;
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .token-table th, .token-table td {
+        padding: 6px;
+        font-size: 12px;
     }
 }
 
