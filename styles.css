@@ -24,9 +24,7 @@ body {
 }
 
 .logo {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
+    margin-right: 20px;
 }
 
 .logo span {
@@ -39,7 +37,7 @@ body {
 .menu {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 40px 0 0 0;
 }
 
 .menu li {
@@ -90,7 +88,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 20; /* Más alto que el menú para estar siempre visible */
+    z-index: 20; /* Más alto que el menú */
     box-sizing: border-box;
     width: 100%;
 }
@@ -98,8 +96,9 @@ body {
 .token-ticker {
     display: flex;
     align-items: center;
-    flex-shrink: 1;
-    max-width: 70%;
+    justify-content: center;
+    flex-grow: 1;
+    max-width: 60%;
 }
 
 .token-ticker span {
@@ -112,7 +111,7 @@ body {
 .memecoin-list {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .memecoin-item {
@@ -172,6 +171,7 @@ body {
 
 .viewer-section {
     text-align: center;
+    width: 100%;
 }
 
 h1 {
@@ -305,7 +305,7 @@ tr:hover {
     border: none;
     padding: 10px;
     cursor: pointer;
-    z-index: 30; /* Más alto que todo para siempre ser visible */
+    z-index: 30; /* Siempre visible */
     border-radius: 5px;
 }
 
@@ -315,7 +315,7 @@ tr:hover {
 
 @media (max-width: 768px) {
     .sidebar {
-        width: 200px; /* Reducido para móviles */
+        width: 200px;
         left: -200px;
     }
 
@@ -325,27 +325,31 @@ tr:hover {
 
     .top-bar {
         padding: 5px 10px;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    .logo span {
+        font-size: 18px;
     }
 
     .token-ticker {
-        max-width: 100%;
-        flex-wrap: wrap;
-        justify-content: center;
+        max-width: 50%;
+        justify-content: flex-start;
     }
 
     .memecoin-list {
-        gap: 10px;
-        flex-wrap: wrap;
+        gap: 5px;
     }
 
     .memecoin-item {
-        padding: 3px 8px;
+        padding: 3px 6px;
     }
 
     .memecoin-item img {
         width: 16px;
         height: 16px;
+        margin-right: 3px;
     }
 
     .memecoin-item span {
@@ -358,15 +362,24 @@ tr:hover {
     }
 
     .content {
-        padding-top: 80px; /* Más espacio para no tapar el encabezado */
+        padding-top: 80px;
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .viewer-section {
+        width: 90%;
+        margin: 0 auto;
     }
 
     input[type="text"] {
         width: 60%;
+        font-size: 14px;
     }
 
     button {
         padding: 10px 20px;
+        font-size: 14px;
     }
 }
 
@@ -376,6 +389,6 @@ tr:hover {
     }
 
     .token-ticker {
-        max-width: 70%;
+        max-width: 60%;
     }
 }
