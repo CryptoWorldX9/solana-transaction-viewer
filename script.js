@@ -10,22 +10,43 @@ const tokenNames = {
     '7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj': 'stSOL'
 };
 
-// 🌐 Conectar wallet (Phantom)
-async function connectWallet() {
-    if (window.solana && window.solana.isPhantom) {
-        try {
-            const response = await window.solana.connect();
-            alert(`Phantom Wallet conectada: ${response.publicKey.toString()}`);
-            document.getElementById("walletAddress").value = response.publicKey.toString();
-        } catch (err) {
-            alert("No se pudo conectar la wallet.");
+// 🌐 Conectar/Desconectar wallet (Phantom)
+let isWalletConnected = false;
+
+async function toggleWallet() {
+    const walletIcon = document.getElementById("wallet-icon");
+    if (!isWalletConnected) {
+        if (window.solana && window.solana.isPhantom) {
+            try {
+                const response = await window.solana.connect();
+                alert(`Phantom Wallet conectada: ${response.publicKey.toString()}`);
+                document.getElementById("walletAddress").value = response.publicKey.toString();
+                walletIcon.classList.remove("fas", "fa-wallet");
+                walletIcon.classList.add("fas", "fa-sign-out-alt");
+                walletIcon.title = "Disconnect Wallet";
+                isWalletConnected = true;
+            } catch (err) {
+                alert("No se pudo conectar la wallet.");
+            }
+        } else {
+            alert("Por favor instala Phantom Wallet.");
         }
     } else {
-        alert("Por favor instala Phantom Wallet.");
+        try {
+            await window.solana.disconnect();
+            alert("Wallet desconectada.");
+            document.getElementById("walletAddress").value = "";
+            walletIcon.classList.remove("fas", "fa-sign-out-alt");
+            walletIcon.classList.add("fas", "fa-wallet");
+            walletIcon.title = "Connect Wallet";
+            isWalletConnected = false;
+        } catch (err) {
+            alert("Error al desconectar la wallet.");
+        }
     }
 }
 
-document.getElementById("connect-wallet").addEventListener("click", connectWallet);
+document.getElementById("wallet-icon").addEventListener("click", toggleWallet);
 
 async function fetchWalletData() {
     const walletAddress = document.getElementById('walletAddress').value.trim();
@@ -334,27 +355,20 @@ function displayTransactions(transactions, container) {
     });
 }
 
-// 🎡 Carrusel de memecoins
-async function updateMemecoinCarousel() {
+// 🎡 Lista estática de 5 memecoins
+async function updateMemecoinList() {
     try {
         const response = await fetch(coingeckoMarketsUrl);
         const topMemecoins = await response.json();
-        const carousel = document.getElementById('memecoinCarousel');
-        carousel.innerHTML = `
-            <button class="carousel-prev"><</button>
-            <div class="carousel-inner"></div>
-            <button class="carousel-next">></button>
-        `;
-        const inner = carousel.querySelector('.carousel-inner');
-        inner.style.display = 'flex';
-        inner.style.overflowX = 'auto';
+        const memecoinList = document.getElementById('memecoinList');
+        memecoinList.innerHTML = '';
 
-        const memecoinsToShow = topMemecoins.slice(0, 10);
+        const memecoinsToShow = topMemecoins.slice(0, 5); // Solo 5 memecoins
         memecoinsToShow.forEach((coin) => {
             const item = document.createElement('div');
-            item.className = 'carousel-item';
+            item.className = 'memecoin-item';
             item.innerHTML = `
-                <img src="${coin.image || 'https://via.placeholder.com/30?text=' + coin.symbol}" alt="${coin.symbol}">
+                <img src="${coin.image || 'https://via.placeholder.com/20?text=' + coin.symbol}" alt="${coin.symbol}">
                 <span>${coin.symbol.toUpperCase()}</span>
             `;
             item.addEventListener('click', () => {
@@ -371,21 +385,16 @@ async function updateMemecoinCarousel() {
                 `;
                 detailsDiv.scrollIntoView({ behavior: 'smooth' });
             });
-            inner.appendChild(item);
+            memecoinList.appendChild(item);
         });
-
-        const prev = carousel.querySelector('.carousel-prev');
-        const next = carousel.querySelector('.carousel-next');
-        prev.addEventListener('click', () => inner.scrollBy({ left: -220, behavior: 'smooth' }));
-        next.addEventListener('click', () => inner.scrollBy({ left: 220, behavior: 'smooth' }));
     } catch (error) {
         console.error('Error fetching memecoins:', error);
-        document.getElementById('memecoinCarousel').innerHTML = '<span>Error loading memecoins</span>';
+        document.getElementById('memecoinList').innerHTML = '<span>Error loading memecoins</span>';
     }
 }
 
-updateMemecoinCarousel();
-setInterval(updateMemecoinCarousel, 300000); // 5 minutos
+updateMemecoinList();
+setInterval(updateMemecoinList, 300000); // 5 minutos
 
 // 📜 Abrir/Cerrar menú lateral
 document.getElementById("menu-toggle").addEventListener("click", function() {
