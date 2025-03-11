@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto Tools - Solana Transaction Viewer</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Asegúrate de que este archivo exista en la misma carpeta -->
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -13,21 +13,21 @@
         <ul class="menu">
             <li id="home-menu"><i class="fas fa-home"></i> <a href="#" id="home-link">Home</a></li>
             <li><i class="fas fa-chart-line"></i> <a href="#" class="disabled">Sentiment Tracker</a></li>
-            <li class="active"><i class="fas fa-exchange-alt"></i> <a href="#" id="viewer-link">Solana Transaction Viewer</a></li>
+            <li id="viewer-menu" class="active"><i class="fas fa-exchange-alt"></i> <a href="#" id="viewer-link">Solana Transaction Viewer</a></li>
             <li><i class="fas fa-coins"></i> <a href="#" class="disabled">Token Tracker</a></li>
-            <li><i class="fas fa-leaf"></i> <a href="#" id="detox-reclaim">Detox & Reclaim</a></li>
+            <li id="detox-menu"><i class="fas fa-leaf"></i> <a href="#" id="detox-reclaim" class="disabled">Wallet Detox</a></li>
             <li><i class="fas fa-wallet"></i> <a href="#" class="disabled">Wallet Tracker</a></li>
             <li><i class="fas fa-map-marker-alt"></i> <a href="#" class="disabled">Positioning</a></li>
             <li><i class="fas fa-fire"></i> <a href="#" class="disabled">Token Burner</a></li>
             <li><i class="fas fa-briefcase"></i> <a href="#" class="disabled">Portfolio</a></li>
             <li><i class="fas fa-book"></i> <a href="#" class="disabled">Guide</a></li>
-            <li><i class="fas fa-headset"></i> <a href="#" id="support-link">Support</a></li>
+            <li id="support-menu"><i class="fas fa-headset"></i> <a href="#" id="support-link">Support</a></li>
         </ul>
     </div>
     <div class="main-content">
         <div class="top-bar">
             <div class="logo">
-                <span>CRYPTO TOOLS</span>
+                <img src="logo.png" alt="Crypto Tools Logo">
             </div>
             <button id="menu-toggle" class="menu-toggle"><i class="fas fa-bars"></i></button>
             <div class="memecoin-list" id="memecoinList"></div>
@@ -58,7 +58,7 @@
                 <div id="transactionList"></div>
             </div>
             <div id="detox-section" class="detox-section" style="display: none;">
-                <h1>Detox & Reclaim</h1>
+                <h1>Wallet Detox</h1>
                 <div class="detox-input">
                     <button id="connect-wallet-detox" onclick="connectWalletForDetox()">Connect Wallet</button>
                     <div id="wallet-status" class="wallet-status">Wallet not connected</div>
@@ -102,5 +102,5 @@
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
     <script src="https://unpkg.com/@solana/spl-token@latest/lib/index.iife.js"></script>
     <script src="script.js"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91eeb7cacac50624',t:'MTc0MTczNDU1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
