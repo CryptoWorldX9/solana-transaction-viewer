@@ -124,12 +124,15 @@ body {
 }
 
 .logo {
+    flex-shrink: 0;
     margin-right: 10px;
 }
 
 .logo img {
     max-height: 40px;
+    max-width: 150px;
     width: auto;
+    height: auto;
     display: block;
 }
 
@@ -140,6 +143,7 @@ body {
     cursor: pointer;
     border-radius: 5px;
     margin-right: 10px;
+    flex-shrink: 0;
 }
 
 .menu-toggle:hover {
@@ -546,11 +550,11 @@ tr:hover {
 
     .top-bar {
         padding: 5px 10px;
-        flex-wrap: nowrap;
     }
 
     .logo img {
         max-height: 30px;
+        max-width: 100px;
     }
 
     .menu-toggle {
