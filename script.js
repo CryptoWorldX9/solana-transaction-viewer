@@ -592,11 +592,16 @@ async function connectWalletForDetox() {
     try {
         if (selectedWallet === 'phantom') {
             const response = await window.solana.connect();
+            if (!response.publicKey) throw new Error('No se obtuvo la clave pública de Phantom');
             publicKey = response.publicKey;
             walletProvider = 'phantom';
         } else if (selectedWallet === 'solflare') {
-            const response = await window.solflare.connect();
-            publicKey = response.publicKey;
+            // Asegurarnos de que Solflare esté conectado y obtener la clave pública
+            await window.solflare.connect();
+            if (!window.solflare.isConnected) throw new Error('Solflare no se conectó correctamente');
+            const response = await window.solflare.getAccount();
+            if (!response || !response.publicKey) throw new Error('No se obtuvo la clave pública de Solflare');
+            publicKey = new solanaWeb3.PublicKey(response.publicKey);
             walletProvider = 'solflare';
         } else if (selectedWallet === 'metamask') {
             const accounts = await window.ethereum.request({
@@ -606,6 +611,7 @@ async function connectWalletForDetox() {
                     request: { method: 'solana_connect' }
                 }
             });
+            if (!accounts || !accounts.publicKey) throw new Error('No se obtuvo la clave pública de MetaMask');
             publicKey = new solanaWeb3.PublicKey(accounts.publicKey);
             walletProvider = 'metamask';
         }
@@ -614,6 +620,7 @@ async function connectWalletForDetox() {
         document.getElementById('wallet-status').textContent = `Connected (${selectedWallet}): ${publicKey.toString().slice(0, 8)}...`;
         await scanWalletAssets(publicKey);
     } catch (err) {
+        console.error(`Error conectando ${selectedWallet}:`, err);
         alert(`Error conectando ${selectedWallet}: ${err.message}`);
     }
 }
