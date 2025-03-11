@@ -417,7 +417,7 @@ async function updateMemecoinList() {
                 <span>${coin.name}: $${prices[coin.name] === 'N/A' ? 'N/A' : prices[coin.name].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</span>
             `;
             item.addEventListener('click', () => {
-                window.open(coin.dex, '_blank'); // Abre en nueva pestaña
+                window.open(coin.dex, '_blank');
             });
             memecoinList.appendChild(item);
         });
@@ -430,7 +430,7 @@ async function updateMemecoinList() {
                 <span>${coin.name}: $${coin.name === 'Popcat' ? '0.20' : coin.name === 'Brett' ? '0.10' : '0.02'}</span>
             `;
             item.addEventListener('click', () => {
-                window.open(coin.dex, '_blank'); // Abre en nueva pestaña
+                window.open(coin.dex, '_blank');
             });
             memecoinList.appendChild(item);
         });
@@ -511,7 +511,6 @@ document.getElementById('search-input').addEventListener('input', (e) => {
     const resultsDiv = document.getElementById('search-results');
     resultsDiv.innerHTML = '';
 
-    // Lista estática de términos relacionados con la página
     const searchItems = [
         { name: 'Popcat', action: () => window.open('https://dexscreener.com/solana/7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', '_blank') },
         { name: 'Brett', action: () => window.open('https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4', '_blank') },
@@ -535,6 +534,79 @@ document.getElementById('search-input').addEventListener('input', (e) => {
         resultsDiv.innerHTML = '<div class="search-result-item">No results found</div>';
     }
 });
+
+// 🧹 Detox & Reclaim
+let detoxWalletConnected = false;
+
+document.getElementById('detox-reclaim').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('viewer-section').style.display = 'none';
+    document.getElementById('detox-section').style.display = 'block';
+    document.querySelector('.menu li.active').classList.remove('active');
+    document.getElementById('detox-reclaim').parentElement.classList.add('active');
+});
+
+async function connectWalletForDetox() {
+    if (window.solana && window.solana.isPhantom) {
+        try {
+            const response = await window.solana.connect();
+            detoxWalletConnected = true;
+            document.getElementById('wallet-status').textContent = `Connected: ${response.publicKey.toString().slice(0, 8)}...`;
+            scanWalletAssets(response.publicKey.toString());
+        } catch (err) {
+            alert("No se pudo conectar la wallet para Detox.");
+        }
+    } else {
+        alert("Por favor instala Phantom Wallet.");
+    }
+}
+
+async function scanWalletAssets(publicKey) {
+    const assetList = document.getElementById('asset-list');
+    assetList.innerHTML = '<p>Scanning wallet...</p>';
+
+    // Simulación de activos (reemplazar con RPC real)
+    const simulatedAssets = [
+        { type: 'Token', mint: 'ABC123', amount: 0, reclaimableSOL: 0.002 },
+        { type: 'NFT', mint: 'NFT456', amount: 1, reclaimableSOL: 0.01 },
+        { type: 'Token', mint: 'XYZ789', amount: 0, reclaimableSOL: 0.002 }
+    ];
+
+    let html = '<h3>Wallet Assets</h3>';
+    simulatedAssets.forEach((asset, index) => {
+        html += `
+            <div class="asset-item">
+                <input type="checkbox" id="asset-${index}" data-mint="${asset.mint}" data-sol="${asset.reclaimableSOL}">
+                <label for="asset-${index}">${asset.type}: ${asset.mint} (${asset.amount} units, ${asset.reclaimableSOL} SOL reclaimable)</label>
+            </div>
+        `;
+    });
+    assetList.innerHTML = html;
+
+    // Habilitar botón de quemar al seleccionar activos
+    assetList.addEventListener('change', () => {
+        const selected = assetList.querySelectorAll('input:checked').length > 0;
+        document.getElementById('burn-selected').disabled = !selected;
+    });
+}
+
+function burnSelectedAssets() {
+    const selectedAssets = document.querySelectorAll('#asset-list input:checked');
+    if (selectedAssets.length === 0) {
+        alert('No assets selected to burn.');
+        return;
+    }
+
+    let totalSOL = 0;
+    selectedAssets.forEach(asset => {
+        totalSOL += parseFloat(asset.dataset.sol);
+        // Aquí iría la lógica para quemar/cerrar cuentas con @solana/web3.js
+        console.log(`Burning asset: ${asset.dataset.mint}`);
+    });
+
+    alert(`Burned ${selectedAssets.length} assets. Reclaimed ${totalSOL.toFixed(4)} SOL (simulation).`);
+    scanWalletAssets(window.solana.publicKey.toString()); // Refrescar lista
+}
 
 // Inicializar las actualizaciones
 updateMemecoinList();
