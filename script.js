@@ -629,25 +629,30 @@ document.getElementById('support-link').addEventListener('click', (e) => {
     showSection('support-section');
 });
 
-// Formulario de soporte
+// Formulario de soporte con EmailJS
 document.getElementById('support-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const issue = document.getElementById('issue').value;
-    const ticketNumber = Math.floor(Math.random() * 1000000); // Número aleatorio de ticket
+    const ticketNumber = Math.floor(Math.random() * 1000000);
 
-    // Simulación de envío de correo (requiere backend o EmailJS)
-    console.log(`Sending email to cryptoworldx9@gmail.com:
-        Subject: Support Ticket #${ticketNumber}
-        From: ${name} <${email}>
-        Issue: ${issue}`);
+    const templateParams = {
+        name: name,
+        email: email,
+        issue: issue,
+        ticket: ticketNumber
+    };
 
-    // Mostrar mensaje de confirmación
-    document.getElementById('support-message').innerHTML = `
-        <p>Your ticket is #${ticketNumber}. Thank you for contacting us! We will get back to you soon.</p>
-    `;
-    document.getElementById('support-form').reset();
+    emailjs.send('crypto-tools-service', 'template_muodszo', templateParams)
+        .then(() => {
+            document.getElementById('support-message').innerHTML = `
+                <p>Your ticket is #${ticketNumber}. Thank you for contacting us! We will get back to you soon.</p>
+            `;
+            document.getElementById('support-form').reset();
+        }, (error) => {
+            alert('Error sending support request: ' + error.text);
+        });
 });
 
 // Inicializar las actualizaciones
