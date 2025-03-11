@@ -738,5 +738,16 @@ document.getElementById("menu-toggle").addEventListener("click", function() {
     document.querySelector(".menu-toggle").classList.toggle("menu-closed");
 });
 
+// Habilitar clic en íconos cuando el menú está retraído
+document.querySelectorAll('.menu li i').forEach(icon => {
+    icon.addEventListener('click', (e) => {
+        const link = icon.nextElementSibling;
+        if (link && !link.classList.contains('disabled')) {
+            const sectionId = link.id.replace('-link', '-section').replace('detox-reclaim', 'detox-section');
+            showSection(sectionId);
+        }
+    });
+});
+
 // Mostrar sección inicial
-showSection('viewer-section');
+showSection('home-section');
