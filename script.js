@@ -18,29 +18,29 @@ async function toggleWallet() {
         if (window.solana && window.solana.isPhantom) {
             try {
                 const response = await window.solana.connect();
-                alert(`Phantom Wallet conectada: ${response.publicKey.toString()}`);
+                alert(`Phantom Wallet connected: ${response.publicKey.toString()}`);
                 document.getElementById("walletAddress").value = response.publicKey.toString();
                 walletIcon.classList.remove("fas", "fa-wallet");
                 walletIcon.classList.add("fas", "fa-sign-out-alt");
                 walletIcon.title = "Disconnect Wallet";
                 isWalletConnected = true;
             } catch (err) {
-                alert("No se pudo conectar la wallet.");
+                alert("Could not connect wallet.");
             }
         } else {
-            alert("Por favor instala Phantom Wallet.");
+            alert("Please install Phantom Wallet.");
         }
     } else {
         try {
             await window.solana.disconnect();
-            alert("Wallet desconectada.");
+            alert("Wallet disconnected.");
             document.getElementById("walletAddress").value = "";
             walletIcon.classList.remove("fas", "fa-sign-out-alt");
             walletIcon.classList.add("fas", "fa-wallet");
             walletIcon.title = "Connect Wallet";
             isWalletConnected = false;
         } catch (err) {
-            alert("Error al desconectar la wallet.");
+            alert("Error disconnecting wallet.");
         }
     }
 }
@@ -538,14 +538,6 @@ document.getElementById('search-input').addEventListener('input', (e) => {
 // 🧹 Detox & Reclaim
 let detoxWalletConnected = false;
 
-document.getElementById('detox-reclaim').addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('viewer-section').style.display = 'none';
-    document.getElementById('detox-section').style.display = 'block';
-    document.querySelector('.menu li.active').classList.remove('active');
-    document.getElementById('detox-reclaim').parentElement.classList.add('active');
-});
-
 async function connectWalletForDetox() {
     if (window.solana && window.solana.isPhantom) {
         try {
@@ -554,10 +546,10 @@ async function connectWalletForDetox() {
             document.getElementById('wallet-status').textContent = `Connected: ${response.publicKey.toString().slice(0, 8)}...`;
             scanWalletAssets(response.publicKey.toString());
         } catch (err) {
-            alert("No se pudo conectar la wallet para Detox.");
+            alert("Could not connect wallet for Detox.");
         }
     } else {
-        alert("Por favor instala Phantom Wallet.");
+        alert("Please install Phantom Wallet.");
     }
 }
 
@@ -565,7 +557,6 @@ async function scanWalletAssets(publicKey) {
     const assetList = document.getElementById('asset-list');
     assetList.innerHTML = '<p>Scanning wallet...</p>';
 
-    // Simulación de activos (reemplazar con RPC real)
     const simulatedAssets = [
         { type: 'Token', mint: 'ABC123', amount: 0, reclaimableSOL: 0.002 },
         { type: 'NFT', mint: 'NFT456', amount: 1, reclaimableSOL: 0.01 },
@@ -583,7 +574,6 @@ async function scanWalletAssets(publicKey) {
     });
     assetList.innerHTML = html;
 
-    // Habilitar botón de quemar al seleccionar activos
     assetList.addEventListener('change', () => {
         const selected = assetList.querySelectorAll('input:checked').length > 0;
         document.getElementById('burn-selected').disabled = !selected;
@@ -600,13 +590,65 @@ function burnSelectedAssets() {
     let totalSOL = 0;
     selectedAssets.forEach(asset => {
         totalSOL += parseFloat(asset.dataset.sol);
-        // Aquí iría la lógica para quemar/cerrar cuentas con @solana/web3.js
         console.log(`Burning asset: ${asset.dataset.mint}`);
     });
 
     alert(`Burned ${selectedAssets.length} assets. Reclaimed ${totalSOL.toFixed(4)} SOL (simulation).`);
-    scanWalletAssets(window.solana.publicKey.toString()); // Refrescar lista
+    scanWalletAssets(window.solana.publicKey.toString());
 }
+
+// Navegación del menú
+function showSection(sectionId) {
+    const sections = ['home-section', 'viewer-section', 'detox-section', 'support-section'];
+    sections.forEach(id => {
+        document.getElementById(id).style.display = id === sectionId ? 'block' : 'none';
+    });
+
+    const menuItems = document.querySelectorAll('.menu li');
+    menuItems.forEach(item => item.classList.remove('active'));
+    document.querySelector(`#${sectionId.replace('-section', '-menu')} a`)?.parentElement.classList.add('active');
+}
+
+document.getElementById('home-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    showSection('home-section');
+});
+
+document.getElementById('viewer-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    showSection('viewer-section');
+});
+
+document.getElementById('detox-reclaim').addEventListener('click', (e) => {
+    e.preventDefault();
+    showSection('detox-section');
+});
+
+document.getElementById('support-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    showSection('support-section');
+});
+
+// Formulario de soporte
+document.getElementById('support-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const issue = document.getElementById('issue').value;
+    const ticketNumber = Math.floor(Math.random() * 1000000); // Número aleatorio de ticket
+
+    // Simulación de envío de correo (requiere backend o EmailJS)
+    console.log(`Sending email to cryptoworldx9@gmail.com:
+        Subject: Support Ticket #${ticketNumber}
+        From: ${name} <${email}>
+        Issue: ${issue}`);
+
+    // Mostrar mensaje de confirmación
+    document.getElementById('support-message').innerHTML = `
+        <p>Your ticket is #${ticketNumber}. Thank you for contacting us! We will get back to you soon.</p>
+    `;
+    document.getElementById('support-form').reset();
+});
 
 // Inicializar las actualizaciones
 updateMemecoinList();
@@ -620,3 +662,6 @@ document.getElementById("menu-toggle").addEventListener("click", function() {
     document.querySelector(".footer").classList.toggle("menu-closed");
     document.querySelector(".menu-toggle").classList.toggle("menu-closed");
 });
+
+// Mostrar sección inicial
+showSection('viewer-section');
