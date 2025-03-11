@@ -92,7 +92,7 @@ body {
 }
 
 .logo {
-    margin-right: 10px; /* Espacio entre el título y el botón */
+    margin-right: 10px;
 }
 
 .logo span {
@@ -108,7 +108,7 @@ body {
     padding: 8px;
     cursor: pointer;
     border-radius: 5px;
-    margin-right: 10px; /* Espacio entre el botón y las memecoins */
+    margin-right: 10px;
 }
 
 .menu-toggle:hover {
@@ -140,12 +140,6 @@ body {
 
 .memecoin-item:hover {
     background: #00D4FF;
-}
-
-.memecoin-item img {
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
 }
 
 .memecoin-item span {
@@ -253,7 +247,7 @@ button:hover {
     margin: 10px auto;
     border-radius: 5px;
     overflow: hidden;
-    display: none; /* Oculta por defecto */
+    display: none;
 }
 
 .loading-bar::after {
@@ -413,7 +407,7 @@ tr:hover {
 
     .menu-toggle {
         padding: 6px;
-        margin-right: 5px; /* Menor espacio en móvil */
+        margin-right: 5px;
     }
 
     .menu-toggle i {
@@ -426,12 +420,6 @@ tr:hover {
 
     .memecoin-item {
         padding: 3px 6px;
-    }
-
-    .memecoin-item img {
-        width: 16px;
-        height: 16px;
-        margin-right: 3px;
     }
 
     .memecoin-item span {
