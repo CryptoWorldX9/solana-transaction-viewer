@@ -164,7 +164,7 @@ async function fetchWalletData() {
 function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, totalTxData, tokenPrices, walletAddress, container) {
     const solBalance = accountData.lamports ? (accountData.lamports / 1e9) : 0;
     const usdBalance = (solBalance * solPriceUSD).toFixed(2);
-    const tokenBalances = Array.isArray(tokenAccounts) && tokenAccounts.length > 0 ? tokenAccounts.map(t => t.account.data.parsed?.info?.tokenAmount?.uiAmount || 0).reduce((a, b) => a + b, 0) : 0;
+    const tokenBalances = Array.isArray(tokenAccounts) && tokenAccounts.length > 0 ? tokenAccounts.map(t => t.account.data.parsed.info.tokenAmount.uiAmount).reduce((a, b) => a + b, 0) : 0;
     const tps = tpsData && tpsData[0] ? (tpsData[0].numTransactions / tpsData[0].samplePeriodSecs).toFixed(2) : 'N/A';
     const lastActivity = totalTxData && totalTxData[0] ? new Date(totalTxData[0].blockTime * 1000).toLocaleString() : 'N/A';
     const totalTransactions = totalTxData ? totalTxData.length : 'N/A';
@@ -185,10 +185,9 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
                 <tbody>
         `;
         tokenAccounts.forEach(t => {
-            const parsedInfo = t.account.data.parsed?.info;
-            const mint = parsedInfo?.mint || 'Unknown';
+            const mint = t.account.data.parsed.info.mint || 'Unknown';
             const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
-            const amount = parsedInfo?.tokenAmount?.uiAmount || 0;
+            const amount = t.account.data.parsed.info.tokenAmount.uiAmount || 0;
             const priceUSD = tokenPrices[mint]?.usd || 'N/A';
             const totalUSD = priceUSD !== 'N/A' ? (amount * priceUSD).toFixed(2) : 'N/A';
             const supplyPercent = amount / 1e9 * 100;
@@ -400,7 +399,7 @@ async function updateMemecoinList() {
         const prices = {};
         for (const coin of memecoins) {
             const url = `${coingeckoTokenUrl}${coin.chain}?contract_addresses=${coin.contract}&vs_currencies=usd`;
-            const response = await fetch(url, { mode: 'cors' });
+            const response = await fetch(url);
             if (response.ok) {
                 const data = await response.json();
                 console.log(`${coin.name} price data:`, data);
@@ -448,7 +447,7 @@ async function updateCryptoPrices() {
     carouselTape.innerHTML = '<span>Loading prices...</span>';
 
     try {
-        const response = await fetch(coingeckoPriceUrl, { mode: 'cors' });
+        const response = await fetch(coingeckoPriceUrl);
         if (!response.ok) throw new Error('API request failed');
         const priceData = await response.json();
         console.log('Footer price data:', priceData);
@@ -539,87 +538,21 @@ document.getElementById('search-input').addEventListener('input', (e) => {
 // 🧹 Detox & Reclaim
 let detoxWalletConnected = false;
 let publicKey = null;
-let walletProvider = null; // 'phantom', 'solflare', o 'metamask'
 const connection = new solanaWeb3.Connection(rpcUrl, 'confirmed');
 
 async function connectWalletForDetox() {
-    const availableWallets = [];
-    
-    // Detectar Phantom
     if (window.solana && window.solana.isPhantom) {
-        availableWallets.push('phantom');
-    }
-    
-    // Detectar Solflare
-    if (window.solflare && window.solflare.isSolflare) {
-        availableWallets.push('solflare');
-    }
-    
-    // Detectar MetaMask con Solana Snap
-    if (window.ethereum && window.ethereum.isMetaMask) {
         try {
-            const snaps = await window.ethereum.request({ method: 'wallet_getSnaps' });
-            if (snaps['npm:@solflare-wallet/solana-snap']) {
-                availableWallets.push('metamask');
-            }
-        } catch (err) {
-            console.log('MetaMask detectado, pero no se pudo verificar el Solana Snap:', err);
-        }
-    }
-
-    if (availableWallets.length === 0) {
-        alert('No se detectaron billeteras compatibles. Instala Phantom, Solflare o MetaMask con el Solana Snap.');
-        return;
-    }
-
-    let selectedWallet;
-    if (availableWallets.length === 1) {
-        selectedWallet = availableWallets[0];
-    } else {
-        const choice = prompt(
-            'Se detectaron varias billeteras. Elige una:\n' +
-            availableWallets.map((w, i) => `${i + 1}. ${w.charAt(0).toUpperCase() + w.slice(1)}`).join('\n') +
-            '\nIngresa el número de la billetera:'
-        );
-        const index = parseInt(choice) - 1;
-        if (index >= 0 && index < availableWallets.length) {
-            selectedWallet = availableWallets[index];
-        } else {
-            alert('Selección inválida.');
-            return;
-        }
-    }
-
-    try {
-        if (selectedWallet === 'phantom') {
             const response = await window.solana.connect();
-            if (!response.publicKey) throw new Error('No se obtuvo la clave pública de Phantom');
+            detoxWalletConnected = true;
             publicKey = response.publicKey;
-            walletProvider = 'phantom';
-        } else if (selectedWallet === 'solflare') {
-            const response = await window.solflare.connect();
-            if (!response.publicKey) throw new Error('No se obtuvo la clave pública de Solflare');
-            publicKey = response.publicKey;
-            walletProvider = 'solflare';
-        } else if (selectedWallet === 'metamask') {
-            const accounts = await window.ethereum.request({
-                method: 'wallet_invokeSnap',
-                params: {
-                    snapId: 'npm:@solflare-wallet/solana-snap',
-                    request: { method: 'solana_connect' }
-                }
-            });
-            if (!accounts || !accounts.publicKey) throw new Error('No se obtuvo la clave pública de MetaMask');
-            publicKey = new solanaWeb3.PublicKey(accounts.publicKey);
-            walletProvider = 'metamask';
+            document.getElementById('wallet-status').textContent = `Connected: ${publicKey.toString().slice(0, 8)}...`;
+            await scanWalletAssets(publicKey);
+        } catch (err) {
+            alert("Could not connect wallet for Detox: " + err.message);
         }
-
-        detoxWalletConnected = true;
-        document.getElementById('wallet-status').textContent = `Connected (${selectedWallet}): ${publicKey.toString().slice(0, 8)}...`;
-        await scanWalletAssets(publicKey);
-    } catch (err) {
-        console.error(`Error conectando ${selectedWallet}:`, err);
-        alert(`Error conectando ${selectedWallet}: ${err.message}`);
+    } else {
+        alert("Please install Phantom Wallet.");
     }
 }
 
@@ -641,13 +574,9 @@ async function scanWalletAssets(walletPublicKey) {
 
         let html = '<h3>Wallet Assets</h3>';
         tokenAccounts.value.forEach((account, index) => {
-            const parsedInfo = account.account.data.parsed?.info;
-            if (!parsedInfo) {
-                console.warn('Cuenta no parseada:', account);
-                return; // Saltar cuentas no válidas
-            }
-            const mint = parsedInfo.mint || 'Unknown';
-            const amount = parsedInfo.tokenAmount?.uiAmount || 0;
+            const parsedAccountInfo = account.account.data.parsed.info;
+            const mint = parsedAccountInfo.mint;
+            const amount = parsedAccountInfo.tokenAmount.uiAmount;
             const reclaimableSOL = (account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6);
 
             const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
@@ -679,7 +608,7 @@ async function burnSelectedAssets() {
         return;
     }
 
-    if (!detoxWalletConnected || !publicKey || !walletProvider) {
+    if (!detoxWalletConnected || !publicKey) {
         alert('Please connect your wallet first.');
         return;
     }
@@ -724,27 +653,9 @@ async function burnSelectedAssets() {
         transaction.recentBlockhash = blockhash;
         transaction.feePayer = publicKey;
 
-        let signedTransaction;
-        if (walletProvider === 'phantom') {
-            signedTransaction = await window.solana.signTransaction(transaction);
-        } else if (walletProvider === 'solflare') {
-            signedTransaction = await window.solflare.signTransaction(transaction);
-        } else if (walletProvider === 'metamask') {
-            const serializedTx = transaction.serialize({ requireAllSignatures: false });
-            const signed = await window.ethereum.request({
-                method: 'wallet_invokeSnap',
-                params: {
-                    snapId: 'npm:@solflare-wallet/solana-snap',
-                    request: {
-                        method: 'solana_signTransaction',
-                        params: { transaction: serializedTx.toString('base64') }
-                    }
-                }
-            });
-            signedTransaction = solanaWeb3.Transaction.from(Buffer.from(signed.transaction, 'base64'));
-        }
-
+        const signedTransaction = await window.solana.signTransaction(transaction);
         const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+
         await connection.confirmTransaction(signature, 'confirmed');
         alert(`Successfully processed ${selectedAssets.length} assets. Reclaimed ${totalSOL.toFixed(6)} SOL.`);
 
