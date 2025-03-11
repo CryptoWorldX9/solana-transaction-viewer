@@ -255,9 +255,9 @@ body {
     min-height: calc(100vh - 60px);
 }
 
-.viewer-section, .detox-section {
+.home-section, .viewer-section, .detox-section, .support-section {
     text-align: center;
-    width: 100%;
+    width: //100%;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -278,7 +278,7 @@ h1 {
     margin: 0 auto 20px;
 }
 
-input[type="text"] {
+input[type="text"], input[type="email"], textarea {
     padding: 12px;
     width: 100%;
     max-width: 400px;
@@ -286,6 +286,11 @@ input[type="text"] {
     border-radius: 8px;
     background: #1A1A1A;
     color: #FFFFFF;
+}
+
+textarea {
+    max-width: 100%;
+    resize: vertical;
 }
 
 button {
@@ -447,6 +452,25 @@ tr:hover {
     font-size: 14px;
 }
 
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #00D4FF;
+}
+
+.support-message {
+    margin-top: 20px;
+    color: #00D4FF;
+    font-size: 16px;
+}
+
 .footer {
     position: fixed;
     bottom: 0;
@@ -515,7 +539,9 @@ tr:hover {
     }
 
     .sidebar.active {
-        left: 0;
+        left
+
+: 0;
     }
 
     .top-bar {
@@ -564,7 +590,7 @@ tr:hover {
         width: 100%;
     }
 
-    .viewer-section, .detox-section {
+    .home-section, .viewer-section, .detox-section, .support-section {
         width: 90%;
         max-width: 100%;
     }
@@ -574,7 +600,7 @@ tr:hover {
         flex-wrap: wrap;
     }
 
-    input[type="text"] {
+    input[type="text"], input[type="email"], textarea {
         width: 100%;
         max-width: 100%;
         font-size: 14px;
