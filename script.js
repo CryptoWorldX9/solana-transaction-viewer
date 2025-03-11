@@ -366,16 +366,32 @@ function clearData() {
     document.getElementById("walletAddress").value = "";
 }
 
-// 🎡 Lista estática de memecoins específicas
+// 🎡 Lista estática de memecoins específicas con contratos
 function updateMemecoinList() {
     const memecoinList = document.getElementById('memecoinList');
     memecoinList.innerHTML = '';
 
     const memecoins = [
-        { name: 'Flork', img: 'https://dexscreener.com/static/images/coins/solana/FLORK.png', dex: 'https://dexscreener.com/solana/8qGaDX78hK2h8XU8JxsNfeX2uZrgwP2uTCSsUGU5Kdwf' },
-        { name: 'Brett', img: 'https://dexscreener.com/static/images/coins/base/BRETT.png', dex: 'https://dexscreener.com/base/0x532f27101965dd16442e59d40670faf5ebb142e4' },
-        { name: 'Lofi', img: 'https://dexscreener.com/static/images/coins/sui/LOFI.png', dex: 'https://dexscreener.com/sui/0x4e5e11f0c9ab8a4e57329bf0b8a6e2c4e43d0b9e684db01f990c8e24c657d8e0' },
-        { name: 'SPX', img: 'https://dexscreener.com/static/images/coins/ethereum/SPX.png', dex: 'https://dexscreener.com/ethereum/0x50c0def242b8546c596cdda757fb78d7ad66f18b' }
+        { 
+            name: 'Flork', 
+            img: 'https://assets.coingecko.com/coins/images/37221/standard/flork.jpg', // Imagen de CoinGecko
+            dex: 'https://dexscreener.com/solana/CnGb7hJsGdsFyQP2uXNWrUgT5K1tovBA3mNnUZcTpump' 
+        },
+        { 
+            name: 'Brett', 
+            img: 'https://assets.coingecko.com/coins/images/35926/standard/1000050712.png', // Imagen de CoinGecko
+            dex: 'https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4' 
+        },
+        { 
+            name: 'Lofi', 
+            img: 'https://via.placeholder.com/20?text=LOFI', // Placeholder, no encontré imagen oficial
+            dex: 'https://dexscreener.com/sui/0xf22da9a24ad027cccb5f2d496cbe91de953d363513db08a3a734d361c7c17503::LOFI::LOFI' 
+        },
+        { 
+            name: 'SPX', 
+            img: 'https://assets.coingecko.com/coins/images/35373/standard/spx.png', // Imagen de CoinGecko
+            dex: 'https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C' 
+        }
     ];
 
     memecoins.forEach(coin => {
