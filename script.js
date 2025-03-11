@@ -376,9 +376,24 @@ async function updateMemecoinList() {
     memecoinList.innerHTML = '';
 
     const memecoins = [
-        { name: 'Popcat', contract: '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', chain: 'solana', dex: 'https://dexscreener.com/solana/7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' },
-        { name: 'Brett', contract: '0x532f27101965dd16442E59d40670FaF5eBB142E4', chain: 'base', dex: 'https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4' },
-        { name: 'SPX', contract: '0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C', chain: 'ethereum', dex: 'https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C' }
+        { 
+            name: 'Popcat', 
+            contract: '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', 
+            chain: 'solana', 
+            dex: 'https://dexscreener.com/solana/7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' 
+        },
+        { 
+            name: 'Brett', 
+            contract: '0x532f27101965dd16442E59d40670FaF5eBB142E4', 
+            chain: 'base', 
+            dex: 'https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4' 
+        },
+        { 
+            name: 'SPX', 
+            contract: '0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C', 
+            chain: 'ethereum', 
+            dex: 'https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C' 
+        }
     ];
 
     try {
@@ -388,8 +403,10 @@ async function updateMemecoinList() {
             const response = await fetch(url, { mode: 'cors' });
             if (response.ok) {
                 const data = await response.json();
+                console.log(`${coin.name} price data:`, data);
                 prices[coin.name] = data[coin.contract.toLowerCase()]?.usd || 'N/A';
             } else {
+                console.warn(`Error fetching price for ${coin.name}: ${response.status}`);
                 prices[coin.name] = 'N/A';
             }
         }
@@ -397,8 +414,12 @@ async function updateMemecoinList() {
         memecoins.forEach(coin => {
             const item = document.createElement('div');
             item.className = 'memecoin-item';
-            item.innerHTML = `<span>${coin.name}: $${prices[coin.name] === 'N/A' ? 'N/A' : prices[coin.name].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</span>`;
-            item.addEventListener('click', () => window.open(coin.dex, '_blank'));
+            item.innerHTML = `
+                <span>${coin.name}: $${prices[coin.name] === 'N/A' ? 'N/A' : prices[coin.name].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</span>
+            `;
+            item.addEventListener('click', () => {
+                window.open(coin.dex, '_blank');
+            });
             memecoinList.appendChild(item);
         });
     } catch (error) {
@@ -406,8 +427,12 @@ async function updateMemecoinList() {
         memecoins.forEach(coin => {
             const item = document.createElement('div');
             item.className = 'memecoin-item';
-            item.innerHTML = `<span>${coin.name}: $${coin.name === 'Popcat' ? '0.20' : coin.name === 'Brett' ? '0.10' : '0.02'}</span>`;
-            item.addEventListener('click', () => window.open(coin.dex, '_blank'));
+            item.innerHTML = `
+                <span>${coin.name}: $${coin.name === 'Popcat' ? '0.20' : coin.name === 'Brett' ? '0.10' : '0.02'}</span>
+            `;
+            item.addEventListener('click', () => {
+                window.open(coin.dex, '_blank');
+            });
             memecoinList.appendChild(item);
         });
     }
@@ -426,6 +451,7 @@ async function updateCryptoPrices() {
         const response = await fetch(coingeckoPriceUrl, { mode: 'cors' });
         if (!response.ok) throw new Error('API request failed');
         const priceData = await response.json();
+        console.log('Footer price data:', priceData);
 
         const coins = [
             { id: 'bitcoin', name: 'Bitcoin' },
@@ -510,9 +536,228 @@ document.getElementById('search-input').addEventListener('input', (e) => {
     }
 });
 
+// 🧹 Detox & Reclaim
+let detoxWalletConnected = false;
+let publicKey = null;
+let walletProvider = null; // 'phantom', 'solflare', o 'metamask'
+const connection = new solanaWeb3.Connection(rpcUrl, 'confirmed');
+
+async function connectWalletForDetox() {
+    const availableWallets = [];
+    
+    // Detectar Phantom
+    if (window.solana && window.solana.isPhantom) {
+        availableWallets.push('phantom');
+    }
+    
+    // Detectar Solflare
+    if (window.solflare && window.solflare.isSolflare) {
+        availableWallets.push('solflare');
+    }
+    
+    // Detectar MetaMask con Solana Snap
+    if (window.ethereum && window.ethereum.isMetaMask) {
+        try {
+            const snaps = await window.ethereum.request({ method: 'wallet_getSnaps' });
+            if (snaps['npm:@solflare-wallet/solana-snap']) {
+                availableWallets.push('metamask');
+            }
+        } catch (err) {
+            console.log('MetaMask detectado, pero no se pudo verificar el Solana Snap:', err);
+        }
+    }
+
+    if (availableWallets.length === 0) {
+        alert('No se detectaron billeteras compatibles. Instala Phantom, Solflare o MetaMask con el Solana Snap.');
+        return;
+    }
+
+    let selectedWallet;
+    if (availableWallets.length === 1) {
+        selectedWallet = availableWallets[0];
+    } else {
+        const choice = prompt(
+            'Se detectaron varias billeteras. Elige una:\n' +
+            availableWallets.map((w, i) => `${i + 1}. ${w.charAt(0).toUpperCase() + w.slice(1)}`).join('\n') +
+            '\nIngresa el número de la billetera:'
+        );
+        const index = parseInt(choice) - 1;
+        if (index >= 0 && index < availableWallets.length) {
+            selectedWallet = availableWallets[index];
+        } else {
+            alert('Selección inválida.');
+            return;
+        }
+    }
+
+    try {
+        if (selectedWallet === 'phantom') {
+            const response = await window.solana.connect();
+            if (!response.publicKey) throw new Error('No se obtuvo la clave pública de Phantom');
+            publicKey = response.publicKey;
+            walletProvider = 'phantom';
+        } else if (selectedWallet === 'solflare') {
+            const response = await window.solflare.connect();
+            if (!response.publicKey) throw new Error('No se obtuvo la clave pública de Solflare');
+            publicKey = response.publicKey;
+            walletProvider = 'solflare';
+        } else if (selectedWallet === 'metamask') {
+            const accounts = await window.ethereum.request({
+                method: 'wallet_invokeSnap',
+                params: {
+                    snapId: 'npm:@solflare-wallet/solana-snap',
+                    request: { method: 'solana_connect' }
+                }
+            });
+            if (!accounts || !accounts.publicKey) throw new Error('No se obtuvo la clave pública de MetaMask');
+            publicKey = new solanaWeb3.PublicKey(accounts.publicKey);
+            walletProvider = 'metamask';
+        }
+
+        detoxWalletConnected = true;
+        document.getElementById('wallet-status').textContent = `Connected (${selectedWallet}): ${publicKey.toString().slice(0, 8)}...`;
+        await scanWalletAssets(publicKey);
+    } catch (err) {
+        console.error(`Error conectando ${selectedWallet}:`, err);
+        alert(`Error conectando ${selectedWallet}: ${err.message}`);
+    }
+}
+
+async function scanWalletAssets(walletPublicKey) {
+    const assetList = document.getElementById('asset-list');
+    assetList.innerHTML = '<p>Scanning wallet...</p>';
+
+    try {
+        const tokenAccounts = await connection.getTokenAccountsByOwner(
+            walletPublicKey,
+            { programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA') },
+            'confirmed'
+        );
+
+        if (!tokenAccounts.value.length) {
+            assetList.innerHTML = '<p>No tokens or NFTs found in this wallet.</p>';
+            return;
+        }
+
+        let html = '<h3>Wallet Assets</h3>';
+        tokenAccounts.value.forEach((account, index) => {
+            const parsedInfo = account.account.data.parsed?.info;
+            if (!parsedInfo) {
+                console.warn('Cuenta no parseada:', account);
+                return; // Saltar cuentas no válidas
+            }
+            const mint = parsedInfo.mint || 'Unknown';
+            const amount = parsedInfo.tokenAmount?.uiAmount || 0;
+            const reclaimableSOL = (account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6);
+
+            const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
+            const type = amount > 0 ? 'Token' : 'Empty Token Account';
+
+            html += `
+                <div class="asset-item">
+                    <input type="checkbox" id="asset-${index}" data-mint="${mint}" data-account="${account.pubkey.toBase58()}" data-amount="${amount}" data-sol="${reclaimableSOL}">
+                    <label for="asset-${index}">${type}: ${tokenName} (${amount} units, ${reclaimableSOL} SOL reclaimable)</label>
+                </div>
+            `;
+        });
+        assetList.innerHTML = html;
+
+        assetList.addEventListener('change', () => {
+            const selected = assetList.querySelectorAll('input:checked').length > 0;
+            document.getElementById('burn-selected').disabled = !selected;
+        });
+    } catch (error) {
+        console.error('Error scanning wallet assets:', error);
+        assetList.innerHTML = '<p>Error scanning wallet. Please try again.</p>';
+    }
+}
+
+async function burnSelectedAssets() {
+    const selectedAssets = document.querySelectorAll('#asset-list input:checked');
+    if (selectedAssets.length === 0) {
+        alert('No assets selected to burn.');
+        return;
+    }
+
+    if (!detoxWalletConnected || !publicKey || !walletProvider) {
+        alert('Please connect your wallet first.');
+        return;
+    }
+
+    const transaction = new solanaWeb3.Transaction();
+    let totalSOL = 0;
+
+    try {
+        for (const asset of selectedAssets) {
+            const mint = new solanaWeb3.PublicKey(asset.dataset.mint);
+            const account = new solanaWeb3.PublicKey(asset.dataset.account);
+            const amount = parseFloat(asset.dataset.amount);
+            totalSOL += parseFloat(asset.dataset.sol);
+
+            if (amount > 0) {
+                const tokenAccount = await splToken.getAssociatedTokenAddress(
+                    mint,
+                    publicKey
+                );
+                const burnInstruction = splToken.createBurnInstruction(
+                    tokenAccount,
+                    mint,
+                    publicKey,
+                    Math.floor(amount * 10 ** 6), // Asumimos 6 decimales
+                    [],
+                    splToken.TOKEN_PROGRAM_ID
+                );
+                transaction.add(burnInstruction);
+            } else {
+                const closeInstruction = splToken.createCloseAccountInstruction(
+                    account,
+                    publicKey,
+                    publicKey,
+                    [],
+                    splToken.TOKEN_PROGRAM_ID
+                );
+                transaction.add(closeInstruction);
+            }
+        }
+
+        const { blockhash } = await connection.getLatestBlockhash();
+        transaction.recentBlockhash = blockhash;
+        transaction.feePayer = publicKey;
+
+        let signedTransaction;
+        if (walletProvider === 'phantom') {
+            signedTransaction = await window.solana.signTransaction(transaction);
+        } else if (walletProvider === 'solflare') {
+            signedTransaction = await window.solflare.signTransaction(transaction);
+        } else if (walletProvider === 'metamask') {
+            const serializedTx = transaction.serialize({ requireAllSignatures: false });
+            const signed = await window.ethereum.request({
+                method: 'wallet_invokeSnap',
+                params: {
+                    snapId: 'npm:@solflare-wallet/solana-snap',
+                    request: {
+                        method: 'solana_signTransaction',
+                        params: { transaction: serializedTx.toString('base64') }
+                    }
+                }
+            });
+            signedTransaction = solanaWeb3.Transaction.from(Buffer.from(signed.transaction, 'base64'));
+        }
+
+        const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+        await connection.confirmTransaction(signature, 'confirmed');
+        alert(`Successfully processed ${selectedAssets.length} assets. Reclaimed ${totalSOL.toFixed(6)} SOL.`);
+
+        await scanWalletAssets(publicKey);
+    } catch (error) {
+        console.error('Error burning assets:', error);
+        alert('Error processing assets: ' + error.message);
+    }
+}
+
 // Navegación del menú
 function showSection(sectionId) {
-    const sections = ['home-section', 'viewer-section', 'support-section'];
+    const sections = ['home-section', 'viewer-section', 'detox-section', 'support-section'];
     sections.forEach(id => {
         document.getElementById(id).style.display = id === sectionId ? 'block' : 'none';
     });
@@ -523,9 +768,25 @@ function showSection(sectionId) {
     if (activeItem) activeItem.parentElement.classList.add('active');
 }
 
-document.getElementById('home-link').addEventListener('click', (e) => { e.preventDefault(); showSection('home-section'); });
-document.getElementById('viewer-link').addEventListener('click', (e) => { e.preventDefault(); showSection('viewer-section'); });
-document.getElementById('support-link').addEventListener('click', (e) => { e.preventDefault(); showSection('support-section'); });
+document.getElementById('home-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    showSection('home-section');
+});
+
+document.getElementById('viewer-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    showSection('viewer-section');
+});
+
+document.getElementById('detox-reclaim').addEventListener('click', (e) => {
+    e.preventDefault();
+    showSection('detox-section');
+});
+
+document.getElementById('support-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    showSection('support-section');
+});
 
 // Formulario de soporte con EmailJS
 document.getElementById('support-form').addEventListener('submit', (e) => {
