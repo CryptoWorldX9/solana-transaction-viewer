@@ -16,15 +16,35 @@ body {
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     z-index: 15;
-    transition: left 0.3s ease;
+    transition: width 0.3s ease, left 0.3s ease;
 }
 
 .sidebar.active {
+    width: 250px;
     left: 0;
 }
 
-.sidebar:not(.active) {
-    left: -250px;
+@media (min-width: 769px) {
+    .sidebar:not(.active) {
+        width: 50px; /* Solo íconos visibles en PC */
+        left: 0;
+        padding: 20px 10px;
+    }
+    .sidebar:not(.active) .menu li a {
+        display: none; /* Oculta el texto en PC cuando está retraído */
+    }
+    .sidebar:not(.active) .menu li i {
+        margin-right: 0; /* Ajusta el ícono al centro */
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    .sidebar:not(.active) {
+        left: -200px; /* Oculta completamente en móvil */
+    }
 }
 
 .menu {
@@ -61,18 +81,26 @@ body {
 }
 
 .main-content {
-    margin-left: 250px;
-    padding: 0;
+    padding-left: 250px; /* Espacio para el menú abierto */
     background-color: #0A0A0A;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: margin-left 0.3s ease;
+    transition: padding-left 0.3s ease;
 }
 
 .main-content.menu-closed {
-    margin-left: 0;
+    padding-left: 50px; /* Espacio para íconos en PC */
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding-left: 0; /* Sin padding en móvil */
+    }
+    .main-content.menu-closed {
+        padding-left: 0; /* Sin padding cuando el menú está cerrado en móvil */
+    }
 }
 
 .top-bar {
@@ -180,13 +208,14 @@ body {
 .viewer-section {
     text-align: center;
     width: 100%;
+    max-width: 800px; /* Ancho máximo para uniformidad */
+    margin: 0 auto;
 }
 
 h1 {
     color: #00D4FF;
     font-size: 36px;
     margin-bottom: 20px;
-    text-align: center;
 }
 
 .input-section {
@@ -194,12 +223,15 @@ h1 {
     justify-content: center;
     align-items: center;
     gap: 10px;
+    width: 100%;
+    max-width: 600px; /* Ancho fijo para el buscador y botones */
+    margin: 0 auto 20px;
 }
 
 input[type="text"] {
     padding: 12px;
-    width: 70%;
-    max-width: 500px;
+    width: 100%;
+    max-width: 400px;
     border: 1px solid #00D4FF;
     border-radius: 8px;
     background: #1A1A1A;
@@ -265,20 +297,20 @@ button:hover {
     100% { transform: translateX(300%); }
 }
 
-#walletInfo, #transactionList, #memecoinDetails {
+#walletInfo, #transactionList {
     background: #1A1A1A;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    margin-bottom: 20px;
+    margin: 20px auto; /* Centrado */
     width: 100%;
-    max-width: 800px;
-    margin-left: 20px;
+    max-width: 800px; /* Igual que .viewer-section */
 }
 
+/* Eliminar el margen izquierdo dependiente del sidebar */
 .sidebar.active ~ .main-content #walletInfo,
 .sidebar.active ~ .main-content #transactionList {
-    margin-left: 270px;
+    margin-left: auto; /* Siempre centrado */
 }
 
 h3 {
@@ -358,7 +390,16 @@ tr:hover {
 }
 
 .footer.menu-closed {
-    left: 0;
+    left: 50px; /* Ajustado para íconos en PC */
+}
+
+@media (max-width: 768px) {
+    .footer {
+        left: 0;
+    }
+    .footer.menu-closed {
+        left: 0;
+    }
 }
 
 .carousel-container {
@@ -407,10 +448,6 @@ tr:hover {
         left: 0;
     }
 
-    .main-content {
-        margin-left: 0;
-    }
-
     .top-bar {
         padding: 5px 10px;
         flex-wrap: nowrap;
@@ -454,22 +491,23 @@ tr:hover {
 
     .viewer-section {
         width: 90%;
-        margin: 0 auto;
+        max-width: 100%; /* Ajuste en móvil */
+    }
+
+    .input-section {
+        max-width: 100%;
+        flex-wrap: wrap; /* Permite que se ajuste en móvil */
     }
 
     input[type="text"] {
-        width: 50%;
+        width: 100%;
+        max-width: 100%;
         font-size: 14px;
     }
 
     button {
         padding: 10px 20px;
         font-size: 14px;
-    }
-
-    .footer {
-        left: 0;
-        padding: 5px;
     }
 
     .crypto-item {
@@ -489,10 +527,6 @@ tr:hover {
     .token-table th, .token-table td {
         padding: 6px;
         font-size: 12px;
-    }
-
-    #walletInfo, #transactionList {
-        margin-left: 0;
     }
 
     .loading-bar {
