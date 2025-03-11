@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@solana/web3.js@1.95.3/dist/index.iife.min.js"></script>
-    <script src="https://unpkg.com/@solana/spl-token@0.3.8/lib/index.iife.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
 </head>
 <body>
@@ -21,7 +20,6 @@
             <ul class="menu">
                 <li id="home-menu"><a href="#" id="home-link">Home</a></li>
                 <li id="viewer-menu" class="active"><a href="#" id="viewer-link">Wallet Viewer</a></li>
-                <li id="detox-menu"><a href="#" id="detox-reclaim">Detox & Reclaim</a></li>
                 <li id="support-menu"><a href="#" id="support-link">Support</a></li>
             </ul>
             <div class="memecoin-list" id="memecoinList"></div>
@@ -49,13 +47,6 @@
                     <div id="walletInfo"></div>
                     <div id="transactionList"></div>
                 </div>
-                <div id="detox-section" style="display: none;">
-                    <h1>Detox & Reclaim</h1>
-                    <p id="wallet-status">Wallet not connected</p>
-                    <button onclick="connectWalletForDetox()">Connect Wallet</button>
-                    <div id="asset-list"></div>
-                    <button id="burn-selected" onclick="burnSelectedAssets()" disabled>Burn Selected Assets</button>
-                </div>
                 <div id="support-section" style="display: none;">
                     <h1>Support</h1>
                     <form id="support-form">
@@ -75,13 +66,6 @@
         </div>
         <div class="menu-toggle" id="menu-toggle">
             <i class="fas fa-bars"></i>
-        </div>
-    </div>
-    <div id="wallet-modal" class="modal">
-        <div class="modal-content">
-            <h3>Selecciona una billetera</h3>
-            <div id="wallet-options"></div>
-            <button onclick="document.getElementById('wallet-modal').style.display='none'">Cancelar</button>
         </div>
     </div>
     <script src="script.js"></script>
