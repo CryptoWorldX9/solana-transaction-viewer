@@ -255,7 +255,7 @@ body {
     min-height: calc(100vh - 60px);
 }
 
-.viewer-section {
+.viewer-section, .detox-section {
     text-align: center;
     width: 100%;
     max-width: 800px;
@@ -268,7 +268,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-.input-section {
+.input-section, .detox-input {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -300,6 +300,11 @@ button {
 
 button:hover {
     background: linear-gradient(135deg, #007ACC, #00D4FF);
+}
+
+button:disabled {
+    background: #A0A0A0;
+    cursor: not-allowed;
 }
 
 .copy-btn {
@@ -347,7 +352,7 @@ button:hover {
     100% { transform: translateX(300%); }
 }
 
-#walletInfo, #transactionList {
+#walletInfo, #transactionList, .asset-list {
     background: #1A1A1A;
     padding: 20px;
     border-radius: 8px;
@@ -424,6 +429,22 @@ tr:hover {
     max-height: 150px;
     margin: 20px auto;
     display: block;
+}
+
+.asset-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #2A2A2A;
+}
+
+.asset-item input {
+    margin-right: 10px;
+}
+
+.wallet-status {
+    color: #A0A0A0;
+    font-size: 14px;
 }
 
 .footer {
@@ -543,12 +564,12 @@ tr:hover {
         width: 100%;
     }
 
-    .viewer-section {
+    .viewer-section, .detox-section {
         width: 90%;
         max-width: 100%;
     }
 
-    .input-section {
+    .input-section, .detox-input {
         max-width: 100%;
         flex-wrap: wrap;
     }
