@@ -257,7 +257,7 @@ body {
 
 .home-section, .viewer-section, .detox-section, .support-section {
     text-align: center;
-    width: //100%;
+    width: 100%;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -539,9 +539,7 @@ tr:hover {
     }
 
     .sidebar.active {
-        left
-
-: 0;
+        left: 0;
     }
 
     .top-bar {
