@@ -389,7 +389,7 @@ tr:hover {
     padding: 5px 10px;
     border-radius: 5px;
     margin-right: 15px;
-    min-width: 135px; /* Ancho fijo para consistencia */
+    min-width: 135px;
 }
 
 .crypto-item span {
@@ -474,7 +474,7 @@ tr:hover {
 
     .crypto-item {
         padding: 3px 5px;
-        min-width: 110px; /* Menor ancho en móvil */
+        min-width: 110px;
     }
 
     .crypto-item span {
