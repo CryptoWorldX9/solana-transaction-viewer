@@ -93,7 +93,7 @@ body {
 }
 
 .logo {
-    margin-right: 20px;
+    margin-left: 10px; /* Espacio fijo para evitar superposición */
 }
 
 .logo span {
@@ -228,6 +228,32 @@ button:hover {
     background: #CC4444;
 }
 
+.loading-bar {
+    width: 50%;
+    max-width: 500px;
+    height: 5px;
+    background: #333;
+    margin: 10px auto;
+    border-radius: 5px;
+    overflow: hidden;
+    display: none; /* Oculta por defecto */
+}
+
+.loading-bar::after {
+    content: '';
+    display: block;
+    width: 30%;
+    height: 100%;
+    background: #00D4FF;
+    animation: loading 1.5s infinite ease-in-out;
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(300%); }
+    100% { transform: translateX(300%); }
+}
+
 #walletInfo, #transactionList, #memecoinDetails {
     background: #1A1A1A;
     padding: 20px;
@@ -311,18 +337,13 @@ tr:hover {
 .menu-toggle {
     position: fixed;
     top: 15px;
-    left: 260px;
+    right: 10px; /* Siempre a la derecha */
     background: #00D4FF;
     border: none;
     padding: 10px;
     cursor: pointer;
     z-index: 30;
     border-radius: 5px;
-    transition: left 0.3s ease;
-}
-
-.menu-toggle.menu-closed {
-    left: 10px;
 }
 
 .menu-toggle:hover {
@@ -388,7 +409,7 @@ tr:hover {
 
     .logo span {
         font-size: 18px;
-        margin-left: 40px;
+        margin-left: 10px; /* Espacio reducido en móvil */
     }
 
     .memecoin-list {
@@ -436,7 +457,6 @@ tr:hover {
     }
 
     .menu-toggle {
-        left: auto;
         right: 10px;
         top: 10px;
     }
@@ -466,6 +486,10 @@ tr:hover {
 
     #walletInfo, #transactionList {
         margin-left: 0;
+    }
+
+    .loading-bar {
+        width: 70%;
     }
 }
 
