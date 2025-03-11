@@ -126,7 +126,7 @@ async function fetchWalletData() {
         });
         const totalTxData = await totalTxResponse.json();
 
-        const tpsResponse = impressão fetch(rpcUrl, {
+        const tpsResponse = await fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -152,7 +152,7 @@ async function fetchWalletData() {
 
         document.getElementById("walletAddress").value = "";
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error in fetchWalletData:', error);
         walletInfoDiv.innerHTML = '<p>Error connecting to the API. Please try again later.</p>';
         transactionListDiv.innerHTML = '';
         document.getElementById("walletAddress").value = "";
@@ -402,6 +402,7 @@ async function updateMemecoinList() {
             const response = await fetch(url);
             if (response.ok) {
                 const data = await response.json();
+                console.log(`${coin.name} price data:`, data); // Depuración
                 prices[coin.name] = data[coin.contract.toLowerCase()]?.usd || 'N/A';
             } else {
                 console.warn(`Error fetching price for ${coin.name}: ${response.status}`);
@@ -436,18 +437,20 @@ async function updateMemecoinList() {
     }
 }
 
-updateMemecoinList();
-setInterval(updateMemecoinList, 60000);
-
 // 📈 Precios en el footer como carrusel
 async function updateCryptoPrices() {
     const carouselTape = document.querySelector('.carousel-tape');
+    if (!carouselTape) {
+        console.error('Carousel tape not found!');
+        return;
+    }
     carouselTape.innerHTML = '<span>Loading prices...</span>';
 
     try {
         const response = await fetch(coingeckoPriceUrl);
         if (!response.ok) throw new Error('API request failed');
         const priceData = await response.json();
+        console.log('Footer price data:', priceData); // Depuración
 
         const coins = [
             { id: 'bitcoin', name: 'Bitcoin' },
@@ -460,15 +463,12 @@ async function updateCryptoPrices() {
             { id: 'dogecoin', name: 'DOGE' }
         ];
 
-        // Generar ítems del carrusel (duplicados para continuidad)
         let html = '';
         coins.forEach(coin => {
             html += `<div class="crypto-item"><span>${coin.name}: $${priceData[coin.id].usd.toLocaleString()}</span></div>`;
         });
-        // Duplicar para efecto continuo
-        carouselTape.innerHTML = html + html;
+        carouselTape.innerHTML = html + html; // Duplicar para continuidad
 
-        // Ajustar ancho de la cinta según cantidad de ítems
         const itemCount = coins.length;
         carouselTape.style.width = `${itemCount * 150 * 2}px`; // 150px por ítem, x2 por duplicado
         carouselTape.style.animationDuration = `${itemCount * 2}s`; // 2 segundos por ítem
@@ -497,6 +497,9 @@ async function updateCryptoPrices() {
     }
 }
 
+// Inicializar las actualizaciones
+updateMemecoinList();
+setInterval(updateMemecoinList, 60000);
 setTimeout(updateCryptoPrices, 1000);
 setInterval(updateCryptoPrices, 60000);
 
