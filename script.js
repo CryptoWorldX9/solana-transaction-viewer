@@ -538,21 +538,83 @@ document.getElementById('search-input').addEventListener('input', (e) => {
 // 🧹 Detox & Reclaim
 let detoxWalletConnected = false;
 let publicKey = null;
+let walletProvider = null; // 'phantom', 'solflare', o 'metamask'
 const connection = new solanaWeb3.Connection(rpcUrl, 'confirmed');
 
 async function connectWalletForDetox() {
+    const availableWallets = [];
+    
+    // Detectar Phantom
     if (window.solana && window.solana.isPhantom) {
+        availableWallets.push('phantom');
+    }
+    
+    // Detectar Solflare
+    if (window.solflare && window.solflare.isSolflare) {
+        availableWallets.push('solflare');
+    }
+    
+    // Detectar MetaMask con Solana Snap
+    if (window.ethereum && window.ethereum.isMetaMask) {
         try {
-            const response = await window.solana.connect();
-            detoxWalletConnected = true;
-            publicKey = response.publicKey;
-            document.getElementById('wallet-status').textContent = `Connected: ${publicKey.toString().slice(0, 8)}...`;
-            await scanWalletAssets(publicKey);
+            const snaps = await window.ethereum.request({ method: 'wallet_getSnaps' });
+            if (snaps['npm:@solflare-wallet/solana-snap']) {
+                availableWallets.push('metamask');
+            }
         } catch (err) {
-            alert("Could not connect wallet for Detox: " + err.message);
+            console.log('MetaMask detectado, pero no se pudo verificar el Solana Snap:', err);
         }
+    }
+
+    if (availableWallets.length === 0) {
+        alert('No se detectaron billeteras compatibles. Instala Phantom, Solflare o MetaMask con el Solana Snap.');
+        return;
+    }
+
+    let selectedWallet;
+    if (availableWallets.length === 1) {
+        selectedWallet = availableWallets[0];
     } else {
-        alert("Please install Phantom Wallet.");
+        const choice = prompt(
+            'Se detectaron varias billeteras. Elige una:\n' +
+            availableWallets.map((w, i) => `${i + 1}. ${w.charAt(0).toUpperCase() + w.slice(1)}`).join('\n') +
+            '\nIngresa el número de la billetera:'
+        );
+        const index = parseInt(choice) - 1;
+        if (index >= 0 && index < availableWallets.length) {
+            selectedWallet = availableWallets[index];
+        } else {
+            alert('Selección inválida.');
+            return;
+        }
+    }
+
+    try {
+        if (selectedWallet === 'phantom') {
+            const response = await window.solana.connect();
+            publicKey = response.publicKey;
+            walletProvider = 'phantom';
+        } else if (selectedWallet === 'solflare') {
+            const response = await window.solflare.connect();
+            publicKey = response.publicKey;
+            walletProvider = 'solflare';
+        } else if (selectedWallet === 'metamask') {
+            const accounts = await window.ethereum.request({
+                method: 'wallet_invokeSnap',
+                params: {
+                    snapId: 'npm:@solflare-wallet/solana-snap',
+                    request: { method: 'solana_connect' }
+                }
+            });
+            publicKey = new solanaWeb3.PublicKey(accounts.publicKey);
+            walletProvider = 'metamask';
+        }
+
+        detoxWalletConnected = true;
+        document.getElementById('wallet-status').textContent = `Connected (${selectedWallet}): ${publicKey.toString().slice(0, 8)}...`;
+        await scanWalletAssets(publicKey);
+    } catch (err) {
+        alert(`Error conectando ${selectedWallet}: ${err.message}`);
     }
 }
 
@@ -608,7 +670,7 @@ async function burnSelectedAssets() {
         return;
     }
 
-    if (!detoxWalletConnected || !publicKey) {
+    if (!detoxWalletConnected || !publicKey || !walletProvider) {
         alert('Please connect your wallet first.');
         return;
     }
@@ -653,9 +715,27 @@ async function burnSelectedAssets() {
         transaction.recentBlockhash = blockhash;
         transaction.feePayer = publicKey;
 
-        const signedTransaction = await window.solana.signTransaction(transaction);
-        const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+        let signedTransaction;
+        if (walletProvider === 'phantom') {
+            signedTransaction = await window.solana.signTransaction(transaction);
+        } else if (walletProvider === 'solflare') {
+            signedTransaction = await window.solflare.signTransaction(transaction);
+        } else if (walletProvider === 'metamask') {
+            const serializedTx = transaction.serialize({ requireAllSignatures: false });
+            const signed = await window.ethereum.request({
+                method: 'wallet_invokeSnap',
+                params: {
+                    snapId: 'npm:@solflare-wallet/solana-snap',
+                    request: {
+                        method: 'solana_signTransaction',
+                        params: { transaction: serializedTx.toString('base64') }
+                    }
+                }
+            });
+            signedTransaction = solanaWeb3.Transaction.from(Buffer.from(signed.transaction, 'base64'));
+        }
 
+        const signature = await connection.sendRawTransaction(signedTransaction.serialize());
         await connection.confirmTransaction(signature, 'confirmed');
         alert(`Successfully processed ${selectedAssets.length} assets. Reclaimed ${totalSOL.toFixed(6)} SOL.`);
 
