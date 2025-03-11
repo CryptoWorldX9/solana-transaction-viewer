@@ -361,20 +361,35 @@ tr:hover {
     left: 0;
 }
 
-.crypto-prices {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
+.carousel-container {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.carousel-tape {
+    display: inline-flex;
+    animation: slide 16s linear infinite;
+}
+
+.carousel-tape:hover {
+    animation-play-state: paused;
+}
+
+@keyframes slide {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
 
 .crypto-item {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 10px;
     background: #2A2A2A;
     padding: 5px 10px;
     border-radius: 5px;
+    margin-right: 15px;
+    min-width: 135px; /* Ancho fijo para consistencia */
 }
 
 .crypto-item span {
@@ -459,6 +474,7 @@ tr:hover {
 
     .crypto-item {
         padding: 3px 5px;
+        min-width: 110px; /* Menor ancho en móvil */
     }
 
     .crypto-item span {
