@@ -15,7 +15,7 @@
             <li><i class="fas fa-chart-line"></i> <a href="#" class="disabled">Sentiment Tracker</a></li>
             <li class="active"><i class="fas fa-exchange-alt"></i> <a href="#">Solana Transaction Viewer</a></li>
             <li><i class="fas fa-coins"></i> <a href="#" class="disabled">Token Tracker</a></li>
-            <li><i class="fas fa-leaf"></i> <a href="#" class="disabled">Detox & Reclaim</a></li>
+            <li><i class="fas fa-leaf"></i> <a href="#" id="detox-reclaim">Detox & Reclaim</a></li>
             <li><i class="fas fa-wallet"></i> <a href="#" class="disabled">Wallet Tracker</a></li>
             <li><i class="fas fa-map-marker-alt"></i> <a href="#" class="disabled">Positioning</a></li>
             <li><i class="fas fa-fire"></i> <a href="#" class="disabled">Token Burner</a></li>
@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="content">
-            <div class="viewer-section">
+            <div class="viewer-section" id="viewer-section">
                 <h1>Solana Transaction Viewer</h1>
                 <div class="input-section">
                     <input type="text" id="walletAddress" placeholder="Enter a Solana wallet address (e.g., 7gFvUbRt7fW4QeNipXb63gS4xETngbG9RuXw5YviFzSF)">
@@ -52,6 +52,15 @@
                 <div class="loading-bar" id="loadingBar"></div>
                 <div id="walletInfo"></div>
                 <div id="transactionList"></div>
+            </div>
+            <div id="detox-section" class="detox-section" style="display: none;">
+                <h1>Detox & Reclaim</h1>
+                <div class="detox-input">
+                    <button id="connect-wallet-detox" onclick="connectWalletForDetox()">Connect Wallet</button>
+                    <div id="wallet-status" class="wallet-status">Wallet not connected</div>
+                </div>
+                <div id="asset-list" class="asset-list"></div>
+                <button id="burn-selected" onclick="burnSelectedAssets()" disabled>Burn Selected Assets</button>
             </div>
             <div id="memecoinDetails" style="display: none; width: 100%; max-width: 800px; margin-top: 20px; background: #1A1A1A; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);"></div>
         </div>
