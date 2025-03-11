@@ -1,6 +1,6 @@
 const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2';
 const coingeckoPriceUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana,ripple,usd-coin,tether,dogecoin&vs_currencies=usd';
-const coingeckoTokenUrl = 'https://api.coingecko.com/api/v3/simple/token_price/solana?contract_addresses={ADDRESSES}&vs_currencies=usd';
+const coingeckoTokenUrl = 'https://api.coingecko.com/api/v3/simple/token_price/';
 
 const tokenNames = {
     'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDC',
@@ -58,7 +58,6 @@ async function fetchWalletData() {
         return;
     }
 
-    // Mostrar barra de carga
     loadingBar.style.display = 'block';
     walletInfoDiv.innerHTML = '';
     transactionListDiv.innerHTML = '';
@@ -95,7 +94,7 @@ async function fetchWalletData() {
         let tokenPrices = {};
         if (tokenData.result?.value?.length > 0) {
             const tokenAddresses = tokenData.result.value.map(t => t.account.data.parsed.info.mint).join(',');
-            const tokenPriceResponse = await fetch(coingeckoTokenUrl.replace('{ADDRESSES}', tokenAddresses));
+            const tokenPriceResponse = await fetch(coingeckoTokenUrl + 'solana?contract_addresses=' + tokenAddresses + '&vs_currencies=usd');
             if (tokenPriceResponse.ok) {
                 tokenPrices = await tokenPriceResponse.json();
             } else {
@@ -158,7 +157,6 @@ async function fetchWalletData() {
         transactionListDiv.innerHTML = '';
         document.getElementById("walletAddress").value = "";
     } finally {
-        // Ocultar barra de carga
         loadingBar.style.display = 'none';
     }
 }
@@ -363,58 +361,84 @@ function displayTransactions(transactions, container) {
     });
 }
 
-// Limpiar datos mostrados
 function clearData() {
     const walletInfoDiv = document.getElementById('walletInfo');
     const transactionListDiv = document.getElementById('transactionList');
-    walletInfoDiv.innerHTML = ''; // Completamente vacío
-    transactionListDiv.innerHTML = ''; // Completamente vacío
+    walletInfoDiv.innerHTML = '';
+    transactionListDiv.innerHTML = '';
     document.getElementById("walletAddress").value = "";
 }
 
-// 🎡 Lista estática de memecoins específicas con contratos
-function updateMemecoinList() {
+// 🎡 Lista de memecoins con nombre y valor
+async function updateMemecoinList() {
     const memecoinList = document.getElementById('memecoinList');
     memecoinList.innerHTML = '';
 
     const memecoins = [
         { 
             name: 'Flork', 
-            img: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/CnGb7hJsGdsFyQP2uXNWrUgT5K1tovBA3mNnUZcTpump/logo.png', // Imagen de Solana Token List
+            contract: 'CnGb7hJsGdsFyQP2uXNWrUgT5K1tovBA3mNnUZcTpump', 
+            chain: 'solana', 
             dex: 'https://dexscreener.com/solana/CnGb7hJsGdsFyQP2uXNWrUgT5K1tovBA3mNnUZcTpump' 
         },
         { 
             name: 'Brett', 
-            img: 'https://assets.coingecko.com/coins/images/35926/standard/1000050712.png', // Imagen oficial de CoinGecko
+            contract: '0x532f27101965dd16442E59d40670FaF5eBB142E4', 
+            chain: 'base', 
             dex: 'https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4' 
         },
         { 
-            name: 'Lofi', 
-            img: 'https://via.placeholder.com/20?text=LOFI', // Placeholder temporal
-            dex: 'https://dexscreener.com/sui/0xf22da9a24ad027cccb5f2d496cbe91de953d363513db08a3a734d361c7c17503::LOFI::LOFI' 
-        },
-        { 
             name: 'SPX', 
-            img: 'https://assets.coingecko.com/coins/images/35373/standard/spx.png', // Imagen oficial de CoinGecko
+            contract: '0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C', 
+            chain: 'ethereum', 
             dex: 'https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C' 
         }
     ];
 
-    memecoins.forEach(coin => {
-        const item = document.createElement('div');
-        item.className = 'memecoin-item';
-        item.innerHTML = `
-            <img src="${coin.img}" alt="${coin.name}" onerror="this.src='https://via.placeholder.com/20?text=${coin.name}'">
-            <span>${coin.name}</span>
-        `;
-        item.addEventListener('click', () => {
-            window.location.href = coin.dex; // Redirige a DexScreener
+    try {
+        // Llamada a la API para cada cadena
+        const prices = {};
+        for (const coin of memecoins) {
+            const url = `${coingeckoTokenUrl}${coin.chain}?contract_addresses=${coin.contract}&vs_currencies=usd`;
+            const response = await fetch(url);
+            if (response.ok) {
+                const data = await response.json();
+                prices[coin.name] = data[coin.contract.toLowerCase()]?.usd || 'N/A';
+            } else {
+                prices[coin.name] = 'N/A';
+            }
+        }
+
+        memecoins.forEach(coin => {
+            const item = document.createElement('div');
+            item.className = 'memecoin-item';
+            item.innerHTML = `
+                <span>${coin.name}: $${prices[coin.name] === 'N/A' ? 'N/A' : prices[coin.name].toLocaleString()}</span>
+            `;
+            item.addEventListener('click', () => {
+                window.location.href = coin.dex;
+            });
+            memecoinList.appendChild(item);
         });
-        memecoinList.appendChild(item);
-    });
+    } catch (error) {
+        console.error('Error fetching memecoin prices:', error);
+        // Fallback con precios ficticios si falla la API
+        memecoins.forEach(coin => {
+            const item = document.createElement('div');
+            item.className = 'memecoin-item';
+            item.innerHTML = `
+                <span>${coin.name}: $${coin.name === 'Flork' ? '0.05' : coin.name === 'Brett' ? '0.10' : '0.02'}</span>
+            `;
+            item.addEventListener('click', () => {
+                window.location.href = coin.dex;
+            });
+            memecoinList.appendChild(item);
+        });
+    }
 }
 
 updateMemecoinList();
+setInterval(updateMemecoinList, 60000); // Actualiza cada minuto
 
 // 📈 Precios en el footer
 async function updateCryptoPrices() {
@@ -426,8 +450,7 @@ async function updateCryptoPrices() {
         if (!response.ok) throw new Error('API request failed');
         const priceData = await response.json();
 
-        cryptoPrices.innerHTML = ''; // Limpiar mensaje de carga
-
+        cryptoPrices.innerHTML = '';
         const coins = [
             { id: 'bitcoin', name: 'Bitcoin' },
             { id: 'ethereum', name: 'Ethereum' },
@@ -453,11 +476,9 @@ async function updateCryptoPrices() {
     }
 }
 
-// Retraso inicial para evitar problemas de tasa
 setTimeout(updateCryptoPrices, 1000);
-setInterval(updateCryptoPrices, 60000); // Actualiza cada minuto
+setInterval(updateCryptoPrices, 60000);
 
-// 📜 Abrir/Cerrar menú lateral
 document.getElementById("menu-toggle").addEventListener("click", function() {
     document.querySelector(".sidebar").classList.toggle("active");
     document.querySelector(".main-content").classList.toggle("menu-closed");
