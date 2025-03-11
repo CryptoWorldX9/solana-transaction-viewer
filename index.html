@@ -67,21 +67,21 @@
                     <div id="support-message"></div>
                 </div>
             </div>
-            <div class="footer">
+            <footer class="footer">
                 <div class="carousel">
                     <div class="carousel-tape"></div>
                 </div>
-            </div>
+            </footer>
         </div>
         <div class="menu-toggle" id="menu-toggle">
             <i class="fas fa-bars"></i>
         </div>
     </div>
-    <div id="wallet-modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;">
-        <div class="modal-content" style="background:#1a1a1a; color:#fff; padding:20px; margin:15% auto; width:300px; border-radius:10px;">
+    <div id="wallet-modal" class="modal">
+        <div class="modal-content">
             <h3>Selecciona una billetera</h3>
             <div id="wallet-options"></div>
-            <button onclick="document.getElementById('wallet-modal').style.display='none'" style="margin-top:10px; padding:5px 10px; background:#00D4FF; border:none; border-radius:5px;">Cancelar</button>
+            <button onclick="document.getElementById('wallet-modal').style.display='none'">Cancelar</button>
         </div>
     </div>
     <script src="script.js"></script>
