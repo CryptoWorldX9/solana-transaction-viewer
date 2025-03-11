@@ -371,7 +371,7 @@ function clearData() {
 
 // 🎡 Lista de memecoins con nombre y valor
 async function updateMemecoinList() {
-    const memecoinList = document }getElementById('memecoinList');
+    const memecoinList = document.getElementById('memecoinList');
     memecoinList.innerHTML = '';
 
     const memecoins = [
@@ -486,7 +486,7 @@ async function updateCryptoPrices() {
             <div class="crypto-item"><span>Bitcoin: $60,000</span></div>
             <div class="crypto-item"><span>Ethereum: $2,500</span></div>
             <div class="crypto-item"><span>BNB: $550</span></div>
- Physicians            <div class="crypto-item"><span>Solana: $150</span></div>
+            <div class="crypto-item"><span>Solana: $150</span></div>
             <div class="crypto-item"><span>XRP: $0.60</span></div>
             <div class="crypto-item"><span>USDC: $1.00</span></div>
             <div class="crypto-item"><span>USDT: $1.00</span></div>
@@ -561,7 +561,6 @@ async function scanWalletAssets(walletPublicKey) {
     assetList.innerHTML = '<p>Scanning wallet...</p>';
 
     try {
-        // Obtener cuentas de tokens SPL
         const tokenAccounts = await connection.getTokenAccountsByOwner(
             walletPublicKey,
             { programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA') },
@@ -578,10 +577,10 @@ async function scanWalletAssets(walletPublicKey) {
             const parsedAccountInfo = account.account.data.parsed.info;
             const mint = parsedAccountInfo.mint;
             const amount = parsedAccountInfo.tokenAmount.uiAmount;
-            const reclaimableSOL = (account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6); // SOL recuperable al cerrar
+            const reclaimableSOL = (account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6);
 
             const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
-            const type = amount > 0 ? 'Token' : 'Empty Token Account'; // Simplificación: asumimos NFT si es único, pero requiere más datos para confirmar
+            const type = amount > 0 ? 'Token' : 'Empty Token Account';
 
             html += `
                 <div class="asset-item">
@@ -592,7 +591,6 @@ async function scanWalletAssets(walletPublicKey) {
         });
         assetList.innerHTML = html;
 
-        // Habilitar botón de quemar al seleccionar activos
         assetList.addEventListener('change', () => {
             const selected = assetList.querySelectorAll('input:checked').length > 0;
             document.getElementById('burn-selected').disabled = !selected;
@@ -626,7 +624,6 @@ async function burnSelectedAssets() {
             totalSOL += parseFloat(asset.dataset.sol);
 
             if (amount > 0) {
-                // Quemar tokens (si tienen saldo)
                 const tokenAccount = await splToken.getAssociatedTokenAddress(
                     mint,
                     publicKey
@@ -635,13 +632,12 @@ async function burnSelectedAssets() {
                     tokenAccount,
                     mint,
                     publicKey,
-                    Math.floor(amount * 10 ** 6), // Asumimos 6 decimales; ajustar según token
+                    Math.floor(amount * 10 ** 6), // Asumimos 6 decimales
                     [],
                     splToken.TOKEN_PROGRAM_ID
                 );
                 transaction.add(burnInstruction);
             } else {
-                // Cerrar cuenta vacía
                 const closeInstruction = splToken.createCloseAccountInstruction(
                     account,
                     publicKey,
@@ -653,20 +649,16 @@ async function burnSelectedAssets() {
             }
         }
 
-        // Configurar la transacción
         const { blockhash } = await connection.getLatestBlockhash();
         transaction.recentBlockhash = blockhash;
         transaction.feePayer = publicKey;
 
-        // Firmar y enviar la transacción con Phantom
         const signedTransaction = await window.solana.signTransaction(transaction);
         const signature = await connection.sendRawTransaction(signedTransaction.serialize());
 
-        // Confirmar la transacción
         await connection.confirmTransaction(signature, 'confirmed');
         alert(`Successfully processed ${selectedAssets.length} assets. Reclaimed ${totalSOL.toFixed(6)} SOL.`);
 
-        // Refrescar la lista de activos
         await scanWalletAssets(publicKey);
     } catch (error) {
         console.error('Error burning assets:', error);
@@ -683,7 +675,8 @@ function showSection(sectionId) {
 
     const menuItems = document.querySelectorAll('.menu li');
     menuItems.forEach(item => item.classList.remove('active'));
-    document.querySelector(`#${sectionId.replace('-section', '-menu')} a`)?.parentElement.classList.add('active');
+    const activeItem = document.querySelector(`#${sectionId.replace('-section', '-menu')} a`);
+    if (activeItem) activeItem.parentElement.classList.add('active');
 }
 
 document.getElementById('home-link').addEventListener('click', (e) => {
