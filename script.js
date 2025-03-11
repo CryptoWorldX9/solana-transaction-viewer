@@ -380,7 +380,7 @@ function updateMemecoinList() {
     const memecoins = [
         { 
             name: 'Flork', 
-            img: 'https://assets.coingecko.com/coins/images/37221/standard/flork.jpg', // Imagen oficial de CoinGecko
+            img: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/CnGb7hJsGdsFyQP2uXNWrUgT5K1tovBA3mNnUZcTpump/logo.png', // Imagen de Solana Token List
             dex: 'https://dexscreener.com/solana/CnGb7hJsGdsFyQP2uXNWrUgT5K1tovBA3mNnUZcTpump' 
         },
         { 
