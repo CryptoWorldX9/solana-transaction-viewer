@@ -9,6 +9,11 @@ const tokenNames = {
     '7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj': 'stSOL'
 };
 
+const protectedTokens = [
+    'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
+    'So11111111111111111111111111111111111111112'  // SOL
+];
+
 // 🌐 Conectar/Desconectar wallet (Phantom)
 let isWalletConnected = false;
 
@@ -93,7 +98,7 @@ async function fetchWalletData() {
 
         let tokenPrices = {};
         if (tokenData.result?.value?.length > 0) {
-            const tokenAddresses = tokenData.result.value.map(t => t.account.data.parsed?.info?.mint).filter(Boolean).join(',');
+            const tokenAddresses = tokenData.result.value.map(t => t.account.data.parsed.info.mint).join(',');
             const tokenPriceResponse = await fetch(coingeckoTokenUrl + 'solana?contract_addresses=' + tokenAddresses + '&vs_currencies=usd');
             if (tokenPriceResponse.ok) {
                 tokenPrices = await tokenPriceResponse.json();
@@ -390,7 +395,7 @@ async function updateMemecoinList() {
                 const data = await response.json();
                 prices[coin.name] = data[coin.contract.toLowerCase()]?.usd || 'N/A';
             } else {
-                throw new Error('API fetch failed');
+                prices[coin.name] = 'N/A';
             }
         }
 
@@ -519,41 +524,30 @@ const connection = new solanaWeb3.Connection(rpcUrl, 'confirmed');
 async function connectWalletForDetox() {
     const availableWallets = [];
     
-    if (window.solana && window.solana.isPhantom) {
-        availableWallets.push('phantom');
-    }
-    
-    if (window.solflare && window.solflare.isSolflare) {
-        availableWallets.push('solflare');
-    }
-    
-    if (window.ethereum && window.ethereum.isMetaMask) {
-        availableWallets.push('metamask'); // Asumimos Snap, verificamos después
-    }
+    if (window.solana && window.solana.isPhantom) availableWallets.push('phantom');
+    if (window.solflare && window.solflare.isSolflare) availableWallets.push('solflare');
+    if (window.ethereum && window.ethereum.isMetaMask) availableWallets.push('metamask');
 
     if (availableWallets.length === 0) {
         alert('No se detectaron billeteras compatibles. Instala Phantom, Solflare o MetaMask con el Solana Snap.');
         return;
     }
 
-    let selectedWallet;
-    if (availableWallets.length === 1) {
-        selectedWallet = availableWallets[0];
-    } else {
-        const choice = prompt(
-            'Se detectaron varias billeteras. Elige una:\n' +
-            availableWallets.map((w, i) => `${i + 1}. ${w.charAt(0).toUpperCase() + w.slice(1)}`).join('\n') +
-            '\nIngresa el número de la billetera:'
-        );
-        const index = parseInt(choice) - 1;
-        if (index >= 0 && index < availableWallets.length) {
-            selectedWallet = availableWallets[index];
-        } else {
-            alert('Selección inválida.');
-            return;
-        }
-    }
+    const modal = document.getElementById('wallet-modal');
+    const optionsDiv = document.getElementById('wallet-options');
+    optionsDiv.innerHTML = '';
+    availableWallets.forEach(wallet => {
+        const button = document.createElement('button');
+        button.textContent = wallet.charAt(0).toUpperCase() + wallet.slice(1);
+        button.style = 'display:block; margin:10px 0; padding:10px; background:#00D4FF; border:none; border-radius:5px; width:100%;';
+        button.onclick = () => selectWallet(wallet);
+        optionsDiv.appendChild(button);
+    });
+    modal.style.display = 'block';
+}
 
+async function selectWallet(selectedWallet) {
+    document.getElementById('wallet-modal').style.display = 'none';
     try {
         if (selectedWallet === 'phantom') {
             const response = await window.solana.connect();
@@ -561,9 +555,9 @@ async function connectWalletForDetox() {
             publicKey = response.publicKey;
             walletProvider = 'phantom';
         } else if (selectedWallet === 'solflare') {
-            const response = await window.solflare.connect();
-            if (!response.publicKey) throw new Error('No se obtuvo la clave pública de Solflare');
-            publicKey = response.publicKey;
+            await window.solflare.connect();
+            if (!window.solflare.publicKey) throw new Error('No se obtuvo la clave pública de Solflare');
+            publicKey = window.solflare.publicKey;
             walletProvider = 'solflare';
         } else if (selectedWallet === 'metamask') {
             try {
@@ -607,48 +601,28 @@ async function scanWalletAssets(walletPublicKey) {
             return;
         }
 
-        // Precios simulados como fallback para CORS y límites
         const tokenPrices = {
-            'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': { usd: 1.00 }, // USDC
-            'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': { usd: 1.00 }, // USDT
-            'So11111111111111111111111111111111111111112': { usd: 150.00 } // SOL (valor aproximado)
+            'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 1.00, // USDC
+            'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': 1.00, // USDT
+            'So11111111111111111111111111111111111111112': 150.00 // SOL
         };
-        const mintAddresses = tokenAccounts.value.map(account => account.account.data.parsed?.info?.mint).filter(Boolean).join(',');
-        try {
-            const response = await fetch(`${coingeckoTokenUrl}solana?contract_addresses=${mintAddresses}&vs_currencies=usd`, { mode: 'cors' });
-            if (response.ok) {
-                Object.assign(tokenPrices, await response.json());
-            }
-        } catch (error) {
-            console.warn('No se pudieron obtener precios de tokens, usando fallbacks:', error);
-        }
 
         let html = '<h3>Wallet Assets</h3><p><button id="enable-advanced" onclick="toggleAdvanced()">Habilitar edición avanzada</button></p>';
         tokenAccounts.value.forEach((account, index) => {
-            const parsedInfo = account.account.data.parsed?.info;
-            if (!parsedInfo) {
-                console.warn('Cuenta no parseada:', account);
-                html += `
-                    <div class="asset-item">
-                        <input type="checkbox" id="asset-${index}" 
-                            data-mint="Unknown" 
-                            data-account="${account.pubkey.toBase58()}" 
-                            data-amount="0" 
-                            data-sol="${(account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6)}" 
-                            data-value-usd="0">
-                        <label for="asset-${index}">Unknown Account (0 units, $0.00 USD, ${(account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6)} SOL reclaimable)</label>
-                    </div>
-                `;
-                return;
-            }
+            const data = account.account.data;
+            let parsedInfo = data.parsed?.info || { mint: 'Unknown', tokenAmount: { uiAmount: 0 } };
+            if (!parsedInfo.mint) console.warn('Cuenta no parseada:', account);
+
             const mint = parsedInfo.mint || 'Unknown';
             const amount = parsedInfo.tokenAmount?.uiAmount || 0;
             const reclaimableSOL = (account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6);
             const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
             const type = amount > 0 ? 'Token' : 'Empty Token Account';
-            const priceUSD = tokenPrices[mint]?.usd || 0;
+
+            const priceUSD = tokenPrices[mint] || 0;
             const totalValueUSD = amount * priceUSD;
-            const isValuable = totalValueUSD > 1;
+            const isProtected = protectedTokens.includes(mint);
+            const isValuable = totalValueUSD > 1 || isProtected;
 
             html += `
                 <div class="asset-item">
@@ -693,15 +667,14 @@ async function burnSelectedAssets() {
         return;
     }
 
-    let hasValuableTokens = false;
+    let hasProtectedTokens = false;
     selectedAssets.forEach(asset => {
-        const valueUSD = parseFloat(asset.dataset.valueUsd);
-        if (valueUSD > 1) hasValuableTokens = true;
+        if (protectedTokens.includes(asset.dataset.mint)) hasProtectedTokens = true;
     });
 
-    if (hasValuableTokens) {
+    if (hasProtectedTokens) {
         const confirmation = confirm(
-            'Estás a punto de quemar tokens con un valor mayor a $1. Esto no se puede deshacer y perderás esos activos permanentemente. ¿Estás seguro?'
+            'Estás a punto de quemar tokens protegidos (como USDC o SOL). Esto no se puede deshacer y perderás esos activos permanentemente. ¿Estás seguro?'
         );
         if (!confirmation) return;
     }
@@ -711,7 +684,7 @@ async function burnSelectedAssets() {
 
     try {
         for (const asset of selectedAssets) {
-            const mint = new solanaWeb3.PublicKey(asset.dataset.mint === 'Unknown' ? solanaWeb3.PublicKey.default : asset.dataset.mint);
+            const mint = new solanaWeb3.PublicKey(asset.dataset.mint);
             const account = new solanaWeb3.PublicKey(asset.dataset.account);
             const amount = parseFloat(asset.dataset.amount);
             totalSOL += parseFloat(asset.dataset.sol);
@@ -754,7 +727,10 @@ async function burnSelectedAssets() {
                 method: 'wallet_invokeSnap',
                 params: {
                     snapId: 'npm:@solflare-wallet/solana-snap',
-                    request: { method: 'solana_signTransaction', params: { transaction: serializedTx.toString('base64') } }
+                    request: {
+                        method: 'solana_signTransaction',
+                        params: { transaction: serializedTx.toString('base64') }
+                    }
                 }
             });
             signedTransaction = solanaWeb3.Transaction.from(Buffer.from(signed.transaction, 'base64'));
@@ -774,7 +750,9 @@ async function burnSelectedAssets() {
 // Navegación del menú
 function showSection(sectionId) {
     const sections = ['home-section', 'viewer-section', 'detox-section', 'support-section'];
-    sections.forEach(id => document.getElementById(id).style.display = id === sectionId ? 'block' : 'none');
+    sections.forEach(id => {
+        document.getElementById(id).style.display = id === sectionId ? 'block' : 'none';
+    });
 
     const menuItems = document.querySelectorAll('.menu li');
     menuItems.forEach(item => item.classList.remove('active'));
@@ -795,11 +773,18 @@ document.getElementById('support-form').addEventListener('submit', (e) => {
     const issue = document.getElementById('issue').value;
     const ticketNumber = Math.floor(Math.random() * 1000000);
 
-    const templateParams = { name, email, issue, ticket: ticketNumber };
+    const templateParams = {
+        name: name,
+        email: email,
+        issue: issue,
+        ticket: ticketNumber
+    };
 
     emailjs.send('crypto-tools-service', 'template_muodszo', templateParams)
         .then(() => {
-            document.getElementById('support-message').innerHTML = `<p>Your ticket is #${ticketNumber}. Thank you for contacting us! We will get back to you soon.</p>`;
+            document.getElementById('support-message').innerHTML = `
+                <p>Your ticket is #${ticketNumber}. Thank you for contacting us! We will get back to you soon.</p>
+            `;
             document.getElementById('support-form').reset();
         }, (error) => {
             alert('Error sending support request: ' + error.text);
@@ -808,9 +793,9 @@ document.getElementById('support-form').addEventListener('submit', (e) => {
 
 // Inicializar las actualizaciones
 updateMemecoinList();
-setInterval(updateMemecoinList, 120000); // Cada 2 minutos para evitar 429
+setInterval(updateMemecoinList, 60000);
 setTimeout(updateCryptoPrices, 1000);
-setInterval(updateCryptoPrices, 120000);
+setInterval(updateCryptoPrices, 60000);
 
 document.getElementById("menu-toggle").addEventListener("click", function() {
     document.querySelector(".sidebar").classList.toggle("active");
@@ -819,4 +804,5 @@ document.getElementById("menu-toggle").addEventListener("click", function() {
     document.querySelector(".menu-toggle").classList.toggle("menu-closed");
 });
 
+// Mostrar sección inicial
 showSection('viewer-section');
