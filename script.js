@@ -376,10 +376,10 @@ async function updateMemecoinList() {
 
     const memecoins = [
         { 
-            name: 'Flork', 
-            contract: 'CnGb7hJsGdsFyQP2uXNWrUgT5K1tovBA3mNnUZcTpump', 
+            name: 'Popcat', 
+            contract: '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', 
             chain: 'solana', 
-            dex: 'https://dexscreener.com/solana/CnGb7hJsGdsFyQP2uXNWrUgT5K1tovBA3mNnUZcTpump' 
+            dex: 'https://dexscreener.com/solana/7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' 
         },
         { 
             name: 'Brett', 
@@ -396,7 +396,6 @@ async function updateMemecoinList() {
     ];
 
     try {
-        // Llamada a la API para cada cadena
         const prices = {};
         for (const coin of memecoins) {
             const url = `${coingeckoTokenUrl}${coin.chain}?contract_addresses=${coin.contract}&vs_currencies=usd`;
@@ -405,6 +404,7 @@ async function updateMemecoinList() {
                 const data = await response.json();
                 prices[coin.name] = data[coin.contract.toLowerCase()]?.usd || 'N/A';
             } else {
+                console.warn(`Error fetching price for ${coin.name}: ${response.status}`);
                 prices[coin.name] = 'N/A';
             }
         }
@@ -413,7 +413,7 @@ async function updateMemecoinList() {
             const item = document.createElement('div');
             item.className = 'memecoin-item';
             item.innerHTML = `
-                <span>${coin.name}: $${prices[coin.name] === 'N/A' ? 'N/A' : prices[coin.name].toLocaleString()}</span>
+                <span>${coin.name}: $${prices[coin.name] === 'N/A' ? 'N/A' : prices[coin.name].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</span>
             `;
             item.addEventListener('click', () => {
                 window.location.href = coin.dex;
@@ -422,12 +422,11 @@ async function updateMemecoinList() {
         });
     } catch (error) {
         console.error('Error fetching memecoin prices:', error);
-        // Fallback con precios ficticios si falla la API
         memecoins.forEach(coin => {
             const item = document.createElement('div');
             item.className = 'memecoin-item';
             item.innerHTML = `
-                <span>${coin.name}: $${coin.name === 'Flork' ? '0.05' : coin.name === 'Brett' ? '0.10' : '0.02'}</span>
+                <span>${coin.name}: $${coin.name === 'Popcat' ? '0.20' : coin.name === 'Brett' ? '0.10' : '0.02'}</span>
             `;
             item.addEventListener('click', () => {
                 window.location.href = coin.dex;
@@ -438,7 +437,7 @@ async function updateMemecoinList() {
 }
 
 updateMemecoinList();
-setInterval(updateMemecoinList, 60000); // Actualiza cada minuto
+setInterval(updateMemecoinList, 60000);
 
 // 📈 Precios en el footer
 async function updateCryptoPrices() {
