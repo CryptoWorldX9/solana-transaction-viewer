@@ -51,14 +51,17 @@ async function fetchWalletData() {
     const walletAddress = document.getElementById('walletAddress').value.trim();
     const walletInfoDiv = document.getElementById('walletInfo');
     const transactionListDiv = document.getElementById('transactionList');
+    const loadingBar = document.getElementById('loadingBar');
 
     if (!walletAddress) {
         alert('Please enter a valid wallet address.');
         return;
     }
 
-    walletInfoDiv.innerHTML = '<p>Loading wallet data...</p>';
-    transactionListDiv.innerHTML = '<p>Loading transactions...</p>';
+    // Mostrar barra de carga
+    loadingBar.style.display = 'block';
+    walletInfoDiv.innerHTML = '';
+    transactionListDiv.innerHTML = '';
 
     try {
         const priceResponse = await fetch(coingeckoPriceUrl);
@@ -154,6 +157,9 @@ async function fetchWalletData() {
         walletInfoDiv.innerHTML = '<p>Error connecting to the API. Please try again later.</p>';
         transactionListDiv.innerHTML = '';
         document.getElementById("walletAddress").value = "";
+    } finally {
+        // Ocultar barra de carga
+        loadingBar.style.display = 'none';
     }
 }
 
@@ -374,22 +380,22 @@ function updateMemecoinList() {
     const memecoins = [
         { 
             name: 'Flork', 
-            img: 'https://assets.coingecko.com/coins/images/37221/standard/flork.jpg', // Imagen de CoinGecko
+            img: 'https://assets.coingecko.com/coins/images/37221/standard/flork.jpg', // Imagen oficial de CoinGecko
             dex: 'https://dexscreener.com/solana/CnGb7hJsGdsFyQP2uXNWrUgT5K1tovBA3mNnUZcTpump' 
         },
         { 
             name: 'Brett', 
-            img: 'https://assets.coingecko.com/coins/images/35926/standard/1000050712.png', // Imagen de CoinGecko
+            img: 'https://assets.coingecko.com/coins/images/35926/standard/1000050712.png', // Imagen oficial de CoinGecko
             dex: 'https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4' 
         },
         { 
             name: 'Lofi', 
-            img: 'https://via.placeholder.com/20?text=LOFI', // Placeholder, no encontré imagen oficial
+            img: 'https://via.placeholder.com/20?text=LOFI', // Placeholder temporal
             dex: 'https://dexscreener.com/sui/0xf22da9a24ad027cccb5f2d496cbe91de953d363513db08a3a734d361c7c17503::LOFI::LOFI' 
         },
         { 
             name: 'SPX', 
-            img: 'https://assets.coingecko.com/coins/images/35373/standard/spx.png', // Imagen de CoinGecko
+            img: 'https://assets.coingecko.com/coins/images/35373/standard/spx.png', // Imagen oficial de CoinGecko
             dex: 'https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C' 
         }
     ];
