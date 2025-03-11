@@ -93,7 +93,7 @@ async function fetchWalletData() {
 
         let tokenPrices = {};
         if (tokenData.result?.value?.length > 0) {
-            const tokenAddresses = tokenData.result.value.map(t => t.account.data.parsed.info.mint).join(',');
+            const tokenAddresses = tokenData.result.value.map(t => t.account.data.parsed?.info?.mint).filter(Boolean).join(',');
             const tokenPriceResponse = await fetch(coingeckoTokenUrl + 'solana?contract_addresses=' + tokenAddresses + '&vs_currencies=usd');
             if (tokenPriceResponse.ok) {
                 tokenPrices = await tokenPriceResponse.json();
@@ -376,24 +376,9 @@ async function updateMemecoinList() {
     memecoinList.innerHTML = '';
 
     const memecoins = [
-        { 
-            name: 'Popcat', 
-            contract: '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', 
-            chain: 'solana', 
-            dex: 'https://dexscreener.com/solana/7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' 
-        },
-        { 
-            name: 'Brett', 
-            contract: '0x532f27101965dd16442E59d40670FaF5eBB142E4', 
-            chain: 'base', 
-            dex: 'https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4' 
-        },
-        { 
-            name: 'SPX', 
-            contract: '0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C', 
-            chain: 'ethereum', 
-            dex: 'https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C' 
-        }
+        { name: 'Popcat', contract: '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', chain: 'solana', dex: 'https://dexscreener.com/solana/7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' },
+        { name: 'Brett', contract: '0x532f27101965dd16442E59d40670FaF5eBB142E4', chain: 'base', dex: 'https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4' },
+        { name: 'SPX', contract: '0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C', chain: 'ethereum', dex: 'https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C' }
     ];
 
     try {
@@ -403,23 +388,17 @@ async function updateMemecoinList() {
             const response = await fetch(url, { mode: 'cors' });
             if (response.ok) {
                 const data = await response.json();
-                console.log(`${coin.name} price data:`, data);
                 prices[coin.name] = data[coin.contract.toLowerCase()]?.usd || 'N/A';
             } else {
-                console.warn(`Error fetching price for ${coin.name}: ${response.status}`);
-                prices[coin.name] = 'N/A';
+                throw new Error('API fetch failed');
             }
         }
 
         memecoins.forEach(coin => {
             const item = document.createElement('div');
             item.className = 'memecoin-item';
-            item.innerHTML = `
-                <span>${coin.name}: $${prices[coin.name] === 'N/A' ? 'N/A' : prices[coin.name].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</span>
-            `;
-            item.addEventListener('click', () => {
-                window.open(coin.dex, '_blank');
-            });
+            item.innerHTML = `<span>${coin.name}: $${prices[coin.name] === 'N/A' ? 'N/A' : prices[coin.name].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</span>`;
+            item.addEventListener('click', () => window.open(coin.dex, '_blank'));
             memecoinList.appendChild(item);
         });
     } catch (error) {
@@ -427,12 +406,8 @@ async function updateMemecoinList() {
         memecoins.forEach(coin => {
             const item = document.createElement('div');
             item.className = 'memecoin-item';
-            item.innerHTML = `
-                <span>${coin.name}: $${coin.name === 'Popcat' ? '0.20' : coin.name === 'Brett' ? '0.10' : '0.02'}</span>
-            `;
-            item.addEventListener('click', () => {
-                window.open(coin.dex, '_blank');
-            });
+            item.innerHTML = `<span>${coin.name}: $${coin.name === 'Popcat' ? '0.20' : coin.name === 'Brett' ? '0.10' : '0.02'}</span>`;
+            item.addEventListener('click', () => window.open(coin.dex, '_blank'));
             memecoinList.appendChild(item);
         });
     }
@@ -451,7 +426,6 @@ async function updateCryptoPrices() {
         const response = await fetch(coingeckoPriceUrl, { mode: 'cors' });
         if (!response.ok) throw new Error('API request failed');
         const priceData = await response.json();
-        console.log('Footer price data:', priceData);
 
         const coins = [
             { id: 'bitcoin', name: 'Bitcoin' },
@@ -539,32 +513,22 @@ document.getElementById('search-input').addEventListener('input', (e) => {
 // 🧹 Detox & Reclaim
 let detoxWalletConnected = false;
 let publicKey = null;
-let walletProvider = null; // 'phantom', 'solflare', o 'metamask'
+let walletProvider = null;
 const connection = new solanaWeb3.Connection(rpcUrl, 'confirmed');
 
 async function connectWalletForDetox() {
     const availableWallets = [];
     
-    // Detectar Phantom
     if (window.solana && window.solana.isPhantom) {
         availableWallets.push('phantom');
     }
     
-    // Detectar Solflare
     if (window.solflare && window.solflare.isSolflare) {
         availableWallets.push('solflare');
     }
     
-    // Detectar MetaMask con Solana Snap
     if (window.ethereum && window.ethereum.isMetaMask) {
-        try {
-            const snaps = await window.ethereum.request({ method: 'wallet_getSnaps' });
-            if (snaps['npm:@solflare-wallet/solana-snap']) {
-                availableWallets.push('metamask');
-            }
-        } catch (err) {
-            console.log('MetaMask detectado, pero no se pudo verificar el Solana Snap:', err);
-        }
+        availableWallets.push('metamask'); // Asumimos Snap, verificamos después
     }
 
     if (availableWallets.length === 0) {
@@ -602,16 +566,20 @@ async function connectWalletForDetox() {
             publicKey = response.publicKey;
             walletProvider = 'solflare';
         } else if (selectedWallet === 'metamask') {
-            const accounts = await window.ethereum.request({
-                method: 'wallet_invokeSnap',
-                params: {
-                    snapId: 'npm:@solflare-wallet/solana-snap',
-                    request: { method: 'solana_connect' }
-                }
-            });
-            if (!accounts || !accounts.publicKey) throw new Error('No se obtuvo la clave pública de MetaMask');
-            publicKey = new solanaWeb3.PublicKey(accounts.publicKey);
-            walletProvider = 'metamask';
+            try {
+                const accounts = await window.ethereum.request({
+                    method: 'wallet_invokeSnap',
+                    params: {
+                        snapId: 'npm:@solflare-wallet/solana-snap',
+                        request: { method: 'solana_connect' }
+                    }
+                });
+                if (!accounts || !accounts.publicKey) throw new Error('No se obtuvo la clave pública de MetaMask');
+                publicKey = new solanaWeb3.PublicKey(accounts.publicKey);
+                walletProvider = 'metamask';
+            } catch (err) {
+                throw new Error('MetaMask requiere el Solana Snap instalado. Instálalo desde snaps.metamask.io.');
+            }
         }
 
         detoxWalletConnected = true;
@@ -639,24 +607,59 @@ async function scanWalletAssets(walletPublicKey) {
             return;
         }
 
-        let html = '<h3>Wallet Assets</h3>';
+        // Precios simulados como fallback para CORS y límites
+        const tokenPrices = {
+            'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': { usd: 1.00 }, // USDC
+            'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': { usd: 1.00 }, // USDT
+            'So11111111111111111111111111111111111111112': { usd: 150.00 } // SOL (valor aproximado)
+        };
+        const mintAddresses = tokenAccounts.value.map(account => account.account.data.parsed?.info?.mint).filter(Boolean).join(',');
+        try {
+            const response = await fetch(`${coingeckoTokenUrl}solana?contract_addresses=${mintAddresses}&vs_currencies=usd`, { mode: 'cors' });
+            if (response.ok) {
+                Object.assign(tokenPrices, await response.json());
+            }
+        } catch (error) {
+            console.warn('No se pudieron obtener precios de tokens, usando fallbacks:', error);
+        }
+
+        let html = '<h3>Wallet Assets</h3><p><button id="enable-advanced" onclick="toggleAdvanced()">Habilitar edición avanzada</button></p>';
         tokenAccounts.value.forEach((account, index) => {
             const parsedInfo = account.account.data.parsed?.info;
             if (!parsedInfo) {
                 console.warn('Cuenta no parseada:', account);
-                return; // Saltar cuentas no válidas
+                html += `
+                    <div class="asset-item">
+                        <input type="checkbox" id="asset-${index}" 
+                            data-mint="Unknown" 
+                            data-account="${account.pubkey.toBase58()}" 
+                            data-amount="0" 
+                            data-sol="${(account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6)}" 
+                            data-value-usd="0">
+                        <label for="asset-${index}">Unknown Account (0 units, $0.00 USD, ${(account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6)} SOL reclaimable)</label>
+                    </div>
+                `;
+                return;
             }
             const mint = parsedInfo.mint || 'Unknown';
             const amount = parsedInfo.tokenAmount?.uiAmount || 0;
             const reclaimableSOL = (account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6);
-
             const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
             const type = amount > 0 ? 'Token' : 'Empty Token Account';
+            const priceUSD = tokenPrices[mint]?.usd || 0;
+            const totalValueUSD = amount * priceUSD;
+            const isValuable = totalValueUSD > 1;
 
             html += `
                 <div class="asset-item">
-                    <input type="checkbox" id="asset-${index}" data-mint="${mint}" data-account="${account.pubkey.toBase58()}" data-amount="${amount}" data-sol="${reclaimableSOL}">
-                    <label for="asset-${index}">${type}: ${tokenName} (${amount} units, ${reclaimableSOL} SOL reclaimable)</label>
+                    <input type="checkbox" id="asset-${index}" 
+                        data-mint="${mint}" 
+                        data-account="${account.pubkey.toBase58()}" 
+                        data-amount="${amount}" 
+                        data-sol="${reclaimableSOL}" 
+                        data-value-usd="${totalValueUSD}" 
+                        ${isValuable ? 'disabled' : ''}>
+                    <label for="asset-${index}">${type}: ${tokenName} (${amount} units, $${totalValueUSD.toFixed(2)} USD, ${reclaimableSOL} SOL reclaimable)</label>
                 </div>
             `;
         });
@@ -672,6 +675,12 @@ async function scanWalletAssets(walletPublicKey) {
     }
 }
 
+function toggleAdvanced() {
+    const checkboxes = document.querySelectorAll('#asset-list input:disabled');
+    checkboxes.forEach(checkbox => checkbox.disabled = false);
+    document.getElementById('enable-advanced').style.display = 'none';
+}
+
 async function burnSelectedAssets() {
     const selectedAssets = document.querySelectorAll('#asset-list input:checked');
     if (selectedAssets.length === 0) {
@@ -684,21 +693,31 @@ async function burnSelectedAssets() {
         return;
     }
 
+    let hasValuableTokens = false;
+    selectedAssets.forEach(asset => {
+        const valueUSD = parseFloat(asset.dataset.valueUsd);
+        if (valueUSD > 1) hasValuableTokens = true;
+    });
+
+    if (hasValuableTokens) {
+        const confirmation = confirm(
+            'Estás a punto de quemar tokens con un valor mayor a $1. Esto no se puede deshacer y perderás esos activos permanentemente. ¿Estás seguro?'
+        );
+        if (!confirmation) return;
+    }
+
     const transaction = new solanaWeb3.Transaction();
     let totalSOL = 0;
 
     try {
         for (const asset of selectedAssets) {
-            const mint = new solanaWeb3.PublicKey(asset.dataset.mint);
+            const mint = new solanaWeb3.PublicKey(asset.dataset.mint === 'Unknown' ? solanaWeb3.PublicKey.default : asset.dataset.mint);
             const account = new solanaWeb3.PublicKey(asset.dataset.account);
             const amount = parseFloat(asset.dataset.amount);
             totalSOL += parseFloat(asset.dataset.sol);
 
             if (amount > 0) {
-                const tokenAccount = await splToken.getAssociatedTokenAddress(
-                    mint,
-                    publicKey
-                );
+                const tokenAccount = await splToken.getAssociatedTokenAddress(mint, publicKey);
                 const burnInstruction = splToken.createBurnInstruction(
                     tokenAccount,
                     mint,
@@ -735,10 +754,7 @@ async function burnSelectedAssets() {
                 method: 'wallet_invokeSnap',
                 params: {
                     snapId: 'npm:@solflare-wallet/solana-snap',
-                    request: {
-                        method: 'solana_signTransaction',
-                        params: { transaction: serializedTx.toString('base64') }
-                    }
+                    request: { method: 'solana_signTransaction', params: { transaction: serializedTx.toString('base64') } }
                 }
             });
             signedTransaction = solanaWeb3.Transaction.from(Buffer.from(signed.transaction, 'base64'));
@@ -758,9 +774,7 @@ async function burnSelectedAssets() {
 // Navegación del menú
 function showSection(sectionId) {
     const sections = ['home-section', 'viewer-section', 'detox-section', 'support-section'];
-    sections.forEach(id => {
-        document.getElementById(id).style.display = id === sectionId ? 'block' : 'none';
-    });
+    sections.forEach(id => document.getElementById(id).style.display = id === sectionId ? 'block' : 'none');
 
     const menuItems = document.querySelectorAll('.menu li');
     menuItems.forEach(item => item.classList.remove('active'));
@@ -768,25 +782,10 @@ function showSection(sectionId) {
     if (activeItem) activeItem.parentElement.classList.add('active');
 }
 
-document.getElementById('home-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    showSection('home-section');
-});
-
-document.getElementById('viewer-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    showSection('viewer-section');
-});
-
-document.getElementById('detox-reclaim').addEventListener('click', (e) => {
-    e.preventDefault();
-    showSection('detox-section');
-});
-
-document.getElementById('support-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    showSection('support-section');
-});
+document.getElementById('home-link').addEventListener('click', (e) => { e.preventDefault(); showSection('home-section'); });
+document.getElementById('viewer-link').addEventListener('click', (e) => { e.preventDefault(); showSection('viewer-section'); });
+document.getElementById('detox-reclaim').addEventListener('click', (e) => { e.preventDefault(); showSection('detox-section'); });
+document.getElementById('support-link').addEventListener('click', (e) => { e.preventDefault(); showSection('support-section'); });
 
 // Formulario de soporte con EmailJS
 document.getElementById('support-form').addEventListener('submit', (e) => {
@@ -796,18 +795,11 @@ document.getElementById('support-form').addEventListener('submit', (e) => {
     const issue = document.getElementById('issue').value;
     const ticketNumber = Math.floor(Math.random() * 1000000);
 
-    const templateParams = {
-        name: name,
-        email: email,
-        issue: issue,
-        ticket: ticketNumber
-    };
+    const templateParams = { name, email, issue, ticket: ticketNumber };
 
     emailjs.send('crypto-tools-service', 'template_muodszo', templateParams)
         .then(() => {
-            document.getElementById('support-message').innerHTML = `
-                <p>Your ticket is #${ticketNumber}. Thank you for contacting us! We will get back to you soon.</p>
-            `;
+            document.getElementById('support-message').innerHTML = `<p>Your ticket is #${ticketNumber}. Thank you for contacting us! We will get back to you soon.</p>`;
             document.getElementById('support-form').reset();
         }, (error) => {
             alert('Error sending support request: ' + error.text);
@@ -816,9 +808,9 @@ document.getElementById('support-form').addEventListener('submit', (e) => {
 
 // Inicializar las actualizaciones
 updateMemecoinList();
-setInterval(updateMemecoinList, 60000);
+setInterval(updateMemecoinList, 120000); // Cada 2 minutos para evitar 429
 setTimeout(updateCryptoPrices, 1000);
-setInterval(updateCryptoPrices, 60000);
+setInterval(updateCryptoPrices, 120000);
 
 document.getElementById("menu-toggle").addEventListener("click", function() {
     document.querySelector(".sidebar").classList.toggle("active");
@@ -827,5 +819,4 @@ document.getElementById("menu-toggle").addEventListener("click", function() {
     document.querySelector(".menu-toggle").classList.toggle("menu-closed");
 });
 
-// Mostrar sección inicial
 showSection('viewer-section');
