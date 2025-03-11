@@ -164,7 +164,7 @@ async function fetchWalletData() {
 function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, totalTxData, tokenPrices, walletAddress, container) {
     const solBalance = accountData.lamports ? (accountData.lamports / 1e9) : 0;
     const usdBalance = (solBalance * solPriceUSD).toFixed(2);
-    const tokenBalances = Array.isArray(tokenAccounts) && tokenAccounts.length > 0 ? tokenAccounts.map(t => t.account.data.parsed.info.tokenAmount.uiAmount).reduce((a, b) => a + b, 0) : 0;
+    const tokenBalances = Array.isArray(tokenAccounts) && tokenAccounts.length > 0 ? tokenAccounts.map(t => t.account.data.parsed?.info?.tokenAmount?.uiAmount || 0).reduce((a, b) => a + b, 0) : 0;
     const tps = tpsData && tpsData[0] ? (tpsData[0].numTransactions / tpsData[0].samplePeriodSecs).toFixed(2) : 'N/A';
     const lastActivity = totalTxData && totalTxData[0] ? new Date(totalTxData[0].blockTime * 1000).toLocaleString() : 'N/A';
     const totalTransactions = totalTxData ? totalTxData.length : 'N/A';
@@ -185,9 +185,10 @@ function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, tpsData, tot
                 <tbody>
         `;
         tokenAccounts.forEach(t => {
-            const mint = t.account.data.parsed.info.mint || 'Unknown';
+            const parsedInfo = t.account.data.parsed?.info;
+            const mint = parsedInfo?.mint || 'Unknown';
             const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
-            const amount = t.account.data.parsed.info.tokenAmount.uiAmount || 0;
+            const amount = parsedInfo?.tokenAmount?.uiAmount || 0;
             const priceUSD = tokenPrices[mint]?.usd || 'N/A';
             const totalUSD = priceUSD !== 'N/A' ? (amount * priceUSD).toFixed(2) : 'N/A';
             const supplyPercent = amount / 1e9 * 100;
@@ -399,7 +400,7 @@ async function updateMemecoinList() {
         const prices = {};
         for (const coin of memecoins) {
             const url = `${coingeckoTokenUrl}${coin.chain}?contract_addresses=${coin.contract}&vs_currencies=usd`;
-            const response = await fetch(url);
+            const response = await fetch(url, { mode: 'cors' });
             if (response.ok) {
                 const data = await response.json();
                 console.log(`${coin.name} price data:`, data);
@@ -447,7 +448,7 @@ async function updateCryptoPrices() {
     carouselTape.innerHTML = '<span>Loading prices...</span>';
 
     try {
-        const response = await fetch(coingeckoPriceUrl);
+        const response = await fetch(coingeckoPriceUrl, { mode: 'cors' });
         if (!response.ok) throw new Error('API request failed');
         const priceData = await response.json();
         console.log('Footer price data:', priceData);
@@ -596,12 +597,9 @@ async function connectWalletForDetox() {
             publicKey = response.publicKey;
             walletProvider = 'phantom';
         } else if (selectedWallet === 'solflare') {
-            // Asegurarnos de que Solflare esté conectado y obtener la clave pública
-            await window.solflare.connect();
-            if (!window.solflare.isConnected) throw new Error('Solflare no se conectó correctamente');
-            const response = await window.solflare.getAccount();
-            if (!response || !response.publicKey) throw new Error('No se obtuvo la clave pública de Solflare');
-            publicKey = new solanaWeb3.PublicKey(response.publicKey);
+            const response = await window.solflare.connect();
+            if (!response.publicKey) throw new Error('No se obtuvo la clave pública de Solflare');
+            publicKey = response.publicKey;
             walletProvider = 'solflare';
         } else if (selectedWallet === 'metamask') {
             const accounts = await window.ethereum.request({
@@ -643,9 +641,13 @@ async function scanWalletAssets(walletPublicKey) {
 
         let html = '<h3>Wallet Assets</h3>';
         tokenAccounts.value.forEach((account, index) => {
-            const parsedAccountInfo = account.account.data.parsed.info;
-            const mint = parsedAccountInfo.mint;
-            const amount = parsedAccountInfo.tokenAmount.uiAmount;
+            const parsedInfo = account.account.data.parsed?.info;
+            if (!parsedInfo) {
+                console.warn('Cuenta no parseada:', account);
+                return; // Saltar cuentas no válidas
+            }
+            const mint = parsedInfo.mint || 'Unknown';
+            const amount = parsedInfo.tokenAmount?.uiAmount || 0;
             const reclaimableSOL = (account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6);
 
             const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
