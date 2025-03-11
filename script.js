@@ -371,7 +371,7 @@ function clearData() {
 
 // 🎡 Lista de memecoins con nombre y valor
 async function updateMemecoinList() {
-    const memecoinList = document.getElementById('memecoinList');
+    const memecoinList = document }getElementById('memecoinList');
     memecoinList.innerHTML = '';
 
     const memecoins = [
@@ -486,7 +486,7 @@ async function updateCryptoPrices() {
             <div class="crypto-item"><span>Bitcoin: $60,000</span></div>
             <div class="crypto-item"><span>Ethereum: $2,500</span></div>
             <div class="crypto-item"><span>BNB: $550</span></div>
-            <div class="crypto-item"><span>Solana: $150</span></div>
+ Physicians            <div class="crypto-item"><span>Solana: $150</span></div>
             <div class="crypto-item"><span>XRP: $0.60</span></div>
             <div class="crypto-item"><span>USDC: $1.00</span></div>
             <div class="crypto-item"><span>USDT: $1.00</span></div>
@@ -537,64 +537,141 @@ document.getElementById('search-input').addEventListener('input', (e) => {
 
 // 🧹 Detox & Reclaim
 let detoxWalletConnected = false;
+let publicKey = null;
+const connection = new solanaWeb3.Connection(rpcUrl, 'confirmed');
 
 async function connectWalletForDetox() {
     if (window.solana && window.solana.isPhantom) {
         try {
             const response = await window.solana.connect();
             detoxWalletConnected = true;
-            document.getElementById('wallet-status').textContent = `Connected: ${response.publicKey.toString().slice(0, 8)}...`;
-            scanWalletAssets(response.publicKey.toString());
+            publicKey = response.publicKey;
+            document.getElementById('wallet-status').textContent = `Connected: ${publicKey.toString().slice(0, 8)}...`;
+            await scanWalletAssets(publicKey);
         } catch (err) {
-            alert("Could not connect wallet for Detox.");
+            alert("Could not connect wallet for Detox: " + err.message);
         }
     } else {
         alert("Please install Phantom Wallet.");
     }
 }
 
-async function scanWalletAssets(publicKey) {
+async function scanWalletAssets(walletPublicKey) {
     const assetList = document.getElementById('asset-list');
     assetList.innerHTML = '<p>Scanning wallet...</p>';
 
-    const simulatedAssets = [
-        { type: 'Token', mint: 'ABC123', amount: 0, reclaimableSOL: 0.002 },
-        { type: 'NFT', mint: 'NFT456', amount: 1, reclaimableSOL: 0.01 },
-        { type: 'Token', mint: 'XYZ789', amount: 0, reclaimableSOL: 0.002 }
-    ];
+    try {
+        // Obtener cuentas de tokens SPL
+        const tokenAccounts = await connection.getTokenAccountsByOwner(
+            walletPublicKey,
+            { programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA') },
+            'confirmed'
+        );
 
-    let html = '<h3>Wallet Assets</h3>';
-    simulatedAssets.forEach((asset, index) => {
-        html += `
-            <div class="asset-item">
-                <input type="checkbox" id="asset-${index}" data-mint="${asset.mint}" data-sol="${asset.reclaimableSOL}">
-                <label for="asset-${index}">${asset.type}: ${asset.mint} (${asset.amount} units, ${asset.reclaimableSOL} SOL reclaimable)</label>
-            </div>
-        `;
-    });
-    assetList.innerHTML = html;
+        if (!tokenAccounts.value.length) {
+            assetList.innerHTML = '<p>No tokens or NFTs found in this wallet.</p>';
+            return;
+        }
 
-    assetList.addEventListener('change', () => {
-        const selected = assetList.querySelectorAll('input:checked').length > 0;
-        document.getElementById('burn-selected').disabled = !selected;
-    });
+        let html = '<h3>Wallet Assets</h3>';
+        tokenAccounts.value.forEach((account, index) => {
+            const parsedAccountInfo = account.account.data.parsed.info;
+            const mint = parsedAccountInfo.mint;
+            const amount = parsedAccountInfo.tokenAmount.uiAmount;
+            const reclaimableSOL = (account.account.lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6); // SOL recuperable al cerrar
+
+            const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
+            const type = amount > 0 ? 'Token' : 'Empty Token Account'; // Simplificación: asumimos NFT si es único, pero requiere más datos para confirmar
+
+            html += `
+                <div class="asset-item">
+                    <input type="checkbox" id="asset-${index}" data-mint="${mint}" data-account="${account.pubkey.toBase58()}" data-amount="${amount}" data-sol="${reclaimableSOL}">
+                    <label for="asset-${index}">${type}: ${tokenName} (${amount} units, ${reclaimableSOL} SOL reclaimable)</label>
+                </div>
+            `;
+        });
+        assetList.innerHTML = html;
+
+        // Habilitar botón de quemar al seleccionar activos
+        assetList.addEventListener('change', () => {
+            const selected = assetList.querySelectorAll('input:checked').length > 0;
+            document.getElementById('burn-selected').disabled = !selected;
+        });
+    } catch (error) {
+        console.error('Error scanning wallet assets:', error);
+        assetList.innerHTML = '<p>Error scanning wallet. Please try again.</p>';
+    }
 }
 
-function burnSelectedAssets() {
+async function burnSelectedAssets() {
     const selectedAssets = document.querySelectorAll('#asset-list input:checked');
     if (selectedAssets.length === 0) {
         alert('No assets selected to burn.');
         return;
     }
 
-    let totalSOL = 0;
-    selectedAssets.forEach(asset => {
-        totalSOL += parseFloat(asset.dataset.sol);
-        console.log(`Burning asset: ${asset.dataset.mint}`);
-    });
+    if (!detoxWalletConnected || !publicKey) {
+        alert('Please connect your wallet first.');
+        return;
+    }
 
-    alert(`Burned ${selectedAssets.length} assets. Reclaimed ${totalSOL.toFixed(4)} SOL (simulation).`);
-    scanWalletAssets(window.solana.publicKey.toString());
+    const transaction = new solanaWeb3.Transaction();
+    let totalSOL = 0;
+
+    try {
+        for (const asset of selectedAssets) {
+            const mint = new solanaWeb3.PublicKey(asset.dataset.mint);
+            const account = new solanaWeb3.PublicKey(asset.dataset.account);
+            const amount = parseFloat(asset.dataset.amount);
+            totalSOL += parseFloat(asset.dataset.sol);
+
+            if (amount > 0) {
+                // Quemar tokens (si tienen saldo)
+                const tokenAccount = await splToken.getAssociatedTokenAddress(
+                    mint,
+                    publicKey
+                );
+                const burnInstruction = splToken.createBurnInstruction(
+                    tokenAccount,
+                    mint,
+                    publicKey,
+                    Math.floor(amount * 10 ** 6), // Asumimos 6 decimales; ajustar según token
+                    [],
+                    splToken.TOKEN_PROGRAM_ID
+                );
+                transaction.add(burnInstruction);
+            } else {
+                // Cerrar cuenta vacía
+                const closeInstruction = splToken.createCloseAccountInstruction(
+                    account,
+                    publicKey,
+                    publicKey,
+                    [],
+                    splToken.TOKEN_PROGRAM_ID
+                );
+                transaction.add(closeInstruction);
+            }
+        }
+
+        // Configurar la transacción
+        const { blockhash } = await connection.getLatestBlockhash();
+        transaction.recentBlockhash = blockhash;
+        transaction.feePayer = publicKey;
+
+        // Firmar y enviar la transacción con Phantom
+        const signedTransaction = await window.solana.signTransaction(transaction);
+        const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+
+        // Confirmar la transacción
+        await connection.confirmTransaction(signature, 'confirmed');
+        alert(`Successfully processed ${selectedAssets.length} assets. Reclaimed ${totalSOL.toFixed(6)} SOL.`);
+
+        // Refrescar la lista de activos
+        await scanWalletAssets(publicKey);
+    } catch (error) {
+        console.error('Error burning assets:', error);
+        alert('Error processing assets: ' + error.message);
+    }
 }
 
 // Navegación del menú
