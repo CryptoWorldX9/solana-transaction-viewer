@@ -402,7 +402,7 @@ async function updateMemecoinList() {
             const response = await fetch(url);
             if (response.ok) {
                 const data = await response.json();
-                console.log(`${coin.name} price data:`, data); // Depuración
+                console.log(`${coin.name} price data:`, data);
                 prices[coin.name] = data[coin.contract.toLowerCase()]?.usd || 'N/A';
             } else {
                 console.warn(`Error fetching price for ${coin.name}: ${response.status}`);
@@ -417,7 +417,7 @@ async function updateMemecoinList() {
                 <span>${coin.name}: $${prices[coin.name] === 'N/A' ? 'N/A' : prices[coin.name].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</span>
             `;
             item.addEventListener('click', () => {
-                window.location.href = coin.dex;
+                window.open(coin.dex, '_blank'); // Abre en nueva pestaña
             });
             memecoinList.appendChild(item);
         });
@@ -430,7 +430,7 @@ async function updateMemecoinList() {
                 <span>${coin.name}: $${coin.name === 'Popcat' ? '0.20' : coin.name === 'Brett' ? '0.10' : '0.02'}</span>
             `;
             item.addEventListener('click', () => {
-                window.location.href = coin.dex;
+                window.open(coin.dex, '_blank'); // Abre en nueva pestaña
             });
             memecoinList.appendChild(item);
         });
@@ -450,7 +450,7 @@ async function updateCryptoPrices() {
         const response = await fetch(coingeckoPriceUrl);
         if (!response.ok) throw new Error('API request failed');
         const priceData = await response.json();
-        console.log('Footer price data:', priceData); // Depuración
+        console.log('Footer price data:', priceData);
 
         const coins = [
             { id: 'bitcoin', name: 'Bitcoin' },
@@ -467,11 +467,11 @@ async function updateCryptoPrices() {
         coins.forEach(coin => {
             html += `<div class="crypto-item"><span>${coin.name}: $${priceData[coin.id].usd.toLocaleString()}</span></div>`;
         });
-        carouselTape.innerHTML = html + html; // Duplicar para continuidad
+        carouselTape.innerHTML = html + html;
 
         const itemCount = coins.length;
-        carouselTape.style.width = `${itemCount * 150 * 2}px`; // 150px por ítem, x2 por duplicado
-        carouselTape.style.animationDuration = `${itemCount * 2}s`; // 2 segundos por ítem
+        carouselTape.style.width = `${itemCount * 150 * 2}px`;
+        carouselTape.style.animationDuration = `${itemCount * 2}s`;
     } catch (error) {
         console.error('Error fetching crypto prices:', error);
         carouselTape.innerHTML = `
@@ -492,10 +492,49 @@ async function updateCryptoPrices() {
             <div class="crypto-item"><span>USDT: $1.00</span></div>
             <div class="crypto-item"><span>DOGE: $0.15</span></div>
         `;
-        carouselTape.style.width = '2400px'; // 8 ítems x 150px x 2
-        carouselTape.style.animationDuration = '16s'; // 8 ítems x 2s
+        carouselTape.style.width = '2400px';
+        carouselTape.style.animationDuration = '16s';
     }
 }
+
+// 🔍 Funcionalidad del buscador
+document.getElementById('search-toggle').addEventListener('click', () => {
+    const searchBar = document.getElementById('search-bar');
+    searchBar.classList.toggle('active');
+    if (searchBar.classList.contains('active')) {
+        document.getElementById('search-input').focus();
+    }
+});
+
+document.getElementById('search-input').addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    const resultsDiv = document.getElementById('search-results');
+    resultsDiv.innerHTML = '';
+
+    // Lista estática de términos relacionados con la página
+    const searchItems = [
+        { name: 'Popcat', action: () => window.open('https://dexscreener.com/solana/7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', '_blank') },
+        { name: 'Brett', action: () => window.open('https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4', '_blank') },
+        { name: 'SPX', action: () => window.open('https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C', '_blank') },
+        { name: 'Solana', action: () => document.getElementById('walletAddress').focus() },
+        { name: 'Wallet', action: () => document.getElementById('wallet-icon').click() },
+        { name: 'Transaction', action: () => document.getElementById('walletAddress').focus() }
+    ];
+
+    const filteredItems = searchItems.filter(item => item.name.toLowerCase().includes(query));
+    
+    if (filteredItems.length > 0 && query) {
+        filteredItems.forEach(item => {
+            const result = document.createElement('div');
+            result.className = 'search-result-item';
+            result.textContent = item.name;
+            result.addEventListener('click', item.action);
+            resultsDiv.appendChild(result);
+        });
+    } else if (query) {
+        resultsDiv.innerHTML = '<div class="search-result-item">No results found</div>';
+    }
+});
 
 // Inicializar las actualizaciones
 updateMemecoinList();
