@@ -126,7 +126,7 @@ async function fetchWalletData() {
         });
         const totalTxData = await totalTxResponse.json();
 
-        const tpsResponse = await fetch(rpcUrl, {
+        const tpsResponse = impressão fetch(rpcUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -439,17 +439,16 @@ async function updateMemecoinList() {
 updateMemecoinList();
 setInterval(updateMemecoinList, 60000);
 
-// 📈 Precios en el footer
+// 📈 Precios en el footer como carrusel
 async function updateCryptoPrices() {
-    const cryptoPrices = document.getElementById('cryptoPrices');
-    cryptoPrices.innerHTML = '<span>Loading prices...</span>';
+    const carouselTape = document.querySelector('.carousel-tape');
+    carouselTape.innerHTML = '<span>Loading prices...</span>';
 
     try {
         const response = await fetch(coingeckoPriceUrl);
         if (!response.ok) throw new Error('API request failed');
         const priceData = await response.json();
 
-        cryptoPrices.innerHTML = '';
         const coins = [
             { id: 'bitcoin', name: 'Bitcoin' },
             { id: 'ethereum', name: 'Ethereum' },
@@ -461,17 +460,40 @@ async function updateCryptoPrices() {
             { id: 'dogecoin', name: 'DOGE' }
         ];
 
+        // Generar ítems del carrusel (duplicados para continuidad)
+        let html = '';
         coins.forEach(coin => {
-            const div = document.createElement('div');
-            div.className = 'crypto-item';
-            div.innerHTML = `<span>${coin.name}: $${priceData[coin.id].usd.toLocaleString()}</span>`;
-            cryptoPrices.appendChild(div);
+            html += `<div class="crypto-item"><span>${coin.name}: $${priceData[coin.id].usd.toLocaleString()}</span></div>`;
         });
+        // Duplicar para efecto continuo
+        carouselTape.innerHTML = html + html;
+
+        // Ajustar ancho de la cinta según cantidad de ítems
+        const itemCount = coins.length;
+        carouselTape.style.width = `${itemCount * 150 * 2}px`; // 150px por ítem, x2 por duplicado
+        carouselTape.style.animationDuration = `${itemCount * 2}s`; // 2 segundos por ítem
     } catch (error) {
         console.error('Error fetching crypto prices:', error);
-        cryptoPrices.innerHTML = `
-            <span>Bitcoin: $60,000 | Ethereum: $2,500 | BNB: $550 | Solana: $150 | XRP: $0.60 | USDC: $1.00 | USDT: $1.00 | DOGE: $0.15 (Retry soon...)</span>
+        carouselTape.innerHTML = `
+            <div class="crypto-item"><span>Bitcoin: $60,000</span></div>
+            <div class="crypto-item"><span>Ethereum: $2,500</span></div>
+            <div class="crypto-item"><span>BNB: $550</span></div>
+            <div class="crypto-item"><span>Solana: $150</span></div>
+            <div class="crypto-item"><span>XRP: $0.60</span></div>
+            <div class="crypto-item"><span>USDC: $1.00</span></div>
+            <div class="crypto-item"><span>USDT: $1.00</span></div>
+            <div class="crypto-item"><span>DOGE: $0.15</span></div>
+            <div class="crypto-item"><span>Bitcoin: $60,000</span></div>
+            <div class="crypto-item"><span>Ethereum: $2,500</span></div>
+            <div class="crypto-item"><span>BNB: $550</span></div>
+            <div class="crypto-item"><span>Solana: $150</span></div>
+            <div class="crypto-item"><span>XRP: $0.60</span></div>
+            <div class="crypto-item"><span>USDC: $1.00</span></div>
+            <div class="crypto-item"><span>USDT: $1.00</span></div>
+            <div class="crypto-item"><span>DOGE: $0.15</span></div>
         `;
+        carouselTape.style.width = '2400px'; // 8 ítems x 150px x 2
+        carouselTape.style.animationDuration = '16s'; // 8 ítems x 2s
     }
 }
 
