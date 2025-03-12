@@ -3,9 +3,11 @@ console.log("Script.js loaded");
 // Constantes
 const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2';
 const coingeckoApiKey = 'CG-55C5t38w8kL5EhLmaHNJmAY3';
-const coingeckoPriceUrl = `https://api.coingecko.com/api/v3/simple/price?vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false&precision=4&x_cg_demo_api_key=${coingeckoApiKey}`;
-const coingeckoTokenUrl = `https://api.coingecko.com/api/v3/simple/token_price/solana?vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false&precision=4&x_cg_demo_api_key=${coingeckoApiKey}`;
+const coingeckoPriceUrl = `https://api.coingecko.com/api/v3/simple/price?vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=true&include_last_updated_at=false&precision=4&x_cg_demo_api_key=${coingeckoApiKey}`;
+const coingeckoTokenUrl = `https://api.coingecko.com/api/v3/simple/token_price/solana?vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=true&include_last_updated_at=false&precision=4&x_cg_demo_api_key=${coingeckoApiKey}`;
+const coingeckoCoinInfoUrl = `https://api.coingecko.com/api/v3/coins/solana/contract/`;
 
+// Token Names (Fallback)
 const tokenNames = {
     'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDC',
     'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': 'USDT',
@@ -77,30 +79,26 @@ async function fetchTokenSentiment() {
     dexscreenerIframe.src = '';
 
     try {
-        const tokenPriceUrl = `${coingeckoTokenUrl}&contract_addresses=${tokenContract}`;
-        const tokenResponse = await fetch(tokenPriceUrl);
-        const tokenData = tokenResponse.ok ? await tokenResponse.json() : {};
+        // Obtener información del token (nombre e imagen)
+        const tokenInfoUrl = `${coingeckoCoinInfoUrl}${tokenContract}?x_cg_demo_api_key=${coingeckoApiKey}`;
+        const tokenInfoResponse = await fetch(tokenInfoUrl);
+        const tokenInfo = tokenInfoResponse.ok ? await tokenInfoResponse.json() : {};
 
+        // Obtener precio actual
+        const tokenPriceUrl = `${coingeckoTokenUrl}&contract_addresses=${tokenContract}`;
+        const tokenPriceResponse = await fetch(tokenPriceUrl);
+        const tokenData = tokenPriceResponse.ok ? await tokenPriceResponse.json() : {};
+
+        // Obtener datos históricos
         const priceChangeUrl = `https://api.coingecko.com/api/v3/coins/solana/contract/${tokenContract}/market_chart?vs_currency=usd&days=1&x_cg_demo_api_key=${coingeckoApiKey}`;
         const priceChangeResponse = await fetch(priceChangeUrl);
         const priceChangeData = priceChangeResponse.ok ? await priceChangeResponse.json() : {};
 
-        const metadataResponse = await fetch(rpcUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                jsonrpc: '2.0',
-                id: 1,
-                method: 'getAccountInfo',
-                params: [tokenContract, { encoding: 'jsonParsed' }]
-            })
-        });
-        const metadata = await metadataResponse.json();
-
+        // Obtener posts de X
         currentPosts = await fetchXPosts(tokenContract);
         const sentimentAnalysis = analyzeSentiment(currentPosts, tokenData, priceChangeData, tokenContract);
 
-        displayTokenInfo(tokenData, metadata, tokenContract, tokenInfoDiv);
+        displayTokenInfo(tokenInfo, tokenData, tokenContract, tokenInfoDiv);
         displaySocialSentiment(currentPosts, socialSentimentDiv);
         displaySentimentScore(sentimentAnalysis, sentimentScoreDiv);
         displayPriceInfo(tokenData, priceChangeData, tokenContract, priceInfoDiv);
@@ -110,13 +108,13 @@ async function fetchTokenSentiment() {
         if (error.message.includes('429')) {
             alert('Too many requests to CoinGecko. Please wait a minute and try again.');
         }
+        const mockTokenInfo = { name: 'Unknown Token', image: { small: 'https://via.placeholder.com/50' } };
         const mockTokenData = { [tokenContract.toLowerCase()]: { usd: 0.20 } };
         const mockPriceChangeData = { prices: [[Date.now() - 24*60*60*1000, 0.18], [Date.now(), 0.20]] };
-        const mockMetadata = { result: { value: { lamports: Date.now() * 1e9 } } };
         const mockPosts = [{ text: 'Test tweet', sentiment: 'neutral', username: 'testuser', created_at: new Date().toISOString(), likes: 5, retweets: 2 }];
         const mockAnalysis = { generalScore: 50, socialScore: 50, priceScore: 10 };
 
-        displayTokenInfo(mockTokenData, mockMetadata, tokenContract, tokenInfoDiv);
+        displayTokenInfo(mockTokenInfo, mockTokenData, tokenContract, tokenInfoDiv);
         displaySocialSentiment(mockPosts, socialSentimentDiv);
         displaySentimentScore(mockAnalysis, sentimentScoreDiv);
         displayPriceInfo(mockTokenData, mockPriceChangeData, tokenContract, priceInfoDiv);
@@ -128,39 +126,41 @@ async function fetchTokenSentiment() {
 
 async function fetchXPosts(query) {
     console.log("Fetching X posts for:", query);
-    const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAFOQzwEAAAAAtsPkCNQYZJS0%2B2MstthckE%2BMIPE%3DjKgQFSE7rBuqRkAXGBopwhrf3j2B6ycvgwgDLp9N9ff7KQvodQ';
-    const url = `https://api.twitter.com/2/tweets/search/recent?query=${encodeURIComponent(query)}&max_results=20&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,created_at`;
+    const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAFOQzwEAAAAAtsPkCNQYZJS0%2B2MstthckE%2BMIPE%3DjKgQFSE7rBuqRkAXGBopwhrf3j2B6ycvgwgDLp9N9ff7KQvodQ'; // Verificar si sigue siendo válida
+    const url = `https://api.twitter.com/2/tweets/search/recent?query=${encodeURIComponent(query)}&max_results=20&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username`;
 
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${bearerToken}`,
-            'Content-Type': 'application/json'
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${bearerToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error fetching X posts: ' + response.status);
         }
-    });
 
-    if (!response.ok) {
-        throw new Error('Error fetching X posts: ' + response.status);
+        const data = await response.json();
+        const users = data.includes?.users || [];
+        const userMap = users.reduce((map, user) => {
+            map[user.id] = { username: user.username };
+            return map;
+        }, {});
+
+        return data.data ? data.data.map(post => ({
+            text: post.text,
+            sentiment: classifySentiment(post.text),
+            username: userMap[post.author_id]?.username || 'Unknown',
+            created_at: post.created_at,
+            likes: post.public_metrics.like_count,
+            retweets: post.public_metrics.retweet_count
+        })) : [];
+    } catch (error) {
+        console.error('X API Error:', error);
+        return [];
     }
-
-    const data = await response.json();
-    const users = data.includes?.users || [];
-    const userMap = users.reduce((map, user) => {
-        map[user.id] = { username: user.username, created_at: user.created_at };
-        return map;
-    }, {});
-
-    return data.data ? data.data.map(post => ({
-        text: post.text,
-        sentiment: classifySentiment(post.text),
-        username: userMap[post.author_id]?.username || 'Unknown',
-        user_created_at: userMap[post.author_id]?.created_at || 'N/A',
-        created_at: post.created_at,
-        likes: post.public_metrics.like_count,
-        retweets: post.public_metrics.retweet_count,
-        replies: post.public_metrics.reply_count,
-        quotes: post.public_metrics.quote_count
-    })) : [];
 }
 
 function classifySentiment(text) {
@@ -195,7 +195,7 @@ async function searchXPosts() {
 function analyzeSentiment(posts, tokenData, priceChangeData, tokenContract) {
     let positive = 0, negative = 0, neutral = 0, totalEngagement = 0;
     posts.forEach(post => {
-        const engagement = post.likes + post.retweets + post.replies + post.quotes;
+        const engagement = post.likes + post.retweets;
         totalEngagement += engagement;
         if (post.sentiment === 'positive') positive += engagement + 1;
         else if (post.sentiment === 'negative') negative += engagement + 1;
@@ -213,16 +213,17 @@ function analyzeSentiment(posts, tokenData, priceChangeData, tokenContract) {
     return { generalScore, socialScore, priceScore };
 }
 
-function displayTokenInfo(tokenData, metadata, tokenContract, container) {
+function displayTokenInfo(tokenInfo, tokenData, tokenContract, container) {
+    const name = tokenInfo.name || tokenNames[tokenContract] || 'Unknown Token';
+    const image = tokenInfo.image?.small || 'https://via.placeholder.com/50';
     const price = tokenData[tokenContract.toLowerCase()]?.usd || 'N/A';
-    const name = tokenNames[tokenContract] || 'Unknown Token';
-    const image = tokenContract === '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' ? 'https://assets.coingecko.com/coins/images/33743/small/popcat.png' : 'https://via.placeholder.com/50';
 
     let html = `
         <h3>Token Info</h3>
         <img src="${image}" alt="${name}">
         <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Contract:</strong> ${tokenContract} <button class="copy-btn" onclick="navigator.clipboard.writeText('${tokenContract}')">Copy</button></p>
+        <p><strong>Contract:</strong> <span class="contract-text">${tokenContract}</span> <button class="copy-btn" onclick="navigator.clipboard.writeText('${tokenContract}')">Copy</button></p>
+        <p><strong>Price:</strong> $${price === 'N/A' ? 'N/A' : price.toLocaleString()}</p>
         <p><strong>Socials:</strong>
             <button class="social-btn" onclick="window.open('https://x.com/search?q=${tokenContract}', '_blank')"><i class="fab fa-twitter"></i></button>
             <button class="social-btn" onclick="window.open('https://dexscreener.com/solana/${tokenContract}', '_blank')"><i class="fas fa-globe"></i></button>
@@ -271,13 +272,13 @@ function displaySentimentScore(analysis, container) {
 
     let html = `
         <h3>Analysis</h3>
-        <p><strong>General Score:</strong> ${generalScore.toFixed(2)}%</p>
-        <p><strong>Social Score:</strong> ${socialScore.toFixed(2)}%</p>
-        <p><strong>Price Score:</strong> ${priceScore.toFixed(2)}%</p>
+        <p><strong>General:</strong> ${generalScore.toFixed(2)}%</p>
+        <p><strong>Social:</strong> ${socialScore.toFixed(2)}%</p>
+        <p><strong>Price:</strong> ${priceScore.toFixed(2)}%</p>
         <div class="sentiment-bar">
             <div class="sentiment-fill" style="width: ${generalScore}%; background-color: ${color};"></div>
         </div>
-        <p style="color: ${color}">${sentimentLabel} (${generalScore.toFixed(0)}%)</p>
+        <p style="color: ${color}; font-size: 14px;">${sentimentLabel}</p>
     `;
     container.innerHTML = html;
 }
@@ -292,31 +293,20 @@ function displayPriceInfo(tokenData, priceChangeData, tokenContract, container) 
 
     let html = `
         <h3>Prices</h3>
-        <p><strong>Current:</strong> $${currentPrice} (${price24h}% 24h)</p>
-        <p><strong>1h Change:</strong> ${price1h}%</p>
-        <p><strong>6h Change:</strong> ${price6h}%</p>
-        <p><strong>12h Change:</strong> ${price12h}%</p>
-        <p><strong>24h Change:</strong> ${price24h}%</p>
+        <p><strong>Current:</strong> $${currentPrice === 'N/A' ? 'N/A' : currentPrice.toLocaleString()}</p>
+        <p><strong>1h:</strong> ${price1h}%</p>
+        <p><strong>6h:</strong> ${price6h}%</p>
+        <p><strong>12h:</strong> ${price12h}%</p>
+        <p><strong>24h:</strong> ${price24h}%</p>
     `;
     container.innerHTML = html;
 }
 
 function displayDexscreenerChart(tokenContract, iframe) {
-    iframe.src = `https://dexscreener.com/solana/${tokenContract}?embed=1&theme=dark`;
+    iframe.src = `https://dexscreener.com/solana/${tokenContract}?embed=1&theme=dark&trades=0&info=0`;
 }
 
-function clearSentimentData() {
-    document.getElementById('tokenInfo').innerHTML = '';
-    document.getElementById('socialSentiment').innerHTML = '';
-    document.getElementById('sentimentScore').innerHTML = '';
-    document.getElementById('priceInfo').innerHTML = '';
-    document.getElementById('dexscreenerIframe').src = '';
-    document.getElementById('tokenContract').value = '';
-    document.getElementById('xSearch').value = '';
-    currentPosts = [];
-}
-
-// Solana Transaction Viewer
+// Otras funciones (sin cambios significativos)
 async function fetchWalletData() {
     console.log("Fetching wallet data");
     const walletAddress = document.getElementById('walletAddress').value.trim();
@@ -441,6 +431,17 @@ function clearData() {
     document.getElementById('walletInfo').innerHTML = '';
     document.getElementById('transactionList').innerHTML = '';
     document.getElementById('walletAddress').value = '';
+}
+
+function clearSentimentData() {
+    document.getElementById('tokenInfo').innerHTML = '';
+    document.getElementById('socialSentiment').innerHTML = '';
+    document.getElementById('sentimentScore').innerHTML = '';
+    document.getElementById('priceInfo').innerHTML = '';
+    document.getElementById('dexscreenerIframe').src = '';
+    document.getElementById('tokenContract').value = '';
+    document.getElementById('xSearch').value = '';
+    currentPosts = [];
 }
 
 // Memecoin List (Encabezado)
