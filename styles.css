@@ -129,8 +129,8 @@ body {
 }
 
 .logo img {
-    max-height: 50px;
-    max-width: 185px;
+    max-height: 55px;
+    max-width: 200px;
     width: auto;
     height: auto;
     display: block;
@@ -553,8 +553,8 @@ tr:hover {
     }
 
     .logo img {
-        max-height: 40px;
-        max-width: 130px;
+        max-height: 45px;
+        max-width: 150px;
     }
 
     .menu-toggle {
