@@ -49,6 +49,8 @@ async function toggleWallet() {
 document.getElementById("wallet-icon").addEventListener("click", toggleWallet);
 
 // Sentiment Tracker
+let currentPosts = [];
+
 async function fetchTokenSentiment() {
     const tokenContract = document.getElementById('tokenContract').value.trim();
     const tokenInfoDiv = document.getElementById('tokenInfo');
@@ -76,7 +78,7 @@ async function fetchTokenSentiment() {
         const tokenResponse = await fetch(tokenPriceUrl);
         const tokenData = tokenResponse.ok ? await tokenResponse.json() : {};
 
-        // Fetch price changes from Dexscreener (simulated via CoinGecko for now)
+        // Fetch price changes from CoinGecko
         const priceChangeUrl = `https://api.coingecko.com/api/v3/coins/solana/contract/${tokenContract}/market_chart?vs_currency=usd&days=1`;
         const priceChangeResponse = await fetch(priceChangeUrl);
         const priceChangeData = priceChangeResponse.ok ? await priceChangeResponse.json() : {};
@@ -95,14 +97,12 @@ async function fetchTokenSentiment() {
         const metadata = await metadataResponse.json();
 
         // Fetch X posts
-        const xPosts = await fetchXPosts(tokenContract);
-
-        // Analyze sentiment
-        const sentimentAnalysis = analyzeSentiment(xPosts, tokenData, priceChangeData, tokenContract);
+        currentPosts = await fetchXPosts(tokenContract);
+        const sentimentAnalysis = analyzeSentiment(currentPosts, tokenData, priceChangeData, tokenContract);
 
         // Display results
         displayTokenInfo(tokenData, metadata, tokenContract, tokenInfoDiv);
-        displaySocialSentiment(xPosts, socialSentimentDiv);
+        displaySocialSentiment(currentPosts, socialSentimentDiv);
         displaySentimentScore(sentimentAnalysis, sentimentScoreDiv);
         displayPriceInfo(tokenData, priceChangeData, tokenContract, priceInfoDiv);
         displayDexscreenerChart(tokenContract, dexscreenerIframe);
@@ -117,9 +117,9 @@ async function fetchTokenSentiment() {
     }
 }
 
-async function fetchXPosts(tokenContract) {
-    const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAFOQzwEAAAAAtsPkCNQYZJS0%2B2MstthckE%2BMIPE%3DjKgQFSE7rBuqRkAXGBopwhrf3j2B6ycvgwgDLp9N9ff7KQvodQ'; // Tu Bearer Token
-    const url = `https://api.twitter.com/2/tweets/search/recent?query=${tokenContract}&max_results=20&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,created_at`;
+async function fetchXPosts(query) {
+    const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAFOQzwEAAAAAtsPkCNQYZJS0%2B2MstthckE%2BMIPE%3DjKgQFSE7rBuqRkAXGBopwhrf3j2B6ycvgwgDLp9N9ff7KQvodQ';
+    const url = `https://api.twitter.com/2/tweets/search/recent?query=${encodeURIComponent(query)}&max_results=20&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,created_at`;
 
     const response = await fetch(url, {
         method: 'GET',
@@ -164,6 +164,23 @@ function classifySentiment(text) {
     }
 }
 
+async function searchXPosts() {
+    const query = document.getElementById('xSearch').value.trim();
+    const socialSentimentDiv = document.getElementById('socialSentiment');
+    if (!query) {
+        displaySocialSentiment(currentPosts, socialSentimentDiv);
+        return;
+    }
+
+    try {
+        const posts = await fetchXPosts(query);
+        displaySocialSentiment(posts, socialSentimentDiv);
+    } catch (error) {
+        console.error('Error searching X posts:', error);
+        socialSentimentDiv.innerHTML = '<p>Error searching X posts. Please try again.</p>';
+    }
+}
+
 function analyzeSentiment(posts, tokenData, priceChangeData, tokenContract) {
     let positive = 0, negative = 0, neutral = 0, totalEngagement = 0;
     posts.forEach(post => {
@@ -182,31 +199,22 @@ function analyzeSentiment(posts, tokenData, priceChangeData, tokenContract) {
 
     const generalScore = (socialScore * 0.6 + (priceScore > 0 ? priceScore : 0) * 0.4);
 
-    const newAccounts = posts.filter(post => {
-        const accountAge = new Date() - new Date(post.user_created_at);
-        return accountAge < 30 * 24 * 60 * 60 * 1000;
-    }).length;
-    const scamRisk = newAccounts > posts.length * 0.5 && totalEngagement < 10 ? 'High scam risk detected' : '';
-
-    return { generalScore, socialScore, priceScore, scamRisk };
+    return { generalScore, socialScore, priceScore };
 }
 
 function displayTokenInfo(tokenData, metadata, tokenContract, container) {
     const price = tokenData[tokenContract.toLowerCase()]?.usd || 'N/A';
     const name = tokenNames[tokenContract] || 'Unknown Token';
-    const age = metadata.result?.value?.lamports ? new Date(metadata.result.value.lamports / 1e9 * 1000).toLocaleDateString() : 'N/A';
-    const circulatingSupply = 'N/A'; // Requiere API adicional como CoinGecko markets
+    const image = tokenContract === '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' ? 'https://example.com/popcat.png' : 'https://via.placeholder.com/50'; // Reemplaza con URL real si tienes
 
     let html = `
         <h3>Token Info</h3>
+        <img src="${image}" alt="${name}">
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Contract:</strong> ${tokenContract} <button class="copy-btn" onclick="navigator.clipboard.writeText('${tokenContract}')">Copy</button></p>
-        <p><strong>Price (USD):</strong> $${price}</p>
-        <p><strong>Age:</strong> ${age}</p>
-        <p><strong>Circulating Supply:</strong> ${circulatingSupply}</p>
-        <p><strong>Socials:</strong> 
-            <button class="social-btn" onclick="window.open('https://x.com/search?q=${tokenContract}', '_blank')">X</button>
-            <button class="social-btn" onclick="window.open('https://dexscreener.com/solana/${tokenContract}', '_blank')">Dexscreener</button>
+        <p><strong>Socials:</strong>
+            <button class="social-btn" onclick="window.open('https://x.com/search?q=${tokenContract}', '_blank')"><i class="fab fa-twitter"></i></button>
+            <button class="social-btn" onclick="window.open('https://dexscreener.com/solana/${tokenContract}', '_blank')"><i class="fas fa-globe"></i></button>
         </p>
     `;
     container.innerHTML = html;
@@ -222,8 +230,8 @@ function displaySocialSentiment(posts, container) {
             const color = post.sentiment === 'positive' ? '#00FF00' : post.sentiment === 'negative' ? '#FF0000' : '#FFFF00';
             const date = new Date(post.created_at).toLocaleString();
             html += `
-                <li style="color: ${color}">
-                    <strong>@${post.username}</strong> (${date}): ${post.text}<br>
+                <li style="color: ${color}; margin-bottom: 10px;">
+                    <strong>@${post.username}</strong> (${date}):<br>${post.text}<br>
                     <small>Likes: ${post.likes} | Retweets: ${post.retweets}</small>
                 </li>
             `;
@@ -234,7 +242,7 @@ function displaySocialSentiment(posts, container) {
 }
 
 function displaySentimentScore(analysis, container) {
-    const { generalScore, socialScore, priceScore, scamRisk } = analysis;
+    const { generalScore, socialScore, priceScore } = analysis;
     let sentimentLabel, color;
     if (generalScore < 20) {
         sentimentLabel = 'Extreme Fear';
@@ -251,43 +259,16 @@ function displaySentimentScore(analysis, container) {
     }
 
     let html = `
-        <h3>Community Sentiment</h3>
+        <h3>Analysis</h3>
         <p><strong>General Score:</strong> ${generalScore.toFixed(2)}%</p>
         <p><strong>Social Score:</strong> ${socialScore.toFixed(2)}%</p>
         <p><strong>Price Score:</strong> ${priceScore.toFixed(2)}%</p>
-        <canvas id="sentimentGauge" width="200" height="200"></canvas>
+        <div class="sentiment-bar">
+            <div class="sentiment-fill" style="width: ${generalScore}%; background-color: ${color};"></div>
+        </div>
+        <p style="color: ${color}">${sentimentLabel} (${generalScore.toFixed(0)}%)</p>
     `;
-    if (scamRisk) {
-        html += `<p style="color: #FF0000">${scamRisk}</p>`;
-    }
     container.innerHTML = html;
-
-    const ctx = document.getElementById('sentimentGauge').getContext('2d');
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Sentiment'],
-            datasets: [{
-                data: [generalScore, 100 - generalScore],
-                backgroundColor: [color, '#333'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            cutout: '70%',
-            plugins: {
-                legend: { display: false },
-                tooltip: { enabled: false },
-                title: {
-                    display: true,
-                    text: `${sentimentLabel} (${generalScore.toFixed(0)}%)`,
-                    color: '#FFFFFF',
-                    font: { size: 16 }
-                }
-            }
-        }
-    });
 }
 
 function displayPriceInfo(tokenData, priceChangeData, tokenContract, container) {
@@ -299,8 +280,8 @@ function displayPriceInfo(tokenData, priceChangeData, tokenContract, container) 
     const price24h = prices.length ? ((prices[prices.length - 1][1] - prices[0][1]) / prices[0][1] * 100).toFixed(2) : 'N/A';
 
     let html = `
-        <h3>Price Info</h3>
-        <p><strong>Current:</strong> $${currentPrice}</p>
+        <h3>Prices</h3>
+        <p><strong>Current:</strong> $${currentPrice} (${price24h}% 24h)</p>
         <p><strong>1h Change:</strong> ${price1h}%</p>
         <p><strong>6h Change:</strong> ${price6h}%</p>
         <p><strong>12h Change:</strong> ${price12h}%</p>
@@ -320,6 +301,8 @@ function clearSentimentData() {
     document.getElementById('priceInfo').innerHTML = '';
     document.getElementById('dexscreenerIframe').src = '';
     document.getElementById('tokenContract').value = '';
+    document.getElementById('xSearch').value = '';
+    currentPosts = [];
 }
 
 // Existing Wallet Viewer Functions (unchanged for brevity)
