@@ -277,10 +277,15 @@ body {
     margin: 0 auto;
 }
 
+.sentiment-section.full-screen .input-section {
+    display: none;
+}
+
 .sentiment-container {
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: calc(100vh - 180px); /* Ajuste para encabezado y footer */
 }
 
 .top-row {
@@ -288,7 +293,7 @@ body {
     justify-content: space-between;
     gap: 20px;
     width: 100%;
-    margin-bottom: 20px;
+    flex: 1;
 }
 
 .bottom-row {
@@ -296,6 +301,7 @@ body {
     justify-content: space-between;
     gap: 20px;
     width: 100%;
+    flex: 2;
 }
 
 .left-section, .center-section, .right-section {
@@ -306,24 +312,31 @@ body {
 }
 
 .chart-section {
-    width: 70%;
+    flex: 3;
 }
 
 .tweets-section {
+    flex: 1;
+    height: 100%;
+    position: absolute;
+    top: 100px;
+    right: 0;
+    bottom: 0;
     width: 25%;
+    padding-left: 20px;
 }
 
-.token-info-section, .sentiment-score-section, .price-info-section {
+.info-section {
     background: #1A1A1A;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     text-align: left;
-    height: 250px;
+    height: 100%;
     overflow-y: auto;
 }
 
-.token-info-section img {
+.info-section img {
     width: 70px;
     height: 70px;
     border-radius: 50%;
@@ -355,7 +368,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     width: 100%;
-    height: 400px;
+    height: 100%;
 }
 
 #dexscreenerIframe {
@@ -364,13 +377,14 @@ body {
     border: none;
 }
 
-.social-sentiment-section {
+.tweets-analyser-section {
     background: #1A1A1A;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    height: 400px;
+    height: 100%;
     overflow-y: auto;
+    position: relative;
 }
 
 #xSearch {
@@ -381,6 +395,60 @@ body {
     background: #2A2A2A;
     color: #FFFFFF;
     margin-bottom: 10px;
+}
+
+.tweet-item {
+    display: flex;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #2A2A2A;
+    padding-bottom: 10px;
+}
+
+.tweet-item img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.tweet-content {
+    flex-grow: 1;
+}
+
+.tweet-content .username {
+    font-weight: bold;
+    color: #00D4FF;
+    margin-right: 5px;
+}
+
+.tweet-content .time {
+    color: #A0A0A0;
+    font-size: 12px;
+}
+
+.tweet-content .text {
+    margin: 5px 0;
+}
+
+.tweet-sentiment {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+
+.tweet-sentiment.positive {
+    background: #00FF00;
+    color: #000;
+}
+
+.tweet-sentiment.negative {
+    background: #FF0000;
+    color: #FFF;
+}
+
+.tweet-sentiment.neutral {
+    background: #FFFF00;
+    color: #000;
 }
 
 h1 {
@@ -395,7 +463,7 @@ h3 {
     font-size: 18px;
 }
 
-.input-section, .detox-input {
+.input-section {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -602,10 +670,15 @@ tr:hover {
     .left-section, .center-section, .right-section, .chart-section, .tweets-section {
         width: 100%;
     }
-    .token-info-section, .sentiment-score-section, .price-info-section, .social-sentiment-section {
+    .info-section, .tweets-analyser-section {
         height: auto;
     }
     .dexscreener-chart {
         height: 300px;
+    }
+    .tweets-section {
+        position: static;
+        width: 100%;
+        padding-left: 0;
     }
 }
