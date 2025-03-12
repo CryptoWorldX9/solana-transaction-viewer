@@ -113,7 +113,7 @@ async function fetchTokenSentiment() {
         const mockTokenInfo = { name: 'Unknown Token', image: { small: 'https://via.placeholder.com/50' } };
         const mockTokenData = { [tokenContract.toLowerCase()]: { usd: 0.20 } };
         const mockPriceChangeData = { prices: [[Date.now() - 24*60*60*1000, 0.18], [Date.now(), 0.20]] };
-        const mockPosts = [{ text: 'Test tweet', sentiment: 'neutral', username: 'testuser', created_at: new Date().toISOString(), likes: 5, retweets: 2 }];
+        const mockPosts = [{ text: 'Test tweet', sentiment: { type: 'neutral', score: 50 }, username: 'testuser', profile_image_url: 'https://via.placeholder.com/48', created_at: new Date().toISOString(), likes: 5, retweets: 2 }];
         const mockAnalysis = { generalScore: 50, socialScore: 50, priceScore: 10 };
 
         displayTokenInfo(mockTokenInfo, mockTokenData, tokenContract, tokenInfoDiv);
@@ -288,7 +288,7 @@ function displaySentimentScore(analysis, container) {
         <div class="sentiment-bar">
             <div class="sentiment-fill" style="width: ${generalScore}%; background-color: ${color};"></div>
         </div>
-        <p style="color: ${color}; font-size: 14px;">${sentimentLabel}</p>
+        <p style="color: ${color}; font-size: 10px;">${sentimentLabel}</p>
     `;
     container.innerHTML = html;
 }
