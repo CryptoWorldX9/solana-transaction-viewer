@@ -6,7 +6,8 @@ const tokenNames = {
     'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDC',
     'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': 'USDT',
     'So11111111111111111111111111111111111111112': 'SOL',
-    '7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj': 'stSOL'
+    '7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj': 'stSOL',
+    '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr': 'Popcat'
 };
 
 // 🌐 Conectar/Desconectar wallet (Phantom)
@@ -53,6 +54,8 @@ async function fetchTokenSentiment() {
     const tokenInfoDiv = document.getElementById('tokenInfo');
     const socialSentimentDiv = document.getElementById('socialSentiment');
     const sentimentScoreDiv = document.getElementById('sentimentScore');
+    const priceInfoDiv = document.getElementById('priceInfo');
+    const dexscreenerIframe = document.getElementById('dexscreenerIframe');
     const loadingBar = document.getElementById('sentimentLoadingBar');
 
     if (!tokenContract) {
@@ -64,12 +67,19 @@ async function fetchTokenSentiment() {
     tokenInfoDiv.innerHTML = '';
     socialSentimentDiv.innerHTML = '';
     sentimentScoreDiv.innerHTML = '';
+    priceInfoDiv.innerHTML = '';
+    dexscreenerIframe.src = '';
 
     try {
         // Fetch token data from CoinGecko
         const tokenPriceUrl = `${coingeckoTokenUrl}solana?contract_addresses=${tokenContract}&vs_currencies=usd`;
         const tokenResponse = await fetch(tokenPriceUrl);
         const tokenData = tokenResponse.ok ? await tokenResponse.json() : {};
+
+        // Fetch price changes from Dexscreener (simulated via CoinGecko for now)
+        const priceChangeUrl = `https://api.coingecko.com/api/v3/coins/solana/contract/${tokenContract}/market_chart?vs_currency=usd&days=1`;
+        const priceChangeResponse = await fetch(priceChangeUrl);
+        const priceChangeData = priceChangeResponse.ok ? await priceChangeResponse.json() : {};
 
         // Fetch token metadata from Solana
         const metadataResponse = await fetch(rpcUrl, {
@@ -84,82 +94,139 @@ async function fetchTokenSentiment() {
         });
         const metadata = await metadataResponse.json();
 
-        // Simulate X posts analysis (replace with real X API data if available)
-        const xPosts = await fetchXPosts(tokenContract); // Hypothetical function
-        const sentimentAnalysis = analyzeSentiment(xPosts);
+        // Fetch X posts
+        const xPosts = await fetchXPosts(tokenContract);
 
-        // Display token info
+        // Analyze sentiment
+        const sentimentAnalysis = analyzeSentiment(xPosts, tokenData, priceChangeData, tokenContract);
+
+        // Display results
         displayTokenInfo(tokenData, metadata, tokenContract, tokenInfoDiv);
-
-        // Display social sentiment
         displaySocialSentiment(xPosts, socialSentimentDiv);
-
-        // Display sentiment score
         displaySentimentScore(sentimentAnalysis, sentimentScoreDiv);
+        displayPriceInfo(tokenData, priceChangeData, tokenContract, priceInfoDiv);
+        displayDexscreenerChart(tokenContract, dexscreenerIframe);
     } catch (error) {
         console.error('Error in fetchTokenSentiment:', error);
         tokenInfoDiv.innerHTML = '<p>Error fetching token data. Please try again.</p>';
         socialSentimentDiv.innerHTML = '';
         sentimentScoreDiv.innerHTML = '';
+        priceInfoDiv.innerHTML = '';
     } finally {
         loadingBar.style.display = 'none';
     }
 }
 
 async function fetchXPosts(tokenContract) {
-    // Simulating X posts retrieval (replace with real API call if you have access)
-    // For now, I'll use mock data since I can't directly access X API here
-    return [
-        { text: `${tokenContract} is mooning! Great project!`, sentiment: 'positive' },
-        { text: `Be careful with ${tokenContract}, smells like a rugpull.`, sentiment: 'negative' },
-        { text: `Just bought some ${tokenContract}, let’s see how it goes.`, sentiment: 'neutral' }
-    ];
+    const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAFOQzwEAAAAAtsPkCNQYZJS0%2B2MstthckE%2BMIPE%3DjKgQFSE7rBuqRkAXGBopwhrf3j2B6ycvgwgDLp9N9ff7KQvodQ'; // Tu Bearer Token
+    const url = `https://api.twitter.com/2/tweets/search/recent?query=${tokenContract}&max_results=20&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,created_at`;
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error('Error fetching X posts: ' + response.status);
+    }
+
+    const data = await response.json();
+    const users = data.includes?.users || [];
+    const userMap = users.reduce((map, user) => {
+        map[user.id] = { username: user.username, created_at: user.created_at };
+        return map;
+    }, {});
+
+    return data.data ? data.data.map(post => ({
+        text: post.text,
+        sentiment: classifySentiment(post.text),
+        username: userMap[post.author_id]?.username || 'Unknown',
+        user_created_at: userMap[post.author_id]?.created_at || 'N/A',
+        created_at: post.created_at,
+        likes: post.public_metrics.like_count,
+        retweets: post.public_metrics.retweet_count,
+        replies: post.public_metrics.reply_count,
+        quotes: post.public_metrics.quote_count
+    })) : [];
 }
 
-function analyzeSentiment(posts) {
-    let positive = 0, negative = 0, neutral = 0;
+function classifySentiment(text) {
+    const lowerText = text.toLowerCase();
+    if (lowerText.includes('great') || lowerText.includes('awesome') || lowerText.includes('love') || lowerText.includes('bullish')) {
+        return 'positive';
+    } else if (lowerText.includes('scam') || lowerText.includes('rugpull') || lowerText.includes('bad') || lowerText.includes('dump')) {
+        return 'negative';
+    } else {
+        return 'neutral';
+    }
+}
+
+function analyzeSentiment(posts, tokenData, priceChangeData, tokenContract) {
+    let positive = 0, negative = 0, neutral = 0, totalEngagement = 0;
     posts.forEach(post => {
-        if (post.sentiment === 'positive') positive++;
-        else if (post.sentiment === 'negative') negative++;
-        else neutral++;
+        const engagement = post.likes + post.retweets + post.replies + post.quotes;
+        totalEngagement += engagement;
+        if (post.sentiment === 'positive') positive += engagement + 1;
+        else if (post.sentiment === 'negative') negative += engagement + 1;
+        else neutral += engagement + 1;
     });
-    const total = positive + negative + neutral;
-    const score = total ? ((positive * 1 + neutral * 0.5 - negative) / total) * 100 : 50;
-    return { positive, negative, neutral, score };
+    const totalSocial = positive + negative + neutral;
+    const socialScore = totalSocial ? ((positive * 1 + neutral * 0.5 - negative) / totalSocial) * 100 : 50;
+
+    const price = tokenData[tokenContract.toLowerCase()]?.usd || 0;
+    const prices = priceChangeData.prices || [];
+    const priceScore = prices.length ? ((prices[prices.length - 1][1] - prices[0][1]) / prices[0][1]) * 100 : 0;
+
+    const generalScore = (socialScore * 0.6 + (priceScore > 0 ? priceScore : 0) * 0.4);
+
+    const newAccounts = posts.filter(post => {
+        const accountAge = new Date() - new Date(post.user_created_at);
+        return accountAge < 30 * 24 * 60 * 60 * 1000;
+    }).length;
+    const scamRisk = newAccounts > posts.length * 0.5 && totalEngagement < 10 ? 'High scam risk detected' : '';
+
+    return { generalScore, socialScore, priceScore, scamRisk };
 }
 
 function displayTokenInfo(tokenData, metadata, tokenContract, container) {
     const price = tokenData[tokenContract.toLowerCase()]?.usd || 'N/A';
     const name = tokenNames[tokenContract] || 'Unknown Token';
     const age = metadata.result?.value?.lamports ? new Date(metadata.result.value.lamports / 1e9 * 1000).toLocaleDateString() : 'N/A';
-    const holders = 'N/A'; // Requires additional API or blockchain data
-    const exchanges = ['Raydium', 'Orca']; // Simulated, replace with real data if available
+    const circulatingSupply = 'N/A'; // Requiere API adicional como CoinGecko markets
 
     let html = `
-        <h3>Token Information</h3>
-        <table>
-            <tr><td>Name</td><td>${name}</td></tr>
-            <tr><td>Contract</td><td>${tokenContract} <button class="copy-btn" onclick="navigator.clipboard.writeText('${tokenContract}')">Copy</button></td></tr>
-            <tr><td>Price (USD)</td><td>$${price}</td></tr>
-            <tr><td>Age</td><td>${age}</td></tr>
-            <tr><td>Holders</td><td>${holders}</td></tr>
-            <tr><td>Network</td><td>Solana</td></tr>
-            <tr><td>Exchanges</td><td>${exchanges.join(', ')}</td></tr>
-            <tr><td>Where to Buy</td><td><a href="https://raydium.io/swap/" target="_blank">Raydium</a>, <a href="https://orca.so/" target="_blank">Orca</a></td></tr>
-        </table>
+        <h3>Token Info</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Contract:</strong> ${tokenContract} <button class="copy-btn" onclick="navigator.clipboard.writeText('${tokenContract}')">Copy</button></p>
+        <p><strong>Price (USD):</strong> $${price}</p>
+        <p><strong>Age:</strong> ${age}</p>
+        <p><strong>Circulating Supply:</strong> ${circulatingSupply}</p>
+        <p><strong>Socials:</strong> 
+            <button class="social-btn" onclick="window.open('https://x.com/search?q=${tokenContract}', '_blank')">X</button>
+            <button class="social-btn" onclick="window.open('https://dexscreener.com/solana/${tokenContract}', '_blank')">Dexscreener</button>
+        </p>
     `;
     container.innerHTML = html;
 }
 
 function displaySocialSentiment(posts, container) {
-    let html = '<h3>Social Sentiment (X)</h3>';
+    let html = '<h3>X Posts</h3>';
     if (posts.length === 0) {
         html += '<p>No recent posts found.</p>';
     } else {
         html += '<ul>';
         posts.forEach(post => {
             const color = post.sentiment === 'positive' ? '#00FF00' : post.sentiment === 'negative' ? '#FF0000' : '#FFFF00';
-            html += `<li style="color: ${color}">${post.text}</li>`;
+            const date = new Date(post.created_at).toLocaleString();
+            html += `
+                <li style="color: ${color}">
+                    <strong>@${post.username}</strong> (${date}): ${post.text}<br>
+                    <small>Likes: ${post.likes} | Retweets: ${post.retweets}</small>
+                </li>
+            `;
         });
         html += '</ul>';
     }
@@ -167,38 +234,95 @@ function displaySocialSentiment(posts, container) {
 }
 
 function displaySentimentScore(analysis, container) {
-    const { score } = analysis;
+    const { generalScore, socialScore, priceScore, scamRisk } = analysis;
     let sentimentLabel, color;
-    if (score < 33) {
-        sentimentLabel = 'Fear (Possible Scam/Rugpull Risk)';
+    if (generalScore < 20) {
+        sentimentLabel = 'Extreme Fear';
         color = '#FF0000';
-    } else if (score < 66) {
+    } else if (generalScore < 40) {
+        sentimentLabel = 'Fear';
+        color = '#FF5555';
+    } else if (generalScore < 60) {
         sentimentLabel = 'Neutral';
-        color = '#FFFF00';
+        color = '#FFA500';
     } else {
         sentimentLabel = 'Euphoria';
         color = '#00FF00';
     }
 
     let html = `
-        <h3>Sentiment Score</h3>
-        <p>Score: ${score.toFixed(2)}%</p>
-        <div class="sentiment-bar">
-            <div class="sentiment-fill" style="width: ${score}%; background-color: ${color};"></div>
-        </div>
-        <p class="sentiment-label" style="color: ${color}">${sentimentLabel}</p>
+        <h3>Community Sentiment</h3>
+        <p><strong>General Score:</strong> ${generalScore.toFixed(2)}%</p>
+        <p><strong>Social Score:</strong> ${socialScore.toFixed(2)}%</p>
+        <p><strong>Price Score:</strong> ${priceScore.toFixed(2)}%</p>
+        <canvas id="sentimentGauge" width="200" height="200"></canvas>
+    `;
+    if (scamRisk) {
+        html += `<p style="color: #FF0000">${scamRisk}</p>`;
+    }
+    container.innerHTML = html;
+
+    const ctx = document.getElementById('sentimentGauge').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Sentiment'],
+            datasets: [{
+                data: [generalScore, 100 - generalScore],
+                backgroundColor: [color, '#333'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '70%',
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false },
+                title: {
+                    display: true,
+                    text: `${sentimentLabel} (${generalScore.toFixed(0)}%)`,
+                    color: '#FFFFFF',
+                    font: { size: 16 }
+                }
+            }
+        }
+    });
+}
+
+function displayPriceInfo(tokenData, priceChangeData, tokenContract, container) {
+    const currentPrice = tokenData[tokenContract.toLowerCase()]?.usd || 'N/A';
+    const prices = priceChangeData.prices || [];
+    const price1h = prices.length > 4 ? ((prices[prices.length - 1][1] - prices[prices.length - 5][1]) / prices[prices.length - 5][1] * 100).toFixed(2) : 'N/A';
+    const price6h = prices.length > 24 ? ((prices[prices.length - 1][1] - prices[prices.length - 25][1]) / prices[prices.length - 25][1] * 100).toFixed(2) : 'N/A';
+    const price12h = prices.length > 48 ? ((prices[prices.length - 1][1] - prices[prices.length - 49][1]) / prices[prices.length - 49][1] * 100).toFixed(2) : 'N/A';
+    const price24h = prices.length ? ((prices[prices.length - 1][1] - prices[0][1]) / prices[0][1] * 100).toFixed(2) : 'N/A';
+
+    let html = `
+        <h3>Price Info</h3>
+        <p><strong>Current:</strong> $${currentPrice}</p>
+        <p><strong>1h Change:</strong> ${price1h}%</p>
+        <p><strong>6h Change:</strong> ${price6h}%</p>
+        <p><strong>12h Change:</strong> ${price12h}%</p>
+        <p><strong>24h Change:</strong> ${price24h}%</p>
     `;
     container.innerHTML = html;
+}
+
+function displayDexscreenerChart(tokenContract, iframe) {
+    iframe.src = `https://dexscreener.com/solana/${tokenContract}?embed=1&theme=dark`;
 }
 
 function clearSentimentData() {
     document.getElementById('tokenInfo').innerHTML = '';
     document.getElementById('socialSentiment').innerHTML = '';
     document.getElementById('sentimentScore').innerHTML = '';
+    document.getElementById('priceInfo').innerHTML = '';
+    document.getElementById('dexscreenerIframe').src = '';
     document.getElementById('tokenContract').value = '';
 }
 
-// Existing Wallet Viewer Functions
+// Existing Wallet Viewer Functions (unchanged for brevity)
 async function fetchWalletData() {
     const walletAddress = document.getElementById('walletAddress').value.trim();
     const walletInfoDiv = document.getElementById('walletInfo');
@@ -249,8 +373,6 @@ async function fetchWalletData() {
             const tokenPriceResponse = await fetch(coingeckoTokenUrl + 'solana?contract_addresses=' + tokenAddresses + '&vs_currencies=usd');
             if (tokenPriceResponse.ok) {
                 tokenPrices = await tokenPriceResponse.json();
-            } else {
-                console.warn('Error fetching token prices:', tokenPriceResponse.status);
             }
         }
 
@@ -527,24 +649,9 @@ async function updateMemecoinList() {
     memecoinList.innerHTML = '';
 
     const memecoins = [
-        { 
-            name: 'Popcat', 
-            contract: '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', 
-            chain: 'solana', 
-            dex: 'https://dexscreener.com/solana/7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' 
-        },
-        { 
-            name: 'Brett', 
-            contract: '0x532f27101965dd16442E59d40670FaF5eBB142E4', 
-            chain: 'base', 
-            dex: 'https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4' 
-        },
-        { 
-            name: 'SPX', 
-            contract: '0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C', 
-            chain: 'ethereum', 
-            dex: 'https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C' 
-        }
+        { name: 'Popcat', contract: '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', chain: 'solana', dex: 'https://dexscreener.com/solana/7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' },
+        { name: 'Brett', contract: '0x532f27101965dd16442E59d40670FaF5eBB142E4', chain: 'base', dex: 'https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4' },
+        { name: 'SPX', contract: '0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C', chain: 'ethereum', dex: 'https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C' }
     ];
 
     try {
@@ -556,7 +663,6 @@ async function updateMemecoinList() {
                 const data = await response.json();
                 prices[coin.name] = data[coin.contract.toLowerCase()]?.usd || 'N/A';
             } else {
-                console.warn(`Error fetching price for ${coin.name}: ${response.status}`);
                 prices[coin.name] = 'N/A';
             }
         }
@@ -564,12 +670,8 @@ async function updateMemecoinList() {
         memecoins.forEach(coin => {
             const item = document.createElement('div');
             item.className = 'memecoin-item';
-            item.innerHTML = `
-                <span>${coin.name}: $${prices[coin.name] === 'N/A' ? 'N/A' : prices[coin.name].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</span>
-            `;
-            item.addEventListener('click', () => {
-                window.open(coin.dex, '_blank');
-            });
+            item.innerHTML = `<span>${coin.name}: $${prices[coin.name] === 'N/A' ? 'N/A' : prices[coin.name].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</span>`;
+            item.addEventListener('click', () => window.open(coin.dex, '_blank'));
             memecoinList.appendChild(item);
         });
     } catch (error) {
@@ -577,12 +679,8 @@ async function updateMemecoinList() {
         memecoins.forEach(coin => {
             const item = document.createElement('div');
             item.className = 'memecoin-item';
-            item.innerHTML = `
-                <span>${coin.name}: $${coin.name === 'Popcat' ? '0.20' : coin.name === 'Brett' ? '0.10' : '0.02'}</span>
-            `;
-            item.addEventListener('click', () => {
-                window.open(coin.dex, '_blank');
-            });
+            item.innerHTML = `<span>${coin.name}: $${coin.name === 'Popcat' ? '0.20' : coin.name === 'Brett' ? '0.10' : '0.02'}</span>`;
+            item.addEventListener('click', () => window.open(coin.dex, '_blank'));
             memecoinList.appendChild(item);
         });
     }
@@ -591,10 +689,7 @@ async function updateMemecoinList() {
 // 📈 Precios en el footer como carrusel
 async function updateCryptoPrices() {
     const carouselTape = document.querySelector('.carousel-tape');
-    if (!carouselTape) {
-        console.error('Carousel tape not found!');
-        return;
-    }
+    if (!carouselTape) return;
     carouselTape.innerHTML = '<span>Loading prices...</span>';
 
     try {
@@ -784,27 +879,11 @@ async function burnSelectedAssets() {
             totalSOL += parseFloat(asset.dataset.sol);
 
             if (amount > 0) {
-                const tokenAccount = await splToken.getAssociatedTokenAddress(
-                    mint,
-                    publicKey
-                );
-                const burnInstruction = splToken.createBurnInstruction(
-                    tokenAccount,
-                    mint,
-                    publicKey,
-                    Math.floor(amount * 10 ** 6),
-                    [],
-                    splToken.TOKEN_PROGRAM_ID
-                );
+                const tokenAccount = await splToken.getAssociatedTokenAddress(mint, publicKey);
+                const burnInstruction = splToken.createBurnInstruction(tokenAccount, mint, publicKey, Math.floor(amount * 10 ** 6), [], splToken.TOKEN_PROGRAM_ID);
                 transaction.add(burnInstruction);
             } else {
-                const closeInstruction = splToken.createCloseAccountInstruction(
-                    account,
-                    publicKey,
-                    publicKey,
-                    [],
-                    splToken.TOKEN_PROGRAM_ID
-                );
+                const closeInstruction = splToken.createCloseAccountInstruction(account, publicKey, publicKey, [], splToken.TOKEN_PROGRAM_ID);
                 transaction.add(closeInstruction);
             }
         }
@@ -881,9 +960,7 @@ document.getElementById('support-form').addEventListener('submit', (e) => {
 
     emailjs.send('crypto-tools-service', 'template_muodszo', templateParams)
         .then(() => {
-            document.getElementById('support-message').innerHTML = `
-                <p>Your ticket is #${ticketNumber}. Thank you for contacting us! We will get back to you soon.</p>
-            `;
+            document.getElementById('support-message').innerHTML = `<p>Your ticket is #${ticketNumber}. Thank you for contacting us! We will get back to you soon.</p>`;
             document.getElementById('support-form').reset();
         }, (error) => {
             alert('Error sending support request: ' + error.text);
@@ -903,7 +980,6 @@ document.getElementById("menu-toggle").addEventListener("click", function() {
     document.querySelector(".menu-toggle").classList.toggle("menu-closed");
 });
 
-// Habilitar clic en íconos cuando el menú está retraído
 document.querySelectorAll('.menu li i').forEach(icon => {
     icon.addEventListener('click', (e) => {
         const link = icon.nextElementSibling;
@@ -914,5 +990,4 @@ document.querySelectorAll('.menu li i').forEach(icon => {
     });
 });
 
-// Mostrar sección inicial
 showSection('home-section');
