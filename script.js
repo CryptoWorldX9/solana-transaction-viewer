@@ -498,11 +498,20 @@ async function updateCryptoPrices() {
 }
 
 // 🔍 Funcionalidad del buscador
-document.getElementById('search-toggle').addEventListener('click', () => {
-    const searchBar = document.getElementById('search-bar');
+const searchToggle = document.getElementById('search-toggle');
+const searchBar = document.getElementById('search-bar');
+
+searchToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
     searchBar.classList.toggle('active');
     if (searchBar.classList.contains('active')) {
         document.getElementById('search-input').focus();
+    }
+});
+
+document.addEventListener('click', (e) => {
+    if (searchBar.classList.contains('active') && !searchBar.contains(e.target) && e.target !== searchToggle) {
+        searchBar.classList.remove('active');
     }
 });
 
