@@ -264,11 +264,57 @@ body {
     min-height: calc(100vh - 80px);
 }
 
-.home-section, .viewer-section, .detox-section, .support-section {
+.home-section, .viewer-section, .detox-section, .support-section, .sentiment-section {
     text-align: center;
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
+}
+
+.sentiment-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 800px;
+    gap: 20px;
+}
+
+.token-info, .social-sentiment {
+    background: #1A1A1A;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    width: 48%;
+    text-align: left;
+}
+
+.sentiment-score {
+    margin-top: 20px;
+    background: #1A1A1A;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 800px;
+}
+
+.sentiment-bar {
+    width: 100%;
+    height: 20px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.sentiment-fill {
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.sentiment-label {
+    margin-top: 10px;
+    font-size: 18px;
 }
 
 .support-section {
@@ -377,7 +423,7 @@ button:disabled {
     100% { transform: translateX(300%); }
 }
 
-#walletInfo, #transactionList, .asset-list {
+#walletInfo, #transactionList, .asset-list, #tokenInfo, #socialSentiment, #sentimentScore {
     background: #1A1A1A;
     padding: 20px;
     border-radius: 8px;
@@ -622,9 +668,18 @@ tr:hover {
         min-height: calc(100vh - 80px);
     }
 
-    .home-section, .viewer-section, .detox-section, .support-section {
+    .home-section, .viewer-section, .detox-section, .support-section, .sentiment-section {
         width: 90%;
         max-width: 100%;
+    }
+
+    .sentiment-container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .token-info, .social-sentiment {
+        width: 100%;
     }
 
     .support-section {
