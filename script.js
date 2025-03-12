@@ -47,6 +47,158 @@ async function toggleWallet() {
 
 document.getElementById("wallet-icon").addEventListener("click", toggleWallet);
 
+// Sentiment Tracker
+async function fetchTokenSentiment() {
+    const tokenContract = document.getElementById('tokenContract').value.trim();
+    const tokenInfoDiv = document.getElementById('tokenInfo');
+    const socialSentimentDiv = document.getElementById('socialSentiment');
+    const sentimentScoreDiv = document.getElementById('sentimentScore');
+    const loadingBar = document.getElementById('sentimentLoadingBar');
+
+    if (!tokenContract) {
+        alert('Please enter a valid token contract.');
+        return;
+    }
+
+    loadingBar.style.display = 'block';
+    tokenInfoDiv.innerHTML = '';
+    socialSentimentDiv.innerHTML = '';
+    sentimentScoreDiv.innerHTML = '';
+
+    try {
+        // Fetch token data from CoinGecko
+        const tokenPriceUrl = `${coingeckoTokenUrl}solana?contract_addresses=${tokenContract}&vs_currencies=usd`;
+        const tokenResponse = await fetch(tokenPriceUrl);
+        const tokenData = tokenResponse.ok ? await tokenResponse.json() : {};
+
+        // Fetch token metadata from Solana
+        const metadataResponse = await fetch(rpcUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'getAccountInfo',
+                params: [tokenContract, { encoding: 'jsonParsed' }]
+            })
+        });
+        const metadata = await metadataResponse.json();
+
+        // Simulate X posts analysis (replace with real X API data if available)
+        const xPosts = await fetchXPosts(tokenContract); // Hypothetical function
+        const sentimentAnalysis = analyzeSentiment(xPosts);
+
+        // Display token info
+        displayTokenInfo(tokenData, metadata, tokenContract, tokenInfoDiv);
+
+        // Display social sentiment
+        displaySocialSentiment(xPosts, socialSentimentDiv);
+
+        // Display sentiment score
+        displaySentimentScore(sentimentAnalysis, sentimentScoreDiv);
+    } catch (error) {
+        console.error('Error in fetchTokenSentiment:', error);
+        tokenInfoDiv.innerHTML = '<p>Error fetching token data. Please try again.</p>';
+        socialSentimentDiv.innerHTML = '';
+        sentimentScoreDiv.innerHTML = '';
+    } finally {
+        loadingBar.style.display = 'none';
+    }
+}
+
+async function fetchXPosts(tokenContract) {
+    // Simulating X posts retrieval (replace with real API call if you have access)
+    // For now, I'll use mock data since I can't directly access X API here
+    return [
+        { text: `${tokenContract} is mooning! Great project!`, sentiment: 'positive' },
+        { text: `Be careful with ${tokenContract}, smells like a rugpull.`, sentiment: 'negative' },
+        { text: `Just bought some ${tokenContract}, let’s see how it goes.`, sentiment: 'neutral' }
+    ];
+}
+
+function analyzeSentiment(posts) {
+    let positive = 0, negative = 0, neutral = 0;
+    posts.forEach(post => {
+        if (post.sentiment === 'positive') positive++;
+        else if (post.sentiment === 'negative') negative++;
+        else neutral++;
+    });
+    const total = positive + negative + neutral;
+    const score = total ? ((positive * 1 + neutral * 0.5 - negative) / total) * 100 : 50;
+    return { positive, negative, neutral, score };
+}
+
+function displayTokenInfo(tokenData, metadata, tokenContract, container) {
+    const price = tokenData[tokenContract.toLowerCase()]?.usd || 'N/A';
+    const name = tokenNames[tokenContract] || 'Unknown Token';
+    const age = metadata.result?.value?.lamports ? new Date(metadata.result.value.lamports / 1e9 * 1000).toLocaleDateString() : 'N/A';
+    const holders = 'N/A'; // Requires additional API or blockchain data
+    const exchanges = ['Raydium', 'Orca']; // Simulated, replace with real data if available
+
+    let html = `
+        <h3>Token Information</h3>
+        <table>
+            <tr><td>Name</td><td>${name}</td></tr>
+            <tr><td>Contract</td><td>${tokenContract} <button class="copy-btn" onclick="navigator.clipboard.writeText('${tokenContract}')">Copy</button></td></tr>
+            <tr><td>Price (USD)</td><td>$${price}</td></tr>
+            <tr><td>Age</td><td>${age}</td></tr>
+            <tr><td>Holders</td><td>${holders}</td></tr>
+            <tr><td>Network</td><td>Solana</td></tr>
+            <tr><td>Exchanges</td><td>${exchanges.join(', ')}</td></tr>
+            <tr><td>Where to Buy</td><td><a href="https://raydium.io/swap/" target="_blank">Raydium</a>, <a href="https://orca.so/" target="_blank">Orca</a></td></tr>
+        </table>
+    `;
+    container.innerHTML = html;
+}
+
+function displaySocialSentiment(posts, container) {
+    let html = '<h3>Social Sentiment (X)</h3>';
+    if (posts.length === 0) {
+        html += '<p>No recent posts found.</p>';
+    } else {
+        html += '<ul>';
+        posts.forEach(post => {
+            const color = post.sentiment === 'positive' ? '#00FF00' : post.sentiment === 'negative' ? '#FF0000' : '#FFFF00';
+            html += `<li style="color: ${color}">${post.text}</li>`;
+        });
+        html += '</ul>';
+    }
+    container.innerHTML = html;
+}
+
+function displaySentimentScore(analysis, container) {
+    const { score } = analysis;
+    let sentimentLabel, color;
+    if (score < 33) {
+        sentimentLabel = 'Fear (Possible Scam/Rugpull Risk)';
+        color = '#FF0000';
+    } else if (score < 66) {
+        sentimentLabel = 'Neutral';
+        color = '#FFFF00';
+    } else {
+        sentimentLabel = 'Euphoria';
+        color = '#00FF00';
+    }
+
+    let html = `
+        <h3>Sentiment Score</h3>
+        <p>Score: ${score.toFixed(2)}%</p>
+        <div class="sentiment-bar">
+            <div class="sentiment-fill" style="width: ${score}%; background-color: ${color};"></div>
+        </div>
+        <p class="sentiment-label" style="color: ${color}">${sentimentLabel}</p>
+    `;
+    container.innerHTML = html;
+}
+
+function clearSentimentData() {
+    document.getElementById('tokenInfo').innerHTML = '';
+    document.getElementById('socialSentiment').innerHTML = '';
+    document.getElementById('sentimentScore').innerHTML = '';
+    document.getElementById('tokenContract').value = '';
+}
+
+// Existing Wallet Viewer Functions
 async function fetchWalletData() {
     const walletAddress = document.getElementById('walletAddress').value.trim();
     const walletInfoDiv = document.getElementById('walletInfo');
@@ -402,7 +554,6 @@ async function updateMemecoinList() {
             const response = await fetch(url);
             if (response.ok) {
                 const data = await response.json();
-                console.log(`${coin.name} price data:`, data);
                 prices[coin.name] = data[coin.contract.toLowerCase()]?.usd || 'N/A';
             } else {
                 console.warn(`Error fetching price for ${coin.name}: ${response.status}`);
@@ -450,7 +601,6 @@ async function updateCryptoPrices() {
         const response = await fetch(coingeckoPriceUrl);
         if (!response.ok) throw new Error('API request failed');
         const priceData = await response.json();
-        console.log('Footer price data:', priceData);
 
         const coins = [
             { id: 'bitcoin', name: 'Bitcoin' },
@@ -526,7 +676,8 @@ document.getElementById('search-input').addEventListener('input', (e) => {
         { name: 'SPX', action: () => window.open('https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C', '_blank') },
         { name: 'Solana', action: () => document.getElementById('walletAddress').focus() },
         { name: 'Wallet', action: () => document.getElementById('wallet-icon').click() },
-        { name: 'Transaction', action: () => document.getElementById('walletAddress').focus() }
+        { name: 'Transaction', action: () => document.getElementById('walletAddress').focus() },
+        { name: 'Sentiment', action: () => document.getElementById('tokenContract').focus() }
     ];
 
     const filteredItems = searchItems.filter(item => item.name.toLowerCase().includes(query));
@@ -641,7 +792,7 @@ async function burnSelectedAssets() {
                     tokenAccount,
                     mint,
                     publicKey,
-                    Math.floor(amount * 10 ** 6), // Asumimos 6 decimales
+                    Math.floor(amount * 10 ** 6),
                     [],
                     splToken.TOKEN_PROGRAM_ID
                 );
@@ -677,7 +828,7 @@ async function burnSelectedAssets() {
 
 // Navegación del menú
 function showSection(sectionId) {
-    const sections = ['home-section', 'viewer-section', 'detox-section', 'support-section'];
+    const sections = ['home-section', 'sentiment-section', 'viewer-section', 'detox-section', 'support-section'];
     sections.forEach(id => {
         document.getElementById(id).style.display = id === sectionId ? 'block' : 'none';
     });
@@ -691,6 +842,11 @@ function showSection(sectionId) {
 document.getElementById('home-link').addEventListener('click', (e) => {
     e.preventDefault();
     showSection('home-section');
+});
+
+document.getElementById('sentiment-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    showSection('sentiment-section');
 });
 
 document.getElementById('viewer-link').addEventListener('click', (e) => {
