@@ -3,27 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Tools - Solana Transaction Viewer</title>
+    <title>Crypto Tools</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="sidebar active">
+    <div class="sidebar">
         <ul class="menu">
-            <li id="home-menu"><i class="fas fa-home"></i> <a href="#" id="home-link">Home</a></li>
-            <li><i class="fas fa-chart-line"></i> <a href="#" class="disabled">Sentiment Tracker</a></li>
-            <li id="viewer-menu" class="active"><i class="fas fa-exchange-alt"></i> <a href="#" id="viewer-link">Solana Transaction Viewer</a></li>
-            <li><i class="fas fa-coins"></i> <a href="#" class="disabled">Token Tracker</a></li>
-            <li id="detox-menu"><i class="fas fa-leaf"></i> <a href="#" id="detox-reclaim" class="disabled">Wallet Detox</a></li>
-            <li><i class="fas fa-wallet"></i> <a href="#" class="disabled">Wallet Tracker</a></li>
-            <li><i class="fas fa-map-marker-alt"></i> <a href="#" class="disabled">Positioning</a></li>
-            <li><i class="fas fa-fire"></i> <a href="#" class="disabled">Token Burner</a></li>
-            <li><i class="fas fa-briefcase"></i> <a href="#" class="disabled">Portfolio</a></li>
-            <li><i class="fas fa-book"></i> <a href="#" class="disabled">Guide</a></li>
-            <li id="support-menu"><i class="fas fa-headset"></i> <a href="#" id="support-link">Support</a></li>
+            <li id="home-menu">
+                <i class="fas fa-home"></i>
+                <a href="#" id="home-link">Home</a>
+            </li>
+            <li id="viewer-menu">
+                <i class="fas fa-eye"></i>
+                <a href="#" id="viewer-link">Solana Tracker</a>
+            </li>
+            <li id="detox-menu">
+                <i class="fas fa-broom"></i>
+                <a href="#" id="detox-reclaim">Detox & Reclaim</a>
+            </li>
+            <li id="support-menu">
+                <i class="fas fa-headset"></i>
+                <a href="#" id="support-link">Support</a>
+            </li>
         </ul>
     </div>
+
     <div class="main-content">
         <div class="top-bar">
             <div class="logo">
@@ -41,66 +46,70 @@
                 </div>
             </div>
         </div>
+
         <div class="content">
-            <div class="home-section" id="home-section" style="display: none;">
+            <section id="home-section" class="home-section">
                 <h1>Welcome to Crypto Tools</h1>
-                <p>Your all-in-one platform for managing and exploring the Solana blockchain.</p>
-            </div>
-            <div class="viewer-section" id="viewer-section">
+                <p>Explore our suite of tools designed for cryptocurrency enthusiasts.</p>
+            </section>
+
+            <section id="viewer-section" class="viewer-section" style="display: none;">
                 <h1>Solana Transaction Viewer</h1>
                 <div class="input-section">
-                    <input type="text" id="walletAddress" placeholder="Enter a Solana wallet address (e.g., 7gFvUbRt7fW4QeNipXb63gS4xETngbG9RuXw5YviFzSF)">
-                    <button onclick="fetchWalletData()">Search</button>
-                    <button onclick="clearData()" class="clear-btn">Clear</button>
+                    <input type="text" id="walletAddress" placeholder="Enter Solana wallet address">
+                    <button onclick="fetchWalletData()">View</button>
+                    <button class="clear-btn" onclick="clearData()">Clear</button>
                 </div>
-                <div class="loading-bar" id="loadingBar"></div>
+                <div id="loadingBar" class="loading-bar"></div>
                 <div id="walletInfo"></div>
                 <div id="transactionList"></div>
-            </div>
-            <div id="detox-section" class="detox-section" style="display: none;">
-                <h1>Wallet Detox</h1>
+            </section>
+
+            <section id="detox-section" class="detox-section" style="display: none;">
+                <h1>Detox & Reclaim</h1>
                 <div class="detox-input">
-                    <button id="connect-wallet-detox" onclick="connectWalletForDetox()">Connect Wallet</button>
-                    <div id="wallet-status" class="wallet-status">Wallet not connected</div>
+                    <button onclick="connectWalletForDetox()">Connect Wallet</button>
+                    <p id="wallet-status" class="wallet-status">Not connected</p>
                 </div>
                 <div id="asset-list" class="asset-list"></div>
-                <button id="burn-selected" onclick="burnSelectedAssets()" disabled>Burn Selected Assets</button>
-            </div>
-            <div id="support-section" class="support-section" style="display: none;">
+                <button id="burn-selected" onclick="burnSelectedAssets()" disabled>Burn Selected</button>
+            </section>
+
+            <section id="support-section" class="support-section" style="display: none;">
                 <h1>Support</h1>
                 <form id="support-form">
                     <div class="form-group">
                         <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" required>
+                        <input type="text" id="name" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="issue">Describe your issue:</label>
-                        <textarea id="issue" name="issue" rows="5" required></textarea>
+                        <label for="issue">Issue:</label>
+                        <textarea id="issue" required></textarea>
                     </div>
                     <button type="submit">Submit</button>
                 </form>
                 <div id="support-message" class="support-message"></div>
-            </div>
-            <div id="memecoinDetails" style="display: none; width: 100%; max-width: 800px; margin-top: 20px; background: #1A1A1A; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);"></div>
+            </section>
         </div>
-        <footer class="footer">
-            <div class="carousel-container" id="cryptoPrices">
-                <div class="carousel-tape"></div>
-            </div>
-        </footer>
     </div>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <div class="footer">
+        <div class="carousel-container">
+            <div class="carousel-tape"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <script src="https://unpkg.com/@solana/spl-token@latest/lib/index.iife.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script type="text/javascript">
-        (function(){
-            emailjs.init("PHTIVngUYirYxS92K"); // Tu Public Key
-        })();
+        emailjs.init("mje9Yg6f_0p9p_0pF");
     </script>
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
-    <script src="https://unpkg.com/@solana/spl-token@latest/lib/index.iife.js"></script>
     <script src="script.js"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91eeb7cacac50624',t:'MTc0MTczNDU1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
