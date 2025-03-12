@@ -1,589 +1,658 @@
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #0A0A0A;
-    color: #FFFFFF;
-}
+console.log("Script.js loaded");
 
-.sidebar {
-    width: 250px;
-    height: calc(100vh - 80px);
-    background: #1A1A1A;
-    position: fixed;
-    top: 80px;
-    left: 0;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    z-index: 15;
-    transition: width 0.3s ease, left 0.3s ease;
-}
+// Constantes
+const rpcUrl = 'https://mainnet.helius-rpc.com/?api-key=6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2';
+const coingeckoApiKey = 'CG-55C5t38w8kL5EhLmaHNJmAY3';
+const coingeckoPriceUrl = `https://api.coingecko.com/api/v3/simple/price?vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false&precision=4&x_cg_demo_api_key=${coingeckoApiKey}`;
+const coingeckoTokenUrl = `https://api.coingecko.com/api/v3/simple/token_price/solana?vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false&precision=4&x_cg_demo_api_key=${coingeckoApiKey}`;
 
-.sidebar.active {
-    width: 250px;
-    left: 0;
-}
+const tokenNames = {
+    'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDC',
+    'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': 'USDT',
+    'So11111111111111111111111111111111111111112': 'SOL',
+    '7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj': 'stSOL',
+    '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr': 'Popcat'
+};
 
-@media (min-width: 769px) {
-    .sidebar:not(.active) {
-        width: 50px;
-        left: 0;
-        padding: 20px 10px;
-    }
-    .sidebar:not(.active) .menu li a {
-        display: none;
-    }
-    .sidebar:not(.active) .menu li i {
-        margin-right: 0;
-        cursor: pointer;
-    }
-    .sidebar:not(.active) .menu li i:hover {
-        color: #00D4FF;
-    }
-}
+// Wallet
+let isWalletConnected = false;
 
-@media (max-width: 768px) {
-    .sidebar {
-        width: 200px;
-        height: calc(100vh - 80px);
-        top: 80px;
-    }
-    .sidebar:not(.active) {
-        left: -200px;
+async function toggleWallet() {
+    console.log("Toggle wallet clicked");
+    const walletIcon = document.getElementById("wallet-icon");
+    if (!isWalletConnected) {
+        if (window.solana && window.solana.isPhantom) {
+            try {
+                const response = await window.solana.connect();
+                alert(`Phantom Wallet connected: ${response.publicKey.toString()}`);
+                document.getElementById("walletAddress").value = response.publicKey.toString();
+                walletIcon.classList.remove("fas", "fa-wallet");
+                walletIcon.classList.add("fas", "fa-sign-out-alt");
+                walletIcon.title = "Disconnect Wallet";
+                isWalletConnected = true;
+            } catch (err) {
+                alert("Could not connect wallet: " + err.message);
+            }
+        } else {
+            alert("Please install Phantom Wallet.");
+        }
+    } else {
+        try {
+            await window.solana.disconnect();
+            alert("Wallet disconnected.");
+            document.getElementById("walletAddress").value = "";
+            walletIcon.classList.remove("fas", "fa-sign-out-alt");
+            walletIcon.classList.add("fas", "fa-wallet");
+            walletIcon.title = "Connect Wallet";
+            isWalletConnected = false;
+        } catch (err) {
+            alert("Error disconnecting wallet: " + err.message);
+        }
     }
 }
 
-.menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+// Sentiment Tracker
+let currentPosts = [];
 
-.menu li {
-    margin: 20px 0;
-    display: flex;
-    align-items: center;
-}
+async function fetchTokenSentiment() {
+    console.log("Fetching token sentiment");
+    const tokenContract = document.getElementById('tokenContract').value.trim();
+    const tokenInfoDiv = document.getElementById('tokenInfo');
+    const socialSentimentDiv = document.getElementById('socialSentiment');
+    const sentimentScoreDiv = document.getElementById('sentimentScore');
+    const priceInfoDiv = document.getElementById('priceInfo');
+    const dexscreenerIframe = document.getElementById('dexscreenerIframe');
+    const loadingBar = document.getElementById('sentimentLoadingBar');
 
-.menu li i {
-    margin-right: 10px;
-    color: #FFFFFF;
-}
-
-.menu li a {
-    color: #FFFFFF;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-.menu li.active a {
-    color: #00D4FF;
-    font-weight: bold;
-}
-
-.menu li a.disabled {
-    color: #A0A0A0;
-    pointer-events: none;
-}
-
-.main-content {
-    padding-left: 250px;
-    background-color: #0A0A0A;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: padding-left 0.3s ease;
-}
-
-.main-content.menu-closed {
-    padding-left: 50px;
-}
-
-@media (max-width: 768px) {
-    .main-content {
-        padding-left: 0;
+    if (!tokenContract) {
+        alert('Please enter a valid token contract.');
+        return;
     }
-    .main-content.menu-closed {
-        padding-left: 0;
-    }
-}
 
-.top-bar {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    background: #1A1A1A;
-    border-bottom: 1px solid #00D4FF;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 20;
-    box-sizing: border-box;
-    width: 100%;
-    height: 80px;
-}
+    loadingBar.style.display = 'block';
+    tokenInfoDiv.innerHTML = '';
+    socialSentimentDiv.innerHTML = '';
+    sentimentScoreDiv.innerHTML = '';
+    priceInfoDiv.innerHTML = '';
+    dexscreenerIframe.src = '';
 
-.logo {
-    flex-shrink: 0;
-    margin-right: 10px;
-}
+    try {
+        const tokenPriceUrl = `${coingeckoTokenUrl}&contract_addresses=${tokenContract}`;
+        const tokenResponse = await fetch(tokenPriceUrl);
+        const tokenData = tokenResponse.ok ? await tokenResponse.json() : {};
 
-.logo img {
-    max-height: 70px;
-    max-width: 260px;
-    width: auto;
-    height: auto;
-    display: block;
-}
+        const priceChangeUrl = `https://api.coingecko.com/api/v3/coins/solana/contract/${tokenContract}/market_chart?vs_currency=usd&days=1&x_cg_demo_api_key=${coingeckoApiKey}`;
+        const priceChangeResponse = await fetch(priceChangeUrl);
+        const priceChangeData = priceChangeResponse.ok ? await priceChangeResponse.json() : {};
 
-.menu-toggle {
-    background: #00D4FF;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-right: 10px;
-    flex-shrink: 0;
-}
+        const metadataResponse = await fetch(rpcUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'getAccountInfo',
+                params: [tokenContract, { encoding: 'jsonParsed' }]
+            })
+        });
+        const metadata = await metadataResponse.json();
 
-.menu-toggle:hover {
-    background: #007ACC;
-}
+        currentPosts = await fetchXPosts(tokenContract);
+        const sentimentAnalysis = analyzeSentiment(currentPosts, tokenData, priceChangeData, tokenContract);
 
-.menu-toggle i {
-    font-size: 18px;
-    color: #FFFFFF;
-}
+        displayTokenInfo(tokenData, metadata, tokenContract, tokenInfoDiv);
+        displaySocialSentiment(currentPosts, socialSentimentDiv);
+        displaySentimentScore(sentimentAnalysis, sentimentScoreDiv);
+        displayPriceInfo(tokenData, priceChangeData, tokenContract, priceInfoDiv);
+        displayDexscreenerChart(tokenContract, dexscreenerIframe);
+    } catch (error) {
+        console.error('Error in fetchTokenSentiment:', error);
+        if (error.message.includes('429')) {
+            alert('Too many requests to CoinGecko. Please wait a minute and try again.');
+        }
+        const mockTokenData = { [tokenContract.toLowerCase()]: { usd: 0.20 } };
+        const mockPriceChangeData = { prices: [[Date.now() - 24*60*60*1000, 0.18], [Date.now(), 0.20]] };
+        const mockMetadata = { result: { value: { lamports: Date.now() * 1e9 } } };
+        const mockPosts = [{ text: 'Test tweet', sentiment: 'neutral', username: 'testuser', created_at: new Date().toISOString(), likes: 5, retweets: 2 }];
+        const mockAnalysis = { generalScore: 50, socialScore: 50, priceScore: 10 };
 
-.memecoin-list {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-    gap: 15px;
-}
-
-.memecoin-item {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    padding: 5px 10px;
-    background: #2A2A2A;
-    border-radius: 5px;
-    transition: background 0.3s;
-}
-
-.memecoin-item:hover {
-    background: #00D4FF;
-}
-
-.memecoin-item img {
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
-}
-
-.memecoin-item span {
-    color: #FFFFFF;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.top-icons {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    padding-right: 10px;
-    position: relative;
-}
-
-.top-icons i {
-    font-size: 20px;
-    margin: 0 10px;
-    color: #FFFFFF;
-    cursor: pointer;
-}
-
-.top-icons i:hover {
-    color: #00D4FF;
-}
-
-.search-bar {
-    position: absolute;
-    top: 50px;
-    right: 10px;
-    width: 300px;
-    background: #1A1A1A;
-    border: 1px solid #00D4FF;
-    border-radius: 8px;
-    padding: 10px;
-    display: none;
-    flex-direction: column;
-    z-index: 25;
-    transition: opacity 0.3s ease;
-    opacity: 0;
-}
-
-.search-bar.active {
-    display: flex;
-    opacity: 1;
-}
-
-#search-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #00D4FF;
-    border-radius: 5px;
-    background: #2A2A2A;
-    color: #FFFFFF;
-    margin-bottom: 10px;
-}
-
-.search-results {
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.search-result-item {
-    padding: 8px;
-    background: #2A2A2A;
-    border-radius: 5px;
-    margin-bottom: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.search-result-item:hover {
-    background: #00D4FF;
-}
-
-.content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    padding-top: 100px;
-    padding-bottom: 100px;
-    min-height: calc(100vh - 80px);
-}
-
-.home-section, .viewer-section, .detox-section, .support-section, .sentiment-section {
-    text-align: center;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.sentiment-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.top-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    width: 100%;
-}
-
-.left-section, .center-section, .right-section {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.left-section {
-    width: 25%;
-}
-
-.center-section {
-    width: 45%;
-}
-
-.right-section {
-    width: 30%;
-}
-
-.token-info-section, .sentiment-score-section, .price-info-section, .social-sentiment-section {
-    background: #1A1A1A;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    text-align: left;
-}
-
-.token-info-section img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-}
-
-.sentiment-bar {
-    width: 100%;
-    height: 20px;
-    background: #333;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-top: 10px;
-}
-
-.sentiment-fill {
-    height: 100%;
-    transition: width 0.5s ease;
-}
-
-.dexscreener-chart {
-    background: #1A1A1A;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    height: 400px;
-}
-
-#dexscreenerIframe {
-    width: 100%;
-    height: 100%;
-}
-
-.social-sentiment-section {
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-#xSearch {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #00D4FF;
-    border-radius: 5px;
-    background: #2A2A2A;
-    color: #FFFFFF;
-    margin-bottom: 10px;
-}
-
-h1 {
-    color: #00D4FF;
-    font-size: 36px;
-    margin-bottom: 20px;
-}
-
-h3 {
-    color: #00D4FF;
-    margin-bottom: 10px;
-}
-
-.input-section, .detox-input {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto 20px;
-}
-
-input[type="text"], input[type="email"], textarea {
-    padding: 12px;
-    width: 100%;
-    max-width: 400px;
-    border: 1px solid #00D4FF;
-    border-radius: 8px;
-    background: #1A1A1A;
-    color: #FFFFFF;
-}
-
-textarea {
-    max-width: 100%;
-    resize: vertical;
-}
-
-button {
-    padding: 12px 30px;
-    background: linear-gradient(135deg, #00D4FF, #007ACC);
-    color: #FFFFFF;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-}
-
-button:hover {
-    background: linear-gradient(135deg, #007ACC, #00D4FF);
-}
-
-button:disabled {
-    background: #A0A0A0;
-    cursor: not-allowed;
-}
-
-.copy-btn, .social-btn {
-    padding: 5px 10px;
-    font-size: 12px;
-    background: #00D4FF;
-    margin-left: 5px;
-}
-
-.copy-btn:hover, .social-btn:hover {
-    background: #007ACC;
-}
-
-.clear-btn {
-    background: #FF5555;
-}
-
-.clear-btn:hover {
-    background: #CC4444;
-}
-
-.loading-bar {
-    width: 50%;
-    max-width: 500px;
-    height: 5px;
-    background: #333;
-    margin: 10px auto;
-    border-radius: 5px;
-    overflow: hidden;
-    display: none;
-}
-
-.loading-bar::after {
-    content: '';
-    display: block;
-    width: 30%;
-    height: 100%;
-    background: #00D4FF;
-    animation: loading 1.5s infinite ease-in-out;
-}
-
-@keyframes loading {
-    0% { transform: translateX(-100%); }
-    50% { transform: translateX(300%); }
-    100% { transform: translateX(300%); }
-}
-
-#walletInfo, #transactionList, .asset-list {
-    background: #1A1A1A;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    margin: 20px auto;
-    width: 100%;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #2A2A2A;
-}
-
-th {
-    background: linear-gradient(135deg, #00D4FF, #007ACC);
-    color: #FFFFFF;
-}
-
-tr:nth-child(even) {
-    background-color: #2A2A2A;
-}
-
-tr:hover {
-    background-color: #3A3A3A;
-}
-
-.footer {
-    position: fixed;
-    bottom: 0;
-    left: 250px;
-    right: 0;
-    background: #1A1A1A;
-    padding: 15px;
-    border-top: 2px solid #00D4FF;
-    box-shadow: 0 -2px 10px rgba(0, 212, 255, 0.2);
-    z-index: 10;
-    transition: left 0.3s ease;
-}
-
-.footer.menu-closed {
-    left: 50px;
-}
-
-@media (max-width: 768px) {
-    .footer {
-        left: 0;
-    }
-    .footer.menu-closed {
-        left: 0;
+        displayTokenInfo(mockTokenData, mockMetadata, tokenContract, tokenInfoDiv);
+        displaySocialSentiment(mockPosts, socialSentimentDiv);
+        displaySentimentScore(mockAnalysis, sentimentScoreDiv);
+        displayPriceInfo(mockTokenData, mockPriceChangeData, tokenContract, priceInfoDiv);
+        displayDexscreenerChart(tokenContract, dexscreenerIframe);
+    } finally {
+        loadingBar.style.display = 'none';
     }
 }
 
-.carousel-container {
-    width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    background: #1A1A1A;
-    border-radius: 8px;
-}
+async function fetchXPosts(query) {
+    console.log("Fetching X posts for:", query);
+    const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAFOQzwEAAAAAtsPkCNQYZJS0%2B2MstthckE%2BMIPE%3DjKgQFSE7rBuqRkAXGBopwhrf3j2B6ycvgwgDLp9N9ff7KQvodQ';
+    const url = `https://api.twitter.com/2/tweets/search/recent?query=${encodeURIComponent(query)}&max_results=20&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,created_at`;
 
-.carousel-tape {
-    display: inline-flex;
-    animation: slide 20s linear infinite;
-}
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+            'Content-Type': 'application/json'
+        }
+    });
 
-.carousel-tape:hover {
-    animation-play-state: paused;
-}
-
-@keyframes slide {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
-
-.crypto-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: linear-gradient(135deg, #2A2A2A, #3A3A3A);
-    padding: 8px 12px;
-    border-radius: 8px;
-    margin-right: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s ease, background 0.3s ease;
-}
-
-.crypto-item:hover {
-    transform: scale(1.05);
-    background: linear-gradient(135deg, #00D4FF, #007ACC);
-}
-
-.crypto-item img {
-    width: 20px;
-    height: 20px;
-}
-
-.crypto-item span {
-    font-size: 14px;
-    font-weight: 500;
-    color: #FFFFFF;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-@media (max-width: 768px) {
-    .top-row {
-        flex-direction: column;
+    if (!response.ok) {
+        throw new Error('Error fetching X posts: ' + response.status);
     }
-    .left-section, .center-section, .right-section {
-        width: 100%;
-    }
-    .dexscreener-chart {
-        height: 300px;
+
+    const data = await response.json();
+    const users = data.includes?.users || [];
+    const userMap = users.reduce((map, user) => {
+        map[user.id] = { username: user.username, created_at: user.created_at };
+        return map;
+    }, {});
+
+    return data.data ? data.data.map(post => ({
+        text: post.text,
+        sentiment: classifySentiment(post.text),
+        username: userMap[post.author_id]?.username || 'Unknown',
+        user_created_at: userMap[post.author_id]?.created_at || 'N/A',
+        created_at: post.created_at,
+        likes: post.public_metrics.like_count,
+        retweets: post.public_metrics.retweet_count,
+        replies: post.public_metrics.reply_count,
+        quotes: post.public_metrics.quote_count
+    })) : [];
+}
+
+function classifySentiment(text) {
+    const lowerText = text.toLowerCase();
+    if (lowerText.includes('great') || lowerText.includes('awesome') || lowerText.includes('love') || lowerText.includes('bullish')) {
+        return 'positive';
+    } else if (lowerText.includes('scam') || lowerText.includes('rugpull') || lowerText.includes('bad') || lowerText.includes('dump')) {
+        return 'negative';
+    } else {
+        return 'neutral';
     }
 }
+
+async function searchXPosts() {
+    console.log("Searching X posts");
+    const query = document.getElementById('xSearch').value.trim();
+    const socialSentimentDiv = document.getElementById('socialSentiment');
+    if (!query) {
+        displaySocialSentiment(currentPosts, socialSentimentDiv);
+        return;
+    }
+
+    try {
+        const posts = await fetchXPosts(query);
+        displaySocialSentiment(posts, socialSentimentDiv);
+    } catch (error) {
+        console.error('Error searching X posts:', error);
+        socialSentimentDiv.innerHTML = '<p>Error searching X posts. Please try again.</p>';
+    }
+}
+
+function analyzeSentiment(posts, tokenData, priceChangeData, tokenContract) {
+    let positive = 0, negative = 0, neutral = 0, totalEngagement = 0;
+    posts.forEach(post => {
+        const engagement = post.likes + post.retweets + post.replies + post.quotes;
+        totalEngagement += engagement;
+        if (post.sentiment === 'positive') positive += engagement + 1;
+        else if (post.sentiment === 'negative') negative += engagement + 1;
+        else neutral += engagement + 1;
+    });
+    const totalSocial = positive + negative + neutral;
+    const socialScore = totalSocial ? ((positive * 1 + neutral * 0.5 - negative) / totalSocial) * 100 : 50;
+
+    const price = tokenData[tokenContract.toLowerCase()]?.usd || 0;
+    const prices = priceChangeData.prices || [];
+    const priceScore = prices.length ? ((prices[prices.length - 1][1] - prices[0][1]) / prices[0][1]) * 100 : 0;
+
+    const generalScore = (socialScore * 0.6 + (priceScore > 0 ? priceScore : 0) * 0.4);
+
+    return { generalScore, socialScore, priceScore };
+}
+
+function displayTokenInfo(tokenData, metadata, tokenContract, container) {
+    const price = tokenData[tokenContract.toLowerCase()]?.usd || 'N/A';
+    const name = tokenNames[tokenContract] || 'Unknown Token';
+    const image = tokenContract === '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' ? 'https://assets.coingecko.com/coins/images/33743/small/popcat.png' : 'https://via.placeholder.com/50';
+
+    let html = `
+        <h3>Token Info</h3>
+        <img src="${image}" alt="${name}">
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Contract:</strong> ${tokenContract} <button class="copy-btn" onclick="navigator.clipboard.writeText('${tokenContract}')">Copy</button></p>
+        <p><strong>Socials:</strong>
+            <button class="social-btn" onclick="window.open('https://x.com/search?q=${tokenContract}', '_blank')"><i class="fab fa-twitter"></i></button>
+            <button class="social-btn" onclick="window.open('https://dexscreener.com/solana/${tokenContract}', '_blank')"><i class="fas fa-globe"></i></button>
+        </p>
+    `;
+    container.innerHTML = html;
+}
+
+function displaySocialSentiment(posts, container) {
+    let html = '<h3>X Posts</h3>';
+    if (posts.length === 0) {
+        html += '<p>No recent posts found.</p>';
+    } else {
+        html += '<ul>';
+        posts.forEach(post => {
+            const color = post.sentiment === 'positive' ? '#00FF00' : post.sentiment === 'negative' ? '#FF0000' : '#FFFF00';
+            const date = new Date(post.created_at).toLocaleString();
+            html += `
+                <li style="color: ${color}; margin-bottom: 10px;">
+                    <strong>@${post.username}</strong> (${date}):<br>${post.text}<br>
+                    <small>Likes: ${post.likes} | Retweets: ${post.retweets}</small>
+                </li>
+            `;
+        });
+        html += '</ul>';
+    }
+    container.innerHTML = html;
+}
+
+function displaySentimentScore(analysis, container) {
+    const { generalScore, socialScore, priceScore } = analysis;
+    let sentimentLabel, color;
+    if (generalScore < 20) {
+        sentimentLabel = 'Extreme Fear';
+        color = '#FF0000';
+    } else if (generalScore < 40) {
+        sentimentLabel = 'Fear';
+        color = '#FF5555';
+    } else if (generalScore < 60) {
+        sentimentLabel = 'Neutral';
+        color = '#FFA500';
+    } else {
+        sentimentLabel = 'Euphoria';
+        color = '#00FF00';
+    }
+
+    let html = `
+        <h3>Analysis</h3>
+        <p><strong>General Score:</strong> ${generalScore.toFixed(2)}%</p>
+        <p><strong>Social Score:</strong> ${socialScore.toFixed(2)}%</p>
+        <p><strong>Price Score:</strong> ${priceScore.toFixed(2)}%</p>
+        <div class="sentiment-bar">
+            <div class="sentiment-fill" style="width: ${generalScore}%; background-color: ${color};"></div>
+        </div>
+        <p style="color: ${color}">${sentimentLabel} (${generalScore.toFixed(0)}%)</p>
+    `;
+    container.innerHTML = html;
+}
+
+function displayPriceInfo(tokenData, priceChangeData, tokenContract, container) {
+    const currentPrice = tokenData[tokenContract.toLowerCase()]?.usd || 'N/A';
+    const prices = priceChangeData.prices || [];
+    const price1h = prices.length > 4 ? ((prices[prices.length - 1][1] - prices[prices.length - 5][1]) / prices[prices.length - 5][1] * 100).toFixed(2) : 'N/A';
+    const price6h = prices.length > 24 ? ((prices[prices.length - 1][1] - prices[prices.length - 25][1]) / prices[prices.length - 25][1] * 100).toFixed(2) : 'N/A';
+    const price12h = prices.length > 48 ? ((prices[prices.length - 1][1] - prices[prices.length - 49][1]) / prices[prices.length - 49][1] * 100).toFixed(2) : 'N/A';
+    const price24h = prices.length ? ((prices[prices.length - 1][1] - prices[0][1]) / prices[0][1] * 100).toFixed(2) : 'N/A';
+
+    let html = `
+        <h3>Prices</h3>
+        <p><strong>Current:</strong> $${currentPrice} (${price24h}% 24h)</p>
+        <p><strong>1h Change:</strong> ${price1h}%</p>
+        <p><strong>6h Change:</strong> ${price6h}%</p>
+        <p><strong>12h Change:</strong> ${price12h}%</p>
+        <p><strong>24h Change:</strong> ${price24h}%</p>
+    `;
+    container.innerHTML = html;
+}
+
+function displayDexscreenerChart(tokenContract, iframe) {
+    iframe.src = `https://dexscreener.com/solana/${tokenContract}?embed=1&theme=dark`;
+}
+
+function clearSentimentData() {
+    document.getElementById('tokenInfo').innerHTML = '';
+    document.getElementById('socialSentiment').innerHTML = '';
+    document.getElementById('sentimentScore').innerHTML = '';
+    document.getElementById('priceInfo').innerHTML = '';
+    document.getElementById('dexscreenerIframe').src = '';
+    document.getElementById('tokenContract').value = '';
+    document.getElementById('xSearch').value = '';
+    currentPosts = [];
+}
+
+// Solana Transaction Viewer
+async function fetchWalletData() {
+    console.log("Fetching wallet data");
+    const walletAddress = document.getElementById('walletAddress').value.trim();
+    const walletInfoDiv = document.getElementById('walletInfo');
+    const transactionListDiv = document.getElementById('transactionList');
+    const loadingBar = document.getElementById('loadingBar');
+
+    if (!walletAddress) {
+        alert('Please enter a valid wallet address.');
+        return;
+    }
+
+    loadingBar.style.display = 'block';
+    walletInfoDiv.innerHTML = '';
+    transactionListDiv.innerHTML = '';
+
+    try {
+        const priceResponse = await fetch(`${coingeckoPriceUrl}&ids=solana`);
+        const priceData = await priceResponse.json();
+        const solPriceUSD = priceData.solana.usd;
+
+        const walletResponse = await fetch(rpcUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'getAccountInfo',
+                params: [walletAddress, { encoding: 'jsonParsed' }]
+            })
+        });
+        const walletData = await walletResponse.json();
+
+        const tokenResponse = await fetch(rpcUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'getTokenAccountsByOwner',
+                params: [walletAddress, { programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' }, { encoding: 'jsonParsed' }]
+            })
+        });
+        const tokenData = await tokenResponse.json();
+
+        const txResponse = await fetch(rpcUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'getSignaturesForAddress',
+                params: [walletAddress, { limit: 10 }]
+            })
+        });
+        const txData = await txResponse.json();
+
+        if (walletData.result) {
+            displayWalletInfo(walletData.result.value, tokenData.result?.value || [], solPriceUSD, walletAddress, walletInfoDiv);
+        } else {
+            walletInfoDiv.innerHTML = '<p>Error fetching wallet data. Please verify the address.</p>';
+        }
+
+        if (txData.result) {
+            displayTransactions(txData.result, transactionListDiv);
+        } else {
+            transactionListDiv.innerHTML = '<p>No recent transactions found.</p>';
+        }
+    } catch (error) {
+        console.error('Error in fetchWalletData:', error);
+        walletInfoDiv.innerHTML = '<p>Error connecting to the API. Please try again later.</p>';
+    } finally {
+        loadingBar.style.display = 'none';
+    }
+}
+
+function displayWalletInfo(accountData, tokenAccounts, solPriceUSD, walletAddress, container) {
+    const solBalance = accountData.lamports ? (accountData.lamports / 1e9) : 0;
+    const usdBalance = (solBalance * solPriceUSD).toFixed(2);
+
+    let tokenHtml = '';
+    if (tokenAccounts.length > 0) {
+        tokenHtml = '<table><tr><th>Token</th><th>Amount</th></tr>';
+        tokenAccounts.forEach(t => {
+            const mint = t.account.data.parsed.info.mint;
+            const tokenName = tokenNames[mint] || mint.slice(0, 8) + '...';
+            const amount = t.account.data.parsed.info.tokenAmount.uiAmount;
+            tokenHtml += `<tr><td>${tokenName}</td><td>${amount.toFixed(4)}</td></tr>`;
+        });
+        tokenHtml += '</table>';
+    } else {
+        tokenHtml = 'None';
+    }
+
+    let html = `
+        <h3>Wallet Information</h3>
+        <table>
+            <tr><td>Address</td><td>${walletAddress} <button class="copy-btn" onclick="navigator.clipboard.writeText('${walletAddress}')">Copy</button></td></tr>
+            <tr><td>SOL Balance</td><td>${solBalance.toFixed(4)} SOL</td></tr>
+            <tr><td>Value in USD</td><td>$${usdBalance}</td></tr>
+            <tr><td>SPL Tokens</td><td>${tokenHtml}</td></tr>
+        </table>
+    `;
+    container.innerHTML = html;
+}
+
+function displayTransactions(transactions, container) {
+    let html = '<h3>Recent Transactions</h3>';
+    if (transactions.length === 0) {
+        html += '<p>No recent transactions found.</p>';
+    } else {
+        html += '<table><tr><th>Hash</th><th>Date</th></tr>';
+        transactions.forEach(tx => {
+            html += `<tr><td>${tx.signature.slice(0, 8)}...</td><td>${new Date(tx.blockTime * 1000).toLocaleString()}</td></tr>`;
+        });
+        html += '</table>';
+    }
+    container.innerHTML = html;
+}
+
+function clearData() {
+    document.getElementById('walletInfo').innerHTML = '';
+    document.getElementById('transactionList').innerHTML = '';
+    document.getElementById('walletAddress').value = '';
+}
+
+// Memecoin List (Encabezado)
+async function updateMemecoinList() {
+    console.log("Updating memecoin list");
+    const memecoinList = document.getElementById('memecoinList');
+    memecoinList.innerHTML = '';
+
+    const memecoins = [
+        { name: 'Popcat', contract: '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', image: 'https://assets.coingecko.com/coins/images/33743/small/popcat.png', dex: 'https://dexscreener.com/solana/7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' },
+        { name: 'Brett', contract: '0x532f27101965dd16442E59d40670FaF5eBB142E4', image: 'https://assets.coingecko.com/coins/images/35729/small/brett.png', dex: 'https://dexscreener.com/base/0x532f27101965dd16442E59d40670FaF5eBB142E4' },
+        { name: 'SPX', contract: '0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C', image: 'https://assets.coingecko.com/coins/images/38945/small/spx.png', dex: 'https://dexscreener.com/ethereum/0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C' }
+    ];
+
+    try {
+        const contractIds = memecoins.map(coin => coin.contract).join(',');
+        const response = await fetch(`${coingeckoTokenUrl}&contract_addresses=${contractIds}`);
+        const prices = response.ok ? await response.json() : {};
+
+        memecoins.forEach(coin => {
+            const price = prices[coin.contract.toLowerCase()]?.usd || 'N/A';
+            const item = document.createElement('div');
+            item.className = 'memecoin-item';
+            item.innerHTML = `<img src="${coin.image}" alt="${coin.name}"><span>${coin.name}: $${price === 'N/A' ? 'N/A' : price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</span>`;
+            item.addEventListener('click', () => window.open(coin.dex, '_blank'));
+            memecoinList.appendChild(item);
+        });
+    } catch (error) {
+        console.error('Error fetching memecoin prices:', error);
+        memecoins.forEach(coin => {
+            const item = document.createElement('div');
+            item.className = 'memecoin-item';
+            item.innerHTML = `<img src="${coin.image}" alt="${coin.name}"><span>${coin.name}: $0.20</span>`;
+            item.addEventListener('click', () => window.open(coin.dex, '_blank'));
+            memecoinList.appendChild(item);
+        });
+    }
+}
+
+// Crypto Prices (Footer)
+async function updateCryptoPrices() {
+    console.log("Updating crypto prices");
+    const carouselTape = document.querySelector('.carousel-tape');
+    if (!carouselTape) return;
+    carouselTape.innerHTML = '<span>Loading prices...</span>';
+
+    const coins = [
+        { id: 'bitcoin', name: 'Bitcoin', image: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' },
+        { id: 'ethereum', name: 'Ethereum', image: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png' },
+        { id: 'binancecoin', name: 'BNB', image: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png' },
+        { id: 'solana', name: 'Solana', image: 'https://assets.coingecko.com/coins/images/4128/small/solana.png' },
+        { id: 'ripple', name: 'XRP', image: 'https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png' },
+        { id: 'usd-coin', name: 'USDC', image: 'https://assets.coingecko.com/coins/images/6319/small/usdc.png' },
+        { id: 'tether', name: 'USDT', image: 'https://assets.coingecko.com/coins/images/325/small/Tether.png' },
+        { id: 'dogecoin', name: 'DOGE', image: 'https://assets.coingecko.com/coins/images/5/small/dogecoin.png' }
+    ];
+
+    try {
+        const ids = coins.map(coin => coin.id).join(',');
+        const response = await fetch(`${coingeckoPriceUrl}&ids=${ids}`);
+        const priceData = response.ok ? await response.json() : {};
+
+        let html = '';
+        coins.forEach(coin => {
+            const price = priceData[coin.id]?.usd || 'N/A';
+            html += `<div class="crypto-item"><img src="${coin.image}" alt="${coin.name}"><span>${coin.name}: $${price === 'N/A' ? 'N/A' : price.toLocaleString()}</span></div>`;
+        });
+        carouselTape.innerHTML = html + html;
+    } catch (error) {
+        console.error('Error fetching crypto prices:', error);
+        let html = '';
+        coins.forEach(coin => {
+            html += `<div class="crypto-item"><img src="${coin.image}" alt="${coin.name}"><span>${coin.name}: $N/A</span></div>`;
+        });
+        carouselTape.innerHTML = html + html;
+    }
+}
+
+// Buscador
+function setupSearch() {
+    console.log("Setting up search");
+    const searchToggle = document.getElementById('search-toggle');
+    const searchBar = document.getElementById('search-bar');
+
+    searchToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        searchBar.classList.toggle('active');
+        if (searchBar.classList.contains('active')) {
+            document.getElementById('search-input').focus();
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (searchBar.classList.contains('active') && !searchBar.contains(e.target) && e.target !== searchToggle) {
+            searchBar.classList.remove('active');
+        }
+    });
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        const resultsDiv = document.getElementById('search-results');
+        resultsDiv.innerHTML = '';
+
+        const searchItems = [
+            { name: 'Popcat', action: () => document.getElementById('tokenContract').value = '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' },
+            { name: 'Solana', action: () => document.getElementById('walletAddress').focus() },
+            { name: 'Wallet', action: () => toggleWallet() },
+            { name: 'Support', action: () => showSection('support-section') }
+        ];
+
+        const filteredItems = searchItems.filter(item => item.name.toLowerCase().includes(query));
+        
+        if (filteredItems.length > 0 && query) {
+            filteredItems.forEach(item => {
+                const result = document.createElement('div');
+                result.className = 'search-result-item';
+                result.textContent = item.name;
+                result.addEventListener('click', item.action);
+                resultsDiv.appendChild(result);
+            });
+        } else if (query) {
+            resultsDiv.innerHTML = '<div class="search-result-item">No results found</div>';
+        }
+    });
+}
+
+// Navegación del menú
+function showSection(sectionId) {
+    console.log("Showing section:", sectionId);
+    const sections = ['home-section', 'sentiment-section', 'viewer-section', 'detox-section', 'support-section'];
+    sections.forEach(id => {
+        document.getElementById(id).style.display = id === sectionId ? 'block' : 'none';
+    });
+
+    const menuItems = document.querySelectorAll('.menu li');
+    menuItems.forEach(item => item.classList.remove('active'));
+    const activeItem = document.querySelector(`#${sectionId.replace('-section', '-menu')} a`);
+    if (activeItem) activeItem.parentElement.classList.add('active');
+}
+
+// Event Listeners
+function setupEventListeners() {
+    console.log("Setting up event listeners");
+    document.getElementById('home-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        showSection('home-section');
+    });
+
+    document.getElementById('sentiment-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        showSection('sentiment-section');
+    });
+
+    document.getElementById('viewer-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        showSection('viewer-section');
+    });
+
+    document.getElementById('detox-reclaim').addEventListener('click', (e) => {
+        e.preventDefault();
+        showSection('detox-section');
+    });
+
+    document.getElementById('support-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        showSection('support-section');
+    });
+
+    document.getElementById("menu-toggle").addEventListener("click", () => {
+        console.log("Menu toggle clicked");
+        document.querySelector(".sidebar").classList.toggle("active");
+        document.querySelector(".main-content").classList.toggle("menu-closed");
+        document.querySelector(".footer").classList.toggle("menu-closed");
+    });
+
+    document.getElementById('wallet-icon').addEventListener('click', toggleWallet);
+
+    document.getElementById('support-form').addEventListener('submit', (e) => {
+        console.log("Support form submitted");
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const issue = document.getElementById('issue').value;
+        const ticketNumber = Math.floor(Math.random() * 1000000);
+
+        const templateParams = {
+            name: name,
+            email: email,
+            issue: issue,
+            ticket: ticketNumber
+        };
+
+        emailjs.send('crypto-tools-service', 'template_muodszo', templateParams)
+            .then(() => {
+                document.getElementById('support-message').innerHTML = `<p>Your ticket is #${ticketNumber}. Thank you for contacting us!</p>`;
+                document.getElementById('support-form').reset();
+            }, (error) => {
+                alert('Error sending support request: ' + error.text);
+            });
+    });
+}
+
+// Inicializar
+function init() {
+    console.log("Initializing page");
+    setupEventListeners();
+    setupSearch();
+    updateMemecoinList();
+    setInterval(updateMemecoinList, 3600000); // 1 hora
+    updateCryptoPrices();
+    setInterval(updateCryptoPrices, 3600000); // 1 hora
+    showSection('home-section');
+}
+
+document.addEventListener('DOMContentLoaded', init);
