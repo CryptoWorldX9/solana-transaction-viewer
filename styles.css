@@ -273,46 +273,90 @@ body {
 
 .sentiment-container {
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
     gap: 20px;
+    position: relative;
 }
 
-.social-sentiment-column {
-    width: 35%;
-    background: #1A1A1A;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    height: fit-content;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-.right-column {
+.left-column {
     width: 65%;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.top-sections {
+.right-column {
+    width: 35%;
     display: flex;
+    flex-direction: column;
     gap: 20px;
-    width: 100%;
 }
 
-.token-info-section, .sentiment-score-section, .price-info-section {
+.token-info-section {
     background: #1A1A1A;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    width: 33%;
     text-align: left;
 }
 
-.sentiment-score-section canvas {
-    max-width: 100%;
-    height: auto;
+.token-info-section img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.sentiment-score-section {
+    background: #1A1A1A;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    text-align: left;
+}
+
+.sentiment-bar {
+    width: 100%;
+    height: 20px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.sentiment-fill {
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.price-info-section {
+    background: #1A1A1A;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    text-align: left;
+    width: 100%;
+}
+
+.social-sentiment-section {
+    background: #1A1A1A;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#xSearch {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #00D4FF;
+    border-radius: 5px;
+    background: #2A2A2A;
+    color: #FFFFFF;
+    margin-bottom: 10px;
 }
 
 .dexscreener-chart {
@@ -322,6 +366,8 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     width: 100%;
     height: 400px;
+    margin-top: 20px;
+    order: 3;
 }
 
 #dexscreenerIframe {
@@ -399,7 +445,7 @@ button:disabled {
     padding: 5px 10px;
     font-size: 12px;
     background: #00D4FF;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 
 .copy-btn:hover, .social-btn:hover {
@@ -440,7 +486,7 @@ button:disabled {
     100% { transform: translateX(300%); }
 }
 
-#walletInfo, #transactionList, .asset-list, #socialSentiment, #tokenInfo, #sentimentScore, #priceInfo {
+#walletInfo, #transactionList, .asset-list {
     background: #1A1A1A;
     padding: 20px;
     border-radius: 8px;
@@ -619,13 +665,7 @@ tr:hover {
     .sentiment-container {
         flex-direction: column;
     }
-    .social-sentiment-column, .right-column {
-        width: 100%;
-    }
-    .top-sections {
-        flex-direction: column;
-    }
-    .token-info-section, .sentiment-score-section, .price-info-section {
+    .left-column, .right-column {
         width: 100%;
     }
     .dexscreener-chart {
