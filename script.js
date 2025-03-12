@@ -65,6 +65,8 @@ async function fetchTokenSentiment() {
     const priceInfoDiv = document.getElementById('priceInfo');
     const dexscreenerIframe = document.getElementById('dexscreenerIframe');
     const loadingBar = document.getElementById('sentimentLoadingBar');
+    const sentimentSection = document.querySelector('.sentiment-section');
+    const inputSection = document.getElementById('input-section');
 
     if (!tokenContract) {
         alert('Please enter a valid token contract.');
@@ -78,23 +80,23 @@ async function fetchTokenSentiment() {
     priceInfoDiv.innerHTML = '';
     dexscreenerIframe.src = '';
 
+    // Activar modo pantalla completa al copiar contrato
+    inputSection.style.display = 'none';
+    sentimentSection.classList.add('full-screen');
+
     try {
-        // Obtener información del token (nombre e imagen)
         const tokenInfoUrl = `${coingeckoCoinInfoUrl}${tokenContract}?x_cg_demo_api_key=${coingeckoApiKey}`;
         const tokenInfoResponse = await fetch(tokenInfoUrl);
         const tokenInfo = tokenInfoResponse.ok ? await tokenInfoResponse.json() : {};
 
-        // Obtener precio actual
         const tokenPriceUrl = `${coingeckoTokenUrl}&contract_addresses=${tokenContract}`;
         const tokenPriceResponse = await fetch(tokenPriceUrl);
         const tokenData = tokenPriceResponse.ok ? await tokenPriceResponse.json() : {};
 
-        // Obtener datos históricos
         const priceChangeUrl = `https://api.coingecko.com/api/v3/coins/solana/contract/${tokenContract}/market_chart?vs_currency=usd&days=1&x_cg_demo_api_key=${coingeckoApiKey}`;
         const priceChangeResponse = await fetch(priceChangeUrl);
         const priceChangeData = priceChangeResponse.ok ? await priceChangeResponse.json() : {};
 
-        // Obtener posts de X
         currentPosts = await fetchXPosts(tokenContract);
         const sentimentAnalysis = analyzeSentiment(currentPosts, tokenData, priceChangeData, tokenContract);
 
@@ -128,7 +130,7 @@ async function fetchXPosts(query) {
     console.log("Fetching X posts for:", query);
     const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAFOQzwEAAAAAtsPkCNQYZJS0%2B2MstthckE%2BMIPE%3DjKgQFSE7rBuqRkAXGBopwhrf3j2B6ycvgwgDLp9N9ff7KQvodQ'; // Reemplaza con tu token si tienes uno nuevo
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const apiUrl = `https://api.twitter.com/2/tweets/search/recent?query=${encodeURIComponent(query)}&max_results=20&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username`;
+    const apiUrl = `https://api.twitter.com/2/tweets/search/recent?query=${encodeURIComponent(query)}&max_results=20&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,profile_image_url`;
     const url = proxyUrl + apiUrl;
 
     try {
@@ -147,7 +149,7 @@ async function fetchXPosts(query) {
         const data = await response.json();
         const users = data.includes?.users || [];
         const userMap = users.reduce((map, user) => {
-            map[user.id] = { username: user.username };
+            map[user.id] = { username: user.username, profile_image_url: user.profile_image_url };
             return map;
         }, {});
 
@@ -155,6 +157,7 @@ async function fetchXPosts(query) {
             text: post.text,
             sentiment: classifySentiment(post.text),
             username: userMap[post.author_id]?.username || 'Unknown',
+            profile_image_url: userMap[post.author_id]?.profile_image_url || 'https://via.placeholder.com/48',
             created_at: post.created_at,
             likes: post.public_metrics.like_count,
             retweets: post.public_metrics.retweet_count
@@ -168,11 +171,11 @@ async function fetchXPosts(query) {
 function classifySentiment(text) {
     const lowerText = text.toLowerCase();
     if (lowerText.includes('great') || lowerText.includes('awesome') || lowerText.includes('love') || lowerText.includes('bullish')) {
-        return 'positive';
+        return { type: 'positive', score: 75 };
     } else if (lowerText.includes('scam') || lowerText.includes('rugpull') || lowerText.includes('bad') || lowerText.includes('dump')) {
-        return 'negative';
+        return { type: 'negative', score: 25 };
     } else {
-        return 'neutral';
+        return { type: 'neutral', score: 50 };
     }
 }
 
@@ -199,8 +202,8 @@ function analyzeSentiment(posts, tokenData, priceChangeData, tokenContract) {
     posts.forEach(post => {
         const engagement = post.likes + post.retweets;
         totalEngagement += engagement;
-        if (post.sentiment === 'positive') positive += engagement + 1;
-        else if (post.sentiment === 'negative') negative += engagement + 1;
+        if (post.sentiment.type === 'positive') positive += engagement + 1;
+        else if (post.sentiment.type === 'negative') negative += engagement + 1;
         else neutral += engagement + 1;
     });
     const totalSocial = positive + negative + neutral;
@@ -235,22 +238,27 @@ function displayTokenInfo(tokenInfo, tokenData, tokenContract, container) {
 }
 
 function displaySocialSentiment(posts, container) {
-    let html = '<h3>X Posts</h3>';
+    let html = '<h3>Tweets Analyser</h3>';
     if (posts.length === 0) {
-        html += '<p>No recent posts found.</p>';
+        html += '<p>No recent tweets found.</p>';
     } else {
-        html += '<ul>';
+        html += '<div>';
         posts.forEach(post => {
-            const color = post.sentiment === 'positive' ? '#00FF00' : post.sentiment === 'negative' ? '#FF0000' : '#FFFF00';
             const date = new Date(post.created_at).toLocaleString();
             html += `
-                <li style="color: ${color}; margin-bottom: 10px;">
-                    <strong>@${post.username}</strong> (${date}):<br>${post.text}<br>
-                    <small>Likes: ${post.likes} | Retweets: ${post.retweets}</small>
-                </li>
+                <div class="tweet-item">
+                    <img src="${post.profile_image_url}" alt="${post.username}">
+                    <div class="tweet-content">
+                        <span class="username">${post.username}</span>
+                        <span class="time">${date}</span><br>
+                        <span class="text">${post.text}</span><br>
+                        <span class="tweet-sentiment ${post.sentiment.type}">${post.sentiment.type.toUpperCase()} (Score: ${post.sentiment.score})</span>
+                        <small>Likes: ${post.likes} | Retweets: ${post.retweets}</small>
+                    </div>
+                </div>
             `;
         });
-        html += '</ul>';
+        html += '</div>';
     }
     container.innerHTML = html;
 }
@@ -436,6 +444,8 @@ function clearData() {
 }
 
 function clearSentimentData() {
+    const sentimentSection = document.querySelector('.sentiment-section');
+    const inputSection = document.getElementById('input-section');
     document.getElementById('tokenInfo').innerHTML = '';
     document.getElementById('socialSentiment').innerHTML = '';
     document.getElementById('sentimentScore').innerHTML = '';
@@ -443,6 +453,8 @@ function clearSentimentData() {
     document.getElementById('dexscreenerIframe').src = '';
     document.getElementById('tokenContract').value = '';
     document.getElementById('xSearch').value = '';
+    inputSection.style.display = 'flex';
+    sentimentSection.classList.remove('full-screen');
     currentPosts = [];
 }
 
