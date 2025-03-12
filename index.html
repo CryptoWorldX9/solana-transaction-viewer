@@ -55,18 +55,19 @@
                 </div>
                 <div class="loading-bar" id="sentimentLoadingBar"></div>
                 <div class="sentiment-container">
-                    <div class="social-sentiment-column">
-                        <div id="socialSentiment"></div>
+                    <div class="left-column">
+                        <div id="tokenInfo" class="token-info-section"></div>
+                        <div id="sentimentScore" class="sentiment-score-section"></div>
                     </div>
                     <div class="right-column">
-                        <div class="top-sections">
-                            <div id="tokenInfo" class="token-info-section"></div>
-                            <div id="sentimentScore" class="sentiment-score-section"></div>
-                            <div id="priceInfo" class="price-info-section"></div>
+                        <div id="priceInfo" class="price-info-section"></div>
+                        <div class="social-sentiment-section">
+                            <input type="text" id="xSearch" placeholder="Search on X..." oninput="searchXPosts()">
+                            <div id="socialSentiment"></div>
                         </div>
-                        <div id="dexscreenerChart" class="dexscreener-chart">
-                            <iframe id="dexscreenerIframe" frameborder="0"></iframe>
-                        </div>
+                    </div>
+                    <div id="dexscreenerChart" class="dexscreener-chart">
+                        <iframe id="dexscreenerIframe" frameborder="0"></iframe>
                     </div>
                 </div>
             </div>
