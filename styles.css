@@ -288,6 +288,7 @@ body {
     justify-content: space-between;
     gap: 20px;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .left-section, .center-section, .right-section {
@@ -302,18 +303,23 @@ body {
 
 .center-section {
     width: 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .right-section {
     width: 30%;
 }
 
-.token-info-section, .sentiment-score-section, .price-info-section, .social-sentiment-section {
+.token-info-section, .sentiment-score-section, .price-info-section {
     background: #1A1A1A;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     text-align: left;
+    height: 300px; /* Tamaño fijo para igualar */
+    overflow-y: auto;
 }
 
 .token-info-section img {
@@ -321,6 +327,11 @@ body {
     height: 50px;
     border-radius: 50%;
     margin-bottom: 10px;
+}
+
+.contract-text {
+    word-break: break-all;
+    font-size: 12px;
 }
 
 .sentiment-bar {
@@ -339,19 +350,26 @@ body {
 
 .dexscreener-chart {
     background: #1A1A1A;
-    padding: 20px;
+    padding: 0;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    height: 400px;
+    width: 100%;
+    height: 400px; /* Ajustado para ocupar espacio */
+    margin-top: 20px;
 }
 
 #dexscreenerIframe {
     width: 100%;
     height: 100%;
+    border: none;
 }
 
 .social-sentiment-section {
-    max-height: 400px;
+    background: #1A1A1A;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    height: 300px; /* Igualar tamaño */
     overflow-y: auto;
 }
 
@@ -374,6 +392,7 @@ h1 {
 h3 {
     color: #00D4FF;
     margin-bottom: 10px;
+    font-size: 18px;
 }
 
 .input-section, .detox-input {
@@ -582,6 +601,9 @@ tr:hover {
     }
     .left-section, .center-section, .right-section {
         width: 100%;
+    }
+    .token-info-section, .sentiment-score-section, .price-info-section, .social-sentiment-section {
+        height: auto;
     }
     .dexscreener-chart {
         height: 300px;
