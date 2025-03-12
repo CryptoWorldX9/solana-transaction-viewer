@@ -42,6 +42,10 @@
             </div>
         </div>
         <div class="content">
+            <div class="home-section" id="home-section" style="display: none;">
+                <h1>Welcome to Crypto Tools</h1>
+                <p>Your all-in-one platform for managing and exploring the Solana blockchain.</p>
+            </div>
             <div class="sentiment-section" id="sentiment-section" style="display: none;">
                 <h1>Sentiment Tracker</h1>
                 <div class="input-section">
@@ -52,22 +56,64 @@
                 <div class="loading-bar" id="sentimentLoadingBar"></div>
                 <div class="sentiment-container">
                     <div class="top-row">
-                        <div id="tokenInfo" class="token-info-section"></div>
-                        <div id="sentimentScore" class="sentiment-score-section"></div>
-                        <div id="priceInfo" class="price-info-section"></div>
-                    </div>
-                    <div class="bottom-row">
-                        <div id="dexscreenerChart" class="dexscreener-chart">
-                            <iframe id="dexscreenerIframe" frameborder="0"></iframe>
+                        <div class="left-section">
+                            <div id="tokenInfo" class="token-info-section"></div>
                         </div>
-                        <div class="social-sentiment-section">
-                            <input type="text" id="xSearch" placeholder="Search on X..." oninput="searchXPosts()">
-                            <div id="socialSentiment"></div>
+                        <div class="center-section">
+                            <div id="sentimentScore" class="sentiment-score-section"></div>
+                            <div id="dexscreenerChart" class="dexscreener-chart">
+                                <iframe id="dexscreenerIframe" frameborder="0"></iframe>
+                            </div>
+                        </div>
+                        <div class="right-section">
+                            <div id="priceInfo" class="price-info-section"></div>
+                            <div class="social-sentiment-section">
+                                <input type="text" id="xSearch" placeholder="Search on X..." oninput="searchXPosts()">
+                                <div id="socialSentiment"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Otras secciones como viewer-section, detox-section, etc., permanecen sin cambios -->
+            <div class="viewer-section" id="viewer-section">
+                <h1>Solana Transaction Viewer</h1>
+                <div class="input-section">
+                    <input type="text" id="walletAddress" placeholder="Enter a Solana wallet address (e.g., 7gFvUbRt7fW4QeNipXb63gS4xETngbG9RuXw5YviFzSF)">
+                    <button onclick="fetchWalletData()">Search</button>
+                    <button onclick="clearData()" class="clear-btn">Clear</button>
+                </div>
+                <div class="loading-bar" id="loadingBar"></div>
+                <div id="walletInfo"></div>
+                <div id="transactionList"></div>
+            </div>
+            <div id="detox-section" class="detox-section" style="display: none;">
+                <h1>Wallet Detox</h1>
+                <div class="detox-input">
+                    <button id="connect-wallet-detox" onclick="connectWalletForDetox()">Connect Wallet</button>
+                    <div id="wallet-status" class="wallet-status">Wallet not connected</div>
+                </div>
+                <div id="asset-list" class="asset-list"></div>
+                <button id="burn-selected" onclick="burnSelectedAssets()" disabled>Burn Selected Assets</button>
+            </div>
+            <div id="support-section" class="support-section" style="display: none;">
+                <h1>Support</h1>
+                <form id="support-form">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="issue">Describe your issue:</label>
+                        <textarea id="issue" name="issue" rows="5" required></textarea>
+                    </div>
+                    <button type="submit">Submit</button>
+                </form>
+                <div id="support-message" class="support-message"></div>
+            </div>
         </div>
         <footer class="footer">
             <div class="carousel-container" id="cryptoPrices">
