@@ -84,13 +84,14 @@ body {
 }
 
 .main-content {
-    padding-left: 180px; /* Aumentado para compensar el ancho del menú y un margen extra */
+    padding-left: 200px; /* Aumentado significativamente para compensar el menú + sombra + margen */
     background-color: #0A0A0A;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    width: calc(100% - 180px); /* Ajustado para evitar solapamiento */
+    width: calc(100% - 200px); /* Ajustado para evitar solapamiento */
+    z-index: 5; /* Asegurar que esté por debajo del menú pero visible */
 }
 
 @media (max-width: 768px) {
@@ -260,9 +261,10 @@ body {
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    padding-top: 80px;
+    padding-top: 0; /* Eliminado padding-top para que no interfiera con el top-bar */
     padding-bottom: 80px;
     min-height: calc(100vh - 80px);
+    margin-top: 80px; /* Ajuste para compensar el top-bar */
 }
 
 .home-section, .viewer-section, .detox-section, .support-section, .sentiment-section {
