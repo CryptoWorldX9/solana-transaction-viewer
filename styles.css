@@ -5,6 +5,8 @@ body {
     background-color: #0A0A0A;
     color: #FFFFFF;
     font-weight: 300;
+    overflow: hidden; /* Desactiva el scroll vertical de la página */
+    height: 100vh; /* Asegura que el body ocupe toda la altura del viewport */
 }
 
 .sidebar {
@@ -261,7 +263,7 @@ body {
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    padding-top: 80px; /* Añadido para desplazar el contenido debajo del top-bar */
+    padding-top: 80px;
     padding-bottom: 80px;
     min-height: calc(100vh - 80px);
     margin-top: 0;
@@ -300,8 +302,9 @@ body {
 .main-content-wrapper {
     display: flex;
     flex-direction: column;
-    width: 70%;
+    width: 75%; /* Ajustado para compensar el ancho reducido de tweets-section */
     height: 100%;
+    z-index: 15; /* Asegurar que esté por encima de tweets-section */
 }
 
 .top-row {
@@ -325,11 +328,12 @@ body {
 }
 
 .left-section, .center-section, .right-section {
-    flex: 1;
+    flex: 1; /* Cada sección ocupa el mismo espacio */
     display: flex;
     flex-direction: column;
     gap: 0;
     border-right: 1px solid #00D4FF;
+    width: calc(100% / 3); /* Divide exactamente en 3 partes */
 }
 
 .left-section {
@@ -348,7 +352,7 @@ body {
     top: 80px;
     right: 0;
     bottom: 0;
-    width: 30%;
+    width: 25%; /* Reducido de 30% a 25% para adelgazar */
     border-left: 1px solid #00D4FF;
     margin: 0;
     padding: 0;
@@ -369,6 +373,8 @@ body {
     flex-direction: column;
     gap: 4px;
     font-size: 12px;
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+    box-sizing: border-box; /* Incluye padding y border en el tamaño */
 }
 
 .info-section img {
