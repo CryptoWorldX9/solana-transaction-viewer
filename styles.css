@@ -84,14 +84,14 @@ body {
 }
 
 .main-content {
-    padding-left: 200px; /* Aumentado significativamente para compensar el menú + sombra + margen */
+    padding-left: 200px;
     background-color: #0A0A0A;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    width: calc(100% - 200px); /* Ajustado para evitar solapamiento */
-    z-index: 5; /* Asegurar que esté por debajo del menú pero visible */
+    width: calc(100% - 200px);
+    z-index: 5;
 }
 
 @media (max-width: 768px) {
@@ -261,16 +261,18 @@ body {
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    padding-top: 0; /* Eliminado padding-top para que no interfiera con el top-bar */
+    padding-top: 0;
     padding-bottom: 80px;
     min-height: calc(100vh - 80px);
-    margin-top: 80px; /* Ajuste para compensar el top-bar */
+    margin-top: 80px;
+    margin-bottom: 0; /* Asegurar que no haya margen adicional */
 }
 
 .home-section, .viewer-section, .detox-section, .support-section, .sentiment-section {
     text-align: center;
     width: 100%;
     margin: 0;
+    padding: 0; /* Eliminar cualquier padding que pueda interferir */
 }
 
 .sentiment-section.full-screen .input-section,
@@ -282,12 +284,14 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .sentiment-container {
     display: none;
     width: 100%;
-    height: calc(100vh - 160px);
+    height: calc(100vh - 80px); /* Ajustado para que ocupe desde el top-bar hasta el footer */
     margin: 0;
     padding: 0;
     position: relative;
@@ -340,7 +344,7 @@ body {
 
 .tweets-section {
     flex: 1;
-    height: calc(100vh - 80px); /* Asegura que comience justo después del top-bar */
+    height: calc(100vh - 80px);
     position: absolute;
     top: 80px; /* Alineado exactamente con el borde inferior del top-bar */
     right: 0;
@@ -348,7 +352,8 @@ body {
     width: 30%;
     border-left: 1px solid #00D4FF;
     margin: 0;
-    z-index: 10; /* Asegurar que esté por encima del contenido */
+    padding: 0;
+    z-index: 12; /* Aumentado para evitar conflictos */
 }
 
 .info-section {
@@ -358,7 +363,7 @@ body {
     box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     text-align: left;
     height: 100%;
-    overflow: auto; /* Permitir scroll si el contenido es demasiado largo */
+    overflow: auto;
     border: 1px solid #00D4FF;
     font-weight: 300;
     display: flex;
@@ -438,6 +443,7 @@ body {
     overflow-y: auto;
     border: 1px solid #00D4FF;
     font-weight: 300;
+    margin: 0; /* Asegurar que no haya márgenes */
 }
 
 #xSearch {
