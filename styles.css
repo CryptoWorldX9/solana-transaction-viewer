@@ -8,13 +8,13 @@ body {
 }
 
 .sidebar {
-    width: 160px; /* Reducido para que sea más delgado */
+    width: 160px;
     height: calc(100vh - 80px);
     background: #1A1A1A;
     position: fixed;
     top: 80px;
     left: 0;
-    padding: 15px; /* Reducido el padding */
+    padding: 15px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     z-index: 15;
     transition: left 0.3s ease;
@@ -56,20 +56,20 @@ body {
 }
 
 .menu li {
-    margin: 15px 0; /* Reducido el margen vertical */
+    margin: 15px 0;
     display: flex;
     align-items: center;
 }
 
 .menu li i {
-    margin-right: 8px; /* Reducido el margen */
+    margin-right: 8px;
     color: #FFFFFF;
 }
 
 .menu li a {
     color: #FFFFFF;
     text-decoration: none;
-    font-size: 14px; /* Reducido el tamaño de fuente */
+    font-size: 14px;
     font-weight: 300;
 }
 
@@ -84,13 +84,13 @@ body {
 }
 
 .main-content {
-    padding-left: 175px; /* Ajustado para el nuevo ancho del menú (160px + 15px padding) */
+    padding-left: 180px; /* Aumentado para compensar el ancho del menú y un margen extra */
     background-color: #0A0A0A;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    width: calc(100% - 175px);
+    width: calc(100% - 180px); /* Ajustado para evitar solapamiento */
 }
 
 @media (max-width: 768px) {
@@ -338,14 +338,15 @@ body {
 
 .tweets-section {
     flex: 1;
-    height: calc(100vh - 80px); /* Ajustado para que comience justo debajo del top-bar */
+    height: calc(100vh - 80px); /* Asegura que comience justo después del top-bar */
     position: absolute;
-    top: 80px; /* Comienza justo después del top-bar */
+    top: 80px; /* Alineado exactamente con el borde inferior del top-bar */
     right: 0;
     bottom: 0;
     width: 30%;
     border-left: 1px solid #00D4FF;
     margin: 0;
+    z-index: 10; /* Asegurar que esté por encima del contenido */
 }
 
 .info-section {
@@ -355,13 +356,13 @@ body {
     box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     text-align: left;
     height: 100%;
-    overflow: hidden;
+    overflow: auto; /* Permitir scroll si el contenido es demasiado largo */
     border: 1px solid #00D4FF;
     font-weight: 300;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    font-size: 12px; /* Reducido para que quepa todo */
+    font-size: 12px;
 }
 
 .info-section img {
@@ -654,7 +655,7 @@ tr:hover {
 .footer {
     position: fixed;
     bottom: 0;
-    left: 160px; /* Ajustado para el nuevo ancho del menú */
+    left: 160px;
     right: 0;
     background: #1A1A1A;
     padding: 10px;
