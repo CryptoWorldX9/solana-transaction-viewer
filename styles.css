@@ -8,44 +8,44 @@ body {
 }
 
 .sidebar {
-    width: 200px; /* Ajustado al texto más largo ("Sentiment Insight") */
+    width: 160px; /* Reducido para que sea más delgado */
     height: calc(100vh - 80px);
     background: #1A1A1A;
     position: fixed;
     top: 80px;
     left: 0;
-    padding: 20px;
+    padding: 15px; /* Reducido el padding */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     z-index: 15;
-    transition: left 0.3s ease; /* Solo transición para left en móvil */
+    transition: left 0.3s ease;
 }
 
 @media (min-width: 769px) {
     .sidebar {
-        width: 200px; /* Fijo en PC */
+        width: 160px;
     }
     .sidebar.active {
-        width: 200px;
+        width: 160px;
         left: 0;
     }
     .sidebar:not(.active) {
-        width: 200px; /* No se retrae en PC */
+        width: 160px;
         left: 0;
     }
     .sidebar:not(.active) .menu li a {
-        display: block; /* Siempre visible en PC */
+        display: block;
     }
 }
 
 @media (max-width: 768px) {
     .sidebar {
-        width: 200px;
+        width: 160px;
         height: calc(100vh - 80px);
         top: 80px;
-        left: -200px; /* Oculto por defecto en móvil */
+        left: -160px;
     }
     .sidebar.active {
-        left: 0; /* Desplegado en móvil */
+        left: 0;
     }
 }
 
@@ -56,20 +56,20 @@ body {
 }
 
 .menu li {
-    margin: 20px 0;
+    margin: 15px 0; /* Reducido el margen vertical */
     display: flex;
     align-items: center;
 }
 
 .menu li i {
-    margin-right: 10px;
+    margin-right: 8px; /* Reducido el margen */
     color: #FFFFFF;
 }
 
 .menu li a {
     color: #FFFFFF;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 14px; /* Reducido el tamaño de fuente */
     font-weight: 300;
 }
 
@@ -84,21 +84,17 @@ body {
 }
 
 .main-content {
-    padding-left: 220px; /* Ajustado para el nuevo ancho del menú (200px + 20px padding) */
+    padding-left: 175px; /* Ajustado para el nuevo ancho del menú (160px + 15px padding) */
     background-color: #0A0A0A;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    width: calc(100% - 220px);
+    width: calc(100% - 175px);
 }
 
 @media (max-width: 768px) {
     .main-content {
-        padding-left: 0;
-        width: 100%;
-    }
-    .main-content.menu-closed {
         padding-left: 0;
         width: 100%;
     }
@@ -308,7 +304,7 @@ body {
     justify-content: space-between;
     gap: 0;
     width: 100%;
-    height: 150px; /* Aumentamos la altura para que quepa toda la información */
+    height: 150px;
     border-right: 1px solid #00D4FF;
     margin: 0;
 }
@@ -342,9 +338,9 @@ body {
 
 .tweets-section {
     flex: 1;
-    height: calc(100vh - 230px); /* Ajustado para que comience a la misma altura que los recuadros superiores */
+    height: calc(100vh - 80px); /* Ajustado para que comience justo debajo del top-bar */
     position: absolute;
-    top: 150px; /* 80px (top-bar) + 150px (top-row) - 80px (top-bar) = 150px desde el top */
+    top: 80px; /* Comienza justo después del top-bar */
     right: 0;
     bottom: 0;
     width: 30%;
@@ -354,7 +350,7 @@ body {
 
 .info-section {
     background: #1A1A1A;
-    padding: 10px; /* Aumentamos el padding para mejor legibilidad */
+    padding: 8px;
     border-radius: 8px;
     box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     text-align: left;
@@ -364,29 +360,29 @@ body {
     font-weight: 300;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    font-size: 14px; /* Aumentamos la fuente para mejor legibilidad */
+    gap: 4px;
+    font-size: 12px; /* Reducido para que quepa todo */
 }
 
 .info-section img {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .contract-text {
     word-break: break-all;
-    font-size: 10px;
+    font-size: 8px;
 }
 
 .sentiment-bar {
     width: 100%;
-    height: 10px;
+    height: 8px;
     background: #333;
     border-radius: 6px;
     overflow: hidden;
-    margin-top: 6px;
+    margin-top: 4px;
     position: relative;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
 }
@@ -522,7 +518,7 @@ h1 {
 h3 {
     color: #00D4FF;
     margin-bottom: 4px;
-    font-size: 16px; /* Aumentamos para mejor legibilidad */
+    font-size: 14px;
     font-weight: 300;
 }
 
@@ -575,8 +571,8 @@ button:disabled {
 }
 
 .copy-btn, .social-btn {
-    padding: 5px 10px;
-    font-size: 10px;
+    padding: 4px 8px;
+    font-size: 9px;
     background: #00D4FF;
     margin-left: 5px;
 }
@@ -658,7 +654,7 @@ tr:hover {
 .footer {
     position: fixed;
     bottom: 0;
-    left: 200px; /* Ajustado para el nuevo ancho del menú */
+    left: 160px; /* Ajustado para el nuevo ancho del menú */
     right: 0;
     background: #1A1A1A;
     padding: 10px;
