@@ -81,7 +81,6 @@ async function fetchTokenSentiment() {
     priceInfoDiv.innerHTML = '';
     dexscreenerIframe.src = '';
 
-    // Mostrar el contenedor de sentiment después de buscar
     sentimentContainer.style.display = 'flex';
     inputSection.style.display = 'none';
     sentimentSection.classList.add('full-screen');
@@ -130,7 +129,7 @@ async function fetchTokenSentiment() {
 
 async function fetchXPosts(query) {
     console.log("Fetching X posts for:", query);
-    const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAFOQzwEAAAAAtsPkCNQYZJS0%2B2MstthckE%2BMIPE%3DjKgQFSE7rBuqRkAXGBopwhrf3j2B6ycvgwgDLp9N9ff7KQvodQ'; // Reemplaza con tu token si tienes uno nuevo
+    const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAFOQzwEAAAAAtsPkCNQYZJS0%2B2MstthckE%2BMIPE%3DjKgQFSE7rBuqRkAXGBopwhrf3j2B6ycvgwgDLp9N9ff7KQvodQ';
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const apiUrl = `https://api.twitter.com/2/tweets/search/recent?query=${encodeURIComponent(query)}&max_results=20&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,profile_image_url`;
     const url = proxyUrl + apiUrl;
@@ -598,6 +597,11 @@ function showSection(sectionId) {
     menuItems.forEach(item => item.classList.remove('active'));
     const activeItem = document.querySelector(`#${sectionId.replace('-section', '-menu')} a`);
     if (activeItem) activeItem.parentElement.classList.add('active');
+
+    // Ocultar el menú en móvil después de seleccionar una opción
+    if (window.innerWidth <= 768) {
+        document.querySelector(".sidebar").classList.remove("active");
+    }
 }
 
 // Event Listeners
@@ -631,8 +635,6 @@ function setupEventListeners() {
     document.getElementById("menu-toggle").addEventListener("click", () => {
         console.log("Menu toggle clicked");
         document.querySelector(".sidebar").classList.toggle("active");
-        document.querySelector(".main-content").classList.toggle("menu-closed");
-        document.querySelector(".footer").classList.toggle("menu-closed");
     });
 
     document.getElementById('wallet-icon').addEventListener('click', toggleWallet);
@@ -668,9 +670,9 @@ function init() {
     setupEventListeners();
     setupSearch();
     updateMemecoinList();
-    setInterval(updateMemecoinList, 3600000); // 1 hora
+    setInterval(updateMemecoinList, 3600000);
     updateCryptoPrices();
-    setInterval(updateCryptoPrices, 3600000); // 1 hora
+    setInterval(updateCryptoPrices, 3600000);
     showSection('home-section');
 }
 
