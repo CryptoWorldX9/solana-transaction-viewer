@@ -67,6 +67,7 @@ async function fetchTokenSentiment() {
     const loadingBar = document.getElementById('sentimentLoadingBar');
     const sentimentSection = document.querySelector('.sentiment-section');
     const inputSection = document.getElementById('input-section');
+    const sentimentContainer = document.querySelector('.sentiment-container');
 
     if (!tokenContract) {
         alert('Please enter a valid token contract.');
@@ -80,7 +81,8 @@ async function fetchTokenSentiment() {
     priceInfoDiv.innerHTML = '';
     dexscreenerIframe.src = '';
 
-    // Activar modo pantalla completa al copiar contrato
+    // Mostrar el contenedor de sentiment después de buscar
+    sentimentContainer.style.display = 'flex';
     inputSection.style.display = 'none';
     sentimentSection.classList.add('full-screen');
 
@@ -446,6 +448,7 @@ function clearData() {
 function clearSentimentData() {
     const sentimentSection = document.querySelector('.sentiment-section');
     const inputSection = document.getElementById('input-section');
+    const sentimentContainer = document.querySelector('.sentiment-container');
     document.getElementById('tokenInfo').innerHTML = '';
     document.getElementById('socialSentiment').innerHTML = '';
     document.getElementById('sentimentScore').innerHTML = '';
@@ -454,6 +457,7 @@ function clearSentimentData() {
     document.getElementById('tokenContract').value = '';
     document.getElementById('xSearch').value = '';
     inputSection.style.display = 'flex';
+    sentimentContainer.style.display = 'none';
     sentimentSection.classList.remove('full-screen');
     currentPosts = [];
 }
