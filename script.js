@@ -53,7 +53,7 @@ async function toggleWallet() {
     }
 }
 
-// Sentiment Tracker
+// Sentiment Insight
 let currentPosts = [];
 
 async function fetchTokenSentiment() {
@@ -316,7 +316,7 @@ function displayDexscreenerChart(tokenContract, iframe) {
     iframe.src = `https://dexscreener.com/solana/${tokenContract}?embed=1&theme=dark&trades=0&info=0`;
 }
 
-// Otras funciones (sin cambios significativos)
+// Solana Tracker
 async function fetchWalletData() {
     console.log("Fetching wallet data");
     const walletAddress = document.getElementById('walletAddress').value.trim();
