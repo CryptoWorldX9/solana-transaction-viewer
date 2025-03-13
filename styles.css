@@ -271,16 +271,16 @@ body {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 1400px;
-    padding-top: 80px;
-    padding-bottom: 80px;
+    max-width: none; /* Eliminamos el max-width para usar todo el espacio */
+    padding: 0; /* Eliminamos el padding para usar todo el espacio */
+    margin: 0;
     min-height: calc(100vh - 80px);
 }
 
 .home-section, .viewer-section, .detox-section, .support-section, .sentiment-section {
     text-align: center;
     width: 100%;
-    margin: 0 auto;
+    margin: 0;
 }
 
 .sentiment-section.full-screen .input-section,
@@ -288,18 +288,28 @@ body {
     display: none;
 }
 
+.sentiment-section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .sentiment-container {
     display: flex;
     width: 100%;
-    height: calc(100vh - 160px);
+    height: calc(100vh - 160px); /* Ajustado para el header y footer */
     margin: 0;
     padding: 0;
+    position: relative;
+    top: 80px; /* Ajustado para alinearse justo debajo del header */
 }
 
 .main-content-wrapper {
     flex: 3;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    height: 100%;
 }
 
 .top-row {
@@ -307,6 +317,7 @@ body {
     justify-content: space-between;
     gap: 0;
     width: 100%;
+    height: 120px; /* Reducimos la altura para que sea compacto */
     border-right: 1px solid #00D4FF;
     margin: 0;
 }
@@ -316,8 +327,8 @@ body {
     justify-content: space-between;
     gap: 0;
     width: 100%;
-    border-right: 1px solid #00D4FF;
     flex: 1;
+    border-right: 1px solid #00D4FF;
     margin: 0;
 }
 
@@ -346,45 +357,45 @@ body {
     right: 0;
     bottom: 0;
     width: 25%;
-    padding-left: 20px;
     border-left: 1px solid #00D4FF;
     margin: 0;
 }
 
 .info-section {
     background: #1A1A1A;
-    padding: 12px;
+    padding: 8px;
     border-radius: 8px;
     box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     text-align: left;
-    height: 150px;
-    overflow-y: auto;
+    height: 100%; /* Ajustado para ocupar toda la altura disponible */
+    overflow: hidden; /* Eliminamos el scroll */
     border: 1px solid #00D4FF;
     font-weight: 300;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
+    font-size: 12px; /* Reducimos el tamaño de fuente para que quepa todo */
 }
 
 .info-section img {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .contract-text {
     word-break: break-all;
-    font-size: 10px;
+    font-size: 8px;
 }
 
 .sentiment-bar {
     width: 100%;
-    height: 12px;
+    height: 10px;
     background: #333;
     border-radius: 6px;
     overflow: hidden;
-    margin-top: 6px;
+    margin-top: 4px;
     position: relative;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
 }
@@ -519,8 +530,8 @@ h1 {
 
 h3 {
     color: #00D4FF;
-    margin-bottom: 8px;
-    font-size: 16px;
+    margin-bottom: 4px;
+    font-size: 14px;
     font-weight: 300;
 }
 
@@ -531,7 +542,7 @@ h3 {
     gap: 10px;
     width: 100%;
     max-width: 600px;
-    margin: 0 auto 20px;
+    margin: 20px auto;
 }
 
 input[type="text"], input[type="email"], textarea {
@@ -615,6 +626,17 @@ button:disabled {
     0% { transform: translateX(-100%); }
     50% { transform: translateX(300%); }
     100% { transform: translateX(300%); }
+}
+
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: #1A1A1A;
+    border-bottom: 1px solid #00D4FF;
+    z-index: 20;
 }
 
 #walletInfo, #transactionList, .asset-list {
@@ -743,6 +765,7 @@ tr:hover {
     .top-row, .bottom-row {
         flex-direction: column;
         width: 100%;
+        height: auto;
     }
     .left-section, .center-section, .right-section, .chart-section {
         width: 100%;
@@ -753,8 +776,9 @@ tr:hover {
     .left-section {
         border-left: none;
     }
-    .info-section, .tweets-analyser-section {
+    .info-section {
         height: auto;
+        overflow: visible;
     }
     .dexscreener-chart {
         height: 300px;
