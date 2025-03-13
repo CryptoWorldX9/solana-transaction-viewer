@@ -297,7 +297,7 @@ body {
 .sentiment-container {
     display: flex;
     width: 100%;
-    height: calc(100vh - 160px); /* Ajustado para el header y footer */
+    height: calc(100vh - 160px);
     margin: 0;
     padding: 0;
     position: relative;
@@ -305,10 +305,9 @@ body {
 }
 
 .main-content-wrapper {
-    flex: 3;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 70%; /* Ajustado para que coincida con la proporción típica (70%) */
     height: 100%;
 }
 
@@ -317,7 +316,7 @@ body {
     justify-content: space-between;
     gap: 0;
     width: 100%;
-    height: 100px; /* Reducimos aún más la altura para mayor compactación */
+    height: 90px; /* Altura más compacta para los recuadros superiores */
     border-right: 1px solid #00D4FF;
     margin: 0;
 }
@@ -327,7 +326,7 @@ body {
     justify-content: space-between;
     gap: 0;
     width: 100%;
-    height: 65%; /* Ajustamos la altura para equilibrar con Tweets Analyser */
+    height: calc(100% - 90px); /* El resto de la altura disponible */
     border-right: 1px solid #00D4FF;
     margin: 0;
 }
@@ -356,14 +355,14 @@ body {
     top: 80px;
     right: 0;
     bottom: 0;
-    width: 30%; /* Aumentamos el ancho para equilibrar */
+    width: 30%; /* Proporción ajustada para que coincida con Flork Tools (30%) */
     border-left: 1px solid #00D4FF;
     margin: 0;
 }
 
 .info-section {
     background: #1A1A1A;
-    padding: 6px;
+    padding: 5px;
     border-radius: 8px;
     box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     text-align: left;
@@ -373,29 +372,29 @@ body {
     font-weight: 300;
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    font-size: 11px; /* Reducimos aún más la fuente para que quepa todo */
+    gap: 2px;
+    font-size: 10px; /* Tamaño de fuente ajustado para que quepa todo */
 }
 
 .info-section img {
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
 .contract-text {
     word-break: break-all;
-    font-size: 7px;
+    font-size: 6px;
 }
 
 .sentiment-bar {
     width: 100%;
-    height: 8px;
+    height: 6px;
     background: #333;
     border-radius: 6px;
     overflow: hidden;
-    margin-top: 3px;
+    margin-top: 2px;
     position: relative;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
 }
@@ -441,7 +440,7 @@ body {
 
 .tweets-analyser-section {
     background: #1A1A1A;
-    padding: 10px;
+    padding: 8px;
     border-radius: 8px;
     box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     height: 100%;
@@ -452,28 +451,28 @@ body {
 
 #xSearch {
     width: 100%;
-    padding: 6px;
+    padding: 5px;
     border: 1px solid #00D4FF;
     border-radius: 5px;
     background: #2A2A2A;
     color: #FFFFFF;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-weight: 300;
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .tweet-item {
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     border-bottom: 1px solid #2A2A2A;
-    padding-bottom: 8px;
+    padding-bottom: 6px;
 }
 
 .tweet-item img {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    margin-right: 8px;
+    margin-right: 6px;
 }
 
 .tweet-content {
@@ -483,22 +482,22 @@ body {
 .tweet-content .username {
     font-weight: 400;
     color: #00D4FF;
-    margin-right: 5px;
+    margin-right: 4px;
 }
 
 .tweet-content .time {
     color: #A0A0A0;
-    font-size: 9px;
+    font-size: 8px;
 }
 
 .tweet-content .text {
-    margin: 4px 0;
-    font-size: 11px;
+    margin: 3px 0;
+    font-size: 10px;
 }
 
 .tweet-sentiment {
-    font-size: 9px;
-    padding: 2px 5px;
+    font-size: 8px;
+    padding: 2px 4px;
     border-radius: 3px;
 }
 
@@ -530,8 +529,8 @@ h1 {
 
 h3 {
     color: #00D4FF;
-    margin-bottom: 3px;
-    font-size: 13px;
+    margin-bottom: 2px;
+    font-size: 12px;
     font-weight: 300;
 }
 
