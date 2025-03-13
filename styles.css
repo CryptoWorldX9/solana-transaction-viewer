@@ -268,7 +268,7 @@ body {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     padding-top: 100px;
     padding-bottom: 100px;
     min-height: calc(100vh - 80px);
@@ -277,7 +277,6 @@ body {
 .home-section, .viewer-section, .detox-section, .support-section, .sentiment-section {
     text-align: center;
     width: 100%;
-    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -288,16 +287,21 @@ body {
 
 .sentiment-container {
     display: flex;
-    flex-direction: column;
     width: 100%;
-    height: calc(100vh - 180px); /* Ajuste para encabezado y footer */
+    height: calc(100vh - 180px);
+}
+
+.main-content-wrapper {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
 }
 
 .top-row {
     display: flex;
     justify-content: space-between;
     gap: 0;
-    width: 75%;
+    width: 100%;
     border-right: 1px solid #00D4FF;
 }
 
@@ -305,8 +309,9 @@ body {
     display: flex;
     justify-content: space-between;
     gap: 0;
-    width: 75%;
+    width: 100%;
     border-right: 1px solid #00D4FF;
+    flex: 1;
 }
 
 .left-section, .center-section, .right-section {
@@ -314,6 +319,11 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0;
+    border-right: 1px solid #00D4FF;
+}
+
+.left-section {
+    border-left: 1px solid #00D4FF;
 }
 
 .chart-section {
@@ -335,11 +345,11 @@ body {
 
 .info-section {
     background: #1A1A1A;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     text-align: left;
-    height: 200px;
+    height: 180px;
     overflow-y: auto;
     border: 1px solid #00D4FF;
     font-weight: 300;
@@ -349,7 +359,7 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 .contract-text {
@@ -359,11 +369,11 @@ body {
 
 .sentiment-bar {
     width: 100%;
-    height: 15px;
+    height: 12px;
     background: #333;
-    border-radius: 5px;
+    border-radius: 6px;
     overflow: hidden;
-    margin-top: 5px;
+    margin-top: 8px;
 }
 
 .sentiment-fill {
@@ -374,10 +384,10 @@ body {
 .dexscreener-chart {
     background: #1A1A1A;
     padding: 0;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     width: 100%;
-    height: 400px;
+    height: 100%;
     border: 1px solid #00D4FF;
 }
 
@@ -389,9 +399,9 @@ body {
 
 .tweets-analyser-section {
     background: #1A1A1A;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     height: 100%;
     overflow-y: auto;
     border: 1px solid #00D4FF;
@@ -400,28 +410,28 @@ body {
 
 #xSearch {
     width: 100%;
-    padding: 6px;
+    padding: 8px;
     border: 1px solid #00D4FF;
     border-radius: 5px;
     background: #2A2A2A;
     color: #FFFFFF;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     font-weight: 300;
     font-size: 12px;
 }
 
 .tweet-item {
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     border-bottom: 1px solid #2A2A2A;
-    padding-bottom: 5px;
+    padding-bottom: 10px;
 }
 
 .tweet-item img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    margin-right: 8px;
+    margin-right: 10px;
 }
 
 .tweet-content {
@@ -440,7 +450,7 @@ body {
 }
 
 .tweet-content .text {
-    margin: 3px 0;
+    margin: 5px 0;
     font-size: 12px;
 }
 
@@ -478,8 +488,8 @@ h1 {
 
 h3 {
     color: #00D4FF;
-    margin-bottom: 5px;
-    font-size: 14px;
+    margin-bottom: 10px;
+    font-size: 16px;
     font-weight: 300;
 }
 
@@ -490,11 +500,11 @@ h3 {
     gap: 10px;
     width: 100%;
     max-width: 600px;
-    margin: 0 auto 10px;
+    margin: 0 auto 20px;
 }
 
 input[type="text"], input[type="email"], textarea {
-    padding: 8px;
+    padding: 10px;
     width: 100%;
     max-width: 400px;
     border: 1px solid #00D4FF;
@@ -511,7 +521,7 @@ textarea {
 }
 
 button {
-    padding: 8px 20px;
+    padding: 10px 25px;
     background: linear-gradient(135deg, #00D4FF, #007ACC);
     color: #FFFFFF;
     border: none;
@@ -532,7 +542,7 @@ button:disabled {
 }
 
 .copy-btn, .social-btn {
-    padding: 4px 8px;
+    padding: 5px 10px;
     font-size: 10px;
     background: #00D4FF;
     margin-left: 5px;
@@ -555,7 +565,7 @@ button:disabled {
     max-width: 500px;
     height: 3px;
     background: #333;
-    margin: 5px auto;
+    margin: 10px auto;
     border-radius: 3px;
     overflow: hidden;
     display: none;
@@ -579,8 +589,8 @@ button:disabled {
 #walletInfo, #transactionList, .asset-list {
     background: #1A1A1A;
     padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     margin: 15px auto;
     width: 100%;
     font-weight: 300;
@@ -589,11 +599,11 @@ button:disabled {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 th, td {
-    padding: 6px;
+    padding: 8px;
     text-align: left;
     border-bottom: 1px solid #2A2A2A;
     font-weight: 300;
@@ -692,12 +702,25 @@ tr:hover {
 }
 
 @media (max-width: 768px) {
+    .sentiment-container {
+        flex-direction: column;
+    }
+    .main-content-wrapper {
+        flex: 1;
+        width: 100%;
+    }
     .top-row, .bottom-row {
         flex-direction: column;
         width: 100%;
     }
-    .left-section, .center-section, .right-section, .chart-section, .tweets-section {
+    .left-section, .center-section, .right-section, .chart-section {
         width: 100%;
+        border-right: none;
+        border-left: none;
+        border-bottom: 1px solid #00D4FF;
+    }
+    .left-section {
+        border-left: none;
     }
     .info-section, .tweets-analyser-section {
         height: auto;
@@ -710,5 +733,7 @@ tr:hover {
         width: 100%;
         padding-left: 0;
         height: auto;
+        border-left: none;
+        border-top: 1px solid #00D4FF;
     }
 }
