@@ -207,7 +207,7 @@ body {
 
 .search-bar {
     position: absolute;
-    top: 50px;
+    top: 80px; /* Ajustado para que comience justo debajo del top-bar */
     right: 10px;
     width: 300px;
     background: #1A1A1A;
@@ -216,7 +216,7 @@ body {
     padding: 10px;
     display: none;
     flex-direction: column;
-    z-index: 25;
+    z-index: 30; /* Aumentado para que se superponga a todo */
     transition: opacity 0.3s ease;
     opacity: 0;
 }
@@ -264,15 +264,14 @@ body {
     padding-top: 0;
     padding-bottom: 80px;
     min-height: calc(100vh - 80px);
-    margin-top: 80px;
-    margin-bottom: 0; /* Asegurar que no haya margen adicional */
+    margin-top: 0;
 }
 
 .home-section, .viewer-section, .detox-section, .support-section, .sentiment-section {
     text-align: center;
     width: 100%;
     margin: 0;
-    padding: 0; /* Eliminar cualquier padding que pueda interferir */
+    padding: 0;
 }
 
 .sentiment-section.full-screen .input-section,
@@ -291,7 +290,7 @@ body {
 .sentiment-container {
     display: none;
     width: 100%;
-    height: calc(100vh - 80px); /* Ajustado para que ocupe desde el top-bar hasta el footer */
+    height: calc(100vh - 80px);
     margin: 0;
     padding: 0;
     position: relative;
@@ -345,15 +344,15 @@ body {
 .tweets-section {
     flex: 1;
     height: calc(100vh - 80px);
-    position: absolute;
-    top: 80px; /* Alineado exactamente con el borde inferior del top-bar */
+    position: fixed;
+    top: 80px;
     right: 0;
     bottom: 0;
     width: 30%;
     border-left: 1px solid #00D4FF;
     margin: 0;
     padding: 0;
-    z-index: 12; /* Aumentado para evitar conflictos */
+    z-index: 12;
 }
 
 .info-section {
@@ -443,7 +442,7 @@ body {
     overflow-y: auto;
     border: 1px solid #00D4FF;
     font-weight: 300;
-    margin: 0; /* Asegurar que no haya márgenes */
+    margin: 0;
 }
 
 #xSearch {
