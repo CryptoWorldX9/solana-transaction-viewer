@@ -207,7 +207,7 @@ body {
 
 .search-bar {
     position: absolute;
-    top: 80px; /* Ajustado para que comience justo debajo del top-bar */
+    top: 80px;
     right: 10px;
     width: 300px;
     background: #1A1A1A;
@@ -216,7 +216,7 @@ body {
     padding: 10px;
     display: none;
     flex-direction: column;
-    z-index: 30; /* Aumentado para que se superponga a todo */
+    z-index: 30;
     transition: opacity 0.3s ease;
     opacity: 0;
 }
@@ -261,7 +261,7 @@ body {
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    padding-top: 0;
+    padding-top: 80px; /* Añadido para desplazar el contenido debajo del top-bar */
     padding-bottom: 80px;
     min-height: calc(100vh - 80px);
     margin-top: 0;
