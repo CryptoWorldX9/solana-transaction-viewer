@@ -8,7 +8,7 @@ body {
 }
 
 .sidebar {
-    width: 250px;
+    width: 200px; /* Ajustado al texto más largo ("Sentiment Insight") */
     height: calc(100vh - 80px);
     background: #1A1A1A;
     position: fixed;
@@ -17,29 +17,23 @@ body {
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     z-index: 15;
-    transition: width 0.3s ease, left 0.3s ease;
-}
-
-.sidebar.active {
-    width: 250px;
-    left: 0;
+    transition: left 0.3s ease; /* Solo transición para left en móvil */
 }
 
 @media (min-width: 769px) {
-    .sidebar:not(.active) {
-        width: 50px;
+    .sidebar {
+        width: 200px; /* Fijo en PC */
+    }
+    .sidebar.active {
+        width: 200px;
         left: 0;
-        padding: 20px 10px;
+    }
+    .sidebar:not(.active) {
+        width: 200px; /* No se retrae en PC */
+        left: 0;
     }
     .sidebar:not(.active) .menu li a {
-        display: none;
-    }
-    .sidebar:not(.active) .menu li i {
-        margin-right: 0;
-        cursor: pointer;
-    }
-    .sidebar:not(.active) .menu li i:hover {
-        color: #00D4FF;
+        display: block; /* Siempre visible en PC */
     }
 }
 
@@ -48,9 +42,10 @@ body {
         width: 200px;
         height: calc(100vh - 80px);
         top: 80px;
+        left: -200px; /* Oculto por defecto en móvil */
     }
-    .sidebar:not(.active) {
-        left: -200px;
+    .sidebar.active {
+        left: 0; /* Desplegado en móvil */
     }
 }
 
@@ -89,19 +84,13 @@ body {
 }
 
 .main-content {
-    padding-left: 270px; /* Ajustado para compensar el padding del sidebar (250px + 20px) */
+    padding-left: 220px; /* Ajustado para el nuevo ancho del menú (200px + 20px padding) */
     background-color: #0A0A0A;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* Cambiado a stretch para ocupar todo el ancho disponible */
-    transition: padding-left 0.3s ease;
-    width: calc(100% - 270px); /* Ajustado para que no se desplace a la izquierda */
-}
-
-.main-content.menu-closed {
-    padding-left: 70px; /* Ajustado para el menú colapsado (50px + 20px) */
-    width: calc(100% - 70px);
+    align-items: stretch;
+    width: calc(100% - 220px);
 }
 
 @media (max-width: 768px) {
@@ -273,9 +262,9 @@ body {
 .content {
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* Aseguramos que ocupe todo el ancho disponible */
+    align-items: stretch;
     width: 100%;
-    padding-top: 80px; /* Ajustado para que el título no se pierda debajo del top-bar */
+    padding-top: 80px;
     padding-bottom: 80px;
     min-height: calc(100vh - 80px);
 }
@@ -298,7 +287,7 @@ body {
 }
 
 .sentiment-container {
-    display: none; /* Ocultamos inicialmente el contenedor */
+    display: none;
     width: 100%;
     height: calc(100vh - 160px);
     margin: 0;
@@ -319,7 +308,7 @@ body {
     justify-content: space-between;
     gap: 0;
     width: 100%;
-    height: 120px;
+    height: 150px; /* Aumentamos la altura para que quepa toda la información */
     border-right: 1px solid #00D4FF;
     margin: 0;
 }
@@ -329,7 +318,7 @@ body {
     justify-content: space-between;
     gap: 0;
     width: 100%;
-    height: calc(100% - 120px);
+    height: calc(100% - 150px);
     border-right: 1px solid #00D4FF;
     margin: 0;
 }
@@ -353,9 +342,9 @@ body {
 
 .tweets-section {
     flex: 1;
-    height: calc(100vh - 160px);
+    height: calc(100vh - 230px); /* Ajustado para que comience a la misma altura que los recuadros superiores */
     position: absolute;
-    top: 80px;
+    top: 150px; /* 80px (top-bar) + 150px (top-row) - 80px (top-bar) = 150px desde el top */
     right: 0;
     bottom: 0;
     width: 30%;
@@ -365,7 +354,7 @@ body {
 
 .info-section {
     background: #1A1A1A;
-    padding: 8px;
+    padding: 10px; /* Aumentamos el padding para mejor legibilidad */
     border-radius: 8px;
     box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     text-align: left;
@@ -375,29 +364,29 @@ body {
     font-weight: 300;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    font-size: 12px;
+    gap: 6px;
+    font-size: 14px; /* Aumentamos la fuente para mejor legibilidad */
 }
 
 .info-section img {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .contract-text {
     word-break: break-all;
-    font-size: 8px;
+    font-size: 10px;
 }
 
 .sentiment-bar {
     width: 100%;
-    height: 8px;
+    height: 10px;
     background: #333;
     border-radius: 6px;
     overflow: hidden;
-    margin-top: 4px;
+    margin-top: 6px;
     position: relative;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
 }
@@ -533,7 +522,7 @@ h1 {
 h3 {
     color: #00D4FF;
     margin-bottom: 4px;
-    font-size: 14px;
+    font-size: 16px; /* Aumentamos para mejor legibilidad */
     font-weight: 300;
 }
 
@@ -669,26 +658,18 @@ tr:hover {
 .footer {
     position: fixed;
     bottom: 0;
-    left: 250px;
+    left: 200px; /* Ajustado para el nuevo ancho del menú */
     right: 0;
     background: #1A1A1A;
     padding: 10px;
     border-top: 1px solid #00D4FF;
     box-shadow: 0 -2px 5px rgba(0, 212, 255, 0.2);
     z-index: 10;
-    transition: left 0.3s ease;
     font-weight: 300;
-}
-
-.footer.menu-closed {
-    left: 50px;
 }
 
 @media (max-width: 768px) {
     .footer {
-        left: 0;
-    }
-    .footer.menu-closed {
         left: 0;
     }
 }
