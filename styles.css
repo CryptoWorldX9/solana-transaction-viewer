@@ -89,25 +89,29 @@ body {
 }
 
 .main-content {
-    padding-left: 250px;
+    padding-left: 270px; /* Ajustado para compensar el padding del sidebar (250px + 20px) */
     background-color: #0A0A0A;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch; /* Cambiado a stretch para ocupar todo el ancho disponible */
     transition: padding-left 0.3s ease;
+    width: calc(100% - 270px); /* Ajustado para que no se desplace a la izquierda */
 }
 
 .main-content.menu-closed {
-    padding-left: 50px;
+    padding-left: 70px; /* Ajustado para el menú colapsado (50px + 20px) */
+    width: calc(100% - 70px);
 }
 
 @media (max-width: 768px) {
     .main-content {
         padding-left: 0;
+        width: 100%;
     }
     .main-content.menu-closed {
         padding-left: 0;
+        width: 100%;
     }
 }
 
@@ -269,11 +273,10 @@ body {
 .content {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch; /* Aseguramos que ocupe todo el ancho disponible */
     width: 100%;
-    max-width: none;
-    padding: 0;
-    margin: 0;
+    padding-top: 80px; /* Ajustado para que el título no se pierda debajo del top-bar */
+    padding-bottom: 80px;
     min-height: calc(100vh - 80px);
 }
 
@@ -295,19 +298,19 @@ body {
 }
 
 .sentiment-container {
-    display: flex;
+    display: none; /* Ocultamos inicialmente el contenedor */
     width: 100%;
     height: calc(100vh - 160px);
     margin: 0;
     padding: 0;
     position: relative;
-    top: 80px;
+    top: 0;
 }
 
 .main-content-wrapper {
     display: flex;
     flex-direction: column;
-    width: 70%; /* Ajustado para que coincida con la proporción típica (70%) */
+    width: 70%;
     height: 100%;
 }
 
@@ -316,7 +319,7 @@ body {
     justify-content: space-between;
     gap: 0;
     width: 100%;
-    height: 90px; /* Altura más compacta para los recuadros superiores */
+    height: 120px;
     border-right: 1px solid #00D4FF;
     margin: 0;
 }
@@ -326,7 +329,7 @@ body {
     justify-content: space-between;
     gap: 0;
     width: 100%;
-    height: calc(100% - 90px); /* El resto de la altura disponible */
+    height: calc(100% - 120px);
     border-right: 1px solid #00D4FF;
     margin: 0;
 }
@@ -355,14 +358,14 @@ body {
     top: 80px;
     right: 0;
     bottom: 0;
-    width: 30%; /* Proporción ajustada para que coincida con Flork Tools (30%) */
+    width: 30%;
     border-left: 1px solid #00D4FF;
     margin: 0;
 }
 
 .info-section {
     background: #1A1A1A;
-    padding: 5px;
+    padding: 8px;
     border-radius: 8px;
     box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     text-align: left;
@@ -372,29 +375,29 @@ body {
     font-weight: 300;
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    font-size: 10px; /* Tamaño de fuente ajustado para que quepa todo */
+    gap: 4px;
+    font-size: 12px;
 }
 
 .info-section img {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 .contract-text {
     word-break: break-all;
-    font-size: 6px;
+    font-size: 8px;
 }
 
 .sentiment-bar {
     width: 100%;
-    height: 6px;
+    height: 8px;
     background: #333;
     border-radius: 6px;
     overflow: hidden;
-    margin-top: 2px;
+    margin-top: 4px;
     position: relative;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
 }
@@ -440,7 +443,7 @@ body {
 
 .tweets-analyser-section {
     background: #1A1A1A;
-    padding: 8px;
+    padding: 10px;
     border-radius: 8px;
     box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
     height: 100%;
@@ -451,28 +454,28 @@ body {
 
 #xSearch {
     width: 100%;
-    padding: 5px;
+    padding: 8px;
     border: 1px solid #00D4FF;
     border-radius: 5px;
     background: #2A2A2A;
     color: #FFFFFF;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     font-weight: 300;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .tweet-item {
     display: flex;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     border-bottom: 1px solid #2A2A2A;
-    padding-bottom: 6px;
+    padding-bottom: 8px;
 }
 
 .tweet-item img {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
-    margin-right: 6px;
+    margin-right: 8px;
 }
 
 .tweet-content {
@@ -482,22 +485,22 @@ body {
 .tweet-content .username {
     font-weight: 400;
     color: #00D4FF;
-    margin-right: 4px;
+    margin-right: 5px;
 }
 
 .tweet-content .time {
     color: #A0A0A0;
-    font-size: 8px;
-}
-
-.tweet-content .text {
-    margin: 3px 0;
     font-size: 10px;
 }
 
+.tweet-content .text {
+    margin: 4px 0;
+    font-size: 12px;
+}
+
 .tweet-sentiment {
-    font-size: 8px;
-    padding: 2px 4px;
+    font-size: 10px;
+    padding: 2px 5px;
     border-radius: 3px;
 }
 
@@ -519,7 +522,7 @@ body {
 h1 {
     color: #00D4FF;
     font-size: 36px;
-    margin-bottom: 20px;
+    margin: 20px 0;
     font-weight: 300;
 }
 
@@ -529,8 +532,8 @@ h1 {
 
 h3 {
     color: #00D4FF;
-    margin-bottom: 2px;
-    font-size: 12px;
+    margin-bottom: 4px;
+    font-size: 14px;
     font-weight: 300;
 }
 
@@ -583,8 +586,8 @@ button:disabled {
 }
 
 .copy-btn, .social-btn {
-    padding: 4px 8px;
-    font-size: 9px;
+    padding: 5px 10px;
+    font-size: 10px;
     background: #00D4FF;
     margin-left: 5px;
 }
