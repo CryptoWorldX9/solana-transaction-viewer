@@ -304,10 +304,10 @@ body {
 .main-content-wrapper {
     display: flex;
     flex-direction: column;
-    width: 80%; /* Aumentado a 80% para dar más espacio */
+    width: 80%;
     height: 100%;
-    z-index: 15; /* Mantener por encima */
-    position: relative; /* Asegurar que sea fijo en su posición */
+    z-index: 15;
+    position: relative;
 }
 
 .top-row {
@@ -355,11 +355,12 @@ body {
     top: 80px;
     right: 0;
     bottom: 0;
-    width: 20%; /* Reducido a 20% para evitar solapamiento */
+    width: 20%;
     border-left: 1px solid #00D4FF;
     margin: 0;
     padding: 0;
-    z-index: 12; /* Debajo de main-content-wrapper */
+    z-index: 12;
+    transform: none; /* Eliminar cualquier transformación que pueda interferir */
 }
 
 .info-section {
