@@ -304,9 +304,10 @@ body {
 .main-content-wrapper {
     display: flex;
     flex-direction: column;
-    width: 75%;
+    width: 80%; /* Aumentado a 80% para dar más espacio */
     height: 100%;
-    z-index: 15; /* Aumentado para que esté por encima de tweets-section */
+    z-index: 15; /* Mantener por encima */
+    position: relative; /* Asegurar que sea fijo en su posición */
 }
 
 .top-row {
@@ -354,11 +355,11 @@ body {
     top: 80px;
     right: 0;
     bottom: 0;
-    width: 25%;
+    width: 20%; /* Reducido a 20% para evitar solapamiento */
     border-left: 1px solid #00D4FF;
     margin: 0;
     padding: 0;
-    z-index: 12; /* Reducido para que esté debajo de main-content-wrapper */
+    z-index: 12; /* Debajo de main-content-wrapper */
 }
 
 .info-section {
