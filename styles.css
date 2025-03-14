@@ -263,7 +263,7 @@ body {
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    padding-top: 80px;
+    padding-top: 80px; /* Asegura que el contenido respete el top-bar */
     padding-bottom: 80px;
     min-height: calc(100vh - 80px);
     margin-top: 0;
@@ -297,6 +297,8 @@ body {
     padding: 0;
     position: relative;
     top: 0;
+    display: flex; /* Usar flex para alinear hijos */
+    justify-content: space-between; /* Asegurar que main-content-wrapper y tweets-section estén correctamente distribuidos */
 }
 
 .main-content-wrapper {
@@ -304,7 +306,7 @@ body {
     flex-direction: column;
     width: 75%;
     height: 100%;
-    z-index: 15;
+    z-index: 12; /* Reducido para que no solape tweets-section innecesariamente */
 }
 
 .top-row {
@@ -356,7 +358,7 @@ body {
     border-left: 1px solid #00D4FF;
     margin: 0;
     padding: 0;
-    z-index: 12;
+    z-index: 15; /* Aumentado para que tweets-section esté por encima */
 }
 
 .info-section {
@@ -463,20 +465,20 @@ body {
     font-weight: 300;
     margin: 0;
     box-sizing: border-box;
-    display: flex; /* Usar flexbox para centrar */
-    flex-direction: column; /* Mantener dirección de columna */
-    align-items: center; /* Centrar horizontalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #xSearch {
-    width: 90%; /* Un poco más pequeño para evitar desbordes */
+    width: 90%;
     max-width: 100%;
     padding: 6px;
     border: 1px solid #00D4FF;
     border-radius: 5px;
     background: #2A2A2A;
     color: #FFFFFF;
-    margin-bottom: 8px; /* Eliminar margin auto, ya que flexbox lo centra */
+    margin-bottom: 8px;
     font-weight: 300;
     font-size: 11px;
     box-sizing: border-box;
@@ -487,7 +489,7 @@ body {
     margin-bottom: 10px;
     border-bottom: 1px solid #2A2A2A;
     padding-bottom: 8px;
-    width: 100%; /* Asegurar que los tweets ocupen el ancho disponible */
+    width: 100%;
 }
 
 .tweet-item img {
