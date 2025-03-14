@@ -462,22 +462,24 @@ body {
     border: 1px solid #00D4FF;
     font-weight: 300;
     margin: 0;
-    box-sizing: border-box; /* Asegura que el padding no afecte el cálculo */
+    box-sizing: border-box;
+    display: flex; /* Usar flexbox para centrar */
+    flex-direction: column; /* Mantener dirección de columna */
+    align-items: center; /* Centrar horizontalmente */
 }
 
 #xSearch {
-    width: calc(100% - 20px); /* Restar el padding total de ambos lados */
-    max-width: 100%; /* Limitar el ancho máximo */
+    width: 90%; /* Un poco más pequeño para evitar desbordes */
+    max-width: 100%;
     padding: 6px;
     border: 1px solid #00D4FF;
     border-radius: 5px;
     background: #2A2A2A;
     color: #FFFFFF;
-    margin: 0 auto 8px; /* Centrar horizontalmente */
+    margin-bottom: 8px; /* Eliminar margin auto, ya que flexbox lo centra */
     font-weight: 300;
     font-size: 11px;
-    box-sizing: border-box; /* Incluir padding y border en el ancho */
-    display: block; /* Asegurar que el margin auto funcione */
+    box-sizing: border-box;
 }
 
 .tweet-item {
@@ -485,6 +487,7 @@ body {
     margin-bottom: 10px;
     border-bottom: 1px solid #2A2A2A;
     padding-bottom: 8px;
+    width: 100%; /* Asegurar que los tweets ocupen el ancho disponible */
 }
 
 .tweet-item img {
@@ -794,6 +797,6 @@ tr:hover {
         padding: 8px;
     }
     #xSearch {
-        width: calc(100% - 16px); /* Ajuste para padding de 8px en móvil */
+        width: 90%;
     }
 }
