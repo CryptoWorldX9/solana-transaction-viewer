@@ -5,8 +5,8 @@ body {
     background-color: #0A0A0A;
     color: #FFFFFF;
     font-weight: 300;
-    overflow: hidden; /* Desactiva el scroll vertical de la página */
-    height: 100vh; /* Asegura que el body ocupe toda la altura del viewport */
+    overflow: hidden;
+    height: 100vh;
 }
 
 .sidebar {
@@ -302,9 +302,9 @@ body {
 .main-content-wrapper {
     display: flex;
     flex-direction: column;
-    width: 75%; /* Ajustado para compensar el ancho reducido de tweets-section */
+    width: 75%;
     height: 100%;
-    z-index: 15; /* Asegurar que esté por encima de tweets-section */
+    z-index: 15;
 }
 
 .top-row {
@@ -328,12 +328,12 @@ body {
 }
 
 .left-section, .center-section, .right-section {
-    flex: 1; /* Cada sección ocupa el mismo espacio */
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 0;
     border-right: 1px solid #00D4FF;
-    width: calc(100% / 3); /* Divide exactamente en 3 partes */
+    width: calc(100% / 3);
 }
 
 .left-section {
@@ -352,7 +352,7 @@ body {
     top: 80px;
     right: 0;
     bottom: 0;
-    width: 25%; /* Reducido de 30% a 25% para adelgazar */
+    width: 25%;
     border-left: 1px solid #00D4FF;
     margin: 0;
     padding: 0;
@@ -361,41 +361,54 @@ body {
 
 .info-section {
     background: #1A1A1A;
-    padding: 8px;
+    padding: 6px; /* Reducido para aprovechar más espacio */
     border-radius: 8px;
     box-shadow: 0 3px 8px rgba(0, 212, 255, 0.2);
-    text-align: left;
+    text-align: center; /* Centrar todo el contenido */
     height: 100%;
-    overflow: auto;
+    overflow: hidden; /* Eliminar scroll dentro del cuadro */
     border: 1px solid #00D4FF;
     font-weight: 300;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    font-size: 12px;
-    width: 100%; /* Asegura que ocupe todo el ancho disponible */
-    box-sizing: border-box; /* Incluye padding y border en el tamaño */
+    gap: 2px; /* Reducido para compactar más la información */
+    font-size: 11px; /* Reducido para que quepa más texto */
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 1.2; /* Reducir espacio entre líneas */
 }
 
 .info-section img {
-    width: 30px;
-    height: 30px;
+    width: 24px; /* Reducido para ahorrar espacio */
+    height: 24px;
     border-radius: 50%;
-    margin-bottom: 4px;
+    margin: 0 auto 2px; /* Centrado y con menos margen */
+}
+
+.info-section h3 {
+    margin: 2px 0; /* Reducido para ahorrar espacio */
+    font-size: 12px; /* Reducido para uniformidad */
+    text-align: center; /* Centrar el título */
+}
+
+.info-section p {
+    margin: 1px 0; /* Reducido para compactar */
+    font-size: 11px; /* Ajustado para que quepa más texto */
 }
 
 .contract-text {
     word-break: break-all;
-    font-size: 8px;
+    font-size: 7px; /* Reducido para ahorrar espacio */
+    margin: 1px 0;
 }
 
 .sentiment-bar {
-    width: 100%;
-    height: 8px;
+    width: 80%; /* Reducido para centrarlo */
+    height: 6px; /* Reducido para ahorrar espacio */
     background: #333;
     border-radius: 6px;
     overflow: hidden;
-    margin-top: 4px;
+    margin: 2px auto; /* Centrado y con menos margen */
     position: relative;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
 }
@@ -452,15 +465,17 @@ body {
 }
 
 #xSearch {
-    width: 100%;
-    padding: 8px;
+    width: calc(100% - 20px); /* Ajustado para que no se desborde */
+    padding: 6px; /* Reducido para que sea más compacto */
     border: 1px solid #00D4FF;
     border-radius: 5px;
     background: #2A2A2A;
     color: #FFFFFF;
-    margin-bottom: 8px;
+    margin: 0 auto 8px; /* Centrado */
     font-weight: 300;
-    font-size: 12px;
+    font-size: 11px; /* Reducido para que sea más proporcionado */
+    box-sizing: border-box;
+    display: block;
 }
 
 .tweet-item {
