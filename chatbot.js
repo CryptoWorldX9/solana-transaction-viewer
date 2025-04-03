@@ -1,33 +1,44 @@
-// Configuración del chatbot
-const OPENAI_API_KEY = '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'; // Tu API key de OpenAI
+// Chatbot configuration
+const OPENAI_API_KEY = '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'; // Your OpenAI API key
 const API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
 
-// Elementos del DOM
-const chatToggle = document.getElementById('chatToggle');
-const chatbotContainer = document.getElementById('chatbotContainer');
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const sendMessage = document.getElementById('sendMessage');
-const minimizeChat = document.querySelector('.minimize-chat');
+// DOM Elements
+let chatToggle;
+let chatbotContainer;
+let chatMessages;
+let chatInput;
+let sendMessage;
+let minimizeChat;
 
-// Estado del chat
+// Chat state
 let chatHistory = [
-  { role: "system", content: "Eres un asistente virtual especializado en criptomonedas, blockchain y Solana. Proporciona respuestas concisas y útiles. Responde en español." }
+  { role: "system", content: "You are a virtual assistant specialized in cryptocurrencies, blockchain, and Solana. Provide concise and helpful answers in English." }
 ];
 let isChatOpen = false;
 
-// Inicializar el chatbot
+// Initialize the chatbot
 function initChatbot() {
-  // Evento para abrir/cerrar el chat
+  // Create chatbot HTML structure
+  createChatbotHTML();
+  
+  // Get DOM elements
+  chatToggle = document.getElementById('chatToggle');
+  chatbotContainer = document.getElementById('chatbotContainer');
+  chatMessages = document.getElementById('chatMessages');
+  chatInput = document.getElementById('chatInput');
+  sendMessage = document.getElementById('sendMessage');
+  minimizeChat = document.querySelector('.minimize-chat');
+  
+  // Event for opening/closing the chat
   chatToggle.addEventListener('click', toggleChat);
   
-  // Evento para minimizar el chat
+  // Event for minimizing the chat
   minimizeChat.addEventListener('click', toggleChat);
   
-  // Evento para enviar mensaje
+  // Event for sending message
   sendMessage.addEventListener('click', handleSendMessage);
   
-  // Enviar mensaje con Enter
+  // Send message with Enter
   chatInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
       handleSendMessage();
@@ -35,7 +46,227 @@ function initChatbot() {
   });
 }
 
-// Abrir/cerrar el chat
+// Create chatbot HTML structure
+function createChatbotHTML() {
+  // Create chatbot container
+  const chatbotHTML = `
+    <div class="chatbot-container" id="chatbotContainer">
+      <div class="chatbot-header">
+        <h3>AI Assistant</h3>
+        <button class="minimize-chat"><i class="fas fa-minus"></i></button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot">
+          <div class="message-content">
+            Hello, I'm your virtual assistant. How can I help you today?
+          </div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Type your question here...">
+        <button id="sendMessage">Send</button>
+      </div>
+    </div>
+
+    <button class="chat-toggle" id="chatToggle">
+      <span>Chat</span>
+    </button>
+  `;
+  
+  // Add chatbot HTML to the body
+  document.body.insertAdjacentHTML('beforeend', chatbotHTML);
+  
+  // Add Font Awesome for icons
+  if (!document.querySelector('link[href*="font-awesome"]')) {
+    const fontAwesome = document.createElement('link');
+    fontAwesome.rel = 'stylesheet';
+    fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+    document.head.appendChild(fontAwesome);
+  }
+  
+  // Add chatbot styles
+  addChatbotStyles();
+}
+
+// Add chatbot styles
+function addChatbotStyles() {
+  const styleElement = document.createElement('style');
+  styleElement.textContent = `
+    /* Chatbot Styles */
+    .chatbot-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      height: 450px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      transform: translateY(calc(100% + 20px));
+      transition: transform 0.3s ease;
+      border: 1px solid #ddd;
+    }
+
+    .chatbot-container.open {
+      transform: translateY(0);
+    }
+
+    .chatbot-header {
+      padding: 15px;
+      background: linear-gradient(90deg, #4b6cb7, #182848);
+      color: white;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chatbot-header h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .minimize-chat {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: #f5f7fa;
+    }
+
+    .message {
+      display: flex;
+      max-width: 80%;
+    }
+
+    .message.user {
+      align-self: flex-end;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+    }
+
+    .message-content {
+      padding: 10px 12px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .message.user .message-content {
+      background-color: #4b6cb7;
+      color: white;
+    }
+
+    .message.bot .message-content {
+      background-color: #e9ecef;
+      color: #333;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 10px;
+      background-color: white;
+      border-top: 1px solid #ddd;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px 0 0 5px;
+      font-size: 14px;
+    }
+
+    .chat-input button {
+      padding: 10px 15px;
+      background-color: #4b6cb7;
+      color: white;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+    }
+
+    .chat-input button:hover {
+      background-color: #182848;
+    }
+
+    .chat-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      border-radius: 30px;
+      background: linear-gradient(90deg, #4b6cb7, #182848);
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .chat-toggle:hover {
+      transform: scale(1.05);
+    }
+
+    .chat-toggle.hidden {
+      display: none;
+    }
+
+    .chat-loader {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(75, 108, 183, 0.3);
+      border-radius: 50%;
+      border-top-color: #4b6cb7;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .chatbot-container {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+      }
+      
+      .chat-toggle {
+        right: 10px;
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+    }
+  `;
+  
+  document.head.appendChild(styleElement);
+}
+
+// Open/close the chat
 function toggleChat() {
   isChatOpen = !isChatOpen;
   if (isChatOpen) {
@@ -47,40 +278,40 @@ function toggleChat() {
   }
 }
 
-// Manejar el envío de mensajes
+// Handle sending messages
 async function handleSendMessage() {
   const userMessage = chatInput.value.trim();
   if (!userMessage) return;
   
-  // Limpiar input
+  // Clear input
   chatInput.value = '';
   
-  // Mostrar mensaje del usuario
+  // Show user message
   addMessageToChat('user', userMessage);
   
-  // Mostrar indicador de carga
+  // Show loading indicator
   const loadingId = showLoading();
   
   try {
-    // Obtener respuesta de la IA
+    // Get AI response
     const response = await getAIResponse(userMessage);
     
-    // Ocultar indicador de carga
+    // Hide loading indicator
     hideLoading(loadingId);
     
-    // Mostrar respuesta de la IA
+    // Show AI response
     addMessageToChat('bot', response);
   } catch (error) {
-    // Ocultar indicador de carga
+    // Hide loading indicator
     hideLoading(loadingId);
     
-    // Mostrar mensaje de error
-    addMessageToChat('bot', 'Lo siento, ha ocurrido un error al conectar con la IA. Por favor, intenta de nuevo más tarde.');
-    console.error('Error al obtener respuesta:', error);
+    // Show error message
+    addMessageToChat('bot', 'Sorry, there was an error connecting to the AI. Please try again later.');
+    console.error('Error getting response:', error);
   }
 }
 
-// Agregar mensaje al chat
+// Add message to chat
 function addMessageToChat(type, content) {
   const messageDiv = document.createElement('div');
   messageDiv.className = `message ${type}`;
@@ -92,26 +323,26 @@ function addMessageToChat(type, content) {
   messageDiv.appendChild(contentDiv);
   chatMessages.appendChild(messageDiv);
   
-  // Scroll al último mensaje
+  // Scroll to the last message
   chatMessages.scrollTop = chatMessages.scrollHeight;
   
-  // Actualizar historial del chat
+  // Update chat history
   if (type === 'user') {
     chatHistory.push({ role: "user", content });
   } else if (type === 'bot') {
     chatHistory.push({ role: "assistant", content });
   }
   
-  // Limitar el historial a las últimas 10 interacciones
+  // Limit history to the last 10 interactions
   if (chatHistory.length > 21) { // 1 system + 10 user + 10 assistant
     chatHistory = [
-      chatHistory[0], // Mantener el mensaje del sistema
+      chatHistory[0], // Keep the system message
       ...chatHistory.slice(chatHistory.length - 20)
     ];
   }
 }
 
-// Mostrar indicador de carga
+// Show loading indicator
 function showLoading() {
   const loadingDiv = document.createElement('div');
   loadingDiv.className = 'message bot loading';
@@ -127,13 +358,13 @@ function showLoading() {
   loadingDiv.appendChild(contentDiv);
   chatMessages.appendChild(loadingDiv);
   
-  // Scroll al indicador de carga
+  // Scroll to loading indicator
   chatMessages.scrollTop = chatMessages.scrollHeight;
   
   return loadingDiv.id;
 }
 
-// Ocultar indicador de carga
+// Hide loading indicator
 function hideLoading(id) {
   const loadingDiv = document.getElementById(id);
   if (loadingDiv) {
@@ -141,7 +372,7 @@ function hideLoading(id) {
   }
 }
 
-// Obtener respuesta de la IA usando OpenAI API
+// Get AI response using OpenAI API
 async function getAIResponse(userMessage) {
   try {
     const response = await fetch(API_ENDPOINT, {
@@ -160,45 +391,45 @@ async function getAIResponse(userMessage) {
     
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('Error de API OpenAI:', errorData);
-      throw new Error(`Error de API: ${response.status}`);
+      console.error('OpenAI API Error:', errorData);
+      throw new Error(`API Error: ${response.status}`);
     }
     
     const data = await response.json();
     return data.choices[0].message.content;
   } catch (error) {
-    console.error('Error al llamar a la API de OpenAI:', error);
-    // Si hay un error con la API, usamos respuestas locales como fallback
+    console.error('Error calling OpenAI API:', error);
+    // If there's an error with the API, use local responses as fallback
     return getLocalResponse(userMessage);
   }
 }
 
-// Respuestas locales predefinidas (fallback)
+// Local predefined responses (fallback)
 function getLocalResponse(userMessage) {
-  // Convertir mensaje a minúsculas para facilitar la comparación
+  // Convert message to lowercase for easier comparison
   const message = userMessage.toLowerCase();
   
-  // Respuestas predefinidas basadas en palabras clave
-  if (message.includes('hola') || message.includes('saludos') || message.includes('buenos días')) {
-    return '¡Hola! ¿En qué puedo ayudarte hoy con tus consultas sobre criptomonedas o Solana?';
-  } else if (message.includes('solana') && (message.includes('qué es') || message.includes('que es'))) {
-    return 'Solana es una blockchain de alto rendimiento diseñada para aplicaciones descentralizadas y criptomonedas, conocida por su alta velocidad y bajas tarifas de transacción.';
-  } else if (message.includes('wallet') || message.includes('billetera')) {
-    return 'Una wallet o billetera es una aplicación que te permite almacenar, enviar y recibir criptomonedas. Para Solana, algunas wallets populares son Phantom, Solflare y Slope.';
+  // Predefined responses based on keywords
+  if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+    return 'Hello! How can I help you today with your cryptocurrency or Solana questions?';
+  } else if (message.includes('solana') && (message.includes('what is') || message.includes('explain'))) {
+    return 'Solana is a high-performance blockchain designed for decentralized applications and cryptocurrencies, known for its high speed and low transaction fees.';
+  } else if (message.includes('wallet')) {
+    return 'A wallet is an application that allows you to store, send, and receive cryptocurrencies. For Solana, some popular wallets are Phantom, Solflare, and Slope.';
   } else if (message.includes('nft')) {
-    return 'Los NFTs (Tokens No Fungibles) son activos digitales únicos que representan la propiedad de un artículo digital específico, como arte, música o coleccionables.';
-  } else if (message.includes('gas') || message.includes('tarifas')) {
-    return 'En Solana, las tarifas de transacción (a veces llamadas "gas") son muy bajas comparadas con otras blockchains, generalmente menos de $0.01 por transacción.';
+    return 'NFTs (Non-Fungible Tokens) are unique digital assets that represent ownership of a specific digital item, such as art, music, or collectibles.';
+  } else if (message.includes('gas') || message.includes('fees')) {
+    return 'In Solana, transaction fees (sometimes called "gas") are very low compared to other blockchains, typically less than $0.01 per transaction.';
   } else if (message.includes('staking')) {
-    return 'El staking en Solana implica bloquear tus tokens SOL para ayudar a asegurar la red y ganar recompensas. Puedes hacer staking a través de wallets como Phantom o Solflare.';
-  } else if (message.includes('defi') || message.includes('finanzas descentralizadas')) {
-    return 'DeFi (Finanzas Descentralizadas) se refiere a aplicaciones financieras construidas sobre blockchain que permiten préstamos, intercambios y otros servicios financieros sin intermediarios.';
-  } else if (message.includes('gracias')) {
-    return '¡De nada! Estoy aquí para ayudarte con cualquier otra pregunta que tengas.';
+    return 'Staking in Solana involves locking your SOL tokens to help secure the network and earn rewards. You can stake through wallets like Phantom or Solflare.';
+  } else if (message.includes('defi') || message.includes('decentralized finance')) {
+    return 'DeFi (Decentralized Finance) refers to financial applications built on blockchain that enable lending, trading, and other financial services without intermediaries.';
+  } else if (message.includes('thank')) {
+    return 'You\'re welcome! I\'m here to help with any other questions you might have.';
   } else {
-    return 'Entiendo tu pregunta sobre ' + userMessage.substring(0, 30) + '... Estamos experimentando problemas con la conexión a la IA. Por favor, intenta con una pregunta más específica o inténtalo de nuevo más tarde.';
+    return 'I understand your question about ' + userMessage.substring(0, 30) + '... We\'re experiencing issues with the AI connection. Please try with a more specific question or try again later.';
   }
 }
 
-// Inicializar el chatbot cuando se cargue la página
+// Initialize the chatbot when the page loads
 document.addEventListener('DOMContentLoaded', initChatbot);
