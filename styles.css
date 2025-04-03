@@ -2,9 +2,6 @@
     --primary-color: #3b82f6;
     --primary-hover: #2563eb;
     --sidebar-bg: #0f172a;
-    --sidebar-text: #94a3b8;
-    --sidebar-hover: #1e293b;
-    --sidebar-active: #1e293b;
     --main-bg: #0f172a;
     --card-bg: #1e293b;
     --text-primary: #e2e8f0;
@@ -21,10 +18,27 @@
 }
 
 body {
-    background-color: var(--main-bg);
+    background-color: var(--sidebar-bg);
     color: var(--text-primary);
     line-height: 1.5;
     height: 100vh;
+    position: relative;
+}
+
+/* Fondo con diseño sutil */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
+    background-size: 100% 100%;
+    pointer-events: none;
+    z-index: -1;
 }
 
 .app-container {
@@ -36,7 +50,7 @@ body {
 .sidebar {
     width: 260px;
     background-color: var(--sidebar-bg);
-    color: var(--sidebar-text);
+    color: var(--text-secondary);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -44,6 +58,7 @@ body {
     left: 0;
     top: 0;
     border-right: 1px solid var(--border-color);
+    z-index: 10;
 }
 
 .sidebar-header {
@@ -76,7 +91,7 @@ body {
     display: flex;
     align-items: center;
     padding: 0.75rem 1.5rem;
-    color: var(--sidebar-text);
+    color: var(--text-secondary);
     text-decoration: none;
     transition: all 0.2s ease;
     border-radius: 0.25rem;
@@ -91,13 +106,13 @@ body {
 }
 
 .nav-item a:hover {
-    background-color: var(--sidebar-hover);
-    color: white;
+    background-color: var(--card-bg);
+    color: var(--text-primary);
 }
 
 .nav-item.active a {
-    background-color: var(--sidebar-active);
-    color: white;
+    background-color: var(--card-bg);
+    color: var(--text-primary);
 }
 
 .sidebar-footer {
@@ -131,6 +146,7 @@ body {
     margin-left: 260px;
     padding: 1.5rem;
     overflow-y: auto;
+    background-color: var(--sidebar-bg);
 }
 
 .main-header {
@@ -175,6 +191,10 @@ body {
     width: 100%;
 }
 
+.search-bar input::placeholder {
+    color: var(--text-secondary);
+}
+
 .theme-toggle {
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -205,6 +225,20 @@ body {
     padding: 2rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.05) 0%, transparent 30%);
+    pointer-events: none;
 }
 
 .welcome-card h2 {
@@ -235,6 +269,20 @@ body {
     transition: transform 0.2s ease, background-color 0.2s ease;
     cursor: pointer;
     border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+    pointer-events: none;
 }
 
 .tool-card:hover {
@@ -252,6 +300,13 @@ body {
     justify-content: center;
     color: var(--primary-color);
     font-size: 1.25rem;
+    position: relative;
+    z-index: 1;
+}
+
+.tool-info {
+    position: relative;
+    z-index: 1;
 }
 
 .tool-info h3 {
@@ -288,7 +343,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--main-bg);
+    background: var(--sidebar-bg);
 }
 
 ::-webkit-scrollbar-thumb {
