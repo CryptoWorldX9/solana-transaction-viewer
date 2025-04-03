@@ -1,44 +1,82 @@
-/* Añade esto al CSS existente */
+/* Añade esto al CSS existente o actualiza las secciones correspondientes */
 
-/* Sección de bienvenida */
+/* Welcome section with improved centering */
 .welcome-section {
     text-align: center;
     max-width: 800px;
     margin: 0 auto;
-    padding: 3rem 1rem;
+    padding: 4rem 1.5rem;
     animation: fadeIn 0.8s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
 }
 
 .welcome-section h2 {
-    font-size: 2.2rem;
-    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
     color: var(--accent-color);
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .welcome-section p {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     line-height: 1.8;
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
     color: var(--text-light);
+    max-width: 650px;
 }
 
-/* Asegurarse de que todo el contenido esté centrado */
+/* Ensure all page content is centered */
 .page {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     padding: 1rem;
+    width: 100%;
 }
 
 .input-section, .results-section {
     width: 100%;
     max-width: 800px;
     margin: 0 auto 2rem;
+    text-align: center;
 }
 
-/* Ajustes responsivos para la sección de bienvenida */
+.input-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.network-selector h3 {
+    text-align: center;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
+    .welcome-section {
+        padding: 3rem 1rem;
+        min-height: 40vh;
+    }
+    
+    .welcome-section h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .welcome-section p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+}
+
+@media (max-width: 576px) {
     .welcome-section {
         padding: 2rem 1rem;
     }
@@ -50,4 +88,9 @@
     .welcome-section p {
         font-size: 1rem;
     }
+}
+
+/* Update JavaScript messages to English */
+#walletInfo h3, #transactionList h3 {
+    text-align: center;
 }
