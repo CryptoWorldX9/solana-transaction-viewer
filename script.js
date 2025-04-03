@@ -66,6 +66,14 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('.sidebar-overlay').classList.remove('active');
         }
     });
+    
+    // Initialize network buttons
+    document.querySelectorAll('.network-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.network-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
 });
 
 // Function to initialize theme
@@ -118,6 +126,27 @@ function initModals() {
     // Open wallet modal
     document.querySelector('.wallet-btn').addEventListener('click', function() {
         document.getElementById('walletModal').style.display = 'block';
+    });
+    
+    // Wallet options click event
+    document.querySelectorAll('.wallet-option').forEach(option => {
+        option.addEventListener('click', function() {
+            // Here you would normally connect to the wallet
+            alert('Connecting to wallet...');
+            document.getElementById('walletModal').style.display = 'none';
+        });
+    });
+    
+    // Search functionality
+    const searchInput = document.querySelector('#searchModal input');
+    searchInput.addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            const searchTerm = this.value.trim();
+            if (searchTerm) {
+                document.getElementById('searchResults').innerHTML = `<p>Searching for "${searchTerm}"...</p>`;
+                // Here you would normally perform a search
+            }
+        }
     });
 }
 
