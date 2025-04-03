@@ -11,8 +11,6 @@
     --success-color: #48bb78;
     --error-color: #f56565;
     --warning-color: #ed8936;
-    --font-primary: 'Montserrat', sans-serif;
-    --font-secondary: 'Poppins', sans-serif;
 }
 
 /* Resetear estilos por defecto */
@@ -23,7 +21,7 @@
 }
 
 body {
-    font-family: var(--font-primary);
+    font-family: 'Montserrat', sans-serif;
     background-color: var(--background-dark);
     color: var(--text-light);
     line-height: 1.6;
@@ -80,7 +78,7 @@ body {
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-family: var(--font-secondary);
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
 }
 
@@ -100,7 +98,7 @@ body {
     text-decoration: none;
     transition: all 0.3s ease;
     border-left: 3px solid transparent;
-    font-family: var(--font-secondary);
+    font-family: 'Poppins', sans-serif;
     font-weight: 500;
 }
 
@@ -179,7 +177,7 @@ body {
     padding: 0.5rem 1rem;
     border-radius: 5px;
     font-size: 0.9rem;
-    font-family: var(--font-secondary);
+    font-family: 'Poppins', sans-serif;
     font-weight: 500;
     border: none;
     cursor: pointer;
@@ -199,18 +197,13 @@ body {
     margin: 0 auto;
 }
 
-/* Welcome section with improved centering */
+/* Welcome section */
 .welcome-section {
     text-align: center;
     max-width: 800px;
     margin: 0 auto;
     padding: 4rem 1.5rem;
     animation: fadeIn 0.8s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 50vh;
 }
 
 .welcome-section h2 {
@@ -219,9 +212,8 @@ body {
     color: var(--accent-color);
     font-weight: 700;
     letter-spacing: 0.5px;
-    font-family: var(--font-secondary);
+    font-family: 'Poppins', sans-serif;
     text-align: center;
-    width: 100%;
 }
 
 .welcome-section p {
@@ -229,21 +221,19 @@ body {
     line-height: 1.8;
     margin-bottom: 1.2rem;
     color: var(--text-light);
-    max-width: 650px;
     text-align: center;
-    font-family: var(--font-primary);
+    font-family: 'Montserrat', sans-serif;
     font-weight: 400;
 }
 
-/* Ensure all page content is centered */
+/* Page styles */
 .page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 1rem;
-    width: 100%;
+    display: none;
     text-align: center;
+}
+
+.page.active {
+    display: block;
 }
 
 /* Input Section */
@@ -253,25 +243,17 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 2rem;
-    width: 100%;
+    text-align: center;
     max-width: 800px;
-    text-align: center;
-}
-
-.input-section h2 {
-    margin-bottom: 1.5rem;
-    color: var(--text-light);
-    font-size: 1.5rem;
-    font-family: var(--font-secondary);
-    font-weight: 600;
-    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .input-group {
     display: flex;
-    justify-content: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
+    justify-content: center;
 }
 
 .input-group input {
@@ -282,7 +264,7 @@ body {
     background-color: var(--background-dark);
     color: var(--text-light);
     font-size: 1rem;
-    font-family: var(--font-primary);
+    font-family: 'Montserrat', sans-serif;
 }
 
 .input-group button {
@@ -294,7 +276,7 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease;
     font-weight: 500;
-    font-family: var(--font-secondary);
+    font-family: 'Poppins', sans-serif;
 }
 
 .input-group button:hover {
@@ -311,7 +293,7 @@ body {
     color: var(--text-muted);
     font-size: 1rem;
     text-align: center;
-    font-family: var(--font-secondary);
+    font-family: 'Poppins', sans-serif;
 }
 
 .network-buttons {
@@ -328,8 +310,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: var(--font-secondary);
-    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
 }
 
 .network-btn.active,
@@ -344,17 +325,17 @@ body {
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 800px;
     text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .results-section h2 {
     margin-bottom: 1.5rem;
     color: var(--text-light);
     font-size: 1.5rem;
-    font-family: var(--font-secondary);
-    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
     text-align: center;
 }
 
@@ -370,14 +351,12 @@ body {
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.5rem;
     text-align: center;
-    font-family: var(--font-secondary);
-    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
 }
 
 #walletInfo p {
     margin-bottom: 0.5rem;
     text-align: center;
-    font-family: var(--font-primary);
 }
 
 #transactionList ul {
@@ -391,12 +370,6 @@ body {
     border-radius: 5px;
     margin-bottom: 1rem;
     border-left: 3px solid var(--accent-color);
-    text-align: center;
-    font-family: var(--font-primary);
-}
-
-#transactionList p {
-    margin-bottom: 0.3rem;
     text-align: center;
 }
 
@@ -422,7 +395,6 @@ body {
     max-width: 600px;
     position: relative;
     animation: modalFadeIn 0.3s;
-    font-family: var(--font-primary);
 }
 
 @keyframes modalFadeIn {
@@ -446,9 +418,8 @@ body {
 .modal-content h2 {
     margin-bottom: 1.5rem;
     color: var(--text-light);
-    font-family: var(--font-secondary);
-    font-weight: 600;
     text-align: center;
+    font-family: 'Poppins', sans-serif;
 }
 
 .search-input {
@@ -464,7 +435,6 @@ body {
     background-color: var(--background-dark);
     color: var(--text-light);
     font-size: 1rem;
-    font-family: var(--font-primary);
 }
 
 .search-input button {
@@ -505,11 +475,6 @@ body {
     margin-bottom: 1rem;
 }
 
-.wallet-option span {
-    font-family: var(--font-secondary);
-    font-weight: 500;
-}
-
 /* Loader */
 .loader {
     border: 4px solid var(--background-dark);
@@ -526,13 +491,37 @@ body {
     100% { transform: rotate(360deg); }
 }
 
+/* Theme toggle */
+.theme-toggle {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--background-light);
+    color: var(--text-light);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    border: none;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background-color: var(--accent-color);
+}
+
 /* Responsive */
 @media (max-width: 992px) {
     .sidebar {
         transform: translateX(-100%);
         position: fixed;
         z-index: 1000;
-        width: 280px; /* Ligeramente más ancho en móvil */
+        width: 280px;
     }
     
     .sidebar.active {
@@ -549,15 +538,6 @@ body {
         display: block;
     }
     
-    .input-group {
-        flex-direction: column;
-    }
-    
-    .network-buttons {
-        flex-wrap: wrap;
-    }
-    
-    /* Overlay para cuando el menú está abierto */
     .sidebar-overlay {
         display: none;
         position: fixed;
@@ -571,6 +551,10 @@ body {
     
     .sidebar-overlay.active {
         display: block;
+    }
+    
+    .input-group {
+        flex-direction: column;
     }
 }
 
@@ -601,30 +585,19 @@ body {
     }
     
     .welcome-section {
-        padding: 3rem 1rem;
-        min-height: 40vh;
+        padding: 2rem 1rem;
     }
     
     .welcome-section h2 {
         font-size: 2rem;
-        margin-bottom: 1.5rem;
     }
     
     .welcome-section p {
         font-size: 1.1rem;
-        line-height: 1.6;
-    }
-    
-    .logo {
-        width: 180px;
     }
 }
 
 @media (max-width: 576px) {
-    .welcome-section {
-        padding: 2rem 1rem;
-    }
-    
     .welcome-section h2 {
         font-size: 1.8rem;
     }
@@ -632,31 +605,15 @@ body {
     .welcome-section p {
         font-size: 1rem;
     }
-    
-    .content-wrapper {
-        padding: 1rem 0.5rem;
-    }
-    
-    .input-section, .results-section {
-        padding: 1rem;
-    }
-    
-    .input-section h2, .results-section h2 {
-        font-size: 1.3rem;
-    }
 }
 
-/* Efectos adicionales */
+/* Animations */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
-.results-section {
-    animation: fadeIn 0.5s ease-in;
-}
-
-/* Fondo con diseño */
+/* Background design */
 body::before {
     content: '';
     position: fixed;
@@ -668,60 +625,4 @@ body::before {
                 radial-gradient(circle at 90% 80%, rgba(91, 104, 235, 0.1) 0%, rgba(0, 0, 0, 0) 80%);
     pointer-events: none;
     z-index: -1;
-}
-
-/* Modo oscuro/claro toggle */
-.theme-toggle {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background-color: var(--background-light);
-    color: var(--text-light);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    z-index: 100;
-    border: none;
-    font-size: 1.2rem;
-}
-
-.theme-toggle:hover {
-    background-color: var(--accent-color);
-}
-
-/* Estilos para el tema claro */
-body.light-theme {
-    --background-dark: #f8fafc;
-    --background-light: #ffffff;
-    --text-light: #1a202c;
-    --text-muted: #4a5568;
-    --border-color: #e2e8f0;
-}
-
-body.light-theme::before {
-    background: radial-gradient(circle at 10% 20%, rgba(91, 104, 235, 0.05) 0%, rgba(0, 0, 0, 0) 80%),
-                radial-gradient(circle at 90% 80%, rgba(91, 104, 235, 0.05) 0%, rgba(0, 0, 0, 0) 80%);
-}
-
-/* Estilos para el wallet conectado */
-.wallet-btn.connected {
-    background-color: var(--success-color);
-}
-
-.wallet-btn.connected:hover {
-    background-color: #3da066;
-}
-
-/* Asegurarse de que las páginas se muestren correctamente */
-.page {
-    display: none;
-}
-
-.page.active {
-    display: flex;
 }
