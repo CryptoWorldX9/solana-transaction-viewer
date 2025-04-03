@@ -57,7 +57,7 @@ body {
 .logo {
     width: 100%;
     height: auto;
-    max-height: 240px; /* Duplicado de 120px */
+    max-height: 480px; /* Duplicado de 240px */
     object-fit: contain;
     display: block;
     margin: 0 auto;
@@ -538,7 +538,7 @@ body {
     }
     
     .logo {
-        max-height: 160px; /* Ajustado para móviles */
+        max-height: 320px; /* Duplicado de 160px */
     }
 }
 
@@ -583,21 +583,21 @@ body {
     }
     
     .logo {
-        max-height: 140px; /* Ajustado para móviles pequeños */
+        max-height: 280px; /* Duplicado de 140px */
     }
 }
 
 /* Para pantallas más grandes */
 @media (min-width: 1200px) {
     .logo {
-        max-height: 300px; /* Duplicado de 150px */
+        max-height: 600px; /* Duplicado de 300px */
     }
 }
 
 /* Para dispositivos móviles en modo landscape */
 @media (max-width: 992px) and (orientation: landscape) {
     .logo {
-        max-height: 120px; /* Duplicado de 60px */
+        max-height: 240px; /* Duplicado de 120px */
     }
     
     .sidebar-header {
