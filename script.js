@@ -1,6 +1,3 @@
-// API Key de Solscan
-const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3NDE0NzA4MjAwNjksImVtYWlsIjoiY3J5cHRvd29ybGR4OUBnbWFpbC5jb20iLCJhY3Rpb24iOiJ0b2tlbi1hcGkiLCJhcGlWZXJzaW9uIjoidjIiLCJpYXQiOjE3NDE0NzA4MjB9.rGwXpbL2WoMCDp6DplM0eoXXuTnEUANxQvFhKZQcv1c';
-
 // Function to load the initial page when the site loads
 document.addEventListener('DOMContentLoaded', function() {
     // Show home page by default
@@ -150,7 +147,7 @@ function initModals() {
     });
 }
 
-// Main function to fetch wallet data using a CORS proxy
+// Función para obtener datos de la wallet usando una API pública
 async function fetchWalletData() {
     const walletAddress = document.getElementById('walletAddress').value.trim();
     const walletInfoDiv = document.getElementById('walletInfo');
@@ -165,143 +162,33 @@ async function fetchWalletData() {
     transactionListDiv.innerHTML = '<div class="loader"></div>';
 
     try {
-        // Usar un proxy CORS para evitar problemas de CORS
-        const corsProxy = 'https://corsproxy.io/?';
+        // Usar la API pública de Solana
+        const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.com');
         
-        // Obtener información de la wallet
-        const walletUrl = `${corsProxy}https://api.solscan.io/account?address=${walletAddress}`;
-        const walletResponse = await fetch(walletUrl, {
-            headers: {
-                'Authorization': `Bearer ${API_KEY}`
-            }
-        });
-        
-        if (!walletResponse.ok) {
-            throw new Error(`Error HTTP: ${walletResponse.status}`);
-        }
-        
-        const walletData = await walletResponse.json();
-        displayWalletInfo(walletData, walletInfoDiv);
-
-        // Obtener transacciones de la wallet
-        const txUrl = `${corsProxy}https://api.solscan.io/account/transactions?address=${walletAddress}&limit=10`;
-        const txResponse = await fetch(txUrl, {
-            headers: {
-                'Authorization': `Bearer ${API_KEY}`
-            }
-        });
-        
-        if (!txResponse.ok) {
-            throw new Error(`Error HTTP: ${txResponse.status}`);
-        }
-        
-        const txData = await txResponse.json();
-        displayTransactions(txData.data || txData, transactionListDiv);
-        
-    } catch (error) {
-        console.error('Error:', error);
-        walletInfoDiv.innerHTML = `<p>Error al conectar con la API: ${error.message}. Intenta de nuevo más tarde.</p>`;
-        transactionListDiv.innerHTML = '';
-    }
-}
-
-// Alternativa usando la API pública de Solana
-async function fetchWalletDataAlternative() {
-    const walletAddress = document.getElementById('walletAddress').value.trim();
-    const walletInfoDiv = document.getElementById('walletInfo');
-    const transactionListDiv = document.getElementById('transactionList');
-    
-    if (!walletAddress) {
-        alert('Por favor, ingresa una dirección de wallet válida.');
-        return;
-    }
-
-    walletInfoDiv.innerHTML = '<div class="loader"></div>';
-    transactionListDiv.innerHTML = '<div class="loader"></div>';
-
-    try {
-        // Usar la API pública de Solana en lugar de Solscan
-        const response = await fetch(`https://api.mainnet-beta.solana.com`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "jsonrpc": "2.0",
-                "id": 1,
-                "method": "getBalance",
-                "params": [walletAddress]
-            })
-        });
-        
-        const balanceData = await response.json();
-        
-        if (balanceData.error) {
-            throw new Error(balanceData.error.message);
-        }
-        
-        // Obtener información de tokens
-        const tokenResponse = await fetch(`https://api.mainnet-beta.solana.com`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "jsonrpc": "2.0",
-                "id": 1,
-                "method": "getTokenAccountsByOwner",
-                "params": [
-                    walletAddress,
-                    {
-                        "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-                    },
-                    {
-                        "encoding": "jsonParsed"
-                    }
-                ]
-            })
-        });
-        
-        const tokenData = await tokenResponse.json();
+        // Obtener balance
+        const publicKey = new solanaWeb3.PublicKey(walletAddress);
+        const balance = await connection.getBalance(publicKey);
         
         // Mostrar información de la wallet
         walletInfoDiv.innerHTML = `
             <h3>Información de la Wallet</h3>
             <p><strong>Dirección:</strong> ${walletAddress}</p>
-            <p><strong>Saldo SOL:</strong> ${balanceData.result.value / 1000000000} SOL</p>
-            <p><strong>Tokens:</strong> ${tokenData.result?.value?.length || 0}</p>
+            <p><strong>Saldo SOL:</strong> ${balance / 1000000000} SOL</p>
+            <p><strong>Red:</strong> Mainnet</p>
         `;
         
         // Obtener transacciones recientes
-        const txResponse = await fetch(`https://api.mainnet-beta.solana.com`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "jsonrpc": "2.0",
-                "id": 1,
-                "method": "getSignaturesForAddress",
-                "params": [
-                    walletAddress,
-                    {
-                        "limit": 10
-                    }
-                ]
-            })
-        });
+        const transactions = await connection.getSignaturesForAddress(publicKey, {limit: 10});
         
-        const txData = await txResponse.json();
-        
-        if (txData.result && txData.result.length > 0) {
+        if (transactions && transactions.length > 0) {
             let html = '<h3>Últimas Transacciones</h3><ul>';
-            txData.result.forEach(tx => {
+            transactions.forEach(tx => {
                 html += `
                     <li>
                         <p><strong>Signature:</strong> ${tx.signature}</p>
                         <p><strong>Slot:</strong> ${tx.slot}</p>
-                        <p><strong>Estado:</strong> ${tx.confirmationStatus}</p>
                         <p><strong>Fecha:</strong> ${new Date(tx.blockTime * 1000).toLocaleString()}</p>
+                        <p><strong>Estado:</strong> ${tx.confirmationStatus}</p>
                     </li>
                 `;
             });
@@ -313,42 +200,59 @@ async function fetchWalletDataAlternative() {
         
     } catch (error) {
         console.error('Error:', error);
-        walletInfoDiv.innerHTML = `<p>Error al conectar con la API: ${error.message}. Intenta de nuevo más tarde.</p>`;
-        transactionListDiv.innerHTML = '';
+        
+        // Si hay un error con la API de Solana, intentar con una alternativa
+        try {
+            // Usar una API alternativa que no requiere Web3
+            const response = await fetch(`https://public-api.solscan.io/account/${walletAddress}`);
+            const data = await response.json();
+            
+            if (data) {
+                walletInfoDiv.innerHTML = `
+                    <h3>Información de la Wallet</h3>
+                    <p><strong>Dirección:</strong> ${walletAddress}</p>
+                    <p><strong>Saldo SOL:</strong> ${data.lamports ? (data.lamports / 1e9).toFixed(4) : '0'} SOL</p>
+                    <p><strong>Red:</strong> Mainnet</p>
+                `;
+                
+                // Obtener transacciones
+                const txResponse = await fetch(`https://public-api.solscan.io/account/transactions?account=${walletAddress}&limit=10`);
+                const txData = await txResponse.json();
+                
+                if (txData && txData.length > 0) {
+                    let html = '<h3>Últimas Transacciones</h3><ul>';
+                    txData.forEach(tx => {
+                        html += `
+                            <li>
+                                <p><strong>Signature:</strong> ${tx.txHash || tx.signature || 'No disponible'}</p>
+                                <p><strong>Slot:</strong> ${tx.slot || 'No disponible'}</p>
+                                <p><strong>Fecha:</strong> ${tx.blockTime ? new Date(tx.blockTime * 1000).toLocaleString() : 'No disponible'}</p>
+                                <p><strong>Estado:</strong> ${tx.status || tx.confirmationStatus || 'Confirmada'}</p>
+                            </li>
+                        `;
+                    });
+                    html += '</ul>';
+                    transactionListDiv.innerHTML = html;
+                } else {
+                    transactionListDiv.innerHTML = '<p>No hay transacciones recientes.</p>';
+                }
+            } else {
+                throw new Error('No se pudo obtener información de la wallet');
+            }
+        } catch (alternativeError) {
+            console.error('Error alternativo:', alternativeError);
+            
+            // Si ambas APIs fallan, mostrar un mensaje de error genérico
+            walletInfoDiv.innerHTML = `
+                <h3>Información de la Wallet</h3>
+                <p><strong>Dirección:</strong> ${walletAddress}</p>
+                <p><strong>Estado:</strong> No se pudo obtener información detallada</p>
+                <p>Puedes verificar esta dirección en <a href="https://solscan.io/account/${walletAddress}" target="_blank">Solscan</a> o <a href="https://explorer.solana.com/address/${walletAddress}" target="_blank">Solana Explorer</a></p>
+            `;
+            transactionListDiv.innerHTML = `
+                <p>No se pudieron cargar las transacciones. Por favor, verifica la dirección o intenta más tarde.</p>
+                <p>Puedes ver las transacciones en <a href="https://solscan.io/account/${walletAddress}" target="_blank">Solscan</a> o <a href="https://explorer.solana.com/address/${walletAddress}" target="_blank">Solana Explorer</a></p>
+            `;
+        }
     }
-}
-
-// Function to display wallet information
-function displayWalletInfo(data, container) {
-    // Check if data has the data property (nested response structure)
-    const walletData = data.data || data;
-    
-    container.innerHTML = `
-        <h3>Información de la Wallet</h3>
-        <p><strong>Dirección:</strong> ${walletData.address || 'No disponible'}</p>
-        <p><strong>Saldo SOL:</strong> ${walletData.lamports ? (walletData.lamports / 1e9).toFixed(4) : '0'} SOL</p>
-        <p><strong>Tokens:</strong> ${walletData.tokenAmount ? walletData.tokenAmount.length : 0}</p>
-    `;
-}
-
-// Function to display transaction list
-function displayTransactions(transactions, container) {
-    if (!transactions || transactions.length === 0) {
-        container.innerHTML = '<p>No hay transacciones recientes.</p>';
-        return;
-    }
-
-    let html = '<h3>Últimas Transacciones</h3><ul>';
-    transactions.forEach(tx => {
-        html += `
-            <li>
-                <p><strong>Hash:</strong> ${tx.txHash || 'No disponible'}</p>
-                <p><strong>Fecha:</strong> ${tx.blockTime ? new Date(tx.blockTime * 1000).toLocaleString() : 'No disponible'}</p>
-                <p><strong>Estado:</strong> ${tx.status || 'No disponible'}</p>
-                <p><strong>Monto SOL:</strong> ${tx.lamport ? (tx.lamport / 1e9).toFixed(4) : '0'} SOL</p>
-            </li>
-        `;
-    });
-    html += '</ul>';
-    container.innerHTML = html;
 }
