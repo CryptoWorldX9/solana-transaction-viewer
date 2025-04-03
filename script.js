@@ -132,7 +132,7 @@ function initModals() {
     document.querySelectorAll('.wallet-option').forEach(option => {
         option.addEventListener('click', function() {
             // Here you would normally connect to the wallet
-            alert('Connecting to wallet...');
+            alert('Conectando a la wallet...');
             document.getElementById('walletModal').style.display = 'none';
         });
     });
@@ -143,7 +143,7 @@ function initModals() {
         if (e.key === 'Enter') {
             const searchTerm = this.value.trim();
             if (searchTerm) {
-                document.getElementById('searchResults').innerHTML = `<p>Searching for "${searchTerm}"...</p>`;
+                document.getElementById('searchResults').innerHTML = `<p>Buscando "${searchTerm}"...</p>`;
                 // Here you would normally perform a search
             }
         }
@@ -157,7 +157,7 @@ async function fetchWalletData() {
     const transactionListDiv = document.getElementById('transactionList');
     
     if (!walletAddress) {
-        alert('Please enter a valid wallet address.');
+        alert('Por favor, ingresa una dirección de wallet válida.');
         return;
     }
 
@@ -165,7 +165,7 @@ async function fetchWalletData() {
     transactionListDiv.innerHTML = '<div class="loader"></div>';
 
     try {
-        // Get wallet information
+        // Obtener información de la wallet
         const walletResponse = await fetch(`https://api.solscan.io/account?address=${walletAddress}`, {
             headers: {
                 'Authorization': `Bearer ${API_KEY}`
@@ -174,12 +174,12 @@ async function fetchWalletData() {
         const walletData = await walletResponse.json();
 
         if (walletData.success === false) {
-            walletInfoDiv.innerHTML = '<p>Error retrieving wallet data. Please verify the address.</p>';
+            walletInfoDiv.innerHTML = '<p>Error al obtener datos de la wallet. Verifica la dirección.</p>';
         } else {
             displayWalletInfo(walletData, walletInfoDiv);
         }
 
-        // Get wallet transactions
+        // Obtener transacciones de la wallet
         const txResponse = await fetch(`https://api.solscan.io/account/transactions?address=${walletAddress}&limit=10`, {
             headers: {
                 'Authorization': `Bearer ${API_KEY}`
@@ -188,13 +188,13 @@ async function fetchWalletData() {
         const txData = await txResponse.json();
 
         if (txData.success === false) {
-            transactionListDiv.innerHTML = '<p>No transactions found or there was an error.</p>';
+            transactionListDiv.innerHTML = '<p>No se encontraron transacciones o hubo un error.</p>';
         } else {
             displayTransactions(txData.data || txData, transactionListDiv);
         }
     } catch (error) {
         console.error('Error:', error);
-        walletInfoDiv.innerHTML = '<p>Error connecting to the API. Please try again later.</p>';
+        walletInfoDiv.innerHTML = '<p>Error al conectar con la API. Intenta de nuevo más tarde.</p>';
         transactionListDiv.innerHTML = '';
     }
 }
@@ -205,9 +205,9 @@ function displayWalletInfo(data, container) {
     const walletData = data.data || data;
     
     container.innerHTML = `
-        <h3>Wallet Information</h3>
-        <p><strong>Address:</strong> ${walletData.address || 'Not available'}</p>
-        <p><strong>SOL Balance:</strong> ${walletData.lamports ? (walletData.lamports / 1e9).toFixed(4) : '0'} SOL</p>
+        <h3>Información de la Wallet</h3>
+        <p><strong>Dirección:</strong> ${walletData.address || 'No disponible'}</p>
+        <p><strong>Saldo SOL:</strong> ${walletData.lamports ? (walletData.lamports / 1e9).toFixed(4) : '0'} SOL</p>
         <p><strong>Tokens:</strong> ${walletData.tokenAmount ? walletData.tokenAmount.length : 0}</p>
     `;
 }
@@ -215,18 +215,18 @@ function displayWalletInfo(data, container) {
 // Function to display transaction list
 function displayTransactions(transactions, container) {
     if (!transactions || transactions.length === 0) {
-        container.innerHTML = '<p>No recent transactions.</p>';
+        container.innerHTML = '<p>No hay transacciones recientes.</p>';
         return;
     }
 
-    let html = '<h3>Recent Transactions</h3><ul>';
+    let html = '<h3>Últimas Transacciones</h3><ul>';
     transactions.forEach(tx => {
         html += `
             <li>
-                <p><strong>Hash:</strong> ${tx.txHash || 'Not available'}</p>
-                <p><strong>Date:</strong> ${tx.blockTime ? new Date(tx.blockTime * 1000).toLocaleString() : 'Not available'}</p>
-                <p><strong>Status:</strong> ${tx.status || 'Not available'}</p>
-                <p><strong>SOL Amount:</strong> ${tx.lamport ? (tx.lamport / 1e9).toFixed(4) : '0'} SOL</p>
+                <p><strong>Hash:</strong> ${tx.txHash || 'No disponible'}</p>
+                <p><strong>Fecha:</strong> ${tx.blockTime ? new Date(tx.blockTime * 1000).toLocaleString() : 'No disponible'}</p>
+                <p><strong>Estado:</strong> ${tx.status || 'No disponible'}</p>
+                <p><strong>Monto SOL:</strong> ${tx.lamport ? (tx.lamport / 1e9).toFixed(4) : '0'} SOL</p>
             </li>
         `;
     });
