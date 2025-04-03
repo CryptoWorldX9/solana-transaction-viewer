@@ -1,619 +1,287 @@
-// API Key de Solscan
-const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3NDE0NzA4MjAwNjksImVtYWlsIjoiY3J5cHRvd29ybGR4OUBnbWFpbC5jb20iLCJhY3Rpb24iOiJ0b2tlbi1hcGkiLCJhcGlWZXJzaW9uIjoidjIiLCJpYXQiOjE3NDE0NzA4MjB9.rGwXpbL2WoMCDp6DplM0eoXXuTnEUANxQvFhKZQcv1c';
+// Variables globales para el wallet tracker
+let trackedWallet = null;
+let trackedTokens = [];
+let trackedNFTs = [];
+let trackedTransactions = [];
+let timeFrame = '24h';
+let activeTab = 'tokens';
 
-// Configuración
-let currentNetwork = 'mainnet';
-let currentPage = 1;
-const txPerPage = 10;
-let trackedWalletAddress = '';
-
+// Inicialización cuando el DOM está cargado
 document.addEventListener('DOMContentLoaded', function() {
-    // Elementos del DOM
-    const walletSearchInput = document.getElementById('walletSearchInput');
-    const walletSearchBtn = document.getElementById('walletSearchBtn');
-    const networkOptions = document.querySelectorAll('.option-btn[data-network]');
-    const walletDetails = document.getElementById('walletDetails');
-    const trackedWalletAddressEl = document.getElementById('trackedWalletAddress');
-    const copyTrackedAddressBtn = document.getElementById('copyTrackedAddressBtn');
-    const refreshWalletBtn = document.getElementById('refreshWalletBtn');
-    const viewOnSolscan = document.getElementById('viewOnSolscan');
+    // Inicializar elementos de la interfaz específicos del tracker
+    initTrackerUI();
+});
+
+// Inicializar elementos de la interfaz del tracker
+function initTrackerUI() {
+    // Configurar selectores de tiempo
+    const timeButtons = document.querySelectorAll('.time-btn');
+    if (timeButtons) {
+        timeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                timeButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                timeFrame = this.dataset.time;
+                if (trackedWallet) {
+                    updateDashboard();
+                }
+            });
+        });
+    }
+    
+    // Configurar tabs
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabPanes = document.querySelectorAll('.tab-pane');
-    const prevTxPage = document.getElementById('prevTxPage');
-    const nextTxPage = document.getElementById('nextTxPage');
-    const txPageInfo = document.getElementById('txPageInfo');
     
-    // Inicializar eventos
-    if (walletSearchBtn && walletSearchInput) {
-        walletSearchBtn.addEventListener('click', searchWallet);
-        walletSearchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchWallet();
-            }
-        });
-    }
-    
-    // Cambiar red
-    if (networkOptions) {
-        networkOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                networkOptions.forEach(opt => opt.classList.remove('active'));
-                this.classList.add('active');
-                currentNetwork = this.getAttribute('data-network');
-                console.log('Network changed to:', currentNetwork);
-            });
-        });
-    }
-    
-    // Copiar dirección
-    if (copyTrackedAddressBtn) {
-        copyTrackedAddressBtn.addEventListener('click', function() {
-            if (trackedWalletAddress) {
-                navigator.clipboard.writeText(trackedWalletAddress)
-                    .then(() => {
-                        const originalText = copyTrackedAddressBtn.innerHTML;
-                        copyTrackedAddressBtn.innerHTML = '<i class="fas fa-check"></i>';
-                        setTimeout(() => {
-                            copyTrackedAddressBtn.innerHTML = originalText;
-                        }, 2000);
-                    })
-                    .catch(err => {
-                        console.error('Error copying address:', err);
-                    });
-            }
-        });
-    }
-    
-    // Refrescar datos
-    if (refreshWalletBtn) {
-        refreshWalletBtn.addEventListener('click', function() {
-            if (trackedWalletAddress) {
-                fetchWalletData(trackedWalletAddress);
-            }
-        });
-    }
-    
-    // Cambiar tabs
-    if (tabButtons && tabPanes) {
+    if (tabButtons) {
         tabButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const tabName = this.getAttribute('data-tab');
-                
-                // Activar botón
                 tabButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
+                tabPanes.forEach(pane => pane.classList.remove('active'));
                 
-                // Mostrar contenido
-                tabPanes.forEach(pane => {
-                    pane.classList.remove('active');
-                    if (pane.id === `${tabName}Tab`) {
-                        pane.classList.add('active');
+                this.classList.add('active');
+                activeTab = this.dataset.tab;
+                document.getElementById(`${activeTab}-tab`).classList.add('active');
+            });
+        });
+    }
+    
+    // Configurar botón de actualización
+    const refreshBtn = document.querySelector('.refresh-btn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', function() {
+            if (trackedWallet) {
+                this.classList.add('rotating');
+                trackWallet(trackedWallet);
+                setTimeout(() => {
+                    this.classList.remove('rotating');
+                }, 1000);
+            }
+        });
+    }
+    
+    // Configurar filtros de transacciones
+    const txTypeFilter = document.getElementById('tx-type-filter');
+    const txSearch = document.getElementById('tx-search');
+    
+    if (txTypeFilter) {
+        txTypeFilter.addEventListener('change', filterTransactions);
+    }
+    
+    if (txSearch) {
+        txSearch.addEventListener('input', filterTransactions);
+    }
+}
+
+// Función principal para rastrear una wallet
+async function trackWallet(address = null) {
+    const walletAddress = address || document.getElementById('walletAddress').value.trim();
+    
+    if (!walletAddress) {
+        alert('Por favor, ingresa una dirección de wallet válida.');
+        return;
+    }
+    
+    trackedWallet = walletAddress;
+    document.getElementById('walletAddress').value = walletAddress;
+    
+    // Mostrar indicadores de carga
+    document.getElementById('total-balance').innerHTML = '<div class="loader"></div>';
+    document.getElementById('token-count').innerHTML = '<div class="loader"></div>';
+    document.getElementById('nft-count').innerHTML = '<div class="loader"></div>';
+    document.getElementById('tx-count').innerHTML = '<div class="loader"></div>';
+    
+    document.getElementById('token-list').innerHTML = '<div class="loader"></div>';
+    document.getElementById('nft-grid').innerHTML = '<div class="loader"></div>';
+    document.getElementById('transaction-list').innerHTML = '<div class="loader"></div>';
+    
+    try {
+        // Obtener datos de la wallet en paralelo
+        const [accountData, tokensData, nftsData, txData] = await Promise.all([
+            fetchAccountData(walletAddress),
+            fetchTokensData(walletAddress),
+            fetchNFTsData(walletAddress),
+            fetchTransactionsData(walletAddress)
+        ]);
+        
+        // Actualizar datos globales
+        trackedTokens = tokensData;
+        trackedNFTs = nftsData;
+        trackedTransactions = txData;
+        
+        // Actualizar dashboard
+        updateDashboard(accountData);
+        
+    } catch (error) {
+        console.error('Error al rastrear wallet:', error);
+        alert('Error al obtener datos de la wallet. Intenta de nuevo más tarde.');
+    }
+}
+
+// Obtener datos de la cuenta
+async function fetchAccountData(address) {
+    const response = await fetch(`https://api.solscan.io/account?address=${address}`, {
+        headers: {
+            'Authorization': `Bearer ${API_KEY}`
+        }
+    });
+    
+    const data = await response.json();
+    
+    if (!data.success) {
+        throw new Error('Error al obtener datos de la cuenta');
+    }
+    
+    return data.data;
+}
+
+// Obtener datos de tokens
+async function fetchTokensData(address) {
+    const response = await fetch(`https://api.solscan.io/account/tokens?address=${address}`, {
+        headers: {
+            'Authorization': `Bearer ${API_KEY}`
+        }
+    });
+    
+    const data = await response.json();
+    
+    if (!data.success) {
+        return [];
+    }
+    
+    // Obtener precios de tokens en paralelo
+    const tokens = data.data || [];
+    const tokenAddresses = tokens.map(token => token.tokenAddress).filter(Boolean);
+    
+    if (tokenAddresses.length > 0) {
+        try {
+            const pricesResponse = await fetch(`https://api.solscan.io/market/token/prices?tokens=${tokenAddresses.join(',')}`, {
+                headers: {
+                    'Authorization': `Bearer ${API_KEY}`
+                }
+            });
+            
+            const pricesData = await pricesResponse.json();
+            
+            if (pricesData.success && pricesData.data) {
+                // Añadir información de precios a los tokens
+                tokens.forEach(token => {
+                    const priceInfo = pricesData.data[token.tokenAddress];
+                    if (priceInfo) {
+                        token.price = priceInfo.price;
+                        token.priceChange24h = priceInfo.priceChange24h;
                     }
                 });
-            });
-        });
-    }
-    
-    // Paginación de transacciones
-    if (prevTxPage) {
-        prevTxPage.addEventListener('click', function() {
-            if (currentPage > 1) {
-                currentPage--;
-                fetchTransactions(trackedWalletAddress);
-                updatePaginationUI();
             }
-        });
-    }
-    
-    if (nextTxPage) {
-        nextTxPage.addEventListener('click', function() {
-            currentPage++;
-            fetchTransactions(trackedWalletAddress);
-            updatePaginationUI();
-        });
-    }
-    
-    // Función para buscar wallet
-    function searchWallet() {
-        const address = walletSearchInput.value.trim();
-        if (!address) {
-            alert('Please enter a valid wallet address');
-            return;
-        }
-        
-        fetchWalletData(address);
-    }
-    
-    // Función para obtener datos de la wallet
-    async function fetchWalletData(address) {
-        trackedWalletAddress = address;
-        
-        if (walletDetails) walletDetails.style.display = 'flex';
-        if (trackedWalletAddressEl) trackedWalletAddressEl.textContent = address;
-        if (viewOnSolscan) viewOnSolscan.href = `https://solscan.io/account/${address}`;
-        
-        // Obtener balance
-        try {
-            const publicKey = new solanaWeb3.PublicKey(address);
-            const connection = new solanaWeb3.Connection(getNetworkUrl(currentNetwork));
-            
-            // Obtener balance
-            const balance = await connection.getBalance(publicKey);
-            document.getElementById('solBalance').textContent = (balance / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4);
-            
-            // Obtener tokens (simulado)
-            document.getElementById('trackedTokenCount').textContent = Math.floor(Math.random() * 20);
-            document.getElementById('trackedNftCount').textContent = Math.floor(Math.random() * 10);
-            document.getElementById('trackedTxCount').textContent = Math.floor(Math.random() * 200);
-            
-            // Obtener transacciones
-            fetchTransactions(address);
-            
-            // Obtener tokens
-            fetchTokens(address);
-            
-            // Obtener NFTs
-            fetchNFTs(address);
-            
-            // Generar gráficos
-            generateCharts();
-            
-        } catch (err) {
-            console.error('Error fetching wallet data:', err);
-            alert('Error fetching wallet data. Please check the address and try again.');
+        } catch (error) {
+            console.error('Error al obtener precios de tokens:', error);
         }
     }
     
-    // Función para obtener transacciones
-    async function fetchTransactions(address) {
-        const transactionsTableBody = document.getElementById('transactionsTableBody');
-        if (!transactionsTableBody) return;
-        
-        transactionsTableBody.innerHTML = '<tr class="loading-row"><td colspan="5">Loading transaction data...</td></tr>';
-        
-        try {
-            // Usar Solscan API para obtener transacciones
-            const response = await fetch(`https://api.solscan.io/account/transactions?address=${address}&limit=${txPerPage}&offset=${(currentPage - 1) * txPerPage}`, {
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`
-                }
-            });
-            
-            const data = await response.json();
-            
-            if (data && data.data && Array.isArray(data.data)) {
-                let html = '';
-                
-                if (data.data.length === 0) {
-                    html = '<tr><td colspan="5">No transactions found</td></tr>';
-                } else {
-                    data.data.forEach(tx => {
-                        const date = new Date(tx.blockTime * 1000).toLocaleString();
-                        const signature = tx.txHash;
-                        const shortSignature = `${signature.substring(0, 8)}...${signature.substring(signature.length - 8)}`;
-                        const status = tx.status === 'Success' ? 
-                            '<span class="status-badge success">Success</span>' : 
-                            '<span class="status-badge error">Failed</span>';
-                        
-                        // Determinar tipo de transacción (simplificado)
-                        let type = 'Unknown';
-                        let typeClass = '';
-                        
-                        if (tx.tokenTransfers && tx.tokenTransfers.length > 0) {
-                            type = 'Token Transfer';
-                            typeClass = 'token-transfer';
-                        } else if (tx.instructions && tx.instructions.some(i => i.name && i.name.includes('Swap'))) {
-                            type = 'Swap';
-                            typeClass = 'swap';
-                        } else if (tx.instructions && tx.instructions.some(i => i.name && i.name.includes('Transfer'))) {
-                            type = 'SOL Transfer';
-                            typeClass = 'sol-transfer';
-                        } else if (tx.instructions && tx.instructions.some(i => i.name && i.name.includes('Mint'))) {
-                            type = 'Mint';
-                            typeClass = 'mint';
-                        } else if (tx.instructions && tx.instructions.some(i => i.name && i.name.includes('Burn'))) {
-                            type = 'Burn';
-                            typeClass = 'burn';
-                        }
-                        
-                        // Determinar monto (simplificado)
-                        let amount = '-';
-                        if (tx.tokenTransfers && tx.tokenTransfers.length > 0) {
-                            amount = `${tx.tokenTransfers[0].amount} ${tx.tokenTransfers[0].symbol || 'tokens'}`;
-                        } else if (tx.lamport) {
-                            amount = `${(tx.lamport / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`;
-                        }
-                        
-                        html += `
-                            <tr>
-                                <td>
-                                    <a href="https://solscan.io/tx/${signature}" target="_blank" class="tx-signature">
-                                        ${shortSignature}
-                                    </a>
-                                </td>
-                                <td><span class="tx-type ${typeClass}">${type}</span></td>
-                                <td>${amount}</td>
-                                <td>${date}</td>
-                                <td>${status}</td>
-                            </tr>
-                        `;
-                    });
-                }
-                
-                transactionsTableBody.innerHTML = html;
-                updatePaginationUI();
-            } else {
-                transactionsTableBody.innerHTML = '<tr><td colspan="5">Error loading transactions</td></tr>';
-            }
-        } catch (err) {
-            console.error('Error fetching transactions:', err);
-            transactionsTableBody.innerHTML = '<tr><td colspan="5">Error loading transactions</td></tr>';
+    return tokens;
+}
+
+// Obtener datos de NFTs
+async function fetchNFTsData(address) {
+    const response = await fetch(`https://api.solscan.io/account/nfts?address=${address}`, {
+        headers: {
+            'Authorization': `Bearer ${API_KEY}`
         }
+    });
+    
+    const data = await response.json();
+    
+    if (!data.success) {
+        return [];
     }
     
-    // Función para obtener tokens
-    async function fetchTokens(address) {
-        const tokensTableBody = document.getElementById('tokensTableBody');
-        if (!tokensTableBody) return;
-        
-        tokensTableBody.innerHTML = '<tr class="loading-row"><td colspan="5">Loading token data...</td></tr>';
-        
-        try {
-            // Usar Solscan API para obtener tokens
-            const response = await fetch(`https://api.solscan.io/account/tokens?address=${address}`, {
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`
-                }
-            });
-            
-            const data = await response.json();
-            
-            if (data && data.data && Array.isArray(data.data)) {
-                let html = '';
-                
-                if (data.data.length === 0) {
-                    html = '<tr><td colspan="5">No tokens found</td></tr>';
-                } else {
-                    data.data.forEach(token => {
-                        const tokenName = token.tokenName || 'Unknown Token';
-                        const tokenSymbol = token.tokenSymbol || '???';
-                        const tokenIcon = token.tokenIcon || 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png';
-                        const balance = token.tokenAmount?.uiAmount || 0;
-                        
-                        // Datos simulados para precio y cambio
-                        const price = (Math.random() * 100).toFixed(token.tokenSymbol === 'SOL' ? 2 : 4);
-                        const value = (balance * price).toFixed(2);
-                        const change = (Math.random() * 20 - 10).toFixed(2);
-                        const changeClass = parseFloat(change) >= 0 ? 'positive' : 'negative';
-                        const changeIcon = parseFloat(change) >= 0 ? 'fa-caret-up' : 'fa-caret-down';
-                        
-                        html += `
-                            <tr>
-                                <td>
-                                    <div class="token-info">
-                                        <img src="${tokenIcon}" alt="${tokenSymbol}" class="token-icon">
-                                        <div>
-                                            <div class="token-name">${tokenName}</div>
-                                            <div class="token-symbol">${tokenSymbol}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>${balance.toLocaleString()}</td>
-                                <td>$${value}</td>
-                                <td>$${price}</td>
-                                <td class="${changeClass}">
-                                    <i class="fas ${changeIcon}"></i> ${Math.abs(change)}%
-                                </td>
-                            </tr>
-                        `;
-                    });
-                }
-                
-                tokensTableBody.innerHTML = html;
-            } else {
-                tokensTableBody.innerHTML = '<tr><td colspan="5">Error loading tokens</td></tr>';
-            }
-        } catch (err) {
-            console.error('Error fetching tokens:', err);
-            tokensTableBody.innerHTML = '<tr><td colspan="5">Error loading tokens</td></tr>';
+    return data.data || [];
+}
+
+// Obtener datos de transacciones
+async function fetchTransactionsData(address) {
+    const response = await fetch(`https://api.solscan.io/account/transactions?address=${address}&limit=50`, {
+        headers: {
+            'Authorization': `Bearer ${API_KEY}`
         }
+    });
+    
+    const data = await response.json();
+    
+    if (!data.success) {
+        return [];
     }
     
-    // Función para obtener NFTs
-    async function fetchNFTs(address) {
-        const nftsGrid = document.getElementById('nftsGrid');
-        if (!nftsGrid) return;
-        
-        nftsGrid.innerHTML = '<div class="loading-message">Loading NFT data...</div>';
-        
-        try {
-            // Usar Solscan API para obtener NFTs
-            const response = await fetch(`https://api.solscan.io/account/nfts?address=${address}`, {
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`
-                }
-            });
-            
-            const data = await response.json();
-            
-            if (data && data.data && Array.isArray(data.data)) {
-                let html = '';
-                
-                if (data.data.length === 0) {
-                    html = '<div class="no-data-message">No NFTs found</div>';
-                } else {
-                    data.data.forEach(nft => {
-                        const nftName = nft.name || 'Unknown NFT';
-                        const nftImage = nft.image || 'https://via.placeholder.com/150?text=No+Image';
-                        const nftCollection = nft.collection?.name || 'Unknown Collection';
-                        
-                        html += `
-                            <div class="nft-card">
-                                <div class="nft-image">
-                                    <img src="${nftImage}" alt="${nftName}">
-                                </div>
-                                <div class="nft-info">
-                                    <h4>${nftName}</h4>
-                                    <p>${nftCollection}</p>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-                
-                nftsGrid.innerHTML = html;
-            } else {
-                nftsGrid.innerHTML = '<div class="no-data-message">Error loading NFTs</div>';
-            }
-        } catch (err) {
-            console.error('Error fetching NFTs:', err);
-            nftsGrid.innerHTML = '<div class="no-data-message">Error loading NFTs</div>';
-        }
+    return data.data || [];
+}
+
+// Actualizar dashboard
+function updateDashboard(accountData = null) {
+    // Actualizar contadores
+    document.getElementById('token-count').textContent = trackedTokens.length;
+    document.getElementById('nft-count').textContent = trackedNFTs.length;
+    document.getElementById('tx-count').textContent = trackedTransactions.length;
+    
+    // Calcular saldo total
+    let totalBalance = 0;
+    
+    if (accountData) {
+        // Añadir saldo SOL
+        totalBalance += accountData.lamports / 1e9;
     }
     
-    // Función para generar gráficos
-    function generateCharts() {
-        // Simulación de datos para los gráficos
-        
-        // Balance History Chart
-        const balanceCtx = document.getElementById('balanceChart');
-        if (balanceCtx) {
-            const dates = [];
-            const balances = [];
-            
-            // Generar datos de los últimos 30 días
-            const today = new Date();
-            let balance = Math.random() * 10 + 1; // Balance inicial entre 1 y 11 SOL
-            
-            for (let i = 30; i >= 0; i--) {
-                const date = new Date(today);
-                date.setDate(today.getDate() - i);
-                dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-                
-                // Simular cambios en el balance
-                balance += (Math.random() - 0.45) * 0.5;
-                balance = Math.max(0.1, balance); // Asegurar que no sea negativo
-                balances.push(balance.toFixed(2));
-            }
-            
-            new Chart(balanceCtx, {
-                type: 'line',
-                data: {
-                    labels: dates,
-                    datasets: [{
-                        label: 'SOL Balance',
-                        data: balances,
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: '#94a3b8'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: '#94a3b8',
-                                maxRotation: 45,
-                                minRotation: 45
-                            }
-                        }
-                    }
-                }
-            });
+    // Añadir valor de tokens
+    trackedTokens.forEach(token => {
+        if (token.price && token.tokenAmount && token.tokenAmount.uiAmount) {
+            totalBalance += token.price * token.tokenAmount.uiAmount;
         }
-        
-        // Transaction Activity Chart
-        const activityCtx = document.getElementById('activityChart');
-        if (activityCtx) {
-            const dates = [];
-            const activities = [];
-            
-            // Generar datos de los últimos 30 días
-            const today = new Date();
-            
-            for (let i = 30; i >= 0; i--) {
-                const date = new Date(today);
-                date.setDate(today.getDate() - i);
-                dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-                
-                // Simular actividad de transacciones
-                activities.push(Math.floor(Math.random() * 10));
-            }
-            
-            new Chart(activityCtx, {
-                type: 'bar',
-                data: {
-                    labels: dates,
-                    datasets: [{
-                        label: 'Transactions',
-                        data: activities,
-                        backgroundColor: '#3b82f6',
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: '#94a3b8',
-                                stepSize: 1
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: '#94a3b8',
-                                maxRotation: 45,
-                                minRotation: 45
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        
-        // Token Distribution Chart
-        const distributionCtx = document.getElementById('distributionChart');
-        if (distributionCtx) {
-            // Simular distribución de tokens
-            const tokens = ['SOL', 'USDC', 'RAY', 'SRM', 'Other'];
-            const values = [45, 25, 15, 10, 5];
-            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
-            
-            new Chart(distributionCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: tokens,
-                    datasets: [{
-                        data: values,
-                        backgroundColor: colors,
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                color: '#94a3b8',
-                                padding: 10,
-                                usePointStyle: true,
-                                pointStyle: 'circle'
-                            }
-                        }
-                    },
-                    cutout: '70%'
-                }
-            });
-        }
-        
-        // Transaction Types Chart
-        const txTypesCtx = document.getElementById('txTypesChart');
-        if (txTypesCtx) {
-            // Simular tipos de transacciones
-            const types = ['Transfers', 'Swaps', 'Mints', 'Burns', 'Other'];
-            const counts = [40, 30, 15, 10, 5];
-            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
-            
-            new Chart(txTypesCtx, {
-                type: 'pie',
-                data: {
-                    labels: types,
-                    datasets: [{
-                        data: counts,
-                        backgroundColor: colors,
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                color: '#94a3b8',
-                                padding: 10,
-                                usePointStyle: true,
-                                pointStyle: 'circle'
-                            }
-                        }
-                    }
-                }
-            });
-        }
+    });
+    
+    document.getElementById('total-balance').textContent = `$${totalBalance.toFixed(2)}`;
+    
+    // Actualizar listas según la pestaña activa
+    switch (activeTab) {
+        case 'tokens':
+            displayTokens();
+            break;
+        case 'nfts':
+            displayNFTs();
+            break;
+        case 'transactions':
+            displayTransactions();
+            break;
+        case 'analytics':
+            displayAnalytics();
+            break;
+    }
+}
+
+// Mostrar tokens
+function displayTokens() {
+    const tokenListElement = document.getElementById('token-list');
+    
+    if (trackedTokens.length === 0) {
+        tokenListElement.innerHTML = '<p class="empty-message">No se encontraron tokens para esta wallet.</p>';
+        return;
     }
     
-    // Función para actualizar UI de paginación
-    function updatePaginationUI() {
-        if (prevTxPage) prevTxPage.disabled = currentPage <= 1;
-        if (txPageInfo) txPageInfo.textContent = `Page ${currentPage}`;
-    }
+    let html = '';
     
-    // Función para obtener URL de la red
-    function getNetworkUrl(network) {
-        switch (network) {
-            case 'mainnet':
-                return 'https://api.mainnet-beta.solana.com';
-            case 'devnet':
-                return 'https://api.devnet.solana.com';
-            case 'testnet':
-                return 'https://api.testnet.solana.com';
-            default:
-                return 'https://api.mainnet-beta.solana.com';
-        }
-    }
+    // Ordenar tokens por valor (de mayor a menor)
+    const sortedTokens = [...trackedTokens].sort((a, b) => {
+        const valueA = (a.price || 0) * (a.tokenAmount?.uiAmount || 0);
+        const valueB = (b.price || 0) * (b.tokenAmount?.uiAmount || 0);
+        return valueB - valueA;
+    });
     
-    // Verificar si hay una dirección en la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const addressParam = urlParams.get('address');
-    
-    if (addressParam) {
-        if (walletSearchInput) walletSearchInput.value = addressParam;
-        fetchWalletData(addressParam);
-    }
-});
+    sortedTokens.forEach(token => {
+        const tokenAmount = token.tokenAmount?.uiAmount || 0;
+        const tokenPrice = token.price || 0;
+        const tokenValue = tokenAmount * tokenPrice;
+        const priceChange = token.priceChange24h || 0;
+        const changeClass = priceChange >= 0 ? 'positive' : 'negative';
+        
+        html += `
+        <div class="token-item">
+            <div class="token-info">
+                <img src="${token.logoURI || 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png'}" alt
