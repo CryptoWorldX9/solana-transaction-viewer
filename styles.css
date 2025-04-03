@@ -1,21 +1,22 @@
 /* Variables y reseteo */
 :root {
-    --primary-color: #1E2029;
-    --secondary-color: #2A2D3A;
+    --primary-color: #0F1117;
+    --secondary-color: #1A1D29;
     --accent-color: #3772FF;
-    --text-color: #E0E0E0;
-    --text-secondary: #9E9E9E;
+    --text-color: #FFFFFF;
+    --text-secondary: #8B8D97;
     --sidebar-width: 250px;
     --header-height: 60px;
     --border-radius: 8px;
     --transition-speed: 0.3s;
+    --border-color: #2A2D3A;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 body {
@@ -44,6 +45,7 @@ body {
     transition: transform var(--transition-speed);
     z-index: 100;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    border-right: 1px solid var(--border-color);
 }
 
 .sidebar-header {
@@ -51,7 +53,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .logo {
@@ -74,7 +76,7 @@ body {
 }
 
 .sidebar-menu li {
-    margin: 5px 0;
+    margin: 2px 0;
 }
 
 .sidebar-menu a {
@@ -86,6 +88,8 @@ body {
     transition: background-color var(--transition-speed);
     border-radius: 4px;
     margin: 0 10px;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .sidebar-menu a:hover {
@@ -121,6 +125,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 90;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .sidebar-toggle {
@@ -171,6 +176,33 @@ body {
     display: block;
 }
 
+.page-header {
+    margin-bottom: 20px;
+}
+
+.page-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.page-content {
+    background-color: var(--secondary-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.info-message {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.info-message p {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
 .welcome-section {
     background-color: var(--secondary-color);
     padding: 30px;
@@ -179,28 +211,60 @@ body {
     text-align: center;
     max-width: 800px;
     margin: 0 auto;
+    border: 1px solid var(--border-color);
 }
 
 .welcome-section h2 {
     margin-bottom: 20px;
     color: var(--text-color);
-    font-size: 28px;
+    font-size: 24px;
+    font-weight: 600;
 }
 
 .welcome-section p {
     margin-bottom: 15px;
     color: var(--text-secondary);
-    font-size: 16px;
+    font-size: 14px;
+}
+
+/* Section Tabs */
+.section-tabs {
+    display: flex;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 10px;
+}
+
+.tab-btn {
+    padding: 15px 20px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+}
+
+.tab-btn.active {
+    color: var(--text-color);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--accent-color);
 }
 
 /* Input Section */
 .input-section {
-    background-color: var(--secondary-color);
     padding: 20px;
-    border-radius: var(--border-radius);
-    margin-bottom: 20px;
-    max-width: 800px;
-    margin: 20px auto;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .input-group {
@@ -211,7 +275,7 @@ body {
 .input-group input {
     flex: 1;
     padding: 12px 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: var(--border-radius) 0 0 var(--border-radius);
     color: var(--text-color);
@@ -235,7 +299,7 @@ body {
 
 .network-selector h3 {
     margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 14px;
     color: var(--text-secondary);
 }
 
@@ -248,11 +312,12 @@ body {
 .network-btn {
     padding: 8px 15px;
     background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     color: var(--text-secondary);
     cursor: pointer;
     transition: all var(--transition-speed);
+    font-size: 14px;
 }
 
 .network-btn:hover {
@@ -266,28 +331,18 @@ body {
 
 /* Results Section */
 .results-section {
-    background-color: var(--secondary-color);
-    padding: 20px;
-    border-radius: var(--border-radius);
-    max-width: 800px;
-    margin: 0 auto 20px;
-}
-
-.results-section h2 {
-    margin-bottom: 20px;
-    color: var(--text-color);
-    font-size: 20px;
-    text-align: center;
+    padding-bottom: 20px;
 }
 
 #walletInfo, #transactionList {
-    margin-bottom: 20px;
+    padding: 20px;
 }
 
 #walletInfo h3, #transactionList h3 {
     margin-bottom: 15px;
     color: var(--text-color);
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 #transactionList ul {
@@ -296,11 +351,26 @@ body {
 
 #transactionList li {
     padding: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-color);
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    margin-bottom: 10px;
 }
 
 #transactionList li:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
+}
+
+/* Waiting Message */
+.waiting-message {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.waiting-message h3 {
+    color: var(--text-secondary);
+    font-size: 16px;
+    font-weight: 500;
 }
 
 /* Modal */
@@ -326,6 +396,7 @@ body {
     border-radius: var(--border-radius);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     animation: slideIn 0.3s;
+    border: 1px solid var(--border-color);
 }
 
 .close-modal {
@@ -340,7 +411,8 @@ body {
 .modal h2 {
     margin-bottom: 20px;
     color: var(--text-color);
-    font-size: 24px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .search-input {
@@ -351,7 +423,7 @@ body {
 .search-input input {
     flex: 1;
     padding: 12px 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: var(--border-radius) 0 0 var(--border-radius);
     color: var(--text-color);
@@ -383,6 +455,7 @@ body {
     border-radius: var(--border-radius);
     cursor: pointer;
     transition: background-color var(--transition-speed);
+    border: 1px solid var(--border-color);
 }
 
 .wallet-option:hover {
@@ -398,6 +471,7 @@ body {
 .wallet-option span {
     color: var(--text-color);
     font-weight: 500;
+    font-size: 14px;
 }
 
 /* Loader */
@@ -414,14 +488,11 @@ body {
 /* Estilos para el ChatBot */
 .chatbot-container {
     background-color: var(--secondary-color);
-    border-radius: var(--border-radius);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     height: 500px;
-    max-width: 800px;
-    margin: 20px auto;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-top: 1px solid var(--border-color);
 }
 
 .chat-messages {
@@ -431,6 +502,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .message {
@@ -465,13 +537,13 @@ body {
     display: flex;
     padding: 15px;
     background-color: rgba(0, 0, 0, 0.2);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--border-color);
 }
 
 .chat-input input {
     flex: 1;
     padding: 12px 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: var(--border-radius) 0 0 var(--border-radius);
     color: var(--text-color);
@@ -542,5 +614,9 @@ body {
     
     .wallet-options {
         grid-template-columns: 1fr;
+    }
+    
+    .section-tabs {
+        overflow-x: auto;
     }
 }
