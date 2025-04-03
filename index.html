@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,9 +16,9 @@
             </div>
             <nav class="sidebar-menu">
                 <div class="menu-section">
-                    <h3>Herramientas</h3>
+                    <h3>Tools</h3>
                     <ul>
-                        <li class="active"><a href="#" data-page="home"><i class="fas fa-home"></i>Inicio</a></li>
+                        <li class="active"><a href="#" data-page="home"><i class="fas fa-home"></i>Home</a></li>
                         <li><a href="#" data-page="token-creator"><i class="fas fa-plus-circle"></i>Token Creator</a></li>
                         <li><a href="#" data-page="sentiment-tracker"><i class="fas fa-chart-line"></i>Sentiment Tracker</a></li>
                         <li><a href="#" data-page="token-tracker"><i class="fas fa-search-dollar"></i>Token Tracker</a></li>
@@ -30,17 +30,17 @@
                     </ul>
                 </div>
                 <div class="menu-section">
-                    <h3>Recursos</h3>
+                    <h3>Resources</h3>
                     <ul>
-                        <li><a href="#" data-page="guide"><i class="fas fa-book"></i>Guía</a></li>
+                        <li><a href="#" data-page="guide"><i class="fas fa-book"></i>Guide</a></li>
                         <li><a href="#" data-page="knowledge-base"><i class="fas fa-graduation-cap"></i>Knowledge Base</a></li>
-                        <li><a href="#" data-page="support"><i class="fas fa-headset"></i>Soporte</a></li>
+                        <li><a href="#" data-page="support"><i class="fas fa-headset"></i>Support</a></li>
                     </ul>
                 </div>
             </nav>
         </div>
 
-        <!-- Overlay para móvil -->
+        <!-- Mobile overlay -->
         <div class="sidebar-overlay"></div>
 
         <!-- Main Content -->
@@ -50,34 +50,34 @@
                 <div class="header-actions">
                     <button class="action-btn search-btn"><i class="fas fa-search"></i></button>
                     <button class="action-btn"><i class="fas fa-user"></i></button>
-                    <button class="wallet-btn"><i class="fas fa-wallet"></i><span>Conectar Wallet</span></button>
+                    <button class="wallet-btn"><i class="fas fa-wallet"></i><span>Connect Wallet</span></button>
                 </div>
             </div>
 
             <div class="content-wrapper">
-                <!-- Página de inicio -->
+                <!-- Home page -->
                 <div id="home" class="page active">
                     <div class="welcome-section">
-                        <h2>Bienvenido a CryptoTools</h2>
-                        <p>Una plataforma integral diseñada para gestionar, analizar y optimizar tu experiencia en el ecosistema cripto.</p>
-                        <p>Accede a herramientas clave como creación y seguimiento de tokens, gestión de wallets, análisis de sentimiento, control de portafolio y más.</p>
-                        <p>Incluye recursos como guía de uso y base de conocimiento para acompañarte en cada paso.</p>
+                        <h2>Welcome to CryptoTools</h2>
+                        <p>A comprehensive platform designed to manage, analyze, and optimize your experience in the crypto ecosystem.</p>
+                        <p>Access key tools such as token creation and tracking, wallet management, sentiment analysis, portfolio control, and more.</p>
+                        <p>Includes resources like user guides and knowledge base to support you every step of the way.</p>
                     </div>
                 </div>
 
-                <!-- Página de Wallet Tracker -->
+                <!-- Wallet Tracker page -->
                 <div id="wallet-tracker" class="page">
                     <div class="welcome-section">
                         <h2>Wallet Tracker</h2>
-                        <p>Monitorea cualquier wallet de Solana en tiempo real. Visualiza saldos, tokens, NFTs y el historial completo de transacciones.</p>
+                        <p>Monitor any Solana wallet in real-time. View balances, tokens, NFTs, and complete transaction history.</p>
                     </div>
                     <section class="input-section">
                         <div class="input-group">
-                            <input type="text" id="walletAddress" placeholder="Ingresa la dirección de la wallet Solana">
-                            <button onclick="fetchWalletData()">Buscar</button>
+                            <input type="text" id="walletAddress" placeholder="Enter Solana wallet address">
+                            <button onclick="fetchWalletData()">Search</button>
                         </div>
                         <div class="network-selector">
-                            <h3>Selecciona la red</h3>
+                            <h3>Select Network</h3>
                             <div class="network-buttons">
                                 <button class="network-btn active">Mainnet</button>
                                 <button class="network-btn">Testnet</button>
@@ -86,95 +86,95 @@
                         </div>
                     </section>
                     <section class="results-section" id="results">
-                        <h2>Resultados</h2>
+                        <h2>Results</h2>
                         <div id="walletInfo"></div>
                         <div id="transactionList"></div>
                     </section>
                 </div>
 
-                <!-- Otras páginas (con descripciones mejoradas) -->
+                <!-- Other pages (with improved descriptions) -->
                 <div id="token-creator" class="page">
                     <div class="welcome-section">
                         <h2>Token Creator</h2>
-                        <p>Crea tokens personalizados en la blockchain de Solana con facilidad. Define nombre, símbolo, suministro, decimales y metadatos adicionales sin necesidad de conocimientos técnicos.</p>
+                        <p>Create custom tokens on the Solana blockchain with ease. Define name, symbol, supply, decimals, and additional metadata without technical knowledge.</p>
                     </div>
                 </div>
                 <div id="sentiment-tracker" class="page">
                     <div class="welcome-section">
                         <h2>Sentiment Tracker</h2>
-                        <p>Analiza el sentimiento del mercado en tiempo real. Monitorea menciones en redes sociales, foros y noticias para tomar decisiones informadas basadas en la percepción colectiva.</p>
+                        <p>Analyze market sentiment in real-time. Monitor mentions on social media, forums, and news to make informed decisions based on collective perception.</p>
                     </div>
                 </div>
                 <div id="token-tracker" class="page">
                     <div class="welcome-section">
                         <h2>Token Tracker</h2>
-                        <p>Sigue el rendimiento de cualquier token en la red Solana. Visualiza precios, capitalización, volumen, gráficos históricos y métricas clave para análisis detallado.</p>
+                        <p>Track the performance of any token on the Solana network. View prices, market cap, volume, historical charts, and key metrics for detailed analysis.</p>
                     </div>
                 </div>
                 <div id="detox-reclaim" class="page">
                     <div class="welcome-section">
                         <h2>Detox & Reclaim</h2>
-                        <p>Limpia tu wallet de tokens no deseados y recupera SOL bloqueado en cuentas inactivas. Optimiza tu cartera y mejora la seguridad de tus activos digitales.</p>
+                        <p>Clean your wallet of unwanted tokens and recover SOL locked in inactive accounts. Optimize your portfolio and enhance the security of your digital assets.</p>
                     </div>
                 </div>
                 <div id="positioning" class="page">
                     <div class="welcome-section">
                         <h2>Positioning</h2>
-                        <p>Optimiza tu posición en el mercado con análisis avanzado. Identifica niveles óptimos de entrada y salida, gestiona el riesgo y maximiza tus oportunidades de inversión.</p>
+                        <p>Optimize your market position with advanced analysis. Identify optimal entry and exit levels, manage risk, and maximize your investment opportunities.</p>
                     </div>
                 </div>
                 <div id="token-burner" class="page">
                     <div class="welcome-section">
                         <h2>Token Burner</h2>
-                        <p>Quema tokens para reducir el suministro circulante y potencialmente aumentar su valor. Gestiona la economía de tu token con esta herramienta especializada.</p>
+                        <p>Burn tokens to reduce circulating supply and potentially increase their value. Manage your token's economy with this specialized tool.</p>
                     </div>
                 </div>
                 <div id="portfolio" class="page">
                     <div class="welcome-section">
                         <h2>Portfolio</h2>
-                        <p>Visualiza y gestiona tu cartera completa de criptoactivos. Analiza rendimiento, diversificación, ganancias/pérdidas y obtén informes detallados sobre tu inversión.</p>
+                        <p>Visualize and manage your complete crypto asset portfolio. Analyze performance, diversification, profits/losses, and get detailed reports on your investment.</p>
                     </div>
                 </div>
                 <div id="guide" class="page">
                     <div class="welcome-section">
-                        <h2>Guía</h2>
-                        <p>Accede a tutoriales paso a paso sobre cómo utilizar cada herramienta de CryptoTools. Aprende desde lo básico hasta técnicas avanzadas para maximizar tu experiencia.</p>
+                        <h2>Guide</h2>
+                        <p>Access step-by-step tutorials on how to use each CryptoTools tool. Learn from basics to advanced techniques to maximize your experience.</p>
                     </div>
                 </div>
                 <div id="knowledge-base" class="page">
                     <div class="welcome-section">
                         <h2>Knowledge Base</h2>
-                        <p>Explora nuestra biblioteca de recursos educativos sobre blockchain, criptomonedas, DeFi y más. Mantente actualizado con las últimas tendencias y conceptos del ecosistema.</p>
+                        <p>Explore our library of educational resources on blockchain, cryptocurrencies, DeFi, and more. Stay updated with the latest trends and concepts in the ecosystem.</p>
                     </div>
                 </div>
                 <div id="support" class="page">
                     <div class="welcome-section">
-                        <h2>Soporte</h2>
-                        <p>¿Necesitas ayuda? Contacta con nuestro equipo de soporte para resolver cualquier duda o problema técnico. Estamos aquí para asistirte en tu experiencia con CryptoTools.</p>
+                        <h2>Support</h2>
+                        <p>Need help? Contact our support team to resolve any questions or technical issues. We're here to assist you in your experience with CryptoTools.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal de búsqueda -->
+    <!-- Search modal -->
     <div id="searchModal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>Buscar</h2>
+            <h2>Search</h2>
             <div class="search-input">
-                <input type="text" placeholder="Buscar tokens, wallets, transacciones...">
+                <input type="text" placeholder="Search tokens, wallets, transactions...">
                 <button><i class="fas fa-search"></i></button>
             </div>
             <div id="searchResults"></div>
         </div>
     </div>
 
-    <!-- Modal de wallet -->
+    <!-- Wallet modal -->
     <div id="walletModal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>Conectar Wallet</h2>
+            <h2>Connect Wallet</h2>
             <div class="wallet-options">
                 <div class="wallet-option">
                     <img src="https://phantom.app/img/logo.png" alt="Phantom">
@@ -196,7 +196,7 @@
         </div>
     </div>
 
-    <!-- Botón de toggle de tema -->
+    <!-- Theme toggle button -->
     <button class="theme-toggle"><i class="fas fa-moon"></i></button>
 
     <script src="script.js"></script>
