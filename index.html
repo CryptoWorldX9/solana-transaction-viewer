@@ -3,28 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solana Transaction Viewer</title>
+    <title>CryptoTools</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.css">
 </head>
 <body>
-    <header>
-        <h1>Solana Transaction Viewer</h1>
-        <p>Explora transacciones y detalles de wallets en la red Solana</p>
-    </header>
-    <main>
-        <section class="input-section">
-            <h2>Ingresa la dirección de la wallet</h2>
-            <input type="text" id="walletAddress" placeholder="Ejemplo: 5JLcGJQfZjEEuh1bSDqyw2iEfLuFRoYRJY1paoSwrZC8" aria-label="Dirección de wallet Solana">
-            <button id="searchButton">Buscar</button>
-        </section>
-        <section class="results-section" id="results">
-            <h2>Resultados</h2>
-            <div id="walletInfo"></div>
-            <div id="transactionList"></div>
-        </section>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <img src="logo.png" alt="Logo" class="logo">
+                <div class="nav-links">
+                    <a href="#" class="active">Tools</a>
+                    <a href="#">Resources</a>
+                    <a href="#">About</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="connect-wallet">
+                    <i class="fas fa-wallet"></i>
+                    Connect Wallet
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="hero-section">
+            <h1>Crypto Tools Suite</h1>
+            <p>Powerful tools for Solana blockchain analysis and management</p>
+        </div>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <i class="fas fa-search"></i>
+                <h3>Transaction Viewer</h3>
+                <p>Explore Solana transactions and wallet details</p>
+                <a href="#" class="tool-link">Launch Tool</a>
+            </div>
+            <!-- Más cards de herramientas se agregarán después -->
+        </div>
     </main>
+
     <footer>
-        <p>© 2025 Solana Transaction Viewer. Todos los derechos reservados.</p>
+        <div class="footer-content">
+            <p>&copy; 2025 CryptoTools. All rights reserved.</p>
+        </div>
     </footer>
     <script src="script.js"></script>
 </body>
