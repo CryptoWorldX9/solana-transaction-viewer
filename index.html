@@ -9,47 +9,121 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-left">
+    <div class="app-container">
+        <!-- Sidebar / Menú lateral -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
                 <img src="logo.png" alt="Logo" class="logo">
-                <div class="nav-links">
-                    <a href="#" class="active">Tools</a>
-                    <a href="#">Resources</a>
-                    <a href="#">About</a>
-                </div>
             </div>
-            <div class="nav-right">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3 class="nav-title">Tools</h3>
+                    <ul class="nav-items">
+                        <li class="nav-item active">
+                            <a href="#"><i class="fas fa-home"></i>Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#"><i class="fas fa-search"></i>Token Explorer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#"><i class="fas fa-chart-line"></i>Price Chart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#"><i class="fas fa-exchange-alt"></i>Swap</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#"><i class="fas fa-wallet"></i>Portfolio</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3 class="nav-title">Resources</h3>
+                    <ul class="nav-items">
+                        <li class="nav-item">
+                            <a href="#"><i class="fas fa-book"></i>Documentation</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#"><i class="fas fa-question-circle"></i>Help Center</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
                 <button class="connect-wallet">
                     <i class="fas fa-wallet"></i>
                     Connect Wallet
                 </button>
             </div>
-        </div>
-    </nav>
+        </aside>
 
-    <main class="main-content">
-        <div class="hero-section">
-            <h1>Crypto Tools Suite</h1>
-            <p>Powerful tools for Solana blockchain analysis and management</p>
-        </div>
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Dashboard</h1>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <button class="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </header>
 
-        <div class="tools-grid">
-            <div class="tool-card">
-                <i class="fas fa-search"></i>
-                <h3>Transaction Viewer</h3>
-                <p>Explore Solana transactions and wallet details</p>
-                <a href="#" class="tool-link">Launch Tool</a>
+            <div class="content-area">
+                <div class="welcome-card">
+                    <div class="welcome-text">
+                        <h2>Welcome to CryptoTools</h2>
+                        <p>Explore our suite of tools for Solana blockchain analysis and management</p>
+                    </div>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="tool-info">
+                            <h3>Token Explorer</h3>
+                            <p>Search and analyze tokens on Solana</p>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="tool-info">
+                            <h3>Price Chart</h3>
+                            <p>View real-time price data</p>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="tool-info">
+                            <h3>Swap</h3>
+                            <p>Exchange tokens seamlessly</p>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="tool-info">
+                            <h3>Portfolio</h3>
+                            <p>Track your assets and performance</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- Más cards de herramientas se agregarán después -->
-        </div>
-    </main>
+        </main>
+    </div>
 
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2025 CryptoTools. All rights reserved.</p>
-        </div>
-    </footer>
     <script src="script.js"></script>
 </body>
 </html>
