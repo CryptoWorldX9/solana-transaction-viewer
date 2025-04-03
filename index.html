@@ -3,223 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptoTools</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Portal de Herramientas Solana</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Solana Web3.js -->
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <!-- Sidebar -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <img src="logo.png" alt="Logo" class="logo">
             </div>
-            <nav class="sidebar-menu">
+            <div class="sidebar-menu">
                 <ul>
-                    <li class="active"><a href="#" data-page="home"><i class="fas fa-home"></i>Home</a></li>
-                    <li><a href="#" data-page="chatbot"><i class="fas fa-robot"></i>ChatBot 24/7</a></li>
-                    <li><a href="#" data-page="sentiment-tracker"><i class="fas fa-chart-line"></i>Sentiment Tracker</a></li>
-                    <li><a href="#" data-page="token-tracker"><i class="fas fa-search-dollar"></i>Token Tracker</a></li>
-                    <li><a href="#" data-page="detox-reclaim"><i class="fas fa-broom"></i>Detox & Reclaim</a></li>
-                    <li><a href="#" data-page="wallet-tracker"><i class="fas fa-wallet"></i>Wallet Tracker</a></li>
-                    <li><a href="#" data-page="positioning"><i class="fas fa-map-marker-alt"></i>Positioning</a></li>
-                    <li><a href="#" data-page="token-burner"><i class="fas fa-fire"></i>Token Burner</a></li>
-                    <li><a href="#" data-page="portfolio"><i class="fas fa-briefcase"></i>Portfolio</a></li>
-                    <li><a href="#" data-page="guide"><i class="fas fa-book"></i>Guide</a></li>
-                    <li><a href="#" data-page="knowledge-base"><i class="fas fa-graduation-cap"></i>Knowledge Base</a></li>
-                    <li><a href="#" data-page="support"><i class="fas fa-headset"></i>Support</a></li>
+                    <li class="active"><a href="#home"><i class="fas fa-home"></i>Inicio</a></li>
+                    <li><a href="#wallet-tracker"><i class="fas fa-wallet"></i>Wallet Tracker</a></li>
+                    <li><a href="#token-tracker"><i class="fas fa-chart-line"></i>Token Tracker</a></li>
+                    <li><a href="#token-burner"><i class="fas fa-fire"></i>Token Burner</a></li>
+                    <li><a href="#knowledge-base"><i class="fas fa-book"></i>Knowledge Base</a></li>
                 </ul>
-            </nav>
+                <h4 class="sidebar-category">Recursos</h4>
+                <ul>
+                    <li><a href="#guide"><i class="fas fa-compass"></i>Guía</a></li>
+                    <li><a href="#support"><i class="fas fa-headset"></i>Soporte</a></li>
+                </ul>
+            </div>
         </div>
-
-        <!-- Mobile overlay -->
-        <div class="sidebar-overlay"></div>
 
         <!-- Main Content -->
         <div class="main-content">
             <div class="top-header">
-                <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <div class="header-actions">
-                    <button class="action-btn search-btn"><i class="fas fa-search"></i></button>
-                    <button class="action-btn"><i class="fas fa-user"></i></button>
-                    <button class="action-btn wallet-btn"><i class="fas fa-wallet"></i></button>
-                    <button class="action-btn theme-toggle"><i class="fas fa-moon"></i></button>
+                    <button class="action-btn" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="action-btn" id="walletBtn">
+                        <i class="fas fa-wallet"></i>
+                    </button>
+                    <button class="action-btn" id="userBtn">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <button class="action-btn" id="nightModeBtn">
+                        <i class="fas fa-moon"></i>
+                    </button>
                 </div>
             </div>
 
             <div class="content-wrapper">
-                <!-- Home page -->
-                <div id="home" class="page active">
+                <!-- Home Page -->
+                <div class="page active" id="home">
                     <div class="welcome-section">
-                        <h2>Welcome to CryptoTools</h2>
-                        <p>A comprehensive platform designed to manage, analyze, and optimize your experience in the crypto ecosystem.</p>
-                        <p>Access key tools such as token creation and tracking, wallet management, sentiment analysis, portfolio control, and more.</p>
-                        <p>Includes resources like user guides and knowledge base to support you every step of the way.</p>
+                        <h2>Bienvenido a nuestro Portal de Herramientas Solana</h2>
+                        <p>Explora nuestras herramientas para analizar y gestionar tus activos en la blockchain de Solana.</p>
+                        <p>Selecciona una herramienta del menú lateral para comenzar.</p>
                     </div>
                 </div>
 
-                <!-- ChatBot page -->
-                <div id="chatbot" class="page">
-                    <div class="page-header">
-                        <h2>ChatBot 24/7</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>Get real-time assistance with our AI-powered trading assistant. Improve your trading skills, get market insights, and receive personalized recommendations.</p>
-                        </div>
-                        <div class="chatbot-container">
-                            <div class="chat-messages" id="chatMessages">
-                                <div class="message bot">
-                                    <div class="message-content">
-                                        <p>Hello! I'm your crypto trading assistant. How can I help you today?</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="chat-input">
-                                <input type="text" id="userMessage" placeholder="Ask me anything about crypto trading...">
-                                <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Wallet Tracker page -->
-                <div id="wallet-tracker" class="page">
+                <!-- Wallet Tracker Page -->
+                <div class="page" id="wallet-tracker">
                     <div class="page-header">
                         <h2>Wallet Tracker</h2>
                     </div>
                     <div class="page-content">
                         <div class="info-message">
-                            <p>Monitor any Solana wallet in real-time. View balances, tokens, NFTs, and complete transaction history.</p>
+                            <p>Rastrea cualquier wallet de Solana para ver sus transacciones y balances.</p>
                         </div>
-                        <section class="input-section">
+                        <div class="section-tabs">
+                            <button class="tab-btn active">Rastreador</button>
+                            <button class="tab-btn">Historial</button>
+                            <button class="tab-btn">Estadísticas</button>
+                        </div>
+                        <div class="input-section">
                             <div class="input-group">
-                                <input type="text" id="walletAddress" placeholder="Enter Solana wallet address">
-                                <button onclick="fetchWalletData()">Search</button>
+                                <input type="text" id="walletAddress" placeholder="Ingresa una dirección de wallet de Solana">
+                                <button id="trackWallet">Rastrear</button>
                             </div>
                             <div class="network-selector">
-                                <h3>Select Network</h3>
+                                <h3>Red</h3>
                                 <div class="network-buttons">
-                                    <button class="network-btn active">Mainnet</button>
-                                    <button class="network-btn">Testnet</button>
-                                    <button class="network-btn">Devnet</button>
+                                    <button class="network-btn active" data-network="mainnet">Mainnet</button>
+                                    <button class="network-btn" data-network="testnet">Testnet</button>
+                                    <button class="network-btn" data-network="devnet">Devnet</button>
                                 </div>
                             </div>
-                        </section>
-                        <section class="results-section" id="results">
-                            <div class="section-tabs">
-                                <button class="tab-btn active">Results</button>
+                        </div>
+                        <div class="results-section">
+                            <div class="waiting-message" id="waitingMessage">
+                                <h3>Ingresa una dirección de wallet para ver sus detalles</h3>
                             </div>
-                            <div id="walletInfo"></div>
-                            <div id="transactionList"></div>
-                        </section>
+                            <div id="walletInfo" style="display: none;"></div>
+                            <div id="transactionList" style="display: none;"></div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Other pages -->
-                <div id="sentiment-tracker" class="page">
-                    <div class="page-header">
-                        <h2>Sentiment Tracker</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>Analyze market sentiment in real-time. Monitor mentions on social media, forums, and news to make informed decisions based on collective perception.</p>
-                        </div>
-                    </div>
-                </div>
-                <div id="token-tracker" class="page">
+                <!-- Token Tracker Page -->
+                <div class="page" id="token-tracker">
                     <div class="page-header">
                         <h2>Token Tracker</h2>
                     </div>
                     <div class="page-content">
                         <div class="info-message">
-                            <p>Track the performance of any token on the Solana network. View prices, market cap, volume, historical charts, and key metrics for detailed analysis.</p>
-                        </div>
-                        <div class="section-tabs">
-                            <button class="tab-btn active">General</button>
-                            <button class="tab-btn">Price</button>
-                            <button class="tab-btn">Volume</button>
-                            <button class="tab-btn">Holders</button>
-                            <button class="tab-btn">Market</button>
-                            <button class="tab-btn">Wallets</button>
-                            <button class="tab-btn">KOLs</button>
-                            <button class="tab-btn">High Profile</button>
+                            <p>Rastrea tokens de Solana para ver su precio, volumen y más.</p>
                         </div>
                         <div class="waiting-message">
-                            <h3>Waiting for New Notifications</h3>
+                            <h3>Próximamente</h3>
                         </div>
                     </div>
                 </div>
-                <div id="detox-reclaim" class="page">
-                    <div class="page-header">
-                        <h2>Detox & Reclaim</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>Clean your wallet of unwanted tokens and recover SOL locked in inactive accounts. Optimize your portfolio and enhance the security of your digital assets.</p>
-                        </div>
-                    </div>
-                </div>
-                <div id="positioning" class="page">
-                    <div class="page-header">
-                        <h2>Positioning</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>Optimize your market position with advanced analysis. Identify optimal entry and exit levels, manage risk, and maximize your investment opportunities.</p>
-                        </div>
-                    </div>
-                </div>
-                <div id="token-burner" class="page">
+
+                <!-- Token Burner Page -->
+                <div class="page" id="token-burner">
                     <div class="page-header">
                         <h2>Token Burner</h2>
                     </div>
                     <div class="page-content">
                         <div class="info-message">
-                            <p>Burn tokens to reduce circulating supply and potentially increase their value. Manage your token's economy with this specialized tool.</p>
+                            <p>Quema tokens no deseados de tu wallet de Solana.</p>
+                        </div>
+                        <div class="waiting-message">
+                            <h3>Próximamente</h3>
                         </div>
                     </div>
                 </div>
-                <div id="portfolio" class="page">
-                    <div class="page-header">
-                        <h2>Portfolio</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>Visualize and manage your complete crypto asset portfolio. Analyze performance, diversification, profits/losses, and get detailed reports on your investment.</p>
-                        </div>
-                    </div>
-                </div>
-                <div id="guide" class="page">
-                    <div class="page-header">
-                        <h2>Guide</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>Access step-by-step tutorials on how to use each CryptoTools tool. Learn from basics to advanced techniques to maximize your experience.</p>
-                        </div>
-                    </div>
-                </div>
-                <div id="knowledge-base" class="page">
+
+                <!-- Knowledge Base Page -->
+                <div class="page" id="knowledge-base">
                     <div class="page-header">
                         <h2>Knowledge Base</h2>
                     </div>
                     <div class="page-content">
                         <div class="info-message">
-                            <p>Explore our library of educational resources on blockchain, cryptocurrencies, DeFi, and more. Stay updated with the latest trends and concepts in the ecosystem.</p>
+                            <p>Aprende sobre Solana, criptomonedas y blockchain.</p>
+                        </div>
+                        <div class="waiting-message">
+                            <h3>Próximamente</h3>
                         </div>
                     </div>
                 </div>
-                <div id="support" class="page">
+
+                <!-- Guide Page -->
+                <div class="page" id="guide">
                     <div class="page-header">
-                        <h2>Support</h2>
+                        <h2>Guía</h2>
                     </div>
                     <div class="page-content">
                         <div class="info-message">
-                            <p>Need help? Contact our support team to resolve any questions or technical issues. We're here to assist you in your experience with CryptoTools.</p>
+                            <p>Guías paso a paso para usar nuestras herramientas.</p>
+                        </div>
+                        <div class="waiting-message">
+                            <h3>Próximamente</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Page -->
+                <div class="page" id="support">
+                    <div class="page-header">
+                        <h2>Soporte</h2>
+                    </div>
+                    <div class="page-content">
+                        <div class="info-message">
+                            <p>¿Necesitas ayuda? Contáctanos.</p>
+                        </div>
+                        <div class="waiting-message">
+                            <h3>Próximamente</h3>
                         </div>
                     </div>
                 </div>
@@ -227,45 +179,74 @@
         </div>
     </div>
 
-    <!-- Search modal -->
-    <div id="searchModal" class="modal">
+    <!-- Search Modal -->
+    <div class="modal" id="searchModal">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Search</h2>
+            <span class="close-modal" id="closeSearchModal">&times;</span>
+            <h2>Buscar</h2>
             <div class="search-input">
-                <input type="text" placeholder="Search tokens, wallets, transactions...">
+                <input type="text" placeholder="Buscar herramientas, tokens, wallets...">
                 <button><i class="fas fa-search"></i></button>
             </div>
             <div id="searchResults"></div>
         </div>
     </div>
 
-    <!-- Wallet modal -->
-    <div id="walletModal" class="modal">
+    <!-- Wallet Modal -->
+    <div class="modal" id="walletModal">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Connect Wallet</h2>
+            <span class="close-modal" id="closeWalletModal">&times;</span>
+            <h2>Conectar Wallet</h2>
             <div class="wallet-options">
-                <div class="wallet-option">
-                    <img src="https://raw.githubusercontent.com/solana-labs/wallet-adapter/master/packages/wallets/icons/phantom.svg" alt="Phantom">
+                <div class="wallet-option" data-wallet="phantom">
+                    <img src="https://phantom.app/img/logo.png" alt="Phantom">
                     <span>Phantom</span>
                 </div>
-                <div class="wallet-option">
-                    <img src="https://raw.githubusercontent.com/solana-labs/wallet-adapter/master/packages/wallets/icons/solflare.svg" alt="Solflare">
+                <div class="wallet-option" data-wallet="solflare">
+                    <img src="https://solflare.com/logo.png" alt="Solflare">
                     <span>Solflare</span>
                 </div>
-                <div class="wallet-option">
-                    <img src="https://raw.githubusercontent.com/solana-labs/wallet-adapter/master/packages/wallets/icons/slope.svg" alt="Slope">
+                <div class="wallet-option" data-wallet="slope">
+                    <img src="https://slope.finance/assets/images/logo.png" alt="Slope">
                     <span>Slope</span>
                 </div>
-                <div class="wallet-option">
-                    <img src="https://raw.githubusercontent.com/solana-labs/wallet-adapter/master/packages/wallets/icons/sollet.svg" alt="Sollet">
+                <div class="wallet-option" data-wallet="sollet">
+                    <img src="https://sollet.io/favicon.ico" alt="Sollet">
                     <span>Sollet</span>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Chatbot -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            <h3>Asistente IA</h3>
+            <button class="minimize-chat"><i class="fas fa-minus"></i></button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                <div class="message-content">
+                    Hola, soy tu asistente virtual. ¿En qué puedo ayudarte hoy?
+                </div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Escribe tu pregunta aquí...">
+            <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Botón flotante para abrir el chat -->
+    <button class="chat-toggle" id="chatToggle">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <!-- Overlay para sidebar en móvil -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Scripts -->
     <script src="script.js"></script>
+    <script src="chatbot.js"></script>
 </body>
 </html>
