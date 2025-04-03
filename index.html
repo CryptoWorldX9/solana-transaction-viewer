@@ -8,7 +8,7 @@
     <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.css">
 </head>
-<body>
+<body class="light-mode">
     <div class="app-container">
         <!-- Botón de menú para móviles -->
         <button class="menu-toggle" id="menuToggle">
@@ -73,15 +73,39 @@
             <header class="main-header">
                 <h1>Dashboard</h1>
                 <div class="header-actions">
-                    <div class="search-bar">
+                    <button class="header-icon-btn" id="searchBtn">
                         <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search...">
-                    </div>
-                    <button class="theme-toggle">
+                    </button>
+                    <button class="header-icon-btn" id="walletBtn">
+                        <i class="fas fa-wallet"></i>
+                    </button>
+                    <button class="header-icon-btn" id="userBtn">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <button class="header-icon-btn" id="themeToggle">
                         <i class="fas fa-moon"></i>
                     </button>
                 </div>
             </header>
+
+            <!-- Modal de búsqueda -->
+            <div class="search-modal" id="searchModal">
+                <div class="search-modal-content">
+                    <div class="search-header">
+                        <h3>Search</h3>
+                        <button class="close-btn" id="closeSearchBtn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="search-input-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search tools, tokens, or wallets...">
+                    </div>
+                    <div class="search-results" id="searchResults">
+                        <!-- Los resultados de búsqueda se mostrarán aquí -->
+                    </div>
+                </div>
+            </div>
 
             <div class="content-area">
                 <div class="welcome-card">
@@ -177,11 +201,23 @@
     </div>
 
     <script>
-        // Script para manejar el menú móvil
         document.addEventListener('DOMContentLoaded', function() {
+            // Variables para el menú móvil
             const menuToggle = document.getElementById('menuToggle');
             const sidebar = document.getElementById('sidebar');
             
+            // Variables para el tema
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            
+            // Variables para el buscador
+            const searchBtn = document.getElementById('searchBtn');
+            const searchModal = document.getElementById('searchModal');
+            const closeSearchBtn = document.getElementById('closeSearchBtn');
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            
+            // Función para el menú móvil
             menuToggle.addEventListener('click', function() {
                 sidebar.classList.toggle('active');
                 
@@ -219,6 +255,97 @@
                     const icon = menuToggle.querySelector('i');
                     icon.classList.remove('fa-times');
                     icon.classList.add('fa-bars');
+                }
+            });
+            
+            // Cambiar tema (modo claro/oscuro)
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('dark-mode');
+                
+                // Cambiar el icono según el tema
+                const themeIcon = themeToggle.querySelector('i');
+                if (body.classList.contains('dark-mode')) {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+            
+            // Abrir modal de búsqueda
+            searchBtn.addEventListener('click', function() {
+                searchModal.classList.add('active');
+                searchInput.focus();
+            });
+            
+            // Cerrar modal de búsqueda
+            closeSearchBtn.addEventListener('click', function() {
+                searchModal.classList.remove('active');
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            searchModal.addEventListener('click', function(event) {
+                if (event.target === searchModal) {
+                    searchModal.classList.remove('active');
+                }
+            });
+            
+            // Escape para cerrar modal
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && searchModal.classList.contains('active')) {
+                    searchModal.classList.remove('active');
+                }
+            });
+            
+            // Funcionalidad de búsqueda
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                
+                if (query.length < 2) {
+                    searchResults.innerHTML = '<p class="search-message">Type at least 2 characters to search</p>';
+                    return;
+                }
+                
+                // Lista de herramientas para buscar
+                const tools = [
+                    { name: 'Token Creator', icon: 'fas fa-coins', description: 'Create your own tokens easily' },
+                    { name: 'Sentiment Tracker', icon: 'fas fa-heart', description: 'Monitor market sentiment for tokens' },
+                    { name: 'Token Tracker', icon: 'fas fa-search-dollar', description: 'Track token performance and metrics' },
+                    { name: 'Detox & Reclaim', icon: 'fas fa-broom', description: 'Clean up your wallet and reclaim assets' },
+                    { name: 'Wallet Tracker', icon: 'fas fa-user-shield', description: 'Monitor wallet activities and balances' },
+                    { name: 'Positioning', icon: 'fas fa-map-marker-alt', description: 'Optimize your market positioning' },
+                    { name: 'Token Burner', icon: 'fas fa-fire', description: 'Burn tokens to reduce supply' },
+                    { name: 'Knowledge Base', icon: 'fas fa-graduation-cap', description: 'Learn about blockchain and crypto' },
+                    { name: 'Guide', icon: 'fas fa-book', description: 'Get started with our platform' },
+                    { name: 'Support', icon: 'fas fa-headset', description: 'Get help with our tools' }
+                ];
+                
+                // Filtrar herramientas según la búsqueda
+                const filteredTools = tools.filter(tool => 
+                    tool.name.toLowerCase().includes(query) || 
+                    tool.description.toLowerCase().includes(query)
+                );
+                
+                // Mostrar resultados
+                if (filteredTools.length > 0) {
+                    let resultsHTML = '';
+                    filteredTools.forEach(tool => {
+                        resultsHTML += `
+                            <div class="search-result-item">
+                                <div class="result-icon">
+                                    <i class="${tool.icon}"></i>
+                                </div>
+                                <div class="result-info">
+                                    <h4>${tool.name}</h4>
+                                    <p>${tool.description}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    searchResults.innerHTML = resultsHTML;
+                } else {
+                    searchResults.innerHTML = '<p class="search-message">No results found</p>';
                 }
             });
         });
