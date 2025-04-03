@@ -1,5 +1,5 @@
 // Configuración del chatbot
-const OPENAI_API_KEY = 'tu_api_key_aquí'; // Reemplaza con tu API key
+const OPENAI_API_KEY = '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'; // Tu API key de OpenAI
 const API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
 
 // Elementos del DOM
@@ -12,7 +12,7 @@ const minimizeChat = document.querySelector('.minimize-chat');
 
 // Estado del chat
 let chatHistory = [
-  { role: "system", content: "Eres un asistente virtual especializado en criptomonedas, blockchain y Solana. Proporciona respuestas concisas y útiles." }
+  { role: "system", content: "Eres un asistente virtual especializado en criptomonedas, blockchain y Solana. Proporciona respuestas concisas y útiles. Responde en español." }
 ];
 let isChatOpen = false;
 
@@ -75,7 +75,7 @@ async function handleSendMessage() {
     hideLoading(loadingId);
     
     // Mostrar mensaje de error
-    addMessageToChat('bot', 'Lo siento, ha ocurrido un error. Por favor, intenta de nuevo más tarde.');
+    addMessageToChat('bot', 'Lo siento, ha ocurrido un error al conectar con la IA. Por favor, intenta de nuevo más tarde.');
     console.error('Error al obtener respuesta:', error);
   }
 }
@@ -115,6 +115,7 @@ function addMessageToChat(type, content) {
 function showLoading() {
   const loadingDiv = document.createElement('div');
   loadingDiv.className = 'message bot loading';
+  loadingDiv.id = 'loading-' + Date.now();
   
   const contentDiv = document.createElement('div');
   contentDiv.className = 'message-content';
@@ -129,7 +130,7 @@ function showLoading() {
   // Scroll al indicador de carga
   chatMessages.scrollTop = chatMessages.scrollHeight;
   
-  return loadingDiv.id = 'loading-' + Date.now();
+  return loadingDiv.id;
 }
 
 // Ocultar indicador de carga
@@ -140,33 +141,34 @@ function hideLoading(id) {
   }
 }
 
-// Obtener respuesta de la IA
+// Obtener respuesta de la IA usando OpenAI API
 async function getAIResponse(userMessage) {
-  // Opción 1: Usar OpenAI API (requiere API key)
-  if (OPENAI_API_KEY !== 'tu_api_key_aquí') {
-    try {
-      const response = await fetch(API_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${OPENAI_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: chatHistory,
-          max_tokens: 150,
-          temperature: 0.7
-        })
-      });
-      
-      const data = await response.json();
-      return data.choices[0].message.content;
-    } catch (error) {
-      console.error('Error al llamar a la API de OpenAI:', error);
-      return getLocalResponse(userMessage);
+  try {
+    const response = await fetch(API_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: chatHistory,
+        max_tokens: 250,
+        temperature: 0.7
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error de API OpenAI:', errorData);
+      throw new Error(`Error de API: ${response.status}`);
     }
-  } else {
-    // Opción 2: Respuestas locales predefinidas (fallback)
+    
+    const data = await response.json();
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error('Error al llamar a la API de OpenAI:', error);
+    // Si hay un error con la API, usamos respuestas locales como fallback
     return getLocalResponse(userMessage);
   }
 }
@@ -194,7 +196,7 @@ function getLocalResponse(userMessage) {
   } else if (message.includes('gracias')) {
     return '¡De nada! Estoy aquí para ayudarte con cualquier otra pregunta que tengas.';
   } else {
-    return 'Entiendo tu pregunta sobre ' + userMessage.substring(0, 30) + '... Para obtener información más precisa, te recomendaría consultar la documentación oficial o conectar este chat con una API de IA como OpenAI para respuestas más detalladas.';
+    return 'Entiendo tu pregunta sobre ' + userMessage.substring(0, 30) + '... Estamos experimentando problemas con la conexión a la IA. Por favor, intenta con una pregunta más específica o inténtalo de nuevo más tarde.';
   }
 }
 
