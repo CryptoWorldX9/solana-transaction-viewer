@@ -10,8 +10,13 @@
 </head>
 <body>
     <div class="app-container">
+        <!-- Botón de menú para móviles -->
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
         <!-- Sidebar / Menú lateral -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <img src="logo.png" alt="Logo" class="logo">
             </div>
@@ -180,6 +185,52 @@
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Script para manejar el menú móvil
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                
+                // Cambiar el icono del botón
+                const icon = menuToggle.querySelector('i');
+                if (sidebar.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+            
+            // Cerrar el menú al hacer clic en un enlace (en móviles)
+            const navLinks = document.querySelectorAll('.nav-item a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('active');
+                        const icon = menuToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            });
+            
+            // Cerrar el menú al hacer clic fuera de él (en móviles)
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768 && 
+                    !sidebar.contains(event.target) && 
+                    !menuToggle.contains(event.target) &&
+                    sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
