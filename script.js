@@ -1,4 +1,4 @@
-// API Key for Solscan
+// API Key de Solscan
 const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3NDE0NzA4MjAwNjksImVtYWlsIjoiY3J5cHRvd29ybGR4OUBnbWFpbC5jb20iLCJhY3Rpb24iOiJ0b2tlbi1hcGkiLCJhcGlWZXJzaW9uIjoidjIiLCJpYXQiOjE3NDE0NzA4MjB9.rGwXpbL2WoMCDp6DplM0eoXXuTnEUANxQvFhKZQcv1c';
 
 // Function to load the initial page when the site loads
@@ -86,9 +86,6 @@ function showPage(pageId) {
     const page = document.getElementById(pageId);
     if (page) {
         page.classList.add('active');
-    } else if (pageId === 'wallet-tracker') {
-        // If wallet-tracker page doesn't exist, show home page
-        document.getElementById('home').classList.add('active');
     }
 }
 
