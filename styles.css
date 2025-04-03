@@ -47,7 +47,7 @@ body {
 }
 
 .sidebar-header {
-    padding: 1.5rem;
+    padding: 2rem 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -57,11 +57,11 @@ body {
 .logo {
     width: 100%;
     height: auto;
-    max-height: 120px;
+    max-height: 240px; /* Duplicado de 120px */
     object-fit: contain;
     display: block;
     margin: 0 auto;
-    padding: 0.5rem;
+    padding: 0;
     transition: all 0.3s ease;
 }
 
@@ -557,6 +557,10 @@ body {
     .input-group {
         flex-direction: column;
     }
+    
+    .logo {
+        max-height: 160px; /* Ajustado para móviles */
+    }
 }
 
 @media (max-width: 768px) {
@@ -606,19 +610,23 @@ body {
     .welcome-section p {
         font-size: 1rem;
     }
+    
+    .logo {
+        max-height: 140px; /* Ajustado para móviles pequeños */
+    }
 }
 
 /* Para pantallas más grandes */
 @media (min-width: 1200px) {
     .logo {
-        max-height: 150px; /* Aún más grande en pantallas grandes */
+        max-height: 300px; /* Duplicado de 150px */
     }
 }
 
 /* Para dispositivos móviles en modo landscape */
 @media (max-width: 992px) and (orientation: landscape) {
     .logo {
-        max-height: 80px; /* Ajuste para modo landscape en móviles */
+        max-height: 120px; /* Duplicado de 60px */
     }
     
     .sidebar-header {
