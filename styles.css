@@ -1,169 +1,195 @@
-/* Resetear estilos por defecto */
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --background-color: #f8fafc;
+    --text-color: #1e293b;
+    --card-background: #ffffff;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f7fa;
-    color: #333;
-    line-height: 1.6;
-    padding-bottom: 60px; /* Espacio para el footer */
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.5;
 }
 
-/* Header */
-header {
-    background: linear-gradient(90deg, #4b6cb7, #182848);
-    color: white;
-    text-align: center;
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
-header p {
-    font-size: 1.2rem;
-}
-
-/* Main */
-main {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-}
-
-/* Input Section */
-.input-section {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-}
-
-.input-section h2 {
-    margin-bottom: 1rem;
-    color: #4b6cb7;
-}
-
-.input-section input {
+/* Navbar Styles */
+.navbar {
+    background-color: var(--card-background);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: fixed;
     width: 100%;
-    padding: 0.8rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
+    top: 0;
+    z-index: 1000;
 }
 
-.input-section button {
-    background-color: #4b6cb7;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.logo {
+    height: 32px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
     transition: background-color 0.3s ease;
 }
 
-.input-section button:hover {
-    background-color: #182848;
+.nav-links a.active {
+    background-color: #f1f5f9;
 }
 
-/* Results Section */
-.results-section {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    min-height: 200px;
+.nav-links a:hover {
+    background-color: #f1f5f9;
 }
 
-.results-section h2 {
-    margin-bottom: 1rem;
-    color: #4b6cb7;
-}
-
-#walletInfo, #transactionList {
-    margin-bottom: 1rem;
-}
-
-#transactionList ul {
-    list-style: none;
-}
-
-#transactionList li {
-    border-bottom: 1px solid #eee;
-    padding: 1rem 0;
-}
-
-#transactionList li:last-child {
-    border-bottom: none;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 1rem;
-    background-color: #182848;
+.connect-wallet {
+    background-color: var(--primary-color);
     color: white;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
 }
 
-/* Loader */
-.loader {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #4b6cb7;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
+.connect-wallet:hover {
+    background-color: var(--secondary-color);
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* Main Content Styles */
+.main-content {
+    margin-top: 80px;
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* Efectos adicionales */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+.hero-section {
+    text-align: center;
+    margin-bottom: 3rem;
 }
 
-.results-section {
-    animation: fadeIn 0.5s ease-in;
+.hero-section h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-color);
 }
 
-/* Responsive */
+.hero-section p {
+    font-size: 1.25rem;
+    color: #64748b;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.tool-card {
+    background-color: var(--card-background);
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+}
+
+.tool-card i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.tool-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.tool-card p {
+    color: #64748b;
+    margin-bottom: 1.5rem;
+}
+
+.tool-link {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.tool-link:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Footer Styles */
+footer {
+    background-color: var(--card-background);
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #64748b;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    header h1 {
+    .nav-links {
+        display: none;
+    }
+    
+    .hero-section h1 {
         font-size: 2rem;
     }
     
-    header p {
+    .hero-section p {
         font-size: 1rem;
-    }
-    
-    .input-section, .results-section {
-        padding: 1.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    header {
-        padding: 1.5rem;
-    }
-    
-    header h1 {
-        font-size: 1.8rem;
     }
 }
