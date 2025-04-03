@@ -87,8 +87,97 @@ function displayTransactions(transactions, container) {
     container.innerHTML = html;
 }
 
+// Funcionalidad del ChatBot
+function initChatBot() {
+    const sendButton = document.getElementById('sendMessage');
+    const userInput = document.getElementById('userMessage');
+    const chatMessages = document.getElementById('chatMessages');
+    
+    // Respuestas predefinidas para el ChatBot
+    const botResponses = {
+        'hello': 'Hello! How can I help you with your trading today?',
+        'hi': 'Hi there! What would you like to know about crypto trading?',
+        'help': 'I can help you with market analysis, trading strategies, risk management, and more. What specific area are you interested in?',
+        'market': 'The crypto market is highly volatile. It\'s important to stay updated with news and trends. Would you like some tips on market analysis?',
+        'strategy': 'There are many trading strategies like day trading, swing trading, and HODLing. Your strategy should match your risk tolerance and time commitment.',
+        'risk': 'Risk management is crucial in trading. Never invest more than you can afford to lose, and consider using stop-loss orders to protect your capital.',
+        'beginner': 'For beginners, I recommend starting with small investments, learning the basics of technical analysis, and practicing with paper trading before using real funds.',
+        'solana': 'Solana is a high-performance blockchain supporting smart contracts and decentralized applications. It offers fast transactions and low fees.',
+        'nft': 'NFTs (Non-Fungible Tokens) are unique digital assets verified using blockchain technology. They represent ownership of digital items like art, music, or collectibles.',
+        'defi': 'DeFi (Decentralized Finance) refers to financial services built on blockchain that operate without centralized authorities. It includes lending, borrowing, and trading.',
+        'wallet': 'Crypto wallets store your private keys, allowing you to access and manage your digital assets. There are hot wallets (online) and cold wallets (offline) for storage.'
+    };
+    
+    // Función para enviar mensaje
+    function sendMessage() {
+        const message = userInput.value.trim();
+        if (message === '') return;
+        
+        // Agregar mensaje del usuario al chat
+        addMessage(message, 'user');
+        userInput.value = '';
+        
+        // Simular respuesta del bot después de un breve retraso
+        setTimeout(() => {
+            const response = getBotResponse(message);
+            addMessage(response, 'bot');
+            
+            // Scroll al final del chat
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+    }
+    
+    // Función para agregar mensaje al chat
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', sender);
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.classList.add('message-content');
+        
+        const paragraph = document.createElement('p');
+        paragraph.textContent = text;
+        
+        contentDiv.appendChild(paragraph);
+        messageDiv.appendChild(contentDiv);
+        chatMessages.appendChild(messageDiv);
+        
+        // Scroll al final del chat
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Función para obtener respuesta del bot
+    function getBotResponse(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        // Buscar palabras clave en el mensaje
+        for (const keyword in botResponses) {
+            if (lowerMessage.includes(keyword)) {
+                return botResponses[keyword];
+            }
+        }
+        
+        // Respuesta por defecto si no se encuentra ninguna palabra clave
+        return "I'm not sure I understand. Could you rephrase your question? I can help with trading strategies, market analysis, risk management, and more.";
+    }
+    
+    // Event listeners
+    if (sendButton && userInput) {
+        sendButton.addEventListener('click', sendMessage);
+        
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
+}
+
 // Navegación entre páginas
 document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar ChatBot
+    initChatBot();
+    
     // Navegación del sidebar
     const menuLinks = document.querySelectorAll('.sidebar-menu a');
     const pages = document.querySelectorAll('.page');
