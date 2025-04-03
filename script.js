@@ -93,19 +93,85 @@ function initChatBot() {
     const userInput = document.getElementById('userMessage');
     const chatMessages = document.getElementById('chatMessages');
     
-    // Respuestas predefinidas para el ChatBot
-    const botResponses = {
-        'hello': 'Hello! How can I help you with your trading today?',
-        'hi': 'Hi there! What would you like to know about crypto trading?',
-        'help': 'I can help you with market analysis, trading strategies, risk management, and more. What specific area are you interested in?',
-        'market': 'The crypto market is highly volatile. It\'s important to stay updated with news and trends. Would you like some tips on market analysis?',
-        'strategy': 'There are many trading strategies like day trading, swing trading, and HODLing. Your strategy should match your risk tolerance and time commitment.',
-        'risk': 'Risk management is crucial in trading. Never invest more than you can afford to lose, and consider using stop-loss orders to protect your capital.',
-        'beginner': 'For beginners, I recommend starting with small investments, learning the basics of technical analysis, and practicing with paper trading before using real funds.',
-        'solana': 'Solana is a high-performance blockchain supporting smart contracts and decentralized applications. It offers fast transactions and low fees.',
-        'nft': 'NFTs (Non-Fungible Tokens) are unique digital assets verified using blockchain technology. They represent ownership of digital items like art, music, or collectibles.',
-        'defi': 'DeFi (Decentralized Finance) refers to financial services built on blockchain that operate without centralized authorities. It includes lending, borrowing, and trading.',
-        'wallet': 'Crypto wallets store your private keys, allowing you to access and manage your digital assets. There are hot wallets (online) and cold wallets (offline) for storage.'
+    // Base de conocimiento para el ChatBot
+    const knowledgeBase = {
+        // Información general sobre criptomonedas
+        "crypto": [
+            "Las criptomonedas son activos digitales diseñados para funcionar como medio de intercambio utilizando criptografía para asegurar las transacciones.",
+            "Bitcoin fue la primera criptomoneda, creada en 2009 por una persona o grupo bajo el seudónimo de Satoshi Nakamoto.",
+            "Las criptomonedas operan en redes descentralizadas basadas en tecnología blockchain, un libro mayor distribuido reforzado por una red de computadoras."
+        ],
+        "blockchain": [
+            "Blockchain es una tecnología de registro distribuido que permite el registro seguro y verificable de transacciones.",
+            "Cada 'bloque' contiene un conjunto de transacciones, y una vez completado, se añade a la 'cadena' en orden cronológico.",
+            "La naturaleza descentralizada de blockchain la hace resistente a la modificación de datos y proporciona transparencia y seguridad."
+        ],
+        "bitcoin": [
+            "Bitcoin (BTC) es la primera y más valiosa criptomoneda, creada en 2009.",
+            "Bitcoin utiliza un sistema peer-to-peer sin intermediarios centrales para procesar transacciones.",
+            "La oferta total de Bitcoin está limitada a 21 millones de monedas, lo que lo convierte en un activo escaso."
+        ],
+        "ethereum": [
+            "Ethereum (ETH) es una plataforma blockchain que permite la creación de contratos inteligentes y aplicaciones descentralizadas (dApps).",
+            "Ether es la criptomoneda nativa de la red Ethereum, utilizada para pagar las tarifas de transacción y los servicios computacionales.",
+            "Ethereum 2.0 está migrando de un mecanismo de consenso de Prueba de Trabajo (PoW) a Prueba de Participación (PoS) para mejorar la escalabilidad y reducir el consumo de energía."
+        ],
+        "solana": [
+            "Solana (SOL) es una blockchain de alto rendimiento que ofrece transacciones rápidas y de bajo costo.",
+            "Utiliza un mecanismo de consenso de Prueba de Historia (PoH) junto con Prueba de Participación (PoS).",
+            "Solana puede procesar miles de transacciones por segundo, lo que la hace adecuada para aplicaciones DeFi y NFTs."
+        ],
+        
+        // Trading y análisis
+        "trading": [
+            "El trading de criptomonedas implica comprar y vender activos digitales con el objetivo de obtener beneficios de las fluctuaciones de precios.",
+            "Existen diferentes estrategias de trading, como day trading, swing trading, scalping y posición a largo plazo (HODL).",
+            "Es importante gestionar el riesgo y no invertir más de lo que puedes permitirte perder."
+        ],
+        "análisis técnico": [
+            "El análisis técnico estudia los patrones de precios históricos para predecir movimientos futuros.",
+            "Utiliza indicadores como medias móviles, RSI, MACD y patrones de velas para tomar decisiones de trading.",
+            "No garantiza resultados, pero proporciona una estructura para la toma de decisiones basada en datos."
+        ],
+        "análisis fundamental": [
+            "El análisis fundamental evalúa el valor intrínseco de un activo basándose en factores económicos y financieros.",
+            "Para criptomonedas, incluye el estudio de la tecnología subyacente, el equipo de desarrollo, casos de uso, adopción y tokenomics.",
+            "Ayuda a identificar proyectos con potencial a largo plazo más allá de las fluctuaciones de precios a corto plazo."
+        ],
+        
+        // DeFi y NFTs
+        "defi": [
+            "DeFi (Finanzas Descentralizadas) se refiere a servicios financieros construidos sobre blockchain que operan sin intermediarios centralizados.",
+            "Incluye préstamos, intercambios descentralizados (DEX), staking, yield farming y seguros.",
+            "Ofrece mayor accesibilidad, transparencia y control sobre los activos financieros."
+        ],
+        "nft": [
+            "Los NFTs (Tokens No Fungibles) son activos digitales únicos verificados mediante tecnología blockchain.",
+            "Representan la propiedad de elementos digitales como arte, música, videos, coleccionables y elementos de juegos.",
+            "A diferencia de las criptomonedas, cada NFT tiene un valor único y no puede ser intercambiado de manera equivalente."
+        ],
+        "staking": [
+            "El staking implica bloquear criptomonedas para apoyar las operaciones de una red blockchain y ganar recompensas.",
+            "Funciona principalmente en blockchains que utilizan el mecanismo de consenso de Prueba de Participación (PoS).",
+            "Las recompensas de staking suelen expresarse como un porcentaje de rendimiento anual (APY)."
+        ],
+        
+        // Wallets y seguridad
+        "wallet": [
+            "Las wallets de criptomonedas almacenan las claves privadas que permiten acceder y gestionar activos digitales.",
+            "Existen wallets calientes (conectadas a internet) y frías (sin conexión) para diferentes necesidades de seguridad.",
+            "Nunca compartas tus frases semilla o claves privadas con nadie."
+        ],
+        "seguridad": [
+            "Utiliza autenticación de dos factores (2FA) en todos los intercambios y servicios de criptomonedas.",
+            "Considera usar hardware wallets como Ledger o Trezor para almacenamiento a largo plazo de grandes cantidades.",
+            "Verifica siempre las direcciones antes de enviar criptomonedas y desconfía de ofertas que parezcan demasiado buenas para ser verdad."
+        ],
+        "phishing": [
+            "El phishing es un tipo común de estafa donde los atacantes se hacen pasar por servicios legítimos para robar credenciales o fondos.",
+            "Verifica siempre las URL de los sitios web y no hagas clic en enlaces sospechosos en correos electrónicos o mensajes.",
+            "Los intercambios y servicios legítimos nunca pedirán tu frase semilla o clave privada."
+        ]
     };
     
     // Función para enviar mensaje
@@ -124,7 +190,7 @@ function initChatBot() {
             
             // Scroll al final del chat
             chatMessages.scrollTop = chatMessages.scrollHeight;
-        }, 1000);
+        }, 500);
     }
     
     // Función para agregar mensaje al chat
@@ -150,15 +216,34 @@ function initChatBot() {
     function getBotResponse(message) {
         const lowerMessage = message.toLowerCase();
         
-        // Buscar palabras clave en el mensaje
-        for (const keyword in botResponses) {
+        // Buscar en la base de conocimiento
+        for (const keyword in knowledgeBase) {
             if (lowerMessage.includes(keyword)) {
-                return botResponses[keyword];
+                // Seleccionar una respuesta aleatoria de la lista de respuestas para ese tema
+                const responses = knowledgeBase[keyword];
+                return responses[Math.floor(Math.random() * responses.length)];
             }
         }
         
-        // Respuesta por defecto si no se encuentra ninguna palabra clave
-        return "I'm not sure I understand. Could you rephrase your question? I can help with trading strategies, market analysis, risk management, and more.";
+        // Respuestas generales si no se encuentra una coincidencia específica
+        if (lowerMessage.includes('hola') || lowerMessage.includes('hi') || lowerMessage.includes('hello')) {
+            return "¡Hola! Soy tu asistente de trading de criptomonedas. ¿En qué puedo ayudarte hoy?";
+        } else if (lowerMessage.includes('gracias') || lowerMessage.includes('thank')) {
+            return "¡De nada! Estoy aquí para ayudarte con cualquier duda sobre criptomonedas y trading.";
+        } else if (lowerMessage.includes('ayuda') || lowerMessage.includes('help')) {
+            return "Puedo ayudarte con información sobre criptomonedas, blockchain, estrategias de trading, análisis técnico, DeFi, NFTs, seguridad y más. ¿Sobre qué tema te gustaría saber?";
+        } else if (lowerMessage.includes('precio') || lowerMessage.includes('price') || lowerMessage.includes('valor') || lowerMessage.includes('value')) {
+            return "Los precios de las criptomonedas son volátiles y cambian constantemente. Te recomiendo consultar sitios como CoinMarketCap o CoinGecko para obtener información actualizada sobre precios.";
+        } else if (lowerMessage.includes('invertir') || lowerMessage.includes('invest')) {
+            return "La inversión en criptomonedas conlleva riesgos. Es importante hacer tu propia investigación, diversificar tu cartera y nunca invertir más de lo que puedes permitirte perder.";
+        } else if (lowerMessage.includes('tendencia') || lowerMessage.includes('trend')) {
+            return "Las tendencias del mercado pueden analizarse mediante indicadores técnicos y análisis fundamental. Recuerda que las tendencias pasadas no garantizan resultados futuros.";
+        } else if (lowerMessage.includes('recomienda') || lowerMessage.includes('recommend') || lowerMessage.includes('mejor') || lowerMessage.includes('best')) {
+            return "No puedo recomendar inversiones específicas, ya que cada persona tiene diferentes objetivos y tolerancia al riesgo. Te sugiero investigar proyectos con tecnología sólida, equipos competentes y casos de uso reales.";
+        }
+        
+        // Respuesta por defecto
+        return "Interesante pregunta. Puedo proporcionarte información sobre criptomonedas, blockchain, trading, DeFi, NFTs, seguridad y más. ¿Podrías ser más específico sobre lo que te gustaría saber?";
     }
     
     // Event listeners
