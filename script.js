@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // En móvil, cerrar el menú después de hacer clic
             if (window.innerWidth < 992) {
                 document.querySelector('.sidebar').classList.remove('active');
+                document.querySelector('.sidebar-overlay').classList.remove('active');
             }
         });
     });
@@ -32,16 +33,39 @@ document.addEventListener('DOMContentLoaded', function() {
     // Toggle del menú en móvil
     document.querySelector('.sidebar-toggle').addEventListener('click', function() {
         document.querySelector('.sidebar').classList.toggle('active');
+        document.querySelector('.sidebar-overlay').classList.toggle('active');
+    });
+    
+    // Cerrar menú al hacer clic en el overlay
+    document.querySelector('.sidebar-overlay').addEventListener('click', function() {
+        document.querySelector('.sidebar').classList.remove('active');
+        this.classList.remove('active');
     });
     
     // Toggle del tema
     document.querySelector('.theme-toggle').addEventListener('click', function() {
         document.body.classList.toggle('light-theme');
         localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+        
+        // Cambiar el icono
+        const icon = this.querySelector('i');
+        if (document.body.classList.contains('light-theme')) {
+            icon.className = 'fas fa-sun';
+        } else {
+            icon.className = 'fas fa-moon';
+        }
     });
     
     // Inicializar modales
     initModals();
+    
+    // Manejar cambios de tamaño de ventana
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 992) {
+            document.querySelector('.sidebar').classList.remove('active');
+            document.querySelector('.sidebar-overlay').classList.remove('active');
+        }
+    });
 });
 
 // Función para inicializar el tema
@@ -49,6 +73,7 @@ function initTheme() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
         document.body.classList.add('light-theme');
+        document.querySelector('.theme-toggle i').className = 'fas fa-sun';
     }
 }
 
@@ -88,6 +113,9 @@ function initModals() {
     // Abrir modal de búsqueda
     document.querySelector('.search-btn').addEventListener('click', function() {
         document.getElementById('searchModal').style.display = 'block';
+        setTimeout(() => {
+            document.querySelector('#searchModal input').focus();
+        }, 100);
     });
     
     // Abrir modal de wallet
