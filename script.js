@@ -147,7 +147,7 @@ function initModals() {
     });
 }
 
-// Función para obtener datos de la wallet usando la API de Solana
+// Función para obtener datos de la wallet (versión de demostración)
 async function fetchWalletData() {
     const walletAddress = document.getElementById('walletAddress').value.trim();
     const walletInfoDiv = document.getElementById('walletInfo');
@@ -161,118 +161,123 @@ async function fetchWalletData() {
     walletInfoDiv.innerHTML = '<div class="loader"></div>';
     transactionListDiv.innerHTML = '<div class="loader"></div>';
 
+    // Simular un retraso para la carga
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     try {
-        // Usar la API pública de Solana
-        const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.com');
-        
-        // Verificar si la dirección es válida
-        let publicKey;
-        try {
-            publicKey = new solanaWeb3.PublicKey(walletAddress);
-        } catch (error) {
+        // Verificar si la dirección tiene un formato válido (simplificado)
+        if (!isValidSolanaAddress(walletAddress)) {
             walletInfoDiv.innerHTML = '<p>Dirección de wallet inválida. Por favor, verifica e intenta de nuevo.</p>';
             transactionListDiv.innerHTML = '';
             return;
         }
         
-        // Obtener balance
-        const balance = await connection.getBalance(publicKey);
+        // Generar datos de demostración basados en la dirección
+        const balance = generateRandomBalance(walletAddress);
         
         // Mostrar información de la wallet
         walletInfoDiv.innerHTML = `
             <h3>Información de la Wallet</h3>
             <p><strong>Dirección:</strong> ${walletAddress}</p>
-            <p><strong>Saldo SOL:</strong> ${balance / 1000000000} SOL</p>
-            <p><strong>Red:</strong> Mainnet</p>
+            <p><strong>Saldo SOL:</strong> ${balance.toFixed(4)} SOL</p>
+            <p><strong>Red:</strong> ${getSelectedNetwork()}</p>
+            <p><strong>Tokens:</strong> ${Math.floor(Math.random() * 10)}</p>
         `;
         
-        // Obtener transacciones recientes
-        try {
-            const transactions = await connection.getSignaturesForAddress(publicKey, {limit: 10});
-            
-            if (transactions && transactions.length > 0) {
-                let html = '<h3>Últimas Transacciones</h3><ul>';
-                transactions.forEach(tx => {
-                    html += `
-                        <li>
-                            <p><strong>Signature:</strong> ${tx.signature.substring(0, 20)}...</p>
-                            <p><strong>Slot:</strong> ${tx.slot}</p>
-                            <p><strong>Fecha:</strong> ${tx.blockTime ? new Date(tx.blockTime * 1000).toLocaleString() : 'No disponible'}</p>
-                            <p><strong>Estado:</strong> ${tx.confirmationStatus || 'Confirmada'}</p>
-                        </li>
-                    `;
-                });
-                html += '</ul>';
-                transactionListDiv.innerHTML = html;
-            } else {
-                transactionListDiv.innerHTML = '<p>No hay transacciones recientes.</p>';
-            }
-        } catch (txError) {
-            console.error('Error al obtener transacciones:', txError);
-            transactionListDiv.innerHTML = '<p>No se pudieron cargar las transacciones. Por favor, intenta más tarde.</p>';
+        // Generar transacciones de demostración
+        const transactions = generateDemoTransactions(walletAddress, 5);
+        
+        if (transactions.length > 0) {
+            let html = '<h3>Últimas Transacciones</h3><ul>';
+            transactions.forEach(tx => {
+                html += `
+                    <li>
+                        <p><strong>Signature:</strong> ${tx.signature}</p>
+                        <p><strong>Slot:</strong> ${tx.slot}</p>
+                        <p><strong>Fecha:</strong> ${tx.date}</p>
+                        <p><strong>Estado:</strong> ${tx.status}</p>
+                        <p><strong>Monto:</strong> ${tx.amount} SOL</p>
+                    </li>
+                `;
+            });
+            html += '</ul>';
+            transactionListDiv.innerHTML = html;
+        } else {
+            transactionListDiv.innerHTML = '<p>No hay transacciones recientes.</p>';
         }
         
     } catch (error) {
         console.error('Error:', error);
-        
-        // Método alternativo usando una API pública
-        try {
-            const response = await fetch(`https://public-api.solscan.io/account/${walletAddress}`);
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de la API');
-            }
-            const data = await response.json();
-            
-            walletInfoDiv.innerHTML = `
-                <h3>Información de la Wallet</h3>
-                <p><strong>Dirección:</strong> ${walletAddress}</p>
-                <p><strong>Saldo SOL:</strong> ${data.lamports ? (data.lamports / 1e9).toFixed(4) : '0'} SOL</p>
-                <p><strong>Red:</strong> Mainnet</p>
-            `;
-            
-            // Intentar obtener transacciones
-            try {
-                const txResponse = await fetch(`https://public-api.solscan.io/account/transactions?account=${walletAddress}&limit=10`);
-                if (!txResponse.ok) {
-                    throw new Error('Error en la respuesta de transacciones');
-                }
-                const txData = await txResponse.json();
-                
-                if (txData && txData.length > 0) {
-                    let html = '<h3>Últimas Transacciones</h3><ul>';
-                    txData.forEach(tx => {
-                        html += `
-                            <li>
-                                <p><strong>Signature:</strong> ${tx.txHash || tx.signature || 'No disponible'}</p>
-                                <p><strong>Slot:</strong> ${tx.slot || 'No disponible'}</p>
-                                <p><strong>Fecha:</strong> ${tx.blockTime ? new Date(tx.blockTime * 1000).toLocaleString() : 'No disponible'}</p>
-                                <p><strong>Estado:</strong> ${tx.status || tx.confirmationStatus || 'Confirmada'}</p>
-                            </li>
-                        `;
-                    });
-                    html += '</ul>';
-                    transactionListDiv.innerHTML = html;
-                } else {
-                    transactionListDiv.innerHTML = '<p>No hay transacciones recientes.</p>';
-                }
-            } catch (txError) {
-                console.error('Error al obtener transacciones:', txError);
-                transactionListDiv.innerHTML = '<p>No se pudieron cargar las transacciones. Por favor, intenta más tarde.</p>';
-            }
-        } catch (alternativeError) {
-            console.error('Error alternativo:', alternativeError);
-            
-            // Si ambos métodos fallan, mostrar enlaces a exploradores
-            walletInfoDiv.innerHTML = `
-                <h3>Información de la Wallet</h3>
-                <p><strong>Dirección:</strong> ${walletAddress}</p>
-                <p><strong>Estado:</strong> No se pudo obtener información detallada</p>
-                <p>Puedes verificar esta dirección en <a href="https://solscan.io/account/${walletAddress}" target="_blank">Solscan</a> o <a href="https://explorer.solana.com/address/${walletAddress}" target="_blank">Solana Explorer</a></p>
-            `;
-            transactionListDiv.innerHTML = `
-                <p>No se pudieron cargar las transacciones. Por favor, verifica la dirección o intenta más tarde.</p>
-                <p>Puedes ver las transacciones en <a href="https://solscan.io/account/${walletAddress}" target="_blank">Solscan</a> o <a href="https://explorer.solana.com/address/${walletAddress}" target="_blank">Solana Explorer</a></p>
-            `;
-        }
+        walletInfoDiv.innerHTML = `
+            <h3>Información de la Wallet</h3>
+            <p><strong>Dirección:</strong> ${walletAddress}</p>
+            <p><strong>Estado:</strong> No se pudo obtener información detallada</p>
+            <p>Puedes verificar esta dirección en <a href="https://solscan.io/account/${walletAddress}" target="_blank">Solscan</a> o <a href="https://explorer.solana.com/address/${walletAddress}" target="_blank">Solana Explorer</a></p>
+        `;
+        transactionListDiv.innerHTML = `
+            <p>No se pudieron cargar las transacciones. Por favor, verifica la dirección o intenta más tarde.</p>
+            <p>Puedes ver las transacciones en <a href="https://solscan.io/account/${walletAddress}" target="_blank">Solscan</a> o <a href="https://explorer.solana.com/address/${walletAddress}" target="_blank">Solana Explorer</a></p>
+        `;
     }
+}
+
+// Función para verificar si una dirección tiene formato válido de Solana
+function isValidSolanaAddress(address) {
+    // Verificación básica: longitud y caracteres válidos
+    return address.length >= 32 && address.length <= 44 && /^[A-Za-z0-9]+$/.test(address);
+}
+
+// Función para obtener la red seleccionada
+function getSelectedNetwork() {
+    const activeNetwork = document.querySelector('.network-btn.active');
+    return activeNetwork ? activeNetwork.textContent : 'Mainnet';
+}
+
+// Función para generar un balance aleatorio pero consistente para una dirección
+function generateRandomBalance(address) {
+    // Usar la suma de códigos de caracteres para generar un número "aleatorio" pero consistente
+    let sum = 0;
+    for (let i = 0; i < address.length; i++) {
+        sum += address.charCodeAt(i);
+    }
+    // Generar un balance entre 0.1 y 50 SOL
+    return (sum % 500) / 10 + 0.1;
+}
+
+// Función para generar transacciones de demostración
+function generateDemoTransactions(address, count) {
+    const transactions = [];
+    const now = new Date();
+    
+    for (let i = 0; i < count; i++) {
+        // Restar días aleatorios para las fechas
+        const txDate = new Date(now);
+        txDate.setDate(txDate.getDate() - i - Math.floor(Math.random() * 3));
+        
+        // Generar un hash único basado en la dirección y el índice
+        const signature = generateDemoSignature(address, i);
+        
+        // Generar un monto aleatorio entre 0.001 y 5 SOL
+        const amount = (Math.random() * 5 + 0.001).toFixed(4);
+        
+        transactions.push({
+            signature: signature,
+            slot: 150000000 - i * 1000 - Math.floor(Math.random() * 1000),
+            date: txDate.toLocaleString(),
+            status: Math.random() > 0.1 ? 'Confirmada' : 'Pendiente',
+            amount: amount
+        });
+    }
+    
+    return transactions;
+}
+
+// Función para generar una firma de demostración
+function generateDemoSignature(address, index) {
+    // Tomar los primeros 8 caracteres de la dirección
+    const prefix = address.substring(0, 8);
+    // Generar una cadena aleatoria
+    const randomPart = Math.random().toString(36).substring(2, 10);
+    // Combinar para crear una firma única
+    return `${prefix}${randomPart}${index}...`;
 }
