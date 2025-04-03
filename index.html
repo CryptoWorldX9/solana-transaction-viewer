@@ -1,251 +1,31 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Herramientas Solana</title>
+    <title>Solana Transaction Viewer</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <img src="logo.png" alt="Logo" class="logo">
-            </div>
-            <div class="sidebar-menu">
-                <ul>
-                    <li class="active"><a href="#home"><i class="fas fa-home"></i>Inicio</a></li>
-                    <li><a href="#wallet-tracker"><i class="fas fa-wallet"></i>Wallet Tracker</a></li>
-                    <li><a href="#token-tracker"><i class="fas fa-chart-line"></i>Token Tracker</a></li>
-                    <li><a href="#token-burner"><i class="fas fa-fire"></i>Token Burner</a></li>
-                    <li><a href="#knowledge-base"><i class="fas fa-book"></i>Knowledge Base</a></li>
-                </ul>
-                <h4 class="sidebar-category">Recursos</h4>
-                <ul>
-                    <li><a href="#guide"><i class="fas fa-compass"></i>Guía</a></li>
-                    <li><a href="#support"><i class="fas fa-headset"></i>Soporte</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="top-header">
-                <button class="sidebar-toggle" id="sidebarToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="header-actions">
-                    <button class="action-btn" id="searchBtn">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    <button class="action-btn" id="walletBtn">
-                        <i class="fas fa-wallet"></i>
-                    </button>
-                    <button class="action-btn" id="userBtn">
-                        <i class="fas fa-user"></i>
-                    </button>
-                    <button class="action-btn" id="nightModeBtn">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="content-wrapper">
-                <!-- Home Page -->
-                <div class="page active" id="home">
-                    <div class="welcome-section">
-                        <h2>Bienvenido a nuestro Portal de Herramientas Solana</h2>
-                        <p>Explora nuestras herramientas para analizar y gestionar tus activos en la blockchain de Solana.</p>
-                        <p>Selecciona una herramienta del menú lateral para comenzar.</p>
-                    </div>
-                </div>
-
-                <!-- Wallet Tracker Page -->
-                <div class="page" id="wallet-tracker">
-                    <div class="page-header">
-                        <h2>Wallet Tracker</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>Rastrea cualquier wallet de Solana para ver sus transacciones y balances.</p>
-                        </div>
-                        <div class="section-tabs">
-                            <button class="tab-btn active">Rastreador</button>
-                            <button class="tab-btn">Historial</button>
-                            <button class="tab-btn">Estadísticas</button>
-                        </div>
-                        <div class="input-section">
-                            <div class="input-group">
-                                <input type="text" id="walletAddress" placeholder="Ingresa una dirección de wallet de Solana">
-                                <button id="trackWallet">Rastrear</button>
-                            </div>
-                            <div class="network-selector">
-                                <h3>Red</h3>
-                                <div class="network-buttons">
-                                    <button class="network-btn active" data-network="mainnet">Mainnet</button>
-                                    <button class="network-btn" data-network="testnet">Testnet</button>
-                                    <button class="network-btn" data-network="devnet">Devnet</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="results-section">
-                            <div class="waiting-message" id="waitingMessage">
-                                <h3>Ingresa una dirección de wallet para ver sus detalles</h3>
-                            </div>
-                            <div id="walletInfo" style="display: none;"></div>
-                            <div id="transactionList" style="display: none;"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Token Tracker Page -->
-                <div class="page" id="token-tracker">
-                    <div class="page-header">
-                        <h2>Token Tracker</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>Rastrea tokens de Solana para ver su precio, volumen y más.</p>
-                        </div>
-                        <div class="waiting-message">
-                            <h3>Próximamente</h3>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Token Burner Page -->
-                <div class="page" id="token-burner">
-                    <div class="page-header">
-                        <h2>Token Burner</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>Quema tokens no deseados de tu wallet de Solana.</p>
-                        </div>
-                        <div class="waiting-message">
-                            <h3>Próximamente</h3>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Knowledge Base Page -->
-                <div class="page" id="knowledge-base">
-                    <div class="page-header">
-                        <h2>Knowledge Base</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>Aprende sobre Solana, criptomonedas y blockchain.</p>
-                        </div>
-                        <div class="waiting-message">
-                            <h3>Próximamente</h3>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Guide Page -->
-                <div class="page" id="guide">
-                    <div class="page-header">
-                        <h2>Guía</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>Guías paso a paso para usar nuestras herramientas.</p>
-                        </div>
-                        <div class="waiting-message">
-                            <h3>Próximamente</h3>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Support Page -->
-                <div class="page" id="support">
-                    <div class="page-header">
-                        <h2>Soporte</h2>
-                    </div>
-                    <div class="page-content">
-                        <div class="info-message">
-                            <p>¿Necesitas ayuda? Contáctanos.</p>
-                        </div>
-                        <div class="waiting-message">
-                            <h3>Próximamente</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Search Modal -->
-    <div class="modal" id="searchModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeSearchModal">&times;</span>
-            <h2>Buscar</h2>
-            <div class="search-input">
-                <input type="text" placeholder="Buscar herramientas, tokens, wallets...">
-                <button><i class="fas fa-search"></i></button>
-            </div>
-            <div id="searchResults"></div>
-        </div>
-    </div>
-
-    <!-- Wallet Modal -->
-    <div class="modal" id="walletModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeWalletModal">&times;</span>
-            <h2>Conectar Wallet</h2>
-            <div class="wallet-options">
-                <div class="wallet-option" data-wallet="phantom">
-                    <img src="https://phantom.app/img/logo.png" alt="Phantom">
-                    <span>Phantom</span>
-                </div>
-                <div class="wallet-option" data-wallet="solflare">
-                    <img src="https://solflare.com/logo.png" alt="Solflare">
-                    <span>Solflare</span>
-                </div>
-                <div class="wallet-option" data-wallet="slope">
-                    <img src="https://slope.finance/assets/images/logo.png" alt="Slope">
-                    <span>Slope</span>
-                </div>
-                <div class="wallet-option" data-wallet="sollet">
-                    <img src="https://sollet.io/favicon.ico" alt="Sollet">
-                    <span>Sollet</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Chatbot -->
-    <div class="chatbot-container" id="chatbotContainer">
-        <div class="chatbot-header">
-            <h3>Asistente IA</h3>
-            <button class="minimize-chat"><i class="fas fa-minus"></i></button>
-        </div>
-        <div class="chat-messages" id="chatMessages">
-            <div class="message bot">
-                <div class="message-content">
-                    Hola, soy tu asistente virtual. ¿En qué puedo ayudarte hoy?
-                </div>
-            </div>
-        </div>
-        <div class="chat-input">
-            <input type="text" id="chatInput" placeholder="Escribe tu pregunta aquí...">
-            <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
-        </div>
-    </div>
-
-    <!-- Botón flotante para abrir el chat -->
-    <button class="chat-toggle" id="chatToggle">
-        <i class="fas fa-comments"></i>
-    </button>
-
-    <!-- Overlay para sidebar en móvil -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <!-- Scripts -->
+    <header>
+    <h1>Solana Transaction Viewer</h1>
+    <p>Explore transactions and wallet details on the Solana network</p>
+    </header>
+    <main>
+    <section class="input-section">
+    <h2>Enter wallet address</h2>
+    <input type="text" id="walletAddress" placeholder="Example: 5JLcGJQfZjEEuh1bSDqyw2iEfLuFRoYRJY1paoSwrZC8c8zZFW3VqvxsJgjW3bsUjTrpEUDEtvs83PxsuR6hUWqz">
+    <button onclick="fetchWalletData()">Search</button>
+    </section>
+    <section class="results-section" id="results">
+    <h2>Results</h2>
+    <div id="walletInfo"></div>
+    <div id="transactionList"></div>
+    </section>
+    </main>
+    <footer>
+    <p>&copy; 2025 Solana Transaction Viewer. All rights reserved.</p>
+    </footer>
     <script src="script.js"></script>
     <script src="chatbot.js"></script>
 </body>
