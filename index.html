@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solana Transaction Viewer</title>
+    <title>CryptoTools</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -57,14 +57,21 @@
             <div class="content-wrapper">
                 <!-- Página de inicio -->
                 <div id="home" class="page active">
-                    <h2>Bienvenido a Solana Transaction Viewer</h2>
-                    <p>Selecciona una herramienta del menú para comenzar.</p>
+                    <div class="welcome-section">
+                        <h2>Bienvenido a CryptoTools</h2>
+                        <p>Una plataforma integral diseñada para gestionar, analizar y optimizar tu experiencia en el ecosistema cripto.</p>
+                        <p>Accede a herramientas clave como creación y seguimiento de tokens, gestión de wallets, análisis de sentimiento, control de portafolio y más.</p>
+                        <p>Incluye recursos como guía de uso y base de conocimiento para acompañarte en cada paso.</p>
+                    </div>
                 </div>
 
                 <!-- Página de Wallet Tracker -->
                 <div id="wallet-tracker" class="page">
-                    <section class="input-section">
+                    <div class="welcome-section">
                         <h2>Wallet Tracker</h2>
+                        <p>Monitorea cualquier wallet de Solana en tiempo real. Visualiza saldos, tokens, NFTs y el historial completo de transacciones.</p>
+                    </div>
+                    <section class="input-section">
                         <div class="input-group">
                             <input type="text" id="walletAddress" placeholder="Ingresa la dirección de la wallet Solana">
                             <button onclick="fetchWalletData()">Buscar</button>
@@ -85,46 +92,66 @@
                     </section>
                 </div>
 
-                <!-- Otras páginas (vacías por ahora) -->
+                <!-- Otras páginas (con descripciones mejoradas) -->
                 <div id="token-creator" class="page">
-                    <h2>Token Creator</h2>
-                    <p>Esta función estará disponible próximamente.</p>
+                    <div class="welcome-section">
+                        <h2>Token Creator</h2>
+                        <p>Crea tokens personalizados en la blockchain de Solana con facilidad. Define nombre, símbolo, suministro, decimales y metadatos adicionales sin necesidad de conocimientos técnicos.</p>
+                    </div>
                 </div>
                 <div id="sentiment-tracker" class="page">
-                    <h2>Sentiment Tracker</h2>
-                    <p>Esta función estará disponible próximamente.</p>
+                    <div class="welcome-section">
+                        <h2>Sentiment Tracker</h2>
+                        <p>Analiza el sentimiento del mercado en tiempo real. Monitorea menciones en redes sociales, foros y noticias para tomar decisiones informadas basadas en la percepción colectiva.</p>
+                    </div>
                 </div>
                 <div id="token-tracker" class="page">
-                    <h2>Token Tracker</h2>
-                    <p>Esta función estará disponible próximamente.</p>
+                    <div class="welcome-section">
+                        <h2>Token Tracker</h2>
+                        <p>Sigue el rendimiento de cualquier token en la red Solana. Visualiza precios, capitalización, volumen, gráficos históricos y métricas clave para análisis detallado.</p>
+                    </div>
                 </div>
                 <div id="detox-reclaim" class="page">
-                    <h2>Detox & Reclaim</h2>
-                    <p>Esta función estará disponible próximamente.</p>
+                    <div class="welcome-section">
+                        <h2>Detox & Reclaim</h2>
+                        <p>Limpia tu wallet de tokens no deseados y recupera SOL bloqueado en cuentas inactivas. Optimiza tu cartera y mejora la seguridad de tus activos digitales.</p>
+                    </div>
                 </div>
                 <div id="positioning" class="page">
-                    <h2>Positioning</h2>
-                    <p>Esta función estará disponible próximamente.</p>
+                    <div class="welcome-section">
+                        <h2>Positioning</h2>
+                        <p>Optimiza tu posición en el mercado con análisis avanzado. Identifica niveles óptimos de entrada y salida, gestiona el riesgo y maximiza tus oportunidades de inversión.</p>
+                    </div>
                 </div>
                 <div id="token-burner" class="page">
-                    <h2>Token Burner</h2>
-                    <p>Esta función estará disponible próximamente.</p>
+                    <div class="welcome-section">
+                        <h2>Token Burner</h2>
+                        <p>Quema tokens para reducir el suministro circulante y potencialmente aumentar su valor. Gestiona la economía de tu token con esta herramienta especializada.</p>
+                    </div>
                 </div>
                 <div id="portfolio" class="page">
-                    <h2>Portfolio</h2>
-                    <p>Esta función estará disponible próximamente.</p>
+                    <div class="welcome-section">
+                        <h2>Portfolio</h2>
+                        <p>Visualiza y gestiona tu cartera completa de criptoactivos. Analiza rendimiento, diversificación, ganancias/pérdidas y obtén informes detallados sobre tu inversión.</p>
+                    </div>
                 </div>
                 <div id="guide" class="page">
-                    <h2>Guía</h2>
-                    <p>Esta función estará disponible próximamente.</p>
+                    <div class="welcome-section">
+                        <h2>Guía</h2>
+                        <p>Accede a tutoriales paso a paso sobre cómo utilizar cada herramienta de CryptoTools. Aprende desde lo básico hasta técnicas avanzadas para maximizar tu experiencia.</p>
+                    </div>
                 </div>
                 <div id="knowledge-base" class="page">
-                    <h2>Knowledge Base</h2>
-                    <p>Esta función estará disponible próximamente.</p>
+                    <div class="welcome-section">
+                        <h2>Knowledge Base</h2>
+                        <p>Explora nuestra biblioteca de recursos educativos sobre blockchain, criptomonedas, DeFi y más. Mantente actualizado con las últimas tendencias y conceptos del ecosistema.</p>
+                    </div>
                 </div>
                 <div id="support" class="page">
-                    <h2>Soporte</h2>
-                    <p>Esta función estará disponible próximamente.</p>
+                    <div class="welcome-section">
+                        <h2>Soporte</h2>
+                        <p>¿Necesitas ayuda? Contacta con nuestro equipo de soporte para resolver cualquier duda o problema técnico. Estamos aquí para asistirte en tu experiencia con CryptoTools.</p>
+                    </div>
                 </div>
             </div>
         </div>
