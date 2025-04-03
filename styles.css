@@ -1,4 +1,203 @@
-/* Añade esto al CSS existente o actualiza las secciones correspondientes */
+/* Variables de colores */
+:root {
+    --primary-color: #4b6cb7;
+    --secondary-color: #182848;
+    --accent-color: #5d87ff;
+    --background-dark: #1a1f2b;
+    --background-light: #242a38;
+    --text-light: #ffffff;
+    --text-muted: #a0aec0;
+    --border-color: #2d3748;
+    --success-color: #48bb78;
+    --error-color: #f56565;
+    --warning-color: #ed8936;
+    --font-primary: 'Montserrat', sans-serif;
+    --font-secondary: 'Poppins', sans-serif;
+}
+
+/* Resetear estilos por defecto */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Layout principal */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background-color: var(--background-light);
+    border-right: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    height: 100vh;
+    position: fixed;
+    z-index: 100;
+}
+
+.sidebar-header {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.sidebar-menu {
+    padding: 1rem 0;
+}
+
+.menu-section {
+    margin-bottom: 1.5rem;
+}
+
+.menu-section h3 {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: var(--font-secondary);
+    font-weight: 600;
+}
+
+.sidebar-menu ul {
+    list-style: none;
+}
+
+.sidebar-menu li {
+    margin: 0.2rem 0;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    color: var(--text-light);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    font-family: var(--font-secondary);
+    font-weight: 500;
+}
+
+.sidebar-menu a i {
+    margin-right: 10px;
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-menu li.active a,
+.sidebar-menu a:hover {
+    background-color: rgba(93, 135, 255, 0.1);
+    border-left-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-left: 260px;
+    transition: all 0.3s ease;
+    background-color: var(--background-dark);
+    min-height: 100vh;
+    position: relative;
+}
+
+.top-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: var(--background-light);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.sidebar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-right: auto;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.wallet-btn {
+    display: flex;
+    align-items: center;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-family: var(--font-secondary);
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+}
+
+.wallet-btn i {
+    margin-right: 5px;
+}
+
+.wallet-btn:hover {
+    background-color: #4a6ed9;
+}
+
+.content-wrapper {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
 /* Welcome section with improved centering */
 .welcome-section {
@@ -20,6 +219,9 @@
     color: var(--accent-color);
     font-weight: 700;
     letter-spacing: 0.5px;
+    font-family: var(--font-secondary);
+    text-align: center;
+    width: 100%;
 }
 
 .welcome-section p {
@@ -28,6 +230,9 @@
     margin-bottom: 1.2rem;
     color: var(--text-light);
     max-width: 650px;
+    text-align: center;
+    font-family: var(--font-primary);
+    font-weight: 400;
 }
 
 /* Ensure all page content is centered */
@@ -38,12 +243,27 @@
     justify-content: flex-start;
     padding: 1rem;
     width: 100%;
+    text-align: center;
 }
 
-.input-section, .results-section {
+/* Input Section */
+.input-section {
+    background-color: var(--background-light);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2rem;
     width: 100%;
     max-width: 800px;
-    margin: 0 auto 2rem;
+    text-align: center;
+}
+
+.input-section h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text-light);
+    font-size: 1.5rem;
+    font-family: var(--font-secondary);
+    font-weight: 600;
     text-align: center;
 }
 
@@ -54,12 +274,332 @@
     margin-bottom: 1.5rem;
 }
 
-.network-selector h3 {
+.input-group input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    font-size: 1rem;
+    font-family: var(--font-primary);
+}
+
+.input-group button {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
+    font-family: var(--font-secondary);
+}
+
+.input-group button:hover {
+    background-color: #4a6ed9;
+}
+
+.network-selector {
+    margin-top: 1.5rem;
     text-align: center;
 }
 
-/* Responsive adjustments */
+.network-selector h3 {
+    margin-bottom: 0.8rem;
+    color: var(--text-muted);
+    font-size: 1rem;
+    text-align: center;
+    font-family: var(--font-secondary);
+}
+
+.network-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.network-btn {
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-secondary);
+    font-weight: 500;
+}
+
+.network-btn.active,
+.network-btn:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* Results Section */
+.results-section {
+    background-color: var(--background-light);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.results-section h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text-light);
+    font-size: 1.5rem;
+    font-family: var(--font-secondary);
+    font-weight: 600;
+    text-align: center;
+}
+
+#walletInfo, #transactionList {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+#walletInfo h3, #transactionList h3 {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    text-align: center;
+    font-family: var(--font-secondary);
+    font-weight: 600;
+}
+
+#walletInfo p {
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-family: var(--font-primary);
+}
+
+#transactionList ul {
+    list-style: none;
+    text-align: center;
+}
+
+#transactionList li {
+    background-color: var(--background-dark);
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    border-left: 3px solid var(--accent-color);
+    text-align: center;
+    font-family: var(--font-primary);
+}
+
+#transactionList p {
+    margin-bottom: 0.3rem;
+    text-align: center;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: var(--background-light);
+    margin: 10% auto;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+    animation: modalFadeIn 0.3s;
+    font-family: var(--font-primary);
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: var(--text-light);
+}
+
+.modal-content h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text-light);
+    font-family: var(--font-secondary);
+    font-weight: 600;
+    text-align: center;
+}
+
+.search-input {
+    display: flex;
+    margin-bottom: 1.5rem;
+}
+
+.search-input input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px 0 0 5px;
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    font-size: 1rem;
+    font-family: var(--font-primary);
+}
+
+.search-input button {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+
+.wallet-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.wallet-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    background-color: var(--background-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wallet-option:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-5px);
+}
+
+.wallet-option img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 1rem;
+}
+
+.wallet-option span {
+    font-family: var(--font-secondary);
+    font-weight: 500;
+}
+
+/* Loader */
+.loader {
+    border: 4px solid var(--background-dark);
+    border-top: 4px solid var(--accent-color);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
+        width: 280px; /* Ligeramente más ancho en móvil */
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+    
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .sidebar-toggle {
+        display: block;
+    }
+    
+    .input-group {
+        flex-direction: column;
+    }
+    
+    .network-buttons {
+        flex-wrap: wrap;
+    }
+    
+    /* Overlay para cuando el menú está abierto */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+    
+    .sidebar-overlay.active {
+        display: block;
+    }
+}
+
 @media (max-width: 768px) {
+    .top-header {
+        padding: 1rem;
+    }
+    
+    .content-wrapper {
+        padding: 1rem;
+    }
+    
+    .input-section, .results-section {
+        padding: 1.5rem;
+    }
+    
+    .wallet-btn span {
+        display: none;
+    }
+    
+    .wallet-btn i {
+        margin-right: 0;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+    
     .welcome-section {
         padding: 3rem 1rem;
         min-height: 40vh;
@@ -73,6 +613,10 @@
     .welcome-section p {
         font-size: 1.1rem;
         line-height: 1.6;
+    }
+    
+    .logo {
+        width: 180px;
     }
 }
 
@@ -88,9 +632,96 @@
     .welcome-section p {
         font-size: 1rem;
     }
+    
+    .content-wrapper {
+        padding: 1rem 0.5rem;
+    }
+    
+    .input-section, .results-section {
+        padding: 1rem;
+    }
+    
+    .input-section h2, .results-section h2 {
+        font-size: 1.3rem;
+    }
 }
 
-/* Update JavaScript messages to English */
-#walletInfo h3, #transactionList h3 {
-    text-align: center;
+/* Efectos adicionales */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.results-section {
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* Fondo con diseño */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 10% 20%, rgba(91, 104, 235, 0.1) 0%, rgba(0, 0, 0, 0) 80%),
+                radial-gradient(circle at 90% 80%, rgba(91, 104, 235, 0.1) 0%, rgba(0, 0, 0, 0) 80%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Modo oscuro/claro toggle */
+.theme-toggle {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--background-light);
+    color: var(--text-light);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    border: none;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background-color: var(--accent-color);
+}
+
+/* Estilos para el tema claro */
+body.light-theme {
+    --background-dark: #f8fafc;
+    --background-light: #ffffff;
+    --text-light: #1a202c;
+    --text-muted: #4a5568;
+    --border-color: #e2e8f0;
+}
+
+body.light-theme::before {
+    background: radial-gradient(circle at 10% 20%, rgba(91, 104, 235, 0.05) 0%, rgba(0, 0, 0, 0) 80%),
+                radial-gradient(circle at 90% 80%, rgba(91, 104, 235, 0.05) 0%, rgba(0, 0, 0, 0) 80%);
+}
+
+/* Estilos para el wallet conectado */
+.wallet-btn.connected {
+    background-color: var(--success-color);
+}
+
+.wallet-btn.connected:hover {
+    background-color: #3da066;
+}
+
+/* Asegurarse de que las páginas se muestren correctamente */
+.page {
+    display: none;
+}
+
+.page.active {
+    display: flex;
 }
