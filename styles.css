@@ -1,7 +1,7 @@
 /* Variables y reseteo */
 :root {
-    --primary-color: #0A0B0E;
-    --secondary-color: #13141B;
+    --primary-color: #0B0E17;
+    --secondary-color: #151A29;
     --accent-color: #3772FF;
     --text-color: #FFFFFF;
     --text-secondary: #8B8D97;
@@ -57,7 +57,7 @@ body {
 }
 
 .logo {
-    width: 120px;
+    width: 200px;
     height: auto;
 }
 
@@ -131,6 +131,7 @@ body {
 .header-actions {
     display: flex;
     align-items: center;
+    margin-left: auto;
 }
 
 .action-btn {
