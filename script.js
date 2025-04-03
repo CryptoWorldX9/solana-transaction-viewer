@@ -293,4 +293,20 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
         });
     });
+    
+    // Tabs
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const parentTabs = this.closest('.section-tabs');
+            if (parentTabs) {
+                const siblings = parentTabs.querySelectorAll('.tab-btn');
+                siblings.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+            }
+        });
+    });
 });
