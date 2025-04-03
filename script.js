@@ -1,474 +1,434 @@
-// Configuración de conexión a Solana
-const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.com');
-let wallet = null;
-let publicKey = null;
+// API Key de Solscan
+const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3NDE0NzA4MjAwNjksImVtYWlsIjoiY3J5cHRvd29ybGR4OUBnbWFpbC5jb20iLCJhY3Rpb24iOiJ0b2tlbi1hcGkiLCJhcGlWZXJzaW9uIjoidjIiLCJpYXQiOjE3NDE0NzA4MjB9.rGwXpbL2WoMCDp6DplM0eoXXuTnEUANxQvFhKZQcv1c';
 
+// Variables globales
+let currentNetwork = 'mainnet';
+let connectedWallet = null;
+
+// Inicialización cuando el DOM está cargado
 document.addEventListener('DOMContentLoaded', function() {
-    // Variables para el menú móvil
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.getElementById('sidebar');
+    // Inicializar elementos de la interfaz
+    initUI();
     
-    // Variables para el tema
-    const themeToggle = document.getElementById('themeToggle');
-    const body = document.body;
+    // Configurar listeners para los botones de red
+    setupNetworkButtons();
     
-    // Variables para el buscador
-    const searchBtn = document.getElementById('searchBtn');
-    const searchModal = document.getElementById('searchModal');
-    const closeSearchBtn = document.getElementById('closeSearchBtn');
-    const searchInput = document.getElementById('searchInput');
-    const searchResults = document.getElementById('searchResults');
+    // Configurar modales
+    setupModals();
     
-    // Variables para wallet
-    const walletBtn = document.getElementById('walletBtn');
-    const walletModal = document.getElementById('walletModal');
-    const closeWalletBtn = document.getElementById('closeWalletBtn');
-    const connectPhantomBtn = document.getElementById('connectPhantomBtn');
-    const connectSolflareBtn = document.getElementById('connectSolflareBtn');
-    const disconnectWalletBtn = document.getElementById('disconnectWalletBtn');
-    const sidebarWalletBtn = document.getElementById('sidebarWalletBtn');
-    const walletConnected = document.getElementById('walletConnected');
-    const walletDisconnected = document.getElementById('walletDisconnected');
-    const walletAddress = document.getElementById('walletAddress');
-    const walletBalance = document.getElementById('walletBalance');
-    const copyAddressBtn = document.getElementById('copyAddressBtn');
+    // Configurar conexión de wallet
+    setupWalletConnection();
+});
+
+// Inicializar elementos de la interfaz
+function initUI() {
+    // Toggle del sidebar en móvil
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebar = document.querySelector('.sidebar');
     
-    // Variables para usuario
-    const userBtn = document.getElementById('userBtn');
-    const userModal = document.getElementById('userModal');
-    const closeUserBtn = document.getElementById('closeUserBtn');
-    const userConnected = document.getElementById('userConnected');
-    const userDisconnected = document.getElementById('userDisconnected');
-    const userConnectWalletBtn = document.getElementById('userConnectWalletBtn');
-    const userWalletAddress = document.getElementById('userWalletAddress');
-    const userName = document.getElementById('userName');
-    const tokenCount = document.getElementById('tokenCount');
-    const nftCount = document.getElementById('nftCount');
-    const txCount = document.getElementById('txCount');
-    
-    // Función para el menú móvil
-    if (menuToggle) {
-        menuToggle.addEventListener('click', function() {
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('active');
-            
-            // Cambiar el icono del botón
-            const icon = menuToggle.querySelector('i');
-            if (sidebar.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
         });
     }
     
-    // Cerrar el menú al hacer clic en un enlace (en móviles)
-    const navLinks = document.querySelectorAll('.nav-item a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.remove('active');
-                const icon = menuToggle.querySelector('i');
-                if (icon) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            }
-        });
-    });
-    
-    // Cerrar el menú al hacer clic fuera de él (en móviles)
+    // Cerrar sidebar al hacer clic fuera en móvil
     document.addEventListener('click', function(event) {
-        if (window.innerWidth <= 768 && 
-            sidebar && 
-            menuToggle && 
-            !sidebar.contains(event.target) && 
-            !menuToggle.contains(event.target) &&
+        if (window.innerWidth <= 992 && 
+            !event.target.closest('.sidebar') && 
+            !event.target.closest('#sidebar-toggle') && 
             sidebar.classList.contains('active')) {
             sidebar.classList.remove('active');
-            const icon = menuToggle.querySelector('i');
-            if (icon) {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
         }
     });
     
-    // Cambiar tema (modo claro/oscuro)
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function() {
-            body.classList.toggle('light-mode');
-            body.classList.toggle('dark-mode');
+    // Añadir botón de tema
+    const themeToggle = document.createElement('button');
+    themeToggle.className = 'theme-toggle';
+    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+    themeToggle.title = 'Cambiar tema';
+    document.body.appendChild(themeToggle);
+    
+    themeToggle.addEventListener('click', toggleTheme);
+}
+
+// Configurar botones de red
+function setupNetworkButtons() {
+    const networkButtons = document.querySelectorAll('.network-btn');
+    
+    networkButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Quitar clase active de todos los botones
+            networkButtons.forEach(btn => btn.classList.remove('active'));
             
-            // Cambiar el icono según el tema
-            const themeIcon = themeToggle.querySelector('i');
-            if (body.classList.contains('light-mode')) {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-            }
+            // Añadir clase active al botón seleccionado
+            this.classList.add('active');
             
-            // Guardar preferencia en localStorage
-            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+            // Actualizar red actual
+            currentNetwork = this.dataset.network;
+            console.log(`Red cambiada a: ${currentNetwork}`);
         });
-    }
+    });
+}
+
+// Configurar modales
+function setupModals() {
+    // Modal de búsqueda
+    const searchBtn = document.getElementById('search-btn');
+    const searchModal = document.getElementById('search-modal');
+    const searchInput = document.getElementById('search-input');
+    const searchSubmit = document.getElementById('search-submit');
     
-    // Cargar tema guardado
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        if (savedTheme === 'light') {
-            body.classList.add('light-mode');
-            body.classList.remove('dark-mode');
-            if (themeToggle) {
-                const themeIcon = themeToggle.querySelector('i');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            }
-        } else {
-            body.classList.add('dark-mode');
-            body.classList.remove('light-mode');
-        }
-    }
-    
-    // Abrir modal de búsqueda
     if (searchBtn && searchModal) {
         searchBtn.addEventListener('click', function() {
-            searchModal.classList.add('active');
-            if (searchInput) searchInput.focus();
+            searchModal.style.display = 'block';
+            searchInput.focus();
         });
     }
     
-    // Cerrar modal de búsqueda
-    if (closeSearchBtn && searchModal) {
-        closeSearchBtn.addEventListener('click', function() {
-            searchModal.classList.remove('active');
+    if (searchSubmit) {
+        searchSubmit.addEventListener('click', function() {
+            performSearch(searchInput.value);
         });
     }
     
-    // Cerrar modal al hacer clic fuera
-    if (searchModal) {
-        searchModal.addEventListener('click', function(event) {
-            if (event.target === searchModal) {
-                searchModal.classList.remove('active');
-            }
-        });
-    }
-    
-    // Escape para cerrar modal
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            if (searchModal && searchModal.classList.contains('active')) {
-                searchModal.classList.remove('active');
-            }
-            if (walletModal && walletModal.classList.contains('active')) {
-                walletModal.classList.remove('active');
-            }
-            if (userModal && userModal.classList.contains('active')) {
-                userModal.classList.remove('active');
-            }
-        }
-    });
-    
-    // Funcionalidad de búsqueda
-    if (searchInput && searchResults) {
-        searchInput.addEventListener('input', function() {
-            const query = this.value.toLowerCase().trim();
-            
-            if (query.length < 2) {
-                searchResults.innerHTML = '<p class="search-message">Type at least 2 characters to search</p>';
-                return;
-            }
-            
-            // Lista de herramientas para buscar
-            const tools = [
-                { name: 'Token Creator', icon: 'fas fa-coins', description: 'Create your own tokens easily' },
-                { name: 'Sentiment Tracker', icon: 'fas fa-heart', description: 'Monitor market sentiment for tokens' },
-                { name: 'Token Tracker', icon: 'fas fa-search-dollar', description: 'Track token performance and metrics' },
-                { name: 'Detox & Reclaim', icon: 'fas fa-broom', description: 'Clean up your wallet and reclaim assets' },
-                { name: 'Wallet Tracker', icon: 'fas fa-user-shield', description: 'Monitor wallet activities and balances' },
-                { name: 'Positioning', icon: 'fas fa-map-marker-alt', description: 'Optimize your market positioning' },
-                { name: 'Token Burner', icon: 'fas fa-fire', description: 'Burn tokens to reduce supply' },
-                { name: 'Knowledge Base', icon: 'fas fa-graduation-cap', description: 'Learn about blockchain and crypto' },
-                { name: 'Guide', icon: 'fas fa-book', description: 'Get started with our platform' },
-                { name: 'Support', icon: 'fas fa-headset', description: 'Get help with our tools' }
-            ];
-            
-            // Filtrar herramientas según la búsqueda
-            const filteredTools = tools.filter(tool => 
-                tool.name.toLowerCase().includes(query) || 
-                tool.description.toLowerCase().includes(query)
-            );
-            
-            // Mostrar resultados
-            if (filteredTools.length > 0) {
-                let resultsHTML = '';
-                filteredTools.forEach(tool => {
-                    resultsHTML += `
-                        <div class="search-result-item">
-                            <div class="result-icon">
-                                <i class="${tool.icon}"></i>
-                            </div>
-                            <div class="result-info">
-                                <h4>${tool.name}</h4>
-                                <p>${tool.description}</p>
-                            </div>
-                        </div>
-                    `;
-                });
-                searchResults.innerHTML = resultsHTML;
-            } else {
-                searchResults.innerHTML = '<p class="search-message">No results found</p>';
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch(this.value);
             }
         });
     }
     
-    // Funciones para wallet
+    // Modal de wallet
+    const walletBtn = document.getElementById('wallet-connect-btn');
+    const walletModal = document.getElementById('wallet-modal');
+    const walletOptions = document.querySelectorAll('.wallet-option');
     
-    // Verificar si Phantom está instalado
-    const isPhantomInstalled = window.solana && window.solana.isPhantom;
-    
-    // Verificar si Solflare está instalado
-    const isSolflareInstalled = window.solflare && window.solflare.isSolflare;
-    
-    // Abrir modal de wallet
     if (walletBtn && walletModal) {
         walletBtn.addEventListener('click', function() {
-            walletModal.classList.add('active');
-        });
-    }
-    
-    // Cerrar modal de wallet
-    if (closeWalletBtn && walletModal) {
-        closeWalletBtn.addEventListener('click', function() {
-            walletModal.classList.remove('active');
-        });
-    }
-    
-    // Cerrar modal al hacer clic fuera
-    if (walletModal) {
-        walletModal.addEventListener('click', function(event) {
-            if (event.target === walletModal) {
-                walletModal.classList.remove('active');
-            }
-        });
-    }
-    
-    // Conectar con Phantom
-    if (connectPhantomBtn) {
-        connectPhantomBtn.addEventListener('click', async function() {
-            if (!isPhantomInstalled) {
-                window.open('https://phantom.app/', '_blank');
-                return;
-            }
-            
-            try {
-                const resp = await window.solana.connect();
-                publicKey = resp.publicKey;
-                wallet = 'phantom';
-                handleWalletConnection();
-            } catch (err) {
-                console.error('Error connecting to Phantom:', err);
-                alert('Error connecting to Phantom wallet');
-            }
-        });
-    }
-    
-    // Conectar con Solflare
-    if (connectSolflareBtn) {
-        connectSolflareBtn.addEventListener('click', async function() {
-            if (!isSolflareInstalled) {
-                window.open('https://solflare.com/', '_blank');
-                return;
-            }
-            
-            try {
-                const resp = await window.solflare.connect();
-                publicKey = resp.publicKey;
-                wallet = 'solflare';
-                handleWalletConnection();
-            } catch (err) {
-                console.error('Error connecting to Solflare:', err);
-                alert('Error connecting to Solflare wallet');
-            }
-        });
-    }
-    
-    // Desconectar wallet
-    if (disconnectWalletBtn) {
-        disconnectWalletBtn.addEventListener('click', async function() {
-            try {
-                if (wallet === 'phantom' && window.solana) {
-                    await window.solana.disconnect();
-                } else if (wallet === 'solflare' && window.solflare) {
-                    await window.solflare.disconnect();
-                }
-                
-                publicKey = null;
-                wallet = null;
-                
-                // Actualizar UI
-                if (walletConnected) walletConnected.style.display = 'none';
-                if (walletDisconnected) walletDisconnected.style.display = 'block';
-                if (userConnected) userConnected.style.display = 'none';
-                if (userDisconnected) userDisconnected.style.display = 'block';
-                if (sidebarWalletBtn) {
-                    sidebarWalletBtn.innerHTML = '<i class="fas fa-wallet"></i><span>Connect Wallet</span>';
-                }
-                
-                // Limpiar localStorage
-                localStorage.removeItem('walletConnected');
-                localStorage.removeItem('walletType');
-                
-                console.log('Wallet disconnected');
-            } catch (err) {
-                console.error('Error disconnecting wallet:', err);
-            }
-        });
-    }
-    
-    // Copiar dirección
-    if (copyAddressBtn) {
-        copyAddressBtn.addEventListener('click', function() {
-            if (publicKey) {
-                navigator.clipboard.writeText(publicKey.toString())
-                    .then(() => {
-                        const originalText = copyAddressBtn.innerHTML;
-                        copyAddressBtn.innerHTML = '<i class="fas fa-check"></i>';
-                        setTimeout(() => {
-                            copyAddressBtn.innerHTML = originalText;
-                        }, 2000);
-                    })
-                    .catch(err => {
-                        console.error('Error copying address:', err);
-                    });
-            }
-        });
-    }
-    
-    // Botón de wallet en sidebar
-    if (sidebarWalletBtn) {
-        sidebarWalletBtn.addEventListener('click', function() {
-            if (publicKey) {
-                // Si ya está conectado, mostrar modal de wallet
-                if (walletModal) walletModal.classList.add('active');
+            if (connectedWallet) {
+                disconnectWallet();
             } else {
-                // Si no está conectado, mostrar modal de wallet para conectar
-                if (walletModal) walletModal.classList.add('active');
+                walletModal.style.display = 'block';
             }
         });
     }
     
-    // Funciones para usuario
-    
-    // Abrir modal de usuario
-    if (userBtn && userModal) {
-        userBtn.addEventListener('click', function() {
-            userModal.classList.add('active');
+    if (walletOptions) {
+        walletOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const walletType = this.dataset.wallet;
+                connectWallet(walletType);
+                walletModal.style.display = 'none';
+            });
         });
     }
     
-    // Cerrar modal de usuario
-    if (closeUserBtn && userModal) {
-        closeUserBtn.addEventListener('click', function() {
-            userModal.classList.remove('active');
+    // Cerrar modales
+    const closeButtons = document.querySelectorAll('.close-modal');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            this.closest('.modal').style.display = 'none';
         });
-    }
+    });
     
     // Cerrar modal al hacer clic fuera
-    if (userModal) {
-        userModal.addEventListener('click', function(event) {
-            if (event.target === userModal) {
-                userModal.classList.remove('active');
-            }
-        });
-    }
-    
-    // Conectar wallet desde modal de usuario
-    if (userConnectWalletBtn) {
-        userConnectWalletBtn.addEventListener('click', function() {
-            if (userModal) userModal.classList.remove('active');
-            if (walletModal) walletModal.classList.add('active');
-        });
-    }
-    
-    // Función para manejar la conexión de wallet
-    async function handleWalletConnection() {
-        if (!publicKey) return;
-        
-        // Guardar en localStorage
-        localStorage.setItem('walletConnected', 'true');
-        localStorage.setItem('walletType', wallet);
-        
-        // Actualizar UI de wallet
-        if (walletConnected) walletConnected.style.display = 'block';
-        if (walletDisconnected) walletDisconnected.style.display = 'none';
-        if (walletAddress) walletAddress.textContent = formatAddress(publicKey.toString());
-        
-        // Actualizar UI de usuario
-        if (userConnected) userConnected.style.display = 'block';
-        if (userDisconnected) userDisconnected.style.display = 'none';
-        if (userWalletAddress) userWalletAddress.textContent = formatAddress(publicKey.toString());
-        if (userName) userName.textContent = `User ${publicKey.toString().substring(0, 4)}`;
-        
-        // Actualizar botón de wallet en sidebar
-        if (sidebarWalletBtn) {
-            sidebarWalletBtn.innerHTML = '<i class="fas fa-wallet"></i><span>Disconnect</span>';
+    window.addEventListener('click', function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
         }
+    });
+}
+
+// Realizar búsqueda
+function performSearch(query) {
+    if (!query.trim()) {
+        alert('Por favor, ingresa un término de búsqueda');
+        return;
+    }
+    
+    const searchResults = document.getElementById('search-results');
+    searchResults.innerHTML = '<div class="loader"></div>';
+    
+    // Determinar si es una dirección de wallet o un hash de transacción
+    if (query.length === 44 || query.length === 43) {
+        // Probablemente una dirección de wallet
+        fetchWalletData(query);
+        document.getElementById('search-modal').style.display = 'none';
+        document.getElementById('walletAddress').value = query;
+    } else if (query.length === 88 || query.length === 87) {
+        // Probablemente un hash de transacción
+        fetchTransactionData(query);
+        document.getElementById('search-modal').style.display = 'none';
+    } else {
+        // Búsqueda general
+        searchResults.innerHTML = '<p>Búsqueda no válida. Ingresa una dirección de wallet o hash de transacción.</p>';
+    }
+}
+
+// Configurar conexión de wallet
+function setupWalletConnection() {
+    // Comprobar si Phantom está instalado
+    const isPhantomInstalled = window.solana && window.solana.isPhantom;
+    
+    if (isPhantomInstalled) {
+        console.log('Phantom está instalado');
+    } else {
+        console.log('Phantom no está instalado');
+    }
+}
+
+// Conectar wallet
+async function connectWallet(walletType) {
+    try {
+        let wallet;
         
-        // Obtener balance
-        try {
-            const balance = await connection.getBalance(publicKey);
-            if (walletBalance) walletBalance.textContent = `${(balance / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`;
-            
-            // Obtener tokens y NFTs (simulado por ahora)
-            if (tokenCount) tokenCount.textContent = Math.floor(Math.random() * 10);
-            if (nftCount) nftCount.textContent = Math.floor(Math.random() * 5);
-            if (txCount) txCount.textContent = Math.floor(Math.random() * 100);
-            
-            console.log('Wallet connected:', publicKey.toString());
-        } catch (err) {
-            console.error('Error getting balance:', err);
-            if (walletBalance) walletBalance.textContent = 'Error';
-        }
-    }
-    
-    // Formatear dirección para mostrar
-    function formatAddress(address) {
-        if (!address) return '';
-        return `${address.substring(0, 4)}...${address.substring(address.length - 4)}`;
-    }
-    
-    // Verificar si hay una wallet conectada al cargar la página
-    const isWalletConnected = localStorage.getItem('walletConnected') === 'true';
-    const savedWalletType = localStorage.getItem('walletType');
-    
-    if (isWalletConnected && savedWalletType) {
-        // Intentar reconectar automáticamente
-        (async function() {
-            try {
-                if (savedWalletType === 'phantom' && window.solana && window.solana.isPhantom) {
-                    // Verificar si ya está conectado
-                    if (window.solana.isConnected) {
-                        publicKey = window.solana.publicKey;
-                        wallet = 'phantom';
-                        handleWalletConnection();
-                    }
-                } else if (savedWalletType === 'solflare' && window.solflare && window.solflare.isSolflare) {
-                    // Verificar si ya está conectado
-                    if (window.solflare.isConnected) {
-                        publicKey = window.solflare.publicKey;
-                        wallet = 'solflare';
-                        handleWalletConnection();
-                    }
+        switch (walletType) {
+            case 'phantom':
+                if (window.solana && window.solana.isPhantom) {
+                    wallet = window.solana;
+                } else {
+                    alert('Phantom no está instalado. Por favor, instala la extensión Phantom.');
+                    return;
                 }
-            } catch (err) {
-                console.error('Error reconnecting wallet:', err);
-                localStorage.removeItem('walletConnected');
-                localStorage.removeItem('walletType');
-            }
-        })();
+                break;
+            case 'solflare':
+                if (window.solflare) {
+                    wallet = window.solflare;
+                } else {
+                    alert('Solflare no está instalado. Por favor, instala la extensión Solflare.');
+                    return;
+                }
+                break;
+            default:
+                alert('Wallet no soportada o no instalada.');
+                return;
+        }
+        
+        const response = await wallet.connect();
+        connectedWallet = {
+            publicKey: response.publicKey.toString(),
+            type: walletType
+        };
+        
+        updateWalletButton();
+        
+        // Cargar datos de la wallet conectada
+        document.getElementById('walletAddress').value = connectedWallet.publicKey;
+        fetchWalletData(connectedWallet.publicKey);
+        
+        console.log('Wallet conectada:', connectedWallet);
+    } catch (error) {
+        console.error('Error al conectar wallet:', error);
+        alert('Error al conectar wallet: ' + error.message);
     }
-});
+}
+
+// Desconectar wallet
+function disconnectWallet() {
+    try {
+        if (connectedWallet.type === 'phantom' && window.solana) {
+            window.solana.disconnect();
+        } else if (connectedWallet.type === 'solflare' && window.solflare) {
+            window.solflare.disconnect();
+        }
+        
+        connectedWallet = null;
+        updateWalletButton();
+        console.log('Wallet desconectada');
+    } catch (error) {
+        console.error('Error al desconectar wallet:', error);
+    }
+}
+
+// Actualizar botón de wallet
+function updateWalletButton() {
+    const walletBtn = document.getElementById('wallet-connect-btn');
+    
+    if (connectedWallet) {
+        walletBtn.innerHTML = `<i class="fas fa-wallet"></i> <span>${connectedWallet.publicKey.slice(0, 4)}...${connectedWallet.publicKey.slice(-4)}</span>`;
+        walletBtn.classList.add('connected');
+    } else {
+        walletBtn.innerHTML = `<i class="fas fa-wallet"></i> <span>Conectar Wallet</span>`;
+        walletBtn.classList.remove('connected');
+    }
+}
+
+// Cambiar tema
+function toggleTheme() {
+    document.body.classList.toggle('light-theme');
+    
+    const themeIcon = document.querySelector('.theme-toggle i');
+    if (document.body.classList.contains('light-theme')) {
+        themeIcon.className = 'fas fa-sun';
+    } else {
+        themeIcon.className = 'fas fa-moon';
+    }
+}
+
+// Función principal para obtener datos de la wallet
+async function fetchWalletData(address = null) {
+    const walletAddress = address || document.getElementById('walletAddress').value.trim();
+    const walletInfoDiv = document.getElementById('walletInfo');
+    const transactionListDiv = document.getElementById('transactionList');
+    
+    if (!walletAddress) {
+        alert('Por favor, ingresa una dirección de wallet válida.');
+        return;
+    }
+
+    walletInfoDiv.innerHTML = '<div class="loader"></div>';
+    transactionListDiv.innerHTML = '<div class="loader"></div>';
+
+    try {
+        // Obtener información de la wallet
+        const walletResponse = await fetch(`https://api.solscan.io/account?address=${walletAddress}`, {
+            headers: {
+                'Authorization': `Bearer ${API_KEY}`
+            }
+        });
+        const walletData = await walletResponse.json();
+
+        if (walletData.success) {
+            displayWalletInfo(walletData.data, walletInfoDiv);
+        } else {
+            walletInfoDiv.innerHTML = '<p>Error al obtener datos de la wallet. Verifica la dirección.</p>';
+        }
+
+        // Obtener transacciones de la wallet
+        const txResponse = await fetch(`https://api.solscan.io/account/transactions?address=${walletAddress}&limit=10`, {
+            headers: {
+                'Authorization': `Bearer ${API_KEY}`
+            }
+        });
+        const txData = await txResponse.json();
+
+        if (txData.success) {
+            displayTransactions(txData.data, transactionListDiv);
+        } else {
+            transactionListDiv.innerHTML = '<p>No se encontraron transacciones o hubo un error.</p>';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        walletInfoDiv.innerHTML = '<p>Error al conectar con la API. Intenta de nuevo más tarde.</p>';
+        transactionListDiv.innerHTML = '';
+    }
+}
+
+// Función para obtener datos de una transacción
+async function fetchTransactionData(txHash) {
+    const walletInfoDiv = document.getElementById('walletInfo');
+    const transactionListDiv = document.getElementById('transactionList');
+    
+    walletInfoDiv.innerHTML = '<p>Buscando transacción...</p>';
+    transactionListDiv.innerHTML = '<div class="loader"></div>';
+    
+    try {
+        const txResponse = await fetch(`https://api.solscan.io/transaction?tx=${txHash}`, {
+            headers: {
+                'Authorization': `Bearer ${API_KEY}`
+            }
+        });
+        const txData = await txResponse.json();
+        
+        if (txData.success) {
+            walletInfoDiv.innerHTML = `<h3>Detalles de la Transacción</h3>
+                <p><strong>Hash:</strong> ${txData.data.txHash}</p>
+                <p><strong>Estado:</strong> ${txData.data.status}</p>
+                <p><strong>Bloque:</strong> ${txData.data.slot}</p>
+                <p><strong>Fecha:</strong> ${new Date(txData.data.blockTime * 1000).toLocaleString()}</p>`;
+            
+            displayTransactionDetails(txData.data, transactionListDiv);
+        } else {
+            walletInfoDiv.innerHTML = '<p>Error al obtener datos de la transacción. Verifica el hash.</p>';
+            transactionListDiv.innerHTML = '';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        walletInfoDiv.innerHTML = '<p>Error al conectar con la API. Intenta de nuevo más tarde.</p>';
+        transactionListDiv.innerHTML = '';
+    }
+}
+
+// Función para mostrar información de la wallet
+function displayWalletInfo(data, container) {
+    container.innerHTML = `
+    <h3>Información de la Wallet</h3>
+    <p><strong>Dirección:</strong> ${data.address}</p>
+    <p><strong>Saldo SOL:</strong> ${(data.lamports / 1e9).toFixed(4)} SOL</p>
+    <p><strong>Tokens:</strong> ${data.tokenAmount ? data.tokenAmount.length : 0}</p>
+    `;
+    
+    // Si hay tokens, mostrarlos
+    if (data.tokenAmount && data.tokenAmount.length > 0) {
+        let tokensHtml = '<h3>Tokens</h3><ul class="token-list">';
+        data.tokenAmount.forEach(token => {
+            tokensHtml += `
+            <li>
+                <p><strong>${token.tokenName || 'Token desconocido'}</strong></p>
+                <p>Cantidad: ${token.tokenAmount.uiAmount}</p>
+            </li>
+            `;
+        });
+        tokensHtml += '</ul>';
+        container.innerHTML += tokensHtml;
+    }
+}
+
+// Función para mostrar lista de transacciones
+function displayTransactions(transactions, container) {
+    if (!transactions || transactions.length === 0) {
+        container.innerHTML = '<p>No hay transacciones recientes.</p>';
+        return;
+    }
+
+    let html = '<h3>Últimas Transacciones</h3><ul class="transaction-list">';
+    transactions.forEach(tx => {
+        html += `
+        <li>
+            <p><strong>Hash:</strong> <a href="#" onclick="fetchTransactionData('${tx.txHash}'); return false;">${tx.txHash.substring(0, 10)}...${tx.txHash.substring(tx.txHash.length - 10)}</a></p>
+            <p><strong>Fecha:</strong> ${new Date(tx.blockTime * 1000).toLocaleString()}</p>
+            <p><strong>Estado:</strong> <span class="status ${tx.status === 'Success' ? 'success' : 'error'}">${tx.status}</span></p>
+            <p><strong>Monto SOL:</strong> ${(tx.lamport / 1e9).toFixed(4)} SOL</p>
+        </li>
+        `;
+    });
+    html += '</ul>';
+    container.innerHTML = html;
+}
+
+// Función para mostrar detalles de una transacción
+function displayTransactionDetails(transaction, container) {
+    let html = '<h3>Detalles de la Transacción</h3>';
+    
+    // Información básica
+    html += `
+    <div class="transaction-detail">
+        <p><strong>Tipo:</strong> ${transaction.type || 'Transferencia'}</p>
+        <p><strong>Fee:</strong> ${transaction.fee / 1e9} SOL</p>
+    </div>
+    `;
+    
+    // Remitente y destinatario
+    if (transaction.signer && transaction.signer.length > 0) {
+        html += `<p><strong>Remitente:</strong> ${transaction.signer[0]}</p>`;
+    }
+    
+    if (transaction.tokenTransfers && transaction.tokenTransfers.length > 0) {
+        html += '<h4>Transferencias de Tokens</h4><ul>';
+        transaction.tokenTransfers.forEach(transfer => {
+            html += `
+            <li>
+                <p><strong>Token:</strong> ${transfer.tokenName || 'Desconocido'}</p>
+                <p><strong>De:</strong> ${transfer.source}</p>
+                <p><strong>A:</strong> ${transfer.destination}</p>
+                <p><strong>Cantidad:</strong> ${transfer.amount}</p>
+            </li>
+            `;
+        });
+        html += '</ul>';
+    }
+    
+    container.innerHTML = html;
+}
