@@ -3,445 +3,391 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptoTools</title>
+    <title>Solana Tools Portal</title>
     <link rel="stylesheet" href="styles.css">
     <!-- Font Awesome para iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.css">
-    <!-- Solana Web3.js -->
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
-    <!-- Solana Wallet Adapter -->
-    <script src="https://unpkg.com/@solana/wallet-adapter-base@latest/lib/index.iife.js"></script>
-    <script src="https://unpkg.com/@solana/wallet-adapter-wallets@latest/lib/index.iife.js"></script>
-    <script src="https://unpkg.com/@solana/wallet-adapter-phantom@latest/lib/index.iife.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="dark-mode">
-    <div class="app-container">
-        <!-- Botón de menú para móviles -->
-        <button class="menu-toggle" id="menuToggle">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <!-- Sidebar / Menú lateral -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <img src="logo.png" alt="Logo" class="logo">
+    <!-- Barra de navegación superior -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <button id="menuToggle" class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="https://placehold.co/200x50/1e293b/ffffff?text=LOGO" alt="Logo">
             </div>
+        </div>
+        <div class="navbar-right">
+            <button id="userBtn" class="nav-button">
+                <i class="fas fa-user"></i>
+            </button>
+            <button id="searchBtn" class="nav-button">
+                <i class="fas fa-search"></i>
+            </button>
+            <button id="walletBtn" class="nav-button">
+                <i class="fas fa-wallet"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar (menú lateral) -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="https://placehold.co/200x50/1e293b/ffffff?text=LOGO" alt="Logo">
+            </div>
+        </div>
+        <div class="sidebar-content">
             <nav class="sidebar-nav">
-                <ul class="nav-items">
-                    <li class="nav-item active">
-                        <a href="#" data-page="home"><i class="fas fa-home"></i>Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" data-page="token-creator"><i class="fas fa-coins"></i>Token Creator</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" data-page="sentiment-tracker"><i class="fas fa-heart"></i>Sentiment Tracker</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" data-page="token-tracker"><i class="fas fa-search-dollar"></i>Token Tracker</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" data-page="detox-reclaim"><i class="fas fa-broom"></i>Detox & Reclaim</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" data-page="wallet-tracker"><i class="fas fa-user-shield"></i>Wallet Tracker</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" data-page="positioning"><i class="fas fa-map-marker-alt"></i>Positioning</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" data-page="token-burner"><i class="fas fa-fire"></i>Token Burner</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" data-page="portfolio"><i class="fas fa-wallet"></i>Portfolio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" data-page="guide"><i class="fas fa-book"></i>Guide</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" data-page="knowledge-base"><i class="fas fa-graduation-cap"></i>Knowledge Base</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" data-page="support"><i class="fas fa-headset"></i>Support</a>
-                    </li>
-                </ul>
+                <div class="nav-section">
+                    <h3 class="nav-title">Menu</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item active">
+                            <a href="index.html">
+                                <i class="fas fa-home"></i>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3 class="nav-title">Tools</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="token-creator.html">
+                                <i class="fas fa-coins"></i>
+                                <span>Token Creator</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="sentiment-tracker.html">
+                                <i class="fas fa-heart"></i>
+                                <span>Sentiment Tracker</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="token-tracker.html">
+                                <i class="fas fa-search-dollar"></i>
+                                <span>Token Tracker</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="detox-reclaim.html">
+                                <i class="fas fa-broom"></i>
+                                <span>Detox & Reclaim</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="wallet-tracker.html">
+                                <i class="fas fa-user-shield"></i>
+                                <span>Wallet Tracker</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="positioning.html">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Positioning</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="token-burner.html">
+                                <i class="fas fa-fire"></i>
+                                <span>Token Burner</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3 class="nav-title">Resources</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="portfolio.html">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>Portfolio</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="knowledge-base.html">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Knowledge Base</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="guide.html">
+                                <i class="fas fa-book"></i>
+                                <span>Guide</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="support.html">
+                                <i class="fas fa-headset"></i>
+                                <span>Support</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <button id="sidebarWalletBtn" class="wallet-button">
+                        <i class="fas fa-wallet"></i>
+                        <span>Connect Wallet</span>
+                    </button>
+                </div>
             </nav>
-            <div class="sidebar-footer">
-                <button class="connect-wallet" id="sidebarWalletBtn">
-                    <i class="fas fa-wallet"></i>
-                    <span>Connect Wallet</span>
+        </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Solana Tools Portal</h1>
+                <p>Explore our suite of tools for Solana blockchain</p>
+                <div class="hero-buttons">
+                    <a href="#tools" class="btn btn-primary">Explore Tools</a>
+                    <a href="guide.html" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools" class="tools-section">
+            <h2 class="section-title">Our Tools</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3>Token Creator</h3>
+                    <p>Create your own tokens easily on Solana blockchain</p>
+                    <a href="token-creator.html" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Sentiment Tracker</h3>
+                    <p>Monitor market sentiment for tokens</p>
+                    <a href="sentiment-tracker.html" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-search-dollar"></i>
+                    </div>
+                    <h3>Token Tracker</h3>
+                    <p>Track token performance and metrics</p>
+                    <a href="token-tracker.html" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-broom"></i>
+                    </div>
+                    <h3>Detox & Reclaim</h3>
+                    <p>Clean up your wallet and reclaim assets</p>
+                    <a href="detox-reclaim.html" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>Wallet Tracker</h3>
+                    <p>Monitor wallet activities and balances</p>
+                    <a href="wallet-tracker.html" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Positioning</h3>
+                    <p>Optimize your market positioning</p>
+                    <a href="positioning.html" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h3>Token Burner</h3>
+                    <p>Burn tokens to reduce supply</p>
+                    <a href="token-burner.html" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Portfolio</h3>
+                    <p>Track and manage your crypto portfolio</p>
+                    <a href="portfolio.html" class="tool-link">Use Tool</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de búsqueda -->
+    <div id="searchModal" class="modal">
+        <div class="modal-content search-modal">
+            <div class="modal-header">
+                <h3>Search</h3>
+                <button id="closeSearchBtn" class="close-btn">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
-        </aside>
-
-        <!-- Contenido principal -->
-        <main class="main-content">
-            <header class="main-header">
-                <h1 id="pageTitle">Dashboard</h1>
-                <div class="header-actions">
-                    <button class="header-icon-btn" id="searchBtn">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    <button class="header-icon-btn" id="walletBtn">
-                        <i class="fas fa-wallet"></i>
-                    </button>
-                    <button class="header-icon-btn" id="userBtn">
-                        <i class="fas fa-user"></i>
-                    </button>
-                    <button class="header-icon-btn" id="themeToggle">
-                        <i class="fas fa-moon"></i>
-                    </button>
+            <div class="search-container">
+                <div class="search-input-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search for tools, guides, etc.">
                 </div>
-            </header>
-
-            <!-- Modal de búsqueda -->
-            <div class="search-modal" id="searchModal">
-                <div class="search-modal-content">
-                    <div class="search-header">
-                        <h3>Search</h3>
-                        <button class="close-btn" id="closeSearchBtn">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="search-input-container">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="searchInput" placeholder="Search tools, tokens, or wallets...">
-                    </div>
-                    <div class="search-results" id="searchResults">
-                        <!-- Los resultados de búsqueda se mostrarán aquí -->
-                    </div>
+                <div id="searchResults" class="search-results">
+                    <p class="search-message">Type to search</p>
                 </div>
             </div>
-
-            <!-- Modal de wallet -->
-            <div class="modal" id="walletModal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3>Wallet</h3>
-                        <button class="close-btn" id="closeWalletBtn">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="walletModalBody">
-                        <div id="walletNotConnected">
-                            <p>Connect your wallet to use all features</p>
-                            <button class="primary-btn" id="connectWalletBtn">
-                                <i class="fas fa-wallet"></i>
-                                Connect Wallet
-                            </button>
-                        </div>
-                        <div id="walletConnected" style="display: none;">
-                            <div class="wallet-info">
-                                <div class="wallet-address">
-                                    <p>Connected Address:</p>
-                                    <div class="address-container">
-                                        <span id="walletAddress"></span>
-                                        <button class="copy-btn" id="copyAddressBtn">
-                                            <i class="fas fa-copy"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="wallet-balance">
-                                    <p>SOL Balance:</p>
-                                    <span id="solBalance">Loading...</span>
-                                </div>
-                            </div>
-                            <button class="danger-btn" id="disconnectWalletBtn">
-                                <i class="fas fa-sign-out-alt"></i>
-                                Disconnect Wallet
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal de usuario -->
-            <div class="modal" id="userModal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3>User Profile</h3>
-                        <button class="close-btn" id="closeUserBtn">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="userNotConnected">
-                            <p>Connect your wallet to view your profile</p>
-                        </div>
-                        <div id="userConnected" style="display: none;">
-                            <div class="user-info">
-                                <div class="user-avatar">
-                                    <i class="fas fa-user-circle"></i>
-                                </div>
-                                <div class="user-details">
-                                    <h4 id="userWalletShort"></h4>
-                                    <p>Wallet connected: <span id="userWalletTime">Just now</span></p>
-                                </div>
-                            </div>
-                            <div class="user-stats">
-                                <div class="stat-item">
-                                    <span class="stat-value" id="userTokenCount">-</span>
-                                    <span class="stat-label">Tokens</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-value" id="userNftCount">-</span>
-                                    <span class="stat-label">NFTs</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-value" id="userTxCount">-</span>
-                                    <span class="stat-label">Transactions</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contenido de las páginas -->
-            <div id="pageContent">
-                <!-- Página de inicio (Dashboard) -->
-                <div class="page-container active" id="home">
-                    <div class="content-area">
-                        <div class="welcome-card">
-                            <div class="welcome-text">
-                                <h2>Welcome to CryptoTools</h2>
-                                <p>Explore our suite of tools for blockchain analysis and management</p>
-                            </div>
-                        </div>
-
-                        <div class="tools-grid">
-                            <div class="tool-card" data-page="token-creator">
-                                <div class="tool-icon">
-                                    <i class="fas fa-coins"></i>
-                                </div>
-                                <div class="tool-info">
-                                    <h3>Token Creator</h3>
-                                    <p>Create your own tokens easily</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-card" data-page="sentiment-tracker">
-                                <div class="tool-icon">
-                                    <i class="fas fa-heart"></i>
-                                </div>
-                                <div class="tool-info">
-                                    <h3>Sentiment Tracker</h3>
-                                    <p>Monitor market sentiment for tokens</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-card" data-page="token-tracker">
-                                <div class="tool-icon">
-                                    <i class="fas fa-search-dollar"></i>
-                                </div>
-                                <div class="tool-info">
-                                    <h3>Token Tracker</h3>
-                                    <p>Track token performance and metrics</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-card" data-page="detox-reclaim">
-                                <div class="tool-icon">
-                                    <i class="fas fa-broom"></i>
-                                </div>
-                                <div class="tool-info">
-                                    <h3>Detox & Reclaim</h3>
-                                    <p>Clean up your wallet and reclaim assets</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-card" data-page="wallet-tracker">
-                                <div class="tool-icon">
-                                    <i class="fas fa-user-shield"></i>
-                                </div>
-                                <div class="tool-info">
-                                    <h3>Wallet Tracker</h3>
-                                    <p>Monitor wallet activities and balances</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-card" data-page="positioning">
-                                <div class="tool-icon">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </div>
-                                <div class="tool-info">
-                                    <h3>Positioning</h3>
-                                    <p>Optimize your market positioning</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-card" data-page="token-burner">
-                                <div class="tool-icon">
-                                    <i class="fas fa-fire"></i>
-                                </div>
-                                <div class="tool-info">
-                                    <h3>Token Burner</h3>
-                                    <p>Burn tokens to reduce supply</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tool-card" data-page="knowledge-base">
-                                <div class="tool-icon">
-                                    <i class="fas fa-graduation-cap"></i>
-                                </div>
-                                <div class="tool-info">
-                                    <h3>Knowledge Base</h3>
-                                    <p>Learn about blockchain and crypto</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Página de Wallet Tracker -->
-                <div class="page-container" id="wallet-tracker">
-                    <div class="content-area">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2>Wallet Tracker</h2>
-                                <p>Monitor wallet activities, balances, and transactions</p>
-                            </div>
-                            <div class="card-body">
-                                <div class="wallet-search-container">
-                                    <div class="wallet-search">
-                                        <input type="text" id="walletAddressInput" placeholder="Enter Solana wallet address or ENS name">
-                                        <button class="primary-btn" id="trackWalletBtn">Track Wallet</button>
-                                    </div>
-                                </div>
-                                
-                                <div id="walletTrackerResults" style="display: none;">
-                                    <div class="wallet-overview">
-                                        <div class="wallet-header">
-                                            <h3>Wallet Overview</h3>
-                                            <div class="wallet-address-display">
-                                                <span id="trackedWalletAddress"></span>
-                                                <button class="copy-btn" id="copyTrackedAddressBtn">
-                                                    <i class="fas fa-copy"></i>
-                                                </button>
-                                                <a href="#" target="_blank" id="viewOnSolscanBtn" class="external-link-btn">
-                                                    <i class="fas fa-external-link-alt"></i> View on Solscan
-                                                </a>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="wallet-stats">
-                                            <div class="stat-card">
-                                                <div class="stat-icon">
-                                                    <i class="fas fa-coins"></i>
-                                                </div>
-                                                <div class="stat-details">
-                                                    <span class="stat-value" id="trackedWalletSolBalance">Loading...</span>
-                                                    <span class="stat-label">SOL Balance</span>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="stat-card">
-                                                <div class="stat-icon">
-                                                    <i class="fas fa-exchange-alt"></i>
-                                                </div>
-                                                <div class="stat-details">
-                                                    <span class="stat-value" id="trackedWalletTxCount">Loading...</span>
-                                                    <span class="stat-label">Transactions</span>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="stat-card">
-                                                <div class="stat-icon">
-                                                    <i class="fas fa-tag"></i>
-                                                </div>
-                                                <div class="stat-details">
-                                                    <span class="stat-value" id="trackedWalletTokenCount">Loading...</span>
-                                                    <span class="stat-label">Tokens</span>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="stat-card">
-                                                <div class="stat-icon">
-                                                    <i class="fas fa-image"></i>
-                                                </div>
-                                                <div class="stat-details">
-                                                    <span class="stat-value" id="trackedWalletNftCount">Loading...</span>
-                                                    <span class="stat-label">NFTs</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="wallet-tabs">
-                                        <div class="tabs-header">
-                                            <button class="tab-btn active" data-tab="tokens">Tokens</button>
-                                            <button class="tab-btn" data-tab="nfts">NFTs</button>
-                                            <button class="tab-btn" data-tab="transactions">Transactions</button>
-                                            <button class="tab-btn" data-tab="domains">Domains</button>
-                                        </div>
-                                        
-                                        <div class="tabs-content">
-                                            <div class="tab-pane active" id="tokens-tab">
-                                                <div class="table-container">
-                                                    <table class="data-table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Token</th>
-                                                                <th>Balance</th>
-                                                                <th>Value (USD)</th>
-                                                                <th>Price</th>
-                                                                <th>24h Change</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="tokenTableBody">
-                                                            <tr>
-                                                                <td colspan="5" class="loading-cell">Loading token data...</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="tab-pane" id="nfts-tab">
-                                                <div class="nft-grid" id="nftGrid">
-                                                    <div class="loading-container">Loading NFT data...</div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="tab-pane" id="transactions-tab">
-                                                <div class="table-container">
-                                                    <table class="data-table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Signature</th>
-                                                                <th>Type</th>
-                                                                <th>Amount</th>
-                                                                <th>Date</th>
-                                                                <th>Status</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="transactionTableBody">
-                                                            <tr>
-                                                                <td colspan="5" class="loading-cell">Loading transaction data...</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="tab-pane" id="domains-tab">
-                                                <div id="domainsContainer">
-                                                    <div class="loading-container">Loading domain data...</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Otras páginas se agregarán aquí -->
-            </div>
-        </main>
+        </div>
     </div>
 
+    <!-- Modal de wallet -->
+    <div id="walletModal" class="modal">
+        <div class="modal-content wallet-modal">
+            <div class="modal-header">
+                <h3>Connect Wallet</h3>
+                <button id="closeWalletBtn" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="wallet-container">
+                <!-- Estado desconectado -->
+                <div id="walletDisconnected" class="wallet-state">
+                    <p>Connect your wallet to access all features</p>
+                    <div class="wallet-options">
+                        <button id="connectPhantomBtn" class="wallet-option-btn">
+                            <img src="https://phantom.app/img/logo.png" alt="Phantom">
+                            <span>Phantom</span>
+                        </button>
+                        <button id="connectSolflareBtn" class="wallet-option-btn">
+                            <img src="https://solflare.com/assets/logo.svg" alt="Solflare">
+                            <span>Solflare</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Estado conectado -->
+                <div id="walletConnected" class="wallet-state" style="display: none;">
+                    <div class="wallet-info">
+                        <div class="wallet-address-container">
+                            <p>Connected Wallet</p>
+                            <div class="wallet-address">
+                                <span id="walletAddress">...</span>
+                                <button id="copyAddressBtn" class="copy-btn">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="wallet-balance">
+                            <p>Balance</p>
+                            <h4 id="walletBalance">Loading...</h4>
+                        </div>
+                    </div>
+                    <button id="disconnectWalletBtn" class="btn btn-secondary">Disconnect</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de usuario -->
+    <div id="userModal" class="modal">
+        <div class="modal-content user-modal">
+            <div class="modal-header">
+                <h3>User Profile</h3>
+                <button id="closeUserBtn" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="user-container">
+                <!-- Estado desconectado -->
+                <div id="userDisconnected" class="user-state">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <p>Connect your wallet to view your profile</p>
+                    <button id="userConnectWalletBtn" class="btn btn-primary">Connect Wallet</button>
+                </div>
+                <!-- Estado conectado -->
+                <div id="userConnected" class="user-state" style="display: none;">
+                    <div class="user-header">
+                        <div class="user-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-info">
+                            <h4 id="userName">User</h4>
+                            <p id="userWalletAddress">...</p>
+                        </div>
+                    </div>
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="tokenCount">0</div>
+                            <div class="stat-label">Tokens</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="nftCount">0</div>
+                            <div class="stat-label">NFTs</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="txCount">0</div>
+                            <div class="stat-label">Transactions</div>
+                        </div>
+                    </div>
+                    <div class="user-actions">
+                        <a href="portfolio.html" class="btn btn-secondary">View Portfolio</a>
+                        <button id="disconnectUserBtn" class="btn btn-outline">Disconnect</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="https://placehold.co/200x50/1e293b/ffffff?text=LOGO" alt="Logo">
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li><a href="token-creator.html">Token Creator</a></li>
+                        <li><a href="sentiment-tracker.html">Sentiment Tracker</a></li>
+                        <li><a href="token-tracker.html">Token Tracker</a></li>
+                        <li><a href="wallet-tracker.html">Wallet Tracker</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="knowledge-base.html">Knowledge Base</a></li>
+                        <li><a href="guide.html">Guide</a></li>
+                        <li><a href="support.html">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Solana Tools Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Solana Web3 -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <!-- Tus scripts -->
     <script src="script.js"></script>
+    <script src="wallet-tracker.js"></script>
 </body>
 </html>
