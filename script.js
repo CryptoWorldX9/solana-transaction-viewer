@@ -3,21 +3,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show home page by default
     showPage('home');
     
-    // Initialize theme
-    initTheme();
-    
     // Add event listeners for menu links
-    document.querySelectorAll('.sidebar-menu a').forEach(link => {
+    document.querySelectorAll('.sidebar-menu a, .tool-card a[data-page]').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const page = this.getAttribute('data-page');
             showPage(page);
             
-            // Mark active link
+            // Mark active link in sidebar
             document.querySelectorAll('.sidebar-menu li').forEach(item => {
                 item.classList.remove('active');
             });
-            this.parentElement.classList.add('active');
+            
+            // Find and activate the corresponding sidebar link
+            const sidebarLink = document.querySelector(`.sidebar-menu a[data-page="${page}"]`);
+            if (sidebarLink) {
+                sidebarLink.parentElement.classList.add('active');
+            }
             
             // On mobile, close menu after clicking
             if (window.innerWidth < 992) {
@@ -39,20 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
         this.classList.remove('active');
     });
     
-    // Theme toggle
-    document.querySelector('.theme-toggle').addEventListener('click', function() {
-        document.body.classList.toggle('light-theme');
-        localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-        
-        // Change icon
-        const icon = this.querySelector('i');
-        if (document.body.classList.contains('light-theme')) {
-            icon.className = 'fas fa-sun';
-        } else {
-            icon.className = 'fas fa-moon';
-        }
-    });
-    
     // Initialize modals
     initModals();
     
@@ -65,22 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Initialize network buttons
-    document.querySelectorAll('.network-btn').forEach(btn => {
+    document.querySelectorAll('.network-buttons .btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            document.querySelectorAll('.network-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.network-buttons .btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
         });
     });
 });
-
-// Function to initialize theme
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-        document.body.classList.add('light-theme');
-        document.querySelector('.theme-toggle i').className = 'fas fa-sun';
-    }
-}
 
 // Function to show a specific page
 function showPage(pageId) {
@@ -181,10 +160,10 @@ async function fetchWalletData() {
         const transactions = await connection.getSignaturesForAddress(publicKey, {limit: 10});
         
         if (transactions && transactions.length > 0) {
-            let html = '<h3>Últimas Transacciones</h3><ul>';
+            let html = '<h3>Últimas Transacciones</h3><ul class="transaction-list">';
             transactions.forEach(tx => {
                 html += `
-                    <li>
+                    <li class="transaction-item">
                         <p><strong>Signature:</strong> ${tx.signature}</p>
                         <p><strong>Slot:</strong> ${tx.slot}</p>
                         <p><strong>Fecha:</strong> ${new Date(tx.blockTime * 1000).toLocaleString()}</p>
@@ -201,58 +180,16 @@ async function fetchWalletData() {
     } catch (error) {
         console.error('Error:', error);
         
-        // Si hay un error con la API de Solana, intentar con una alternativa
-        try {
-            // Usar una API alternativa que no requiere Web3
-            const response = await fetch(`https://public-api.solscan.io/account/${walletAddress}`);
-            const data = await response.json();
-            
-            if (data) {
-                walletInfoDiv.innerHTML = `
-                    <h3>Información de la Wallet</h3>
-                    <p><strong>Dirección:</strong> ${walletAddress}</p>
-                    <p><strong>Saldo SOL:</strong> ${data.lamports ? (data.lamports / 1e9).toFixed(4) : '0'} SOL</p>
-                    <p><strong>Red:</strong> Mainnet</p>
-                `;
-                
-                // Obtener transacciones
-                const txResponse = await fetch(`https://public-api.solscan.io/account/transactions?account=${walletAddress}&limit=10`);
-                const txData = await txResponse.json();
-                
-                if (txData && txData.length > 0) {
-                    let html = '<h3>Últimas Transacciones</h3><ul>';
-                    txData.forEach(tx => {
-                        html += `
-                            <li>
-                                <p><strong>Signature:</strong> ${tx.txHash || tx.signature || 'No disponible'}</p>
-                                <p><strong>Slot:</strong> ${tx.slot || 'No disponible'}</p>
-                                <p><strong>Fecha:</strong> ${tx.blockTime ? new Date(tx.blockTime * 1000).toLocaleString() : 'No disponible'}</p>
-                                <p><strong>Estado:</strong> ${tx.status || tx.confirmationStatus || 'Confirmada'}</p>
-                            </li>
-                        `;
-                    });
-                    html += '</ul>';
-                    transactionListDiv.innerHTML = html;
-                } else {
-                    transactionListDiv.innerHTML = '<p>No hay transacciones recientes.</p>';
-                }
-            } else {
-                throw new Error('No se pudo obtener información de la wallet');
-            }
-        } catch (alternativeError) {
-            console.error('Error alternativo:', alternativeError);
-            
-            // Si ambas APIs fallan, mostrar un mensaje de error genérico
-            walletInfoDiv.innerHTML = `
-                <h3>Información de la Wallet</h3>
-                <p><strong>Dirección:</strong> ${walletAddress}</p>
-                <p><strong>Estado:</strong> No se pudo obtener información detallada</p>
-                <p>Puedes verificar esta dirección en <a href="https://solscan.io/account/${walletAddress}" target="_blank">Solscan</a> o <a href="https://explorer.solana.com/address/${walletAddress}" target="_blank">Solana Explorer</a></p>
-            `;
-            transactionListDiv.innerHTML = `
-                <p>No se pudieron cargar las transacciones. Por favor, verifica la dirección o intenta más tarde.</p>
-                <p>Puedes ver las transacciones en <a href="https://solscan.io/account/${walletAddress}" target="_blank">Solscan</a> o <a href="https://explorer.solana.com/address/${walletAddress}" target="_blank">Solana Explorer</a></p>
-            `;
-        }
+        // Si hay un error con la API de Solana, mostrar mensaje de error
+        walletInfoDiv.innerHTML = `
+            <h3>Información de la Wallet</h3>
+            <p><strong>Dirección:</strong> ${walletAddress}</p>
+            <p><strong>Estado:</strong> No se pudo obtener información detallada</p>
+            <p>Puedes verificar esta dirección en <a href="https://solscan.io/account/${walletAddress}" target="_blank">Solscan</a> o <a href="https://explorer.solana.com/address/${walletAddress}" target="_blank">Solana Explorer</a></p>
+        `;
+        transactionListDiv.innerHTML = `
+            <p>No se pudieron cargar las transacciones. Por favor, verifica la dirección o intenta más tarde.</p>
+            <p>Puedes ver las transacciones en <a href="https://solscan.io/account/${walletAddress}" target="_blank">Solscan</a> o <a href="https://explorer.solana.com/address/${walletAddress}" target="_blank">Solana Explorer</a></p>
+        `;
     }
 }
