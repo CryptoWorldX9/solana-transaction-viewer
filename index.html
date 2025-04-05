@@ -1,299 +1,306 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptoTools - Próximamente</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #6c5ce7;
-            --secondary-color: #00cec9;
-            --accent-color: #fdcb6e;
-            --dark-color: #1a1a1a;
-            --light-color: #f9f9f9;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CryptoTools - Próximamente</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary-color: #6c5ce7;
+      --secondary-color: #00cec9;
+      --accent-color: #fdcb6e;
+      --dark-color: #1a1a1a;
+      --light-color: #f9f9f9;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(90deg, #000000, #737373, #000000);
-            color: var(--light-color);
-            line-height: 1.6;
-            position: relative;
-        }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(90deg, #000000, #737373, #000000);
+      color: var(--light-color);
+      line-height: 1.6;
+      position: relative;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-        }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+    }
 
-        header {
-            padding: 30px 0 0;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-        }
+    header {
+      padding: 30px 0 0;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
 
-        .logo {
-            max-width: 400px;
-            margin-bottom: -100px;
-            position: relative;
-            z-index: 2;
-        }
+    .logo {
+      max-width: 250px;
+      margin-bottom: -60px;
+      position: relative;
+      z-index: 2;
+    }
 
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-            z-index: 20;
-            position: relative;
-        }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      z-index: 20;
+      position: relative;
+    }
 
-        .social-link {
-            color: var(--light-color);
-            font-size: 1.2rem;
-            transition: color 0.3s ease;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background-color: rgba(0,0,0,0.3);
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
+    .social-link {
+      color: var(--light-color);
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background-color: rgba(0,0,0,0.3);
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
 
-        .social-link:hover {
-            color: var(--accent-color);
-            background-color: rgba(0,0,0,0.5);
-        }
+    .social-link:hover {
+      color: var(--accent-color);
+      background-color: rgba(0,0,0,0.5);
+    }
 
-        .social-link i {
-            font-size: 1.5rem;
-        }
+    .social-link i {
+      font-size: 1.5rem;
+    }
 
-        .hero {
-            text-align: center;
-            padding: 30px 0;
-            background: linear-gradient(135deg, rgba(108, 92, 231, 0.7), rgba(0, 206, 201, 0.7));
-            border-radius: 15px;
-            margin-top: 80px;
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
-        }
+    .hero {
+      text-align: center;
+      padding: 20px;
+      background-color: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      margin-top: 40px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: var(--light-color);
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 5;
-        }
+    .subtitle {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: var(--light-color);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 10px;
+    }
 
-        .countdown {
-            background-color: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 12px;
-            border-radius: 10px;
-            display: inline-block;
-            margin-top: 100px;
-            position: relative;
-            z-index: 5;
-            max-width: 80%;
-        }
+    .countdown {
+      background-color: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-top: 15px;
+      max-width: 80%;
+    }
 
-        .countdown-title {
-            font-size: 1.1rem;
-            margin-bottom: 12px;
-            color: var(--accent-color);
-        }
+    .countdown-title {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: var(--accent-color);
+    }
 
-        .countdown-timer {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-        }
+    .countdown-timer {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
 
-        .countdown-item {
-            text-align: center;
-        }
+    .countdown-item {
+      text-align: center;
+    }
 
-        .countdown-number {
-            font-size: 1.8rem;
-            font-weight: bold;
-            background-color: rgba(0,0,0,0.4);
-            padding: 6px 10px;
-            border-radius: 5px;
-            display: block;
-            min-width: 50px;
-        }
+    .countdown-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      background-color: rgba(0,0,0,0.4);
+      padding: 6px 10px;
+      border-radius: 5px;
+      display: block;
+      min-width: 50px;
+    }
 
-        .countdown-label {
-            font-size: 0.7rem;
-            margin-top: 5px;
-            text-transform: uppercase;
-        }
+    .countdown-label {
+      font-size: 0.7rem;
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
 
-        .countdown-date {
-            font-size: 0.8rem;
-            color: #ccc;
-            margin-top: 10px;
-        }
+    .countdown-date {
+      font-size: 0.8rem;
+      color: #ccc;
+      margin-top: 10px;
+    }
 
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
 
-        .feature-card {
-            background-color: rgba(255,255,255,0.05);
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
+    .feature-card {
+      background-color: rgba(255,255,255,0.05);
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
 
-        .feature-card:hover {
-            transform: translateY(-10px);
-            background-color: rgba(255,255,255,0.1);
-        }
+    .feature-card:hover {
+      transform: translateY(-10px);
+      background-color: rgba(255,255,255,0.1);
+    }
 
-        .feature-icon {
-            font-size: 3rem;
-            color: var(--accent-color);
-            margin-bottom: 20px;
-        }
+    .feature-icon {
+      font-size: 3rem;
+      color: var(--accent-color);
+      margin-bottom: 20px;
+    }
 
-        .feature-title {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--secondary-color);
-        }
+    .feature-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--secondary-color);
+    }
 
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-    </style>
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    @media (max-width: 768px) {
+      .countdown-timer {
+        flex-wrap: wrap;
+      }
+
+      .social-links {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <img src="CRYPTO TOOLS.png" alt="CryptoTools Logo" class="logo">
-        </header>
+  <div class="container">
+    <header>
+      <img src="CRYPTO TOOLS.png" alt="CryptoTools Logo" class="logo" />
+    </header>
 
-        <div class="social-links">
-            <a href="https://www.instagram.com/armypanzercto?igsh=NDl1ejNraHllY2U5&utm_source=qr" class="social-link" target="_blank">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://x.com/armypanzercto?s=21" class="social-link" target="_blank">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a href="https://youtube.com/@armypanzercto?si=WuoVf0fVKYNLZ5kN" class="social-link" target="_blank">
-                <i class="fab fa-youtube"></i>
-            </a>
-            <a href="https://t.me/ArmyPanzer" class="social-link" target="_blank">
-                <i class="fab fa-telegram"></i>
-            </a>
-            <a href="https://armypanzercto.com/" class="social-link" target="_blank">
-                <i class="fas fa-globe"></i>
-            </a>
-        </div>
-
-        <section class="hero">
-            <p class="subtitle">
-                <strong>El Centro Neural de $PANZER está por llegar</strong><br><br>
-                Muy pronto estará disponible CryptoTools, una plataforma innovadora diseñada especialmente para los inversores de $PANZER y el público en general. Aquí se alojará el cerebro neural del ecosistema $PANZER, con acceso a herramientas avanzadas, análisis en tiempo real y beneficios reales para quienes invierten en criptoactivos. Prepárate para descubrir un entorno inteligente, práctico y actualizado, creado para potenciar tus decisiones en el mundo cripto.
-            </p>
-
-            <div class="countdown">
-                <h2 class="countdown-title">Primer Adelanto de CryptoTools</h2>
-                <div class="countdown-timer" id="countdown">
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="days">00</span>
-                        <span class="countdown-label">Días</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="hours">00</span>
-                        <span class="countdown-label">Horas</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="minutes">00</span>
-                        <span class="countdown-label">Minutos</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="seconds">00</span>
-                        <span class="countdown-label">Segundos</span>
-                    </div>
-                </div>
-                <div class="countdown-date">16 de junio de 2025 – 22:00 hrs UTC</div>
-            </div>
-        </section>
-
-        <section class="features">
-            <div class="feature-card">
-                <i class="fas fa-chart-line feature-icon"></i>
-                <h3 class="feature-title">Análisis Avanzado</h3>
-                <p>Herramientas de análisis de mercado en tiempo real para tomar decisiones informadas.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-wallet feature-icon"></i>
-                <h3 class="feature-title">Gestión de Carteras</h3>
-                <p>Administra tus activos digitales de forma segura y eficiente en un solo lugar.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-shield-alt feature-icon"></i>
-                <h3 class="feature-title">Seguridad Garantizada</h3>
-                <p>Protección de última generación para tus inversiones y datos personales.</p>
-            </div>
-        </section>
-
-        <footer>
-            <p>&copy; 2025 CryptoTools. Todos los derechos reservados.</p>
-        </footer>
+    <div class="social-links">
+      <a href="https://www.instagram.com/armypanzercto?igsh=NDl1ejNraHllY2U5&utm_source=qr" class="social-link" target="_blank">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://x.com/armypanzercto?s=21" class="social-link" target="_blank">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="https://youtube.com/@armypanzercto?si=WuoVf0fVKYNLZ5kN" class="social-link" target="_blank">
+        <i class="fab fa-youtube"></i>
+      </a>
+      <a href="https://t.me/ArmyPanzer" class="social-link" target="_blank">
+        <i class="fab fa-telegram"></i>
+      </a>
+      <a href="https://armypanzercto.com/" class="social-link" target="_blank">
+        <i class="fas fa-globe"></i>
+      </a>
     </div>
 
-    <script>
-        const targetDate = new Date('2025-06-16T22:00:00Z');
-        const countdown = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+    <section class="hero">
+      <p class="subtitle">
+        <strong>El Centro Neural de $PANZER está por llegar</strong><br><br>
+        Muy pronto estará disponible CryptoTools, una plataforma innovadora diseñada especialmente para los inversores de $PANZER y el público en general. Aquí se alojará el cerebro neural del ecosistema $PANZER, con acceso a herramientas avanzadas, análisis en tiempo real y beneficios reales para quienes invierten en criptoactivos. Prepárate para descubrir un entorno inteligente, práctico y actualizado, creado para potenciar tus decisiones en el mundo cripto.
+      </p>
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      <div class="countdown">
+        <h2 class="countdown-title">Primer Adelanto de CryptoTools</h2>
+        <div class="countdown-timer" id="countdown">
+          <div class="countdown-item">
+            <span class="countdown-number" id="days">00</span>
+            <span class="countdown-label">Días</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="hours">00</span>
+            <span class="countdown-label">Horas</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="minutes">00</span>
+            <span class="countdown-label">Minutos</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="seconds">00</span>
+            <span class="countdown-label">Segundos</span>
+          </div>
+        </div>
+        <div class="countdown-date">16 de junio de 2025 – 22:00 hrs UTC</div>
+      </div>
+    </section>
 
-            document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
-            document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
-            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
-            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
+    <section class="features">
+      <div class="feature-card">
+        <i class="fas fa-chart-line feature-icon"></i>
+        <h3 class="feature-title">Análisis Avanzado</h3>
+        <p>Herramientas de análisis de mercado en tiempo real para tomar decisiones informadas.</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-wallet feature-icon"></i>
+        <h3 class="feature-title">Gestión de Carteras</h3>
+        <p>Administra tus activos digitales de forma segura y eficiente en un solo lugar.</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-shield-alt feature-icon"></i>
+        <h3 class="feature-title">Seguridad Garantizada</h3>
+        <p>Protección de última generación para tus inversiones y datos personales.</p>
+      </div>
+    </section>
 
-            if (distance < 0) {
-                clearInterval(countdown);
-                document.getElementById("countdown").innerHTML = "<h3>¡Ya está disponible!</h3>";
-            }
-        }, 1000);
-    </script>
+    <footer>
+      <p>&copy; 2025 CryptoTools. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+
+  <script>
+    const targetDate = new Date('2025-06-16T22:00:00Z');
+    const countdown = setInterval(function() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
+      document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+      document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
+      document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
+
+      if (distance < 0) {
+        clearInterval(countdown);
+        document.getElementById("countdown").innerHTML = "<h3>¡Ya está disponible!</h3>";
+      }
+    }, 1000);
+  </script>
 </body>
 </html>
