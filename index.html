@@ -35,31 +35,29 @@
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 20px;
       position: relative;
     }
 
     header {
-      padding: 30px 0 0;
       text-align: center;
       position: relative;
       z-index: 10;
     }
 
     .logo {
-      max-width: 420px; /* tamaño reducido un 20% más */
+      max-width: 420px;
       width: 100%;
       height: auto;
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 2;
+      margin: 0 auto 20px;
+      display: block;
     }
 
     .social-links {
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       flex-wrap: wrap;
     }
 
@@ -91,10 +89,8 @@
       background-color: #000000;
       border: 1px solid rgba(255,255,255,0.2);
       border-radius: 10px;
-      margin-top: 40px;
       margin-bottom: 40px;
       position: relative;
-      overflow: hidden;
     }
 
     .subtitle {
@@ -114,7 +110,7 @@
       border-radius: 10px;
       display: inline-block;
       margin-top: 15px;
-      max-width: 80%;
+      max-width: 90%;
     }
 
     .countdown-title {
@@ -127,6 +123,7 @@
       display: flex;
       justify-content: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
 
     .countdown-item {
@@ -194,16 +191,25 @@
     }
 
     @media (max-width: 768px) {
-      .countdown-timer {
-        flex-wrap: wrap;
-      }
-
       .logo {
-        max-width: 100%;
+        max-width: 300px;
       }
 
-      .social-links {
-        flex-wrap: wrap;
+      .subtitle {
+        font-size: 0.95rem;
+      }
+
+      .countdown-number {
+        font-size: 1.2rem;
+        min-width: 40px;
+      }
+
+      .countdown-label {
+        font-size: 0.6rem;
+      }
+
+      .countdown-title {
+        font-size: 1rem;
       }
     }
   </style>
