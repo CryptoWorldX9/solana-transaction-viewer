@@ -47,8 +47,10 @@
     }
 
     .logo {
-      max-width: 250px;
-      margin-bottom: -60px;
+      max-width: 750px; /* 3 veces el tamaño original */
+      width: 100%;
+      height: auto;
+      margin-bottom: 20px;
       position: relative;
       z-index: 2;
     }
@@ -57,9 +59,8 @@
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin: 20px 0;
-      z-index: 20;
-      position: relative;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
 
     .social-link {
@@ -197,6 +198,10 @@
         flex-wrap: wrap;
       }
 
+      .logo {
+        max-width: 100%;
+      }
+
       .social-links {
         flex-wrap: wrap;
       }
@@ -207,25 +212,24 @@
   <div class="container">
     <header>
       <img src="CRYPTO TOOLS.png" alt="CryptoTools Logo" class="logo" />
+      <div class="social-links">
+        <a href="https://www.instagram.com/armypanzercto?igsh=NDl1ejNraHllY2U5&utm_source=qr" class="social-link" target="_blank">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://x.com/armypanzercto?s=21" class="social-link" target="_blank">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="https://youtube.com/@armypanzercto?si=WuoVf0fVKYNLZ5kN" class="social-link" target="_blank">
+          <i class="fab fa-youtube"></i>
+        </a>
+        <a href="https://t.me/ArmyPanzer" class="social-link" target="_blank">
+          <i class="fab fa-telegram"></i>
+        </a>
+        <a href="https://armypanzercto.com/" class="social-link" target="_blank">
+          <i class="fas fa-globe"></i>
+        </a>
+      </div>
     </header>
-
-    <div class="social-links">
-      <a href="https://www.instagram.com/armypanzercto?igsh=NDl1ejNraHllY2U5&utm_source=qr" class="social-link" target="_blank">
-        <i class="fab fa-instagram"></i>
-      </a>
-      <a href="https://x.com/armypanzercto?s=21" class="social-link" target="_blank">
-        <i class="fab fa-twitter"></i>
-      </a>
-      <a href="https://youtube.com/@armypanzercto?si=WuoVf0fVKYNLZ5kN" class="social-link" target="_blank">
-        <i class="fab fa-youtube"></i>
-      </a>
-      <a href="https://t.me/ArmyPanzer" class="social-link" target="_blank">
-        <i class="fab fa-telegram"></i>
-      </a>
-      <a href="https://armypanzercto.com/" class="social-link" target="_blank">
-        <i class="fas fa-globe"></i>
-      </a>
-    </div>
 
     <section class="hero">
       <p class="subtitle">
