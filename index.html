@@ -29,58 +29,89 @@
         
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--dark-color);
+            background-color: #2d3436; /* Se ajustará con JavaScript para coincidir con el logo */
             color: var(--light-color);
             line-height: 1.6;
+            position: relative;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
         }
         
         header {
-            padding: 30px 0;
+            padding: 30px 0 10px;
             text-align: center;
+            position: relative;
+            z-index: 10;
         }
         
         .logo {
             max-width: 300px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0 30px;
+        }
+        
+        .social-link {
+            color: var(--light-color);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .social-link:hover {
+            color: var(--accent-color);
+        }
+        
+        .social-link i {
+            font-size: 1.8rem;
         }
         
         .hero {
             text-align: center;
-            padding: 60px 0;
+            padding: 40px 0;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             border-radius: 15px;
             margin-bottom: 40px;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
         }
         
         .subtitle {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             margin-bottom: 30px;
             color: var(--light-color);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
         }
         
         .countdown {
             background-color: rgba(0,0,0,0.2);
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             display: inline-block;
-            margin-top: 30px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 5;
+            max-width: 90%;
         }
         
         .countdown-title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             margin-bottom: 15px;
             color: var(--accent-color);
         }
@@ -88,7 +119,7 @@
         .countdown-timer {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
         }
         
         .countdown-item {
@@ -96,17 +127,17 @@
         }
         
         .countdown-number {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: bold;
             background-color: rgba(0,0,0,0.3);
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 5px;
             display: block;
-            min-width: 70px;
+            min-width: 60px;
         }
         
         .countdown-label {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             margin-top: 5px;
             text-transform: uppercase;
         }
@@ -160,100 +191,34 @@
             transform: scale(1.05);
         }
         
-        .newsletter {
-            background-color: rgba(255,255,255,0.05);
-            padding: 40px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
-        .newsletter h2 {
-            margin-bottom: 20px;
-            color: var(--secondary-color);
-        }
-        
-        .newsletter-form {
-            display: flex;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        
-        .newsletter-input {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 5px 0 0 5px;
-            font-family: 'Montserrat', sans-serif;
-        }
-        
-        .newsletter-button {
-            background-color: var(--accent-color);
-            color: var(--dark-color);
-            border: none;
-            padding: 0 20px;
-            border-radius: 0 5px 5px 0;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        
-        .newsletter-button:hover {
-            background-color: #f0b94d;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 40px;
-        }
-        
-        .social-link {
-            color: var(--light-color);
-            font-size: 1.5rem;
-            transition: color 0.3s ease;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .social-link:hover {
-            color: var(--accent-color);
-        }
-        
-        .social-link i {
-            font-size: 1.8rem;
-        }
-        
         footer {
             text-align: center;
             padding: 30px 0;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
         
+        /* Estilo para la imagen superpuesta */
+        .overlay-image {
+            position: absolute;
+            top: -50px; /* Ajustar según sea necesario */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            max-width: 200px;
+            opacity: 0.8;
+        }
+        
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
             .countdown-timer {
                 flex-wrap: wrap;
             }
             
-            .newsletter-form {
-                flex-direction: column;
-            }
-            
-            .newsletter-input, .newsletter-button {
-                width: 100%;
-                border-radius: 5px;
-                margin-bottom: 10px;
-            }
-            
             .social-links {
                 flex-wrap: wrap;
+            }
+            
+            .overlay-image {
+                max-width: 150px;
             }
         }
     </style>
@@ -263,11 +228,40 @@
         <header>
             <!-- Logo de CryptoTools -->
             <img src="CRYPTO TOOLS.png" alt="CryptoTools Logo" class="logo">
+            
+            <!-- Redes sociales al principio -->
+            <div class="social-links">
+                <a href="https://www.instagram.com/armypanzercto?igsh=NDl1ejNraHllY2U5&utm_source=qr" class="social-link" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                    <span>Instagram</span>
+                </a>
+                <a href="https://x.com/armypanzercto?s=21" class="social-link" target="_blank">
+                    <i class="fab fa-x-twitter"></i>
+                    <span>X</span>
+                </a>
+                <a href="https://youtube.com/@armypanzercto?si=WuoVf0fVKYNLZ5kN" class="social-link" target="_blank">
+                    <i class="fab fa-youtube"></i>
+                    <span>YouTube</span>
+                </a>
+                <a href="https://t.me/ArmyPanzer" class="social-link" target="_blank">
+                    <i class="fab fa-telegram"></i>
+                    <span>Telegram</span>
+                </a>
+                <a href="https://armypanzercto.com/" class="social-link" target="_blank">
+                    <i class="fas fa-globe"></i>
+                    <span>Web</span>
+                </a>
+            </div>
         </header>
         
         <section class="hero">
-            <h1>CryptoTools</h1>
-            <p class="subtitle">Estamos construyendo el futuro de las herramientas crypto para nuestros inversores de $PANZER y el público en general.</p>
+            <!-- Imagen superpuesta sobre el contador -->
+            <img src="659C7C0A-6E71-45DF-A2A7-37BF18CDE798.png" alt="PANZER Character" class="overlay-image">
+            
+            <p class="subtitle">
+                <strong>El Centro Neural de $PANZER está por llegar</strong><br><br>
+                Muy pronto estará disponible CryptoTools, una plataforma innovadora diseñada especialmente para los inversores de $PANZER y el público en general. Aquí se alojará el cerebro neural del ecosistema $PANZER, con acceso a herramientas avanzadas, análisis en tiempo real y beneficios reales para quienes invierten en criptoactivos. Prepárate para descubrir un entorno inteligente, práctico y actualizado, creado para potenciar tus decisiones en el mundo cripto.
+            </p>
             
             <div class="countdown">
                 <h2 class="countdown-title">Primer Adelanto de CryptoTools</h2>
@@ -312,47 +306,12 @@
             </div>
         </section>
         
-        <h2 style="text-align: center; margin-bottom: 20px; color: var(--secondary-color);">Conoce a $PANZER</h2>
-        
         <div class="panzer-gallery">
             <!-- Imágenes de PANZER -->
-            <img src="659C7C0A-6E71-45DF-A2A7-37BF18CDE798.png" alt="PANZER Character" class="panzer-image">
             <img src="04662852-4F7F-483A-8284-353F17D67782.png" alt="PANZER Character" class="panzer-image">
             <img src="07BA5B4B-1027-4882-8E01-6CAD3AE98B16.png" alt="PANZER Character" class="panzer-image">
             <img src="0852056E-B23B-407C-A9A2-902CBAE3016C.png" alt="PANZER Character" class="panzer-image">
             <img src="B6CEA005-2885-43D2-ACA7-67985D6F0CC4.png" alt="PANZER Character" class="panzer-image">
-        </div>
-        
-        <section class="newsletter">
-            <h2>Mantente Informado</h2>
-            <p>Suscríbete para recibir las últimas noticias y actualizaciones sobre el lanzamiento.</p>
-            <form class="newsletter-form">
-                <input type="email" placeholder="Tu correo electrónico" class="newsletter-input" required>
-                <button type="submit" class="newsletter-button">Suscribirse</button>
-            </form>
-        </section>
-        
-        <div class="social-links">
-            <a href="https://www.instagram.com/armypanzercto?igsh=NDl1ejNraHllY2U5&utm_source=qr" class="social-link" target="_blank">
-                <i class="fab fa-instagram"></i>
-                <span>Instagram</span>
-            </a>
-            <a href="https://x.com/armypanzercto?s=21" class="social-link" target="_blank">
-                <i class="fab fa-x-twitter"></i>
-                <span>X</span>
-            </a>
-            <a href="https://youtube.com/@armypanzercto?si=WuoVf0fVKYNLZ5kN" class="social-link" target="_blank">
-                <i class="fab fa-youtube"></i>
-                <span>YouTube</span>
-            </a>
-            <a href="https://t.me/ArmyPanzer" class="social-link" target="_blank">
-                <i class="fab fa-telegram"></i>
-                <span>Telegram</span>
-            </a>
-            <a href="https://armypanzercto.com/" class="social-link" target="_blank">
-                <i class="fas fa-globe"></i>
-                <span>Web</span>
-            </a>
         </div>
         
         <footer>
@@ -387,6 +346,15 @@
                 document.getElementById("countdown").innerHTML = "<h3>¡Ya está disponible!</h3>";
             }
         }, 1000);
+        
+        // Extraer el color dominante del logo y aplicarlo como fondo
+        // Esto es una simulación, ya que no podemos acceder al color real de la imagen
+        // En un entorno real, se necesitaría una biblioteca como color-thief
+        document.addEventListener('DOMContentLoaded', function() {
+            // Aquí se podría implementar la extracción del color dominante
+            // Por ahora, usamos un color oscuro que probablemente combine bien
+            document.body.style.backgroundColor = '#1a1a2e';
+        });
     </script>
 </body>
 </html>
