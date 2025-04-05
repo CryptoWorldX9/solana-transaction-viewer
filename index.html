@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CryptoTools - Próximamente</title>
-    <!-- Favicon -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <!-- Fuentes de Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -20,13 +17,13 @@
             --dark-color: #1a1a1a;
             --light-color: #f9f9f9;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Montserrat', sans-serif;
             background: linear-gradient(90deg, #000000, #737373, #000000);
@@ -34,35 +31,37 @@
             line-height: 1.6;
             position: relative;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
             position: relative;
         }
-        
+
         header {
             padding: 30px 0 0;
             text-align: center;
             position: relative;
             z-index: 10;
         }
-        
+
         .logo {
-            max-width: 200px; /* Tamaño reducido */
-            margin-bottom: 5px;
+            max-width: 400px;
+            margin-bottom: -100px;
+            position: relative;
+            z-index: 2;
         }
-        
+
         .social-links {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin: 10px 0 20px;
+            margin: 20px 0;
+            z-index: 20;
             position: relative;
-            z-index: 20; /* Por encima de la imagen */
         }
-        
+
         .social-link {
             color: var(--light-color);
             font-size: 1.2rem;
@@ -75,26 +74,27 @@
             padding: 5px 10px;
             border-radius: 5px;
         }
-        
+
         .social-link:hover {
             color: var(--accent-color);
             background-color: rgba(0,0,0,0.5);
         }
-        
+
         .social-link i {
             font-size: 1.5rem;
         }
-        
+
         .hero {
             text-align: center;
             padding: 30px 0;
             background: linear-gradient(135deg, rgba(108, 92, 231, 0.7), rgba(0, 206, 201, 0.7));
             border-radius: 15px;
+            margin-top: 80px;
             margin-bottom: 40px;
             position: relative;
             overflow: hidden;
         }
-        
+
         .subtitle {
             font-size: 1.2rem;
             margin-bottom: 20px;
@@ -106,35 +106,35 @@
             position: relative;
             z-index: 5;
         }
-        
+
         .countdown {
-            background-color: rgba(40, 40, 40, 0.7); /* Tono similar al fondo pero más claro */
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 12px;
             border-radius: 10px;
             display: inline-block;
-            margin-top: 15px;
+            margin-top: 100px;
             position: relative;
             z-index: 5;
-            max-width: 80%; /* Más pequeño */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            max-width: 80%;
         }
-        
+
         .countdown-title {
             font-size: 1.1rem;
             margin-bottom: 12px;
             color: var(--accent-color);
         }
-        
+
         .countdown-timer {
             display: flex;
             justify-content: center;
             gap: 12px;
         }
-        
+
         .countdown-item {
             text-align: center;
         }
-        
+
         .countdown-number {
             font-size: 1.8rem;
             font-weight: bold;
@@ -144,20 +144,26 @@
             display: block;
             min-width: 50px;
         }
-        
+
         .countdown-label {
             font-size: 0.7rem;
             margin-top: 5px;
             text-transform: uppercase;
         }
-        
+
+        .countdown-date {
+            font-size: 0.8rem;
+            color: #ccc;
+            margin-top: 10px;
+        }
+
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             margin-bottom: 60px;
         }
-        
+
         .feature-card {
             background-color: rgba(255,255,255,0.05);
             padding: 30px;
@@ -165,88 +171,43 @@
             text-align: center;
             transition: transform 0.3s ease;
         }
-        
+
         .feature-card:hover {
             transform: translateY(-10px);
             background-color: rgba(255,255,255,0.1);
         }
-        
+
         .feature-icon {
             font-size: 3rem;
             color: var(--accent-color);
             margin-bottom: 20px;
         }
-        
+
         .feature-title {
             font-size: 1.5rem;
             margin-bottom: 15px;
             color: var(--secondary-color);
         }
-        
-        .panzer-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-        
-        .panzer-image {
-            width: 100%;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-        }
-        
-        .panzer-image:hover {
-            transform: scale(1.05);
-        }
-        
+
         footer {
             text-align: center;
             padding: 30px 0;
             border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        /* Estilo para la imagen superpuesta */
-        .overlay-image {
-            position: absolute;
-            top: -80px; /* Más arriba para traslapar mejor */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
-            max-width: 220px;
-            opacity: 0.9;
-        }
-        
-        @media (max-width: 768px) {
-            .countdown-timer {
-                flex-wrap: wrap;
-            }
-            
-            .social-links {
-                flex-wrap: wrap;
-            }
-            
-            .overlay-image {
-                max-width: 150px;
-                top: -60px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <!-- Logo de CryptoTools -->
             <img src="CRYPTO TOOLS.png" alt="CryptoTools Logo" class="logo">
         </header>
-        
-        <!-- Redes sociales sobre la imagen -->
+
         <div class="social-links">
             <a href="https://www.instagram.com/armypanzercto?igsh=NDl1ejNraHllY2U5&utm_source=qr" class="social-link" target="_blank">
                 <i class="fab fa-instagram"></i>
             </a>
             <a href="https://x.com/armypanzercto?s=21" class="social-link" target="_blank">
-                <i class="fab fa-x-twitter"></i>
+                <i class="fab fa-twitter"></i>
             </a>
             <a href="https://youtube.com/@armypanzercto?si=WuoVf0fVKYNLZ5kN" class="social-link" target="_blank">
                 <i class="fab fa-youtube"></i>
@@ -258,16 +219,13 @@
                 <i class="fas fa-globe"></i>
             </a>
         </div>
-        
+
         <section class="hero">
-            <!-- Imagen superpuesta sobre el contador -->
-            <img src="659C7C0A-6E71-45DF-A2A7-37BF18CDE798.png" alt="PANZER" class="overlay-image">
-            
             <p class="subtitle">
                 <strong>El Centro Neural de $PANZER está por llegar</strong><br><br>
                 Muy pronto estará disponible CryptoTools, una plataforma innovadora diseñada especialmente para los inversores de $PANZER y el público en general. Aquí se alojará el cerebro neural del ecosistema $PANZER, con acceso a herramientas avanzadas, análisis en tiempo real y beneficios reales para quienes invierten en criptoactivos. Prepárate para descubrir un entorno inteligente, práctico y actualizado, creado para potenciar tus decisiones en el mundo cripto.
             </p>
-            
+
             <div class="countdown">
                 <h2 class="countdown-title">Primer Adelanto de CryptoTools</h2>
                 <div class="countdown-timer" id="countdown">
@@ -288,64 +246,49 @@
                         <span class="countdown-label">Segundos</span>
                     </div>
                 </div>
+                <div class="countdown-date">16 de junio de 2025 – 22:00 hrs UTC</div>
             </div>
         </section>
-        
+
         <section class="features">
             <div class="feature-card">
                 <i class="fas fa-chart-line feature-icon"></i>
                 <h3 class="feature-title">Análisis Avanzado</h3>
                 <p>Herramientas de análisis de mercado en tiempo real para tomar decisiones informadas.</p>
             </div>
-            
             <div class="feature-card">
                 <i class="fas fa-wallet feature-icon"></i>
                 <h3 class="feature-title">Gestión de Carteras</h3>
                 <p>Administra tus activos digitales de forma segura y eficiente en un solo lugar.</p>
             </div>
-            
             <div class="feature-card">
                 <i class="fas fa-shield-alt feature-icon"></i>
                 <h3 class="feature-title">Seguridad Garantizada</h3>
                 <p>Protección de última generación para tus inversiones y datos personales.</p>
             </div>
         </section>
-        
-        <div class="panzer-gallery">
-            <!-- Imágenes de PANZER -->
-            <img src="04662852-4F7F-483A-8284-353F17D67782.png" alt="PANZER" class="panzer-image">
-            <img src="07BA5B4B-1027-4882-8E01-6CAD3AE98B16.png" alt="PANZER" class="panzer-image">
-            <img src="0852056E-B23B-407C-A9A2-902CBAE3016C.png" alt="PANZER" class="panzer-image">
-            <img src="B6CEA005-2885-43D2-ACA7-67985D6F0CC4.png" alt="PANZER" class="panzer-image">
-        </div>
-        
+
         <footer>
             <p>&copy; 2025 CryptoTools. Todos los derechos reservados.</p>
         </footer>
     </div>
-    
+
     <script>
-        // Configurar la fecha objetivo (30 de junio a las 22:00 UTC)
-        const targetDate = new Date('2025-06-30T22:00:00Z');
-        
-        // Actualizar el contador cada segundo
+        const targetDate = new Date('2025-06-16T22:00:00Z');
         const countdown = setInterval(function() {
             const now = new Date().getTime();
             const distance = targetDate - now;
-            
-            // Cálculos de tiempo
+
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            // Mostrar los resultados
+
             document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
             document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
             document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
             document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
-            
-            // Si la cuenta regresiva termina
+
             if (distance < 0) {
                 clearInterval(countdown);
                 document.getElementById("countdown").innerHTML = "<h3>¡Ya está disponible!</h3>";
