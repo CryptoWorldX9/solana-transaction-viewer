@@ -3,11 +3,11 @@
     --primary-color: #4b6cb7;
     --secondary-color: #182848;
     --accent-color: #5d87ff;
-    --background-dark: #1a1f2b;
-    --background-light: #242a38;
+    --background-dark: #000000;
+    --background-light: #000000;
     --text-light: #ffff;
     --text-muted: #a0aec0;
-    --border-color: #2d3748;
+    --border-color: rgba(255, 255, 255, 0.15);
     --success-color: #48bb78;
     --error-color: #f56565;
     --warning-color: #ed8936;
@@ -15,11 +15,11 @@
 
 /* Variables para tema claro */
 body.light-theme {
-    --background-dark: #f7f9fc;
-    --background-light: #ffff;
+    --background-dark: #000000;
+    --background-light: #000000;
     --text-light: #2d3748;
     --text-muted: #718096;
-    --border-color: #e2e8f0;
+    --border-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Resetear estilos por defecto */
