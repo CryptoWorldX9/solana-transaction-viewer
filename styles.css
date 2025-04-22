@@ -690,3 +690,10 @@ body.light-theme .sidebar-menu a:hover {
 body.light-theme .modal {
     background-color: rgba(0, 0, 0, 0.5);
 }
+.language-selector select {
+  background-color: var(--background-dark);
+  color: var(--text-light);
+  border: 1px solid var(--border-color);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+}
