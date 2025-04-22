@@ -25,6 +25,110 @@
       line-height: 1.6;
       position: relative;
     }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+    }
+    header {
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+    .logo {
+      max-width: 420px;
+      width: 100%;
+      height: auto;
+      margin: 0 auto 20px;
+      display: block;
+    }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    .social-link {
+      color: var(--light-color);
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background-color: rgba(255,255,255,0.1);
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    .social-link:hover {
+      color: var(--accent-color);
+      background-color: rgba(255,255,255,0.2);
+    }
+    .social-link i {
+      font-size: 1.5rem;
+    }
+    .hero {
+      text-align: center;
+      padding: 20px;
+      background-color: #000000;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .subtitle {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: var(--light-color);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 10px;
+    }
+    .countdown {
+      background-color: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-top: 15px;
+      max-width: 90%;
+    }
+    .countdown-title {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: var(--accent-color);
+    }
+    .countdown-timer {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .countdown-item {
+      text-align: center;
+    }
+    .countdown-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      background-color: rgba(255,255,255,0.1);
+      padding: 6px 10px;
+      border-radius: 5px;
+      display: block;
+      min-width: 50px;
+    }
+    .countdown-label {
+      font-size: 0.7rem;
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
+    .countdown-date {
+      font-size: 0.8rem;
+      color: #ccc;
+      margin-top: 10px;
+    }
     .language-switcher {
       position: fixed;
       top: 20px;
@@ -70,133 +174,55 @@
       width: 20px;
       height: auto;
     }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+    .feature-card {
+      background-color: rgba(255,255,255,0.05);
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-10px);
+      background-color: rgba(255,255,255,0.1);
+    }
+    .feature-icon {
+      font-size: 3rem;
+      color: var(--accent-color);
+      margin-bottom: 20px;
+    }
+    .feature-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--secondary-color);
+    }
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    @media (max-width: 768px) {
+      .logo {
+        max-width: 300px;
+      }
+      .subtitle {
+        font-size: 0.95rem;
+      }
+      .countdown-number {
+        font-size: 1.2rem;
+        min-width: 40px;
+      }
+      .countdown-label {
+        font-size: 0.6rem;
+      }
+      .countdown-title {
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
-<body>
-  <div class="language-switcher">
-    <div class="language-icon" onclick="toggleLanguageMenu()">
-      <i class="fas fa-globe"></i>
-    </div>
-    <div class="language-menu" id="languageMenu">
-      <div class="language-option" onclick="setLanguage('es')"><img src="https://flagcdn.com/w20/es.png">Español</div>
-      <div class="language-option" onclick="setLanguage('en')"><img src="https://flagcdn.com/w20/gb.png">English</div>
-      <div class="language-option" onclick="setLanguage('ru')"><img src="https://flagcdn.com/w20/ru.png">Русский</div>
-      <div class="language-option" onclick="setLanguage('de')"><img src="https://flagcdn.com/w20/de.png">Deutsch</div>
-      <div class="language-option" onclick="setLanguage('fr')"><img src="https://flagcdn.com/w20/fr.png">Français</div>
-    </div>
-  </div>
-  <div class="container">
-    <header>
-      <img src="CRYPTO TOOLS.png" alt="CryptoTools Logo" class="logo" />
-      <div class="social-links">
-        <a href="https://www.instagram.com/armypanzercto?igsh=NDl1ejNraHllY2U5&utm_source=qr" class="social-link" target="_blank">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://x.com/armypanzercto?s=21" class="social-link" target="_blank">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a href="https://youtube.com/@armypanzercto?si=WuoVf0fVKYNLZ5kN" class="social-link" target="_blank">
-          <i class="fab fa-youtube"></i>
-        </a>
-        <a href="https://t.me/ArmyPanzer" class="social-link" target="_blank">
-          <i class="fab fa-telegram"></i>
-        </a>
-        <a href="https://armypanzercto.com/" class="social-link" target="_blank">
-          <i class="fas fa-globe"></i>
-        </a>
-      </div>
-    </header>
-
-    <section class="hero">
-      <p class="subtitle" id="mainText">
-        <strong>El Centro Neural de $PANZER está por llegar</strong><br><br>
-        Muy pronto estará disponible CryptoTools, una plataforma innovadora diseñada especialmente para los inversores de $PANZER y el público en general. Aquí se alojará el cerebro neural del ecosistema $PANZER, con acceso a herramientas avanzadas, análisis en tiempo real y beneficios reales para quienes invierten en criptoactivos. Prepárate para descubrir un entorno inteligente, práctico y actualizado, creado para potenciar tus decisiones en el mundo cripto.
-      </p>
-      <div class="countdown">
-        <h2 class="countdown-title" id="countdownTitle">Primer Adelanto de CryptoTools</h2>
-        <div class="countdown-timer" id="countdown">
-          <div class="countdown-item">
-            <span class="countdown-number" id="days">00</span>
-            <span class="countdown-label" id="labelDays">Días</span>
-          </div>
-          <div class="countdown-item">
-            <span class="countdown-number" id="hours">00</span>
-            <span class="countdown-label" id="labelHours">Horas</span>
-          </div>
-          <div class="countdown-item">
-            <span class="countdown-number" id="minutes">00</span>
-            <span class="countdown-label" id="labelMinutes">Minutos</span>
-          </div>
-          <div class="countdown-item">
-            <span class="countdown-number" id="seconds">00</span>
-            <span class="countdown-label" id="labelSeconds">Segundos</span>
-          </div>
-        </div>
-        <div class="countdown-date">16 de junio de 2025 – 22:00 hrs UTC</div>
-      </div>
-    </section>
-
-    <script>
-      const translations = {
-        es: {
-          main: '<strong>El Centro Neural de $PANZER está por llegar</strong><br><br>Muy pronto estará disponible CryptoTools, una plataforma innovadora diseñada especialmente para los inversores de $PANZER y el público en general... ',
-          title: 'Primer Adelanto de CryptoTools', days: 'Días', hours: 'Horas', minutes: 'Minutos', seconds: 'Segundos'
-        },
-        en: {
-          main: '<strong>The Neural Center of $PANZER is coming</strong><br><br>CryptoTools will soon be available: an innovative platform specially designed for $PANZER investors and the general public... ',
-          title: 'First Preview of CryptoTools', days: 'Days', hours: 'Hours', minutes: 'Minutes', seconds: 'Seconds'
-        },
-        ru: {
-          main: '<strong>Нейронный центр $PANZER скоро появится</strong><br><br>Скоро будет доступен CryptoTools — инновационная платформа для инвесторов $PANZER и широкой аудитории... ',
-          title: 'Первый взгляд на CryptoTools', days: 'Дни', hours: 'Часы', minutes: 'Минуты', seconds: 'Секунды'
-        },
-        de: {
-          main: '<strong>Das neuronale Zentrum von $PANZER kommt bald</strong><br><br>CryptoTools wird bald verfügbar sein: eine innovative Plattform für $PANZER-Investoren und die breite Öffentlichkeit... ',
-          title: 'Erste Vorschau auf CryptoTools', days: 'Tage', hours: 'Stunden', minutes: 'Minuten', seconds: 'Sekunden'
-        },
-        fr: {
-          main: '<strong>Le centre neuronal de $PANZER arrive</strong><br><br>CryptoTools sera bientôt disponible : une plateforme innovante conçue pour les investisseurs de $PANZER et le grand public... ',
-          title: 'Première Aperçu de CryptoTools', days: 'Jours', hours: 'Heures', minutes: 'Minutes', seconds: 'Secondes'
-        }
-      };
-
-      function toggleLanguageMenu() {
-        document.getElementById('languageMenu').classList.toggle('show');
-      }
-
-      function setLanguage(lang) {
-        document.getElementById('mainText').innerHTML = translations[lang].main;
-        document.getElementById('countdownTitle').innerText = translations[lang].title;
-        document.getElementById('labelDays').innerText = translations[lang].days;
-        document.getElementById('labelHours').innerText = translations[lang].hours;
-        document.getElementById('labelMinutes').innerText = translations[lang].minutes;
-        document.getElementById('labelSeconds').innerText = translations[lang].seconds;
-        document.getElementById('languageMenu').classList.remove('show');
-      }
-    </script>
-
-    <!-- Countdown original script se mantiene -->
-    <script>
-      const targetDate = new Date('2025-06-16T22:00:00Z');
-      const countdown = setInterval(function() {
-        const now = new Date().getTime();
-        const distance = targetDate - now;
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
-        document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
-        document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
-        document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
-
-        if (distance < 0) {
-          clearInterval(countdown);
-          document.getElementById("countdown").innerHTML = "<h3>¡Ya está disponible!</h3>";
-        }
-      }, 1000);
-    </script>
-  </body>
-</html>
