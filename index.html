@@ -219,11 +219,19 @@
       box-shadow: 0 6px 20px rgba(108, 92, 231, 0.5);
     }
 
-    .language-btn i {
-      transition: transform 0.3s ease;
+    .language-btn i.fa-globe-americas {
+      font-size: 1.2rem;
+      color: var(--accent-color);
+      filter: drop-shadow(0 0 2px rgba(253, 203, 110, 0.5));
     }
 
-    .language-btn.active i {
+    .language-btn i.fa-chevron-down {
+      transition: transform 0.3s ease;
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .language-btn.active i.fa-chevron-down {
       transform: rotate(180deg);
     }
 
@@ -321,31 +329,31 @@
 <body>
   <div class="language-selector">
     <button class="language-btn" id="language-toggle">
-      <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/es.svg" class="current-flag" alt="Español">
+      <i class="fas fa-globe-americas"></i>
       Español <i class="fas fa-chevron-down"></i>
     </button>
     <div class="language-options" id="language-menu">
-      <a href="#" class="language-option active">
+      <a href="#" class="language-option active" data-lang="es">
         <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/es.svg" class="flag" alt="Español">
         Español (Actual)
       </a>
-      <a href="#" class="language-option">
+      <a href="#" class="language-option" data-lang="en">
         <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/gb.svg" class="flag" alt="English">
         English
       </a>
-      <a href="#" class="language-option">
+      <a href="#" class="language-option" data-lang="ru">
         <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/ru.svg" class="flag" alt="Russian">
         Русский
       </a>
-      <a href="#" class="language-option">
+      <a href="#" class="language-option" data-lang="de">
         <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/de.svg" class="flag" alt="Deutsch">
         Deutsch
       </a>
-      <a href="#" class="language-option">
+      <a href="#" class="language-option" data-lang="fr">
         <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/fr.svg" class="flag" alt="Français">
         Français
       </a>
-      <a href="#" class="language-option">
+      <a href="#" class="language-option" data-lang="pt">
         <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/pt.svg" class="flag" alt="Português">
         Português
       </a>
@@ -428,8 +436,135 @@
   </div>
 
   <script>
+    // Configuración de traducción
+    const translations = {
+      'es': {
+        'title': 'CryptoTools - Próximamente',
+        'subtitle_heading': 'El Centro Neural de $PANZER está por llegar',
+        'subtitle_text': 'Muy pronto estará disponible CryptoTools, una plataforma innovadora diseñada especialmente para los inversores de $PANZER y el público en general. Aquí se alojará el cerebro neural del ecosistema $PANZER, con acceso a herramientas avanzadas, análisis en tiempo real y beneficios reales para quienes invierten en criptoactivos. Prepárate para descubrir un entorno inteligente, práctico y actualizado, creado para potenciar tus decisiones en el mundo cripto.',
+        'countdown_title': 'Primer Adelanto de CryptoTools',
+        'countdown_days': 'Días',
+        'countdown_hours': 'Horas',
+        'countdown_minutes': 'Minutos',
+        'countdown_seconds': 'Segundos',
+        'countdown_date': '16 de junio de 2025 – 22:00 hrs UTC',
+        'countdown_available': '¡Ya está disponible!',
+        'feature1_title': 'Análisis Avanzado',
+        'feature1_text': 'Herramientas de análisis de mercado en tiempo real para tomar decisiones informadas.',
+        'feature2_title': 'Gestión de Carteras',
+        'feature2_text': 'Administra tus activos digitales de forma segura y eficiente en un solo lugar.',
+        'feature3_title': 'Seguridad Garantizada',
+        'feature3_text': 'Protección de última generación para tus inversiones y datos personales.',
+        'footer_copyright': '© 2025 CryptoTools. Todos los derechos reservados.',
+        'language_current': 'Español (Actual)'
+      },
+      'en': {
+        'title': 'CryptoTools - Coming Soon',
+        'subtitle_heading': 'The Neural Center of $PANZER is coming',
+        'subtitle_text': 'CryptoTools will soon be available, an innovative platform specially designed for $PANZER investors and the general public. This will host the neural brain of the $PANZER ecosystem, with access to advanced tools, real-time analysis and real benefits for those investing in crypto assets. Get ready to discover an intelligent, practical and updated environment, created to enhance your decisions in the crypto world.',
+        'countdown_title': 'First Preview of CryptoTools',
+        'countdown_days': 'Days',
+        'countdown_hours': 'Hours',
+        'countdown_minutes': 'Minutes',
+        'countdown_seconds': 'Seconds',
+        'countdown_date': 'June 16, 2025 – 22:00 UTC',
+        'countdown_available': 'It\'s now available!',
+        'feature1_title': 'Advanced Analysis',
+        'feature1_text': 'Real-time market analysis tools to make informed decisions.',
+        'feature2_title': 'Portfolio Management',
+        'feature2_text': 'Manage your digital assets securely and efficiently in one place.',
+        'feature3_title': 'Guaranteed Security',
+        'feature3_text': 'State-of-the-art protection for your investments and personal data.',
+        'footer_copyright': '© 2025 CryptoTools. All rights reserved.',
+        'language_current': 'English'
+      },
+      'ru': {
+        'title': 'CryptoTools - Скоро будет',
+        'subtitle_heading': 'Нейронный центр $PANZER скоро появится',
+        'subtitle_text': 'Скоро будет доступен CryptoTools, инновационная платформа, специально разработанная для инвесторов $PANZER и широкой публики. Здесь будет размещен нейронный мозг экосистемы $PANZER с доступом к передовым инструментам, анализу в реальном времени и реальным преимуществам для тех, кто инвестирует в криптоактивы. Приготовьтесь открыть для себя интеллектуальную, практичную и обновленную среду, созданную для улучшения ваших решений в мире криптовалют.',
+        'countdown_title': 'Первый предварительный просмотр CryptoTools',
+        'countdown_days': 'Дни',
+        'countdown_hours': 'Часы',
+        'countdown_minutes': 'Минуты',
+        'countdown_seconds': 'Секунды',
+        'countdown_date': '16 июня 2025 г. – 22:00 UTC',
+        'countdown_available': 'Уже доступно!',
+        'feature1_title': 'Расширенный анализ',
+        'feature1_text': 'Инструменты анализа рынка в реальном времени для принятия обоснованных решений.',
+        'feature2_title': 'Управление портфелем',
+        'feature2_text': 'Управляйте своими цифровыми активами безопасно и эффективно в одном месте.',
+        'feature3_title': 'Гарантированная безопасность',
+        'feature3_text': 'Защита последнего поколения для ваших инвестиций и личных данных.',
+        'footer_copyright': '© 2025 CryptoTools. Все права защищены.',
+        'language_current': 'Русский'
+      },
+      'de': {
+        'title': 'CryptoTools - Demnächst',
+        'subtitle_heading': 'Das neuronale Zentrum von $PANZER kommt',
+        'subtitle_text': 'CryptoTools wird bald verfügbar sein, eine innovative Plattform, die speziell für $PANZER-Investoren und die breite Öffentlichkeit entwickelt wurde. Hier wird das neuronale Gehirn des $PANZER-Ökosystems mit Zugang zu fortschrittlichen Tools, Echtzeit-Analysen und echten Vorteilen für diejenigen, die in Krypto-Assets investieren, beherbergt. Machen Sie sich bereit, eine intelligente, praktische und aktualisierte Umgebung zu entdecken, die entwickelt wurde, um Ihre Entscheidungen in der Krypto-Welt zu verbessern.',
+        'countdown_title': 'Erste Vorschau von CryptoTools',
+        'countdown_days': 'Tage',
+        'countdown_hours': 'Stunden',
+        'countdown_minutes': 'Minuten',
+        'countdown_seconds': 'Sekunden',
+        'countdown_date': '16. Juni 2025 – 22:00 Uhr UTC',
+        'countdown_available': 'Jetzt verfügbar!',
+        'feature1_title': 'Fortgeschrittene Analyse',
+        'feature1_text': 'Echtzeit-Marktanalysetools für fundierte Entscheidungen.',
+        'feature2_title': 'Portfolio-Management',
+        'feature2_text': 'Verwalten Sie Ihre digitalen Assets sicher und effizient an einem Ort.',
+        'feature3_title': 'Garantierte Sicherheit',
+        'feature3_text': 'Modernster Schutz für Ihre Investitionen und persönlichen Daten.',
+        'footer_copyright': '© 2025 CryptoTools. Alle Rechte vorbehalten.',
+        'language_current': 'Deutsch'
+      },
+      'fr': {
+        'title': 'CryptoTools - Bientôt disponible',
+        'subtitle_heading': 'Le centre neuronal de $PANZER arrive',
+        'subtitle_text': 'CryptoTools sera bientôt disponible, une plateforme innovante spécialement conçue pour les investisseurs de $PANZER et le grand public. Il hébergera le cerveau neuronal de l\'écosystème $PANZER, avec un accès à des outils avancés, des analyses en temps réel et des avantages réels pour ceux qui investissent dans les crypto-actifs. Préparez-vous à découvrir un environnement intelligent, pratique et mis à jour, créé pour améliorer vos décisions dans le monde des cryptomonnaies.',
+        'countdown_title': 'Premier aperçu de CryptoTools',
+        'countdown_days': 'Jours',
+        'countdown_hours': 'Heures',
+        'countdown_minutes': 'Minutes',
+        'countdown_seconds': 'Secondes',
+        'countdown_date': '16 juin 2025 – 22:00 UTC',
+        'countdown_available': 'C\'est maintenant disponible !',
+        'feature1_title': 'Analyse avancée',
+        'feature1_text': 'Outils d\'analyse de marché en temps réel pour prendre des décisions éclairées.',
+        'feature2_title': 'Gestion de portefeuille',
+        'feature2_text': 'Gérez vos actifs numériques de manière sécurisée et efficace en un seul endroit.',
+        'feature3_title': 'Sécurité garantie',
+        'feature3_text': 'Protection de dernière génération pour vos investissements et données personnelles.',
+        'footer_copyright': '© 2025 CryptoTools. Tous droits réservés.',
+        'language_current': 'Français'
+      },
+      'pt': {
+        'title': 'CryptoTools - Em breve',
+        'subtitle_heading': 'O Centro Neural do $PANZER está chegando',
+        'subtitle_text': 'Em breve estará disponível o CryptoTools, uma plataforma inovadora especialmente desenhada para investidores do $PANZER e o público em geral. Aqui será hospedado o cérebro neural do ecossistema $PANZER, com acesso a ferramentas avançadas, análises em tempo real e benefícios reais para quem investe em criptoativos. Prepare-se para descobrir um ambiente inteligente, prático e atualizado, criado para potencializar suas decisões no mundo cripto.',
+        'countdown_title': 'Primeira prévia do CryptoTools',
+        'countdown_days': 'Dias',
+        'countdown_hours': 'Horas',
+        'countdown_minutes': 'Minutos',
+        'countdown_seconds': 'Segundos',
+        'countdown_date': '16 de junho de 2025 – 22:00 UTC',
+        'countdown_available': 'Já está disponível!',
+        'feature1_title': 'Análise Avançada',
+        'feature1_text': 'Ferramentas de análise de mercado em tempo real para tomar decisões informadas.',
+        'feature2_title': 'Gestão de Carteiras',
+        'feature2_text': 'Administre seus ativos digitais de forma segura e eficiente em um só lugar.',
+        'feature3_title': 'Segurança Garantida',
+        'feature3_text': 'Proteção de última geração para seus investimentos e dados pessoais.',
+        'footer_copyright': '© 2025 CryptoTools. Todos os direitos reservados.',
+        'language_current': 'Português'
+      }
+    };
+
+    // Fecha objetivo para la cuenta regresiva
     const targetDate = new Date('2025-06-16T22:00:00Z');
-    const countdown = setInterval(function() {
+    
+    // Función para actualizar la cuenta regresiva
+    function updateCountdown(lang) {
       const now = new Date().getTime();
       const distance = targetDate - now;
 
@@ -443,10 +578,52 @@
       document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
       document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
 
+      document.getElementById("days").nextElementSibling.innerHTML = translations[lang].countdown_days;
+      document.getElementById("hours").nextElementSibling.innerHTML = translations[lang].countdown_hours;
+      document.getElementById("minutes").nextElementSibling.innerHTML = translations[lang].countdown_minutes;
+      document.getElementById("seconds").nextElementSibling.innerHTML = translations[lang].countdown_seconds;
+
       if (distance < 0) {
         clearInterval(countdown);
-        document.getElementById("countdown").innerHTML = "<h3>¡Ya está disponible!</h3>";
+        document.getElementById("countdown").innerHTML = `<h3>${translations[lang].countdown_available}</h3>`;
       }
+    }
+    
+    // Función para cambiar el idioma
+    function changeLanguage(lang) {
+      // Cambiar título de la página
+      document.title = translations[lang].title;
+      
+      // Cambiar textos del encabezado
+      document.querySelector('.subtitle strong').textContent = translations[lang].subtitle_heading;
+      document.querySelector('.subtitle').innerHTML = `<strong>${translations[lang].subtitle_heading}</strong><br><br>${translations[lang].subtitle_text}`;
+      
+      // Cambiar textos de la cuenta regresiva
+      document.querySelector('.countdown-title').textContent = translations[lang].countdown_title;
+      document.querySelector('.countdown-date').textContent = translations[lang].countdown_date;
+      
+      // Actualizar etiquetas de la cuenta regresiva
+      document.getElementById("days").nextElementSibling.textContent = translations[lang].countdown_days;
+      document.getElementById("hours").nextElementSibling.textContent = translations[lang].countdown_hours;
+      document.getElementById("minutes").nextElementSibling.textContent = translations[lang].countdown_minutes;
+      document.getElementById("seconds").nextElementSibling.textContent = translations[lang].countdown_seconds;
+      
+      // Cambiar textos de las características
+      const features = document.querySelectorAll('.feature-card');
+      features[0].querySelector('.feature-title').textContent = translations[lang].feature1_title;
+      features[0].querySelector('p').textContent = translations[lang].feature1_text;
+      features[1].querySelector('.feature-title').textContent = translations[lang].feature2_title;
+      features[1].querySelector('p').textContent = translations[lang].feature2_text;
+      features[2].querySelector('.feature-title').textContent = translations[lang].feature3_title;
+      features[2].querySelector('p').textContent = translations[lang].feature3_text;
+      
+      // Cambiar texto del pie de página
+      document.querySelector('footer p').textContent = translations[lang].footer_copyright;
+    }
+    
+    // Iniciar la cuenta regresiva
+    let countdown = setInterval(function() {
+      updateCountdown('es');
     }, 1000);
     
     // Funcionalidad del selector de idiomas
@@ -467,11 +644,14 @@
         }
       });
       
-      // Funcionalidad para cambiar el idioma (por ahora solo visual)
+      // Funcionalidad para cambiar el idioma
       const languageOptions = document.querySelectorAll('.language-option');
       languageOptions.forEach(option => {
         option.addEventListener('click', function(e) {
           e.preventDefault();
+          
+          // Obtener el código de idioma
+          const lang = this.getAttribute('data-lang');
           
           // Remover clase active de todas las opciones
           languageOptions.forEach(opt => opt.classList.remove('active'));
@@ -479,20 +659,23 @@
           // Añadir clase active a la opción seleccionada
           this.classList.add('active');
           
-          // Actualizar el botón con la bandera y texto seleccionados
-          const flagSrc = this.querySelector('.flag').src;
-          const languageName = this.textContent.trim();
+          // Actualizar el texto del botón con el nombre del idioma
+          const languageName = this.textContent.trim().replace(" (Actual)", "");
+          languageToggle.innerHTML = `<i class="fas fa-globe-americas"></i> ${languageName} <i class="fas fa-chevron-down"></i>`;
           
-          // Actualizar el botón (solo visualmente por ahora)
-          languageToggle.querySelector('.current-flag').src = flagSrc;
-          
-          // Actualizar el texto del botón (solo el nombre del idioma sin "(Actual)")
-          const newLanguageName = languageName.replace(" (Actual)", "");
-          languageToggle.childNodes[2].nodeValue = newLanguageName + " ";
+          // Cambiar el idioma de la página
+          changeLanguage(lang);
           
           // Cerrar el menú
           languageMenu.classList.remove('show');
           languageToggle.classList.remove('active');
+          
+          // Actualizar la cuenta regresiva
+          clearInterval(countdown);
+          countdown = setInterval(function() {
+            updateCountdown(lang);
+          }, 1000);
+          updateCountdown(lang);
         });
       });
     });
