@@ -1,222 +1,316 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptoTools</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <!-- Solana Web3.js -->
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CryptoTools - Próximamente</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary-color: #6c5ce7;
+      --secondary-color: #00cec9;
+      --accent-color: #fdcb6e;
+      --dark-color: #1a1a1a;
+      --light-color: #f9f9f9;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #000000;
+      color: var(--light-color);
+      line-height: 1.6;
+      position: relative;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+    }
+
+    header {
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo {
+      max-width: 420px;
+      width: 100%;
+      height: auto;
+      margin: 0 auto 20px;
+      display: block;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .social-link {
+      color: var(--light-color);
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background-color: rgba(255,255,255,0.1);
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    .social-link:hover {
+      color: var(--accent-color);
+      background-color: rgba(255,255,255,0.2);
+    }
+
+    .social-link i {
+      font-size: 1.5rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 20px;
+      background-color: #000000;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: var(--light-color);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 10px;
+    }
+
+    .countdown {
+      background-color: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-top: 15px;
+      max-width: 90%;
+    }
+
+    .countdown-title {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: var(--accent-color);
+    }
+
+    .countdown-timer {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .countdown-item {
+      text-align: center;
+    }
+
+    .countdown-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      background-color: rgba(255,255,255,0.1);
+      padding: 6px 10px;
+      border-radius: 5px;
+      display: block;
+      min-width: 50px;
+    }
+
+    .countdown-label {
+      font-size: 0.7rem;
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
+
+    .countdown-date {
+      font-size: 0.8rem;
+      color: #ccc;
+      margin-top: 10px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .feature-card {
+      background-color: rgba(255,255,255,0.05);
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      color: var(--accent-color);
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--secondary-color);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    @media (max-width: 768px) {
+      .logo {
+        max-width: 300px;
+      }
+
+      .subtitle {
+        font-size: 0.95rem;
+      }
+
+      .countdown-number {
+        font-size: 1.2rem;
+        min-width: 40px;
+      }
+
+      .countdown-label {
+        font-size: 0.6rem;
+      }
+
+      .countdown-title {
+        font-size: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-    <div class="sidebar-header">
-    <img src="logo.png" alt="Logo" class="logo">
-    </div>
-    <nav class="sidebar-menu">
-    <div class="menu-section">
-    <h3>Tools</h3>
-    <ul>
-    <li class="active"><a href="#" data-page="home"><i class="fas fa-home"></i>Home</a></li>
-    <li><a href="#" data-page="sentiment-analysis"><i class="fas fa-chart-pie"></i>Sentiment Analysis</a></li>
-    <li><a href="#" data-page="wallet-tracker"><i class="fas fa-wallet"></i>Wallet Tracker</a></li>
-    <li><a href="#" data-page="nfts-collection"><i class="fas fa-images"></i>NFTs Collection</a></li>
-    <li><a href="#" data-page="sniper"><i class="fas fa-crosshairs"></i>Sniper</a></li>
-    <li><a href="#" data-page="gaming"><i class="fas fa-gamepad"></i>Gaming</a></li>
-    <li><a href="#" data-page="token-tracker"><i class="fas fa-search-dollar"></i>Token Tracker</a></li>
-    <li><a href="#" data-page="detox-reclaim"><i class="fas fa-broom"></i>Detox & Reclaim</a></li>
-    <li><a href="#" data-page="bot-trading"><i class="fas fa-robot"></i>Bot Trading</a></li>
-    <li><a href="#" data-page="wallet-management"><i class="fas fa-wallet"></i>Wallet Management</a></li>
-    <li><a href="#" data-page="staking-optimization"><i class="fas fa-coins"></i>Staking Optimization</a></li>
-    <li><a href="#" data-page="chatbot"><i class="fas fa-robot"></i>Chatbot 24/7</a></li>
-    </ul>
-    </div>
-    <div class="menu-section">
-    <h3>Resources</h3>
-    <ul>
-    <li><a href="#" data-page="guide"><i class="fas fa-book"></i>Guide</a></li>
-    <li><a href="#" data-page="knowledge-base"><i class="fas fa-graduation-cap"></i>Knowledge Base</a></li>
-    <li><a href="#" data-page="support"><i class="fas fa-headset"></i>Support</a></li>
-    </ul>
-    </div>
-    </nav>
-    </div>
+  <div class="container">
+    <header>
+      <img src="CRYPTO TOOLS.png" alt="CryptoTools Logo" class="logo" />
+      <div class="social-links">
+        <a href="https://www.instagram.com/armypanzercto?igsh=NDl1ejNraHllY2U5&utm_source=qr" class="social-link" target="_blank">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://x.com/armypanzercto?s=21" class="social-link" target="_blank">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="https://youtube.com/@armypanzercto?si=WuoVf0fVKYNLZ5kN" class="social-link" target="_blank">
+          <i class="fab fa-youtube"></i>
+        </a>
+        <a href="https://t.me/ArmyPanzer" class="social-link" target="_blank">
+          <i class="fab fa-telegram"></i>
+        </a>
+        <a href="https://armypanzercto.com/" class="social-link" target="_blank">
+          <i class="fas fa-globe"></i>
+        </a>
+      </div>
+    </header>
 
-    <!-- Mobile overlay -->
-    <div class="sidebar-overlay"></div>
+    <section class="hero">
+      <p class="subtitle">
+        <strong>El Centro Neural de $PANZER está por llegar</strong><br><br>
+        Muy pronto estará disponible CryptoTools, una plataforma innovadora diseñada especialmente para los inversores de $PANZER y el público en general. Aquí se alojará el cerebro neural del ecosistema $PANZER, con acceso a herramientas avanzadas, análisis en tiempo real y beneficios reales para quienes invierten en criptoactivos. Prepárate para descubrir un entorno inteligente, práctico y actualizado, creado para potenciar tus decisiones en el mundo cripto.
+      </p>
 
-    <!-- Main Content -->
-    <div class="main-content">
-    <div class="top-header">
-    <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
-    <div class="header-actions">
-    <button class="action-btn search-btn"><i class="fas fa-search"></i></button>
-    <button class="action-btn"><i class="fas fa-user"></i></button>
-    <button class="action-btn wallet-btn"><i class="fas fa-wallet"></i></button>
-    <button class="action-btn theme-toggle"><i class="fas fa-moon"></i></button>
-    </div>
-    </div>
-
-    <div class="content-wrapper">
-    <!-- Home page -->
-    <div id="home" class="page active">
-    <div class="welcome-section">
-    <h2>Welcome to CryptoTools</h2>
-    <p>A comprehensive platform designed to manage, analyze, and optimize your experience in the crypto ecosystem.</p>
-    <p>Access key tools such as token creation and tracking, wallet management, sentiment analysis, portfolio control, and more.</p>
-    <p>Includes resources like user guides and knowledge base to support you every step of the way.</p>
-    </div>
-    </div>
-
-    <!-- Wallet Tracker page -->
-    <div id="wallet-tracker" class="page">
-    <div class="welcome-section">
-    <h2>Wallet Tracker</h2>
-    <p>Monitor any Solana wallet in real-time. View balances, tokens, NFTs, and complete transaction history.</p>
-    </div>
-    <section class="input-section">
-    <div class="input-group">
-    <input type="text" id="walletAddress" placeholder="Enter Solana wallet address">
-    <button onclick="fetchWalletData()">Search</button>
-    </div>
-    <div class="network-selector">
-    <h3>Select Network</h3>
-    <div class="network-buttons">
-    <button class="network-btn active">Mainnet</button>
-    <button class="network-btn">Testnet</button>
-    <button class="network-btn">Devnet</button>
-    </div>
-    </div>
+      <div class="countdown">
+        <h2 class="countdown-title">Primer Adelanto de CryptoTools</h2>
+        <div class="countdown-timer" id="countdown">
+          <div class="countdown-item">
+            <span class="countdown-number" id="days">00</span>
+            <span class="countdown-label">Días</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="hours">00</span>
+            <span class="countdown-label">Horas</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="minutes">00</span>
+            <span class="countdown-label">Minutos</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="seconds">00</span>
+            <span class="countdown-label">Segundos</span>
+          </div>
+        </div>
+        <div class="countdown-date">16 de junio de 2025 – 22:00 hrs UTC</div>
+      </div>
     </section>
-    <section class="results-section" id="results">
-    <h2>Results</h2>
-    <div id="walletInfo"></div>
-    <div id="transactionList"></div>
+
+    <section class="features">
+      <div class="feature-card">
+        <i class="fas fa-chart-line feature-icon"></i>
+        <h3 class="feature-title">Análisis Avanzado</h3>
+        <p>Herramientas de análisis de mercado en tiempo real para tomar decisiones informadas.</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-wallet feature-icon"></i>
+        <h3 class="feature-title">Gestión de Carteras</h3>
+        <p>Administra tus activos digitales de forma segura y eficiente en un solo lugar.</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-shield-alt feature-icon"></i>
+        <h3 class="feature-title">Seguridad Garantizada</h3>
+        <p>Protección de última generación para tus inversiones y datos personales.</p>
+      </div>
     </section>
-    </div>
 
-    <!-- Other pages -->
-    <div id="chatbot" class="page">
-    <div class="welcome-section">
-    <h2>Chatbot 24/7</h2>
-    <p>Get instant assistance and answers to your crypto questions with our AI-powered chatbot available 24/7.</p>
-    </div>
-    </div>
-    <div id="token-tracker" class="page">
-    <div class="welcome-section">
-    <h2>Token Tracker</h2>
-    <p>Track the performance of any token on the Solana network. View prices, market cap, volume, historical charts, and key metrics for detailed analysis.</p>
-    </div>
-    </div>
-    <div id="detox-reclaim" class="page">
-    <div class="welcome-section">
-    <h2>Detox & Reclaim</h2>
-    <p>Clean your wallet of unwanted tokens and recover SOL locked in inactive accounts. Optimize your portfolio and enhance the security of your digital assets.</p>
-    </div>
-    </div>
-    <div id="bot-trading" class="page">
-    <div class="welcome-section">
-    <h2>Bot Trading</h2>
-    <p>Automate your trading strategies with our advanced trading bots. Set parameters, manage risk, and execute trades 24/7 without manual intervention.</p>
-    </div>
-    </div>
-    <div id="sentiment-analysis" class="page">
-    <div class="welcome-section">
-    <h2>Sentiment Analysis</h2>
-    <p>Analyze market sentiment across social media, news, and forums to make data-driven investment decisions based on public perception.</p>
-    </div>
-    </div>
-    <div id="wallet-management" class="page">
-    <div class="welcome-section">
-    <h2>Wallet Management</h2>
-    <p>Efficiently manage multiple wallets, track balances, and organize your crypto assets across different blockchains from a single dashboard.</p>
-    </div>
-    </div>
-    <div id="staking-optimization" class="page">
-    <div class="welcome-section">
-    <h2>Staking Optimization</h2>
-    <p>Maximize your staking rewards with our optimization tools. Compare rates, analyze risks, and find the best staking opportunities for your assets.</p>
-    </div>
-    </div>
-    <div id="nfts-collection" class="page">
-    <div class="welcome-section">
-    <h2>NFTs Collection</h2>
-    <p>Browse, manage, and analyze your NFT collection. Track floor prices, rarity rankings, and market trends for your digital collectibles.</p>
-    </div>
-    </div>
-    <div id="gaming" class="page">
-    <div class="welcome-section">
-    <h2>Gaming</h2>
-    <p>Explore blockchain gaming opportunities, track in-game assets, and optimize your gaming experience with our specialized tools.</p>
-    </div>
-    </div>
-    <div id="sniper" class="page">
-    <div class="welcome-section">
-    <h2>Sniper</h2>
-    <p>Quickly identify and execute trades on newly launched tokens or market opportunities with our high-speed sniper tool.</p>
-    </div>
-    </div>
-    <div id="guide" class="page">
-    <div class="welcome-section">
-    <h2>Guide</h2>
-    <p>Access step-by-step tutorials on how to use each CryptoTools tool. Learn from basics to advanced techniques to maximize your experience.</p>
-    </div>
-    </div>
-    <div id="knowledge-base" class="page">
-    <div class="welcome-section">
-    <h2>Knowledge Base</h2>
-    <p>Explore our library of educational resources on blockchain, cryptocurrencies, DeFi, and more. Stay updated with the latest trends and concepts in the ecosystem.</p>
-    </div>
-    </div>
-    <div id="support" class="page">
-    <div class="welcome-section">
-    <h2>Support</h2>
-    <p>Need help? Contact our support team to resolve any questions or technical issues. We're here to assist you in your experience with CryptoTools.</p>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
+    <footer>
+      <p>&copy; 2025 CryptoTools. Todos los derechos reservados.</p>
+    </footer>
+  </div>
 
-    <!-- Search modal -->
-    <div id="searchModal" class="modal">
-    <div class="modal-content">
-    <span class="close-modal">&times;</span>
-    <h2>Search</h2>
-    <div class="search-input">
-    <input type="text" placeholder="Search tokens, wallets, transactions...">
-    <button><i class="fas fa-search"></i></button>
-    </div>
-    <div id="searchResults"></div>
-    </div>
-    </div>
+  <script>
+    const targetDate = new Date('2025-06-16T22:00:00Z');
+    const countdown = setInterval(function() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
 
-    <!-- Wallet modal -->
-    <div id="walletModal" class="modal">
-    <div class="modal-content">
-    <span class="close-modal">&times;</span>
-    <h2>Connect Wallet</h2>
-    <div class="wallet-options">
-    <div class="wallet-option">
-    <img src="https://phantom.app/img/logo.png" alt="Phantom">
-    </div>
-    <div class="wallet-option">
-    <img src="https://solflare.com/logo.svg" alt="Solflare">
-    </div>
-    <div class="wallet-option">
-    <img src="https://www.ledger.com/wp-content/uploads/2021/11/Ledger_logo_color_black.svg" alt="Ledger">
-    </div>
-    <div class="wallet-option">
-    <img src="https://trustwallet.com/assets/images/media/assets/trust_platform.svg" alt="Trust Wallet">
-    </div>
-    </div>
-    </div>
-    </div>
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    <script src="script.js"></script>
+      document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
+      document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+      document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
+      document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
+
+      if (distance < 0) {
+        clearInterval(countdown);
+        document.getElementById("countdown").innerHTML = "<h3>¡Ya está disponible!</h3>";
+      }
+    }, 1000);
+  </script>
 </body>
 </html>
