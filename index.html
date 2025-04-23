@@ -190,6 +190,96 @@
       border-top: 1px solid rgba(255,255,255,0.1);
     }
 
+    /* Estilos para el selector de idiomas */
+    .language-selector {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .language-btn {
+      background-color: rgba(108, 92, 231, 0.8);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+    }
+
+    .language-btn:hover {
+      background-color: var(--primary-color);
+      box-shadow: 0 6px 20px rgba(108, 92, 231, 0.5);
+    }
+
+    .language-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    .language-btn.active i {
+      transform: rotate(180deg);
+    }
+
+    .language-options {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: rgba(26, 26, 26, 0.95);
+      border-radius: 10px;
+      width: 200px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, margin-top 0.3s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      margin-top: 0;
+      opacity: 0;
+    }
+
+    .language-options.show {
+      max-height: 400px;
+      margin-top: 10px;
+      opacity: 1;
+    }
+
+    .language-option {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      color: var(--light-color);
+      text-decoration: none;
+    }
+
+    .language-option:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .language-option.active {
+      background-color: rgba(108, 92, 231, 0.3);
+    }
+
+    .flag {
+      width: 24px;
+      height: 18px;
+      margin-right: 10px;
+      border-radius: 3px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .current-flag {
+      width: 20px;
+      height: 15px;
+      border-radius: 3px;
+    }
+
     @media (max-width: 768px) {
       .logo {
         max-width: 300px;
@@ -211,10 +301,57 @@
       .countdown-title {
         font-size: 1rem;
       }
+      
+      .language-selector {
+        top: 10px;
+        right: 10px;
+      }
+      
+      .language-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+      }
+      
+      .language-options {
+        width: 180px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="language-selector">
+    <button class="language-btn" id="language-toggle">
+      <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/es.svg" class="current-flag" alt="Español">
+      Español <i class="fas fa-chevron-down"></i>
+    </button>
+    <div class="language-options" id="language-menu">
+      <a href="#" class="language-option active">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/es.svg" class="flag" alt="Español">
+        Español (Actual)
+      </a>
+      <a href="#" class="language-option">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/gb.svg" class="flag" alt="English">
+        English
+      </a>
+      <a href="#" class="language-option">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/ru.svg" class="flag" alt="Russian">
+        Русский
+      </a>
+      <a href="#" class="language-option">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/de.svg" class="flag" alt="Deutsch">
+        Deutsch
+      </a>
+      <a href="#" class="language-option">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/fr.svg" class="flag" alt="Français">
+        Français
+      </a>
+      <a href="#" class="language-option">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/pt.svg" class="flag" alt="Português">
+        Português
+      </a>
+    </div>
+  </div>
+
   <div class="container">
     <header>
       <img src="CRYPTO TOOLS.png" alt="CryptoTools Logo" class="logo" />
@@ -311,6 +448,54 @@
         document.getElementById("countdown").innerHTML = "<h3>¡Ya está disponible!</h3>";
       }
     }, 1000);
+    
+    // Funcionalidad del selector de idiomas
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageToggle = document.getElementById('language-toggle');
+      const languageMenu = document.getElementById('language-menu');
+      
+      languageToggle.addEventListener('click', function() {
+        languageMenu.classList.toggle('show');
+        languageToggle.classList.toggle('active');
+      });
+      
+      // Cerrar el menú al hacer clic fuera de él
+      document.addEventListener('click', function(event) {
+        if (!event.target.closest('.language-selector')) {
+          languageMenu.classList.remove('show');
+          languageToggle.classList.remove('active');
+        }
+      });
+      
+      // Funcionalidad para cambiar el idioma (por ahora solo visual)
+      const languageOptions = document.querySelectorAll('.language-option');
+      languageOptions.forEach(option => {
+        option.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Remover clase active de todas las opciones
+          languageOptions.forEach(opt => opt.classList.remove('active'));
+          
+          // Añadir clase active a la opción seleccionada
+          this.classList.add('active');
+          
+          // Actualizar el botón con la bandera y texto seleccionados
+          const flagSrc = this.querySelector('.flag').src;
+          const languageName = this.textContent.trim();
+          
+          // Actualizar el botón (solo visualmente por ahora)
+          languageToggle.querySelector('.current-flag').src = flagSrc;
+          
+          // Actualizar el texto del botón (solo el nombre del idioma sin "(Actual)")
+          const newLanguageName = languageName.replace(" (Actual)", "");
+          languageToggle.childNodes[2].nodeValue = newLanguageName + " ";
+          
+          // Cerrar el menú
+          languageMenu.classList.remove('show');
+          languageToggle.classList.remove('active');
+        });
+      });
+    });
   </script>
 </body>
 </html>
