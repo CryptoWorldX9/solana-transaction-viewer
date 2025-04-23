@@ -10,34 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
-    :root {
-      --primary-color: #6c5ce7;
-      --secondary-color: #00cec9;
-      --accent-color: #fdcb6e;
-      --dark-color: #1a1a1a;
-      --light-color: #f9f9f9;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: #000000;
-      color: var(--light-color);
-      line-height: 1.6;
-      position: relative;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-      position: relative;
-    }
-    .logo {
-      max-width: 420px;
-      width: 100%;
-      height: auto;
-      margin: 0 auto 20px;
-      display: block;
-    }
     .language-switcher {
       position: fixed;
       top: 20px;
@@ -87,9 +59,7 @@
 </head>
 <body>
   <div class="language-switcher">
-    <div class="language-icon" onclick="toggleLanguageMenu()">
-      <i class="fas fa-globe"></i>
-    </div>
+    <div class="language-icon" onclick="toggleLanguageMenu()"><i class="fas fa-globe"></i></div>
     <div class="language-menu" id="languageMenu">
       <div class="language-option" onclick="setLanguage('es')"><img src="https://flagcdn.com/w20/es.png">Español</div>
       <div class="language-option" onclick="setLanguage('en')"><img src="https://flagcdn.com/w20/gb.png">English</div>
@@ -102,27 +72,22 @@
   <script>
     const translations = {
       es: {
-        main: '<strong>El Centro Neural de $PANZER está por llegar</strong><br><br>Muy pronto estará disponible CryptoTools, una plataforma innovadora diseñada especialmente para los inversores de $PANZER y el público en general...',
         title: 'Primer Adelanto de CryptoTools',
         days: 'Días', hours: 'Horas', minutes: 'Minutos', seconds: 'Segundos'
       },
       en: {
-        main: '<strong>The Neural Center of $PANZER is coming</strong><br><br>CryptoTools will soon be available: an innovative platform specially designed for $PANZER investors and the general public...',
         title: 'First Preview of CryptoTools',
         days: 'Days', hours: 'Hours', minutes: 'Minutes', seconds: 'Seconds'
       },
       ru: {
-        main: '<strong>Нейронный центр $PANZER скоро появится</strong><br><br>Скоро будет доступен CryptoTools — инновационная платформа для инвесторов $PANZER и широкой аудитории...',
         title: 'Первый взгляд на CryptoTools',
         days: 'Дни', hours: 'Часы', minutes: 'Минуты', seconds: 'Секунды'
       },
       de: {
-        main: '<strong>Das neuronale Zentrum von $PANZER kommt bald</strong><br><br>CryptoTools wird bald verfügbar sein: eine innovative Plattform für $PANZER-Investoren und die breite Öffentlichkeit...',
         title: 'Erste Vorschau auf CryptoTools',
         days: 'Tage', hours: 'Stunden', minutes: 'Minuten', seconds: 'Sekunden'
       },
       fr: {
-        main: '<strong>Le centre neuronal de $PANZER arrive</strong><br><br>CryptoTools sera bientôt disponible : une plateforme innovante conçue pour les investisseurs de $PANZER et le grand public...',
         title: 'Première Aperçu de CryptoTools',
         days: 'Jours', hours: 'Heures', minutes: 'Minutes', seconds: 'Secondes'
       }
@@ -133,12 +98,14 @@
     }
 
     function setLanguage(lang) {
-      document.getElementById('mainText').innerHTML = translations[lang].main;
-      document.getElementById('countdownTitle').innerText = translations[lang].title;
-      document.getElementById('labelDays').innerText = translations[lang].days;
-      document.getElementById('labelHours').innerText = translations[lang].hours;
-      document.getElementById('labelMinutes').innerText = translations[lang].minutes;
-      document.getElementById('labelSeconds').innerText = translations[lang].seconds;
+      document.querySelector(".countdown-title").innerText = translations[lang].title;
+      const labels = document.querySelectorAll(".countdown-label");
+      labels[0].innerText = translations[lang].days;
+      labels[1].innerText = translations[lang].hours;
+      labels[2].innerText = translations[lang].minutes;
+      labels[3].innerText = translations[lang].seconds;
       document.getElementById('languageMenu').classList.remove('show');
     }
   </script>
+</body>
+</html>
