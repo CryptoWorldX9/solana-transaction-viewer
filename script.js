@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeSidebar = document.querySelector('.close-sidebar');
     const sidebarOverlay = document.querySelector('.sidebar-overlay');
     const menuItems = document.querySelectorAll('.sidebar-menu li a');
+    const searchBtn = document.querySelector('.search-btn');
+    const walletBtn = document.querySelector('.wallet-btn');
+    const searchModal = document.getElementById('searchModal');
+    const walletModal = document.getElementById('walletModal');
+    const closeModals = document.querySelectorAll('.close-modal');
+    const themeToggle = document.querySelector('.theme-toggle');
     
     // Función para abrir el sidebar
     function openSidebar() {
@@ -20,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.overflow = ''; // Permitir scroll
     }
     
-    // Event listeners
+    // Event listeners para sidebar
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', openSidebar);
     }
@@ -56,21 +62,4 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Mostrar la página seleccionada
             document.getElementById(pageId).classList.add('active');
-            
-            // Cerrar el sidebar en modo móvil
-            if (window.innerWidth <= 768) {
-                closeSidebarMenu();
-            }
-        });
-    });
-    
-    // Detección de cambio de tamaño de ventana
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            // En desktop, asegurar que el sidebar esté visible
-            sidebar.classList.remove('active');
-            sidebarOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
-});
+}
