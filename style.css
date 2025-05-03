@@ -112,31 +112,33 @@ header {
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.3);
     flex-grow: 1; /* Permite que el ticker ocupe el espacio disponible */
-    max-width: 600px; /* Ancho máximo en pantallas grandes */
+    max-width: 700px; /* <-- Aumentar ancho máximo para mostrar más items */
 }
 
 .price-ticker-inner {
     display: flex; /* Permite que los dos price-ticker-content estén en fila */
-    width: 200%; /* El doble del ancho del contenedor para el scroll continuo */
-    animation: scroll-left 30s linear infinite; /* Ajusta el tiempo y timing function */
+    /* Ancho ajustado para acomodar más items sin romper el loop */
+    /* Este valor 250% es una estimación; podría necesitar ajuste fino */
+    width: 250%; /* <-- Ajuste de ancho para la animación */
+    animation: scroll-left 45s linear infinite; /* <-- Aumentar duración por más items */
 }
 
 .price-ticker-content {
     display: flex;
     white-space: nowrap; /* Evita que los ítems se envuelvan */
     flex-shrink: 0; /* Evita que se encojan */
-     width: 50%; /* Cada copia ocupa el 50% del contenedor interno */
-     justify-content: space-around; /* Distribuye el espacio entre items */
+    /* width: 50%; <-- Ya no se necesita un ancho fijo si se usa margin-right */
      align-items: center;
 }
 
 .price-item {
     display: inline-flex; /* Permite alinear icono y texto */
     align-items: center;
-    padding: 0 15px; /* Espacio entre ítems */
+    padding: 0 0; /* Eliminar padding lateral interno */
+    margin-right: 20px; /* <-- Añadir margen derecho para separar ítems */
     color: var(--text-color);
     font-size: 0.9rem;
-     flex-shrink: 0; /* Importante para el scroll, evita que los items se encojan */
+    flex-shrink: 0; /* Importante para el scroll, evita que los items se encojan */
 }
 
 .price-item i {
@@ -145,10 +147,19 @@ header {
     color: var(--corp-green); /* Color del icono del precio (ej: verde) */
 }
 
+/* Espaciador al final de cada bloque de contenido para asegurar el loop */
+.price-item-spacer {
+    display: inline-block;
+    width: 50px; /* <-- Ancho del espaciador, ajusta si el loop no es suave */
+    flex-shrink: 0;
+}
+
 /* Animación de scroll para el ticker */
 @keyframes scroll-left {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); } /* Se desplaza un 50% del ancho del contenedor interno */
+    0% { transform: translateX(0%); }
+    /* La traducción debe coincidir con el ancho exacto de un bloque de contenido */
+    /* Si inner es 250% y tiene 2 bloques, cada bloque es 125%. Animamos -125% */
+    100% { transform: translateX(-125%); } /* <-- Ajuste de la traducción */
 }
 
 
@@ -473,13 +484,31 @@ footer {
     .price-ticker {
         margin-left: 15px;
         margin-right: 15px;
-        max-width: 300px; /* Reducir ancho máximo en tablets */
+        /* Reducir ancho máximo para dejar espacio al logo/iconos en tablets */
+        max-width: 250px; /* Ajusta este valor si es necesario */
     }
 
      .price-item {
-         padding: 0 10px; /* Menos espacio entre items en tablet */
-         font-size: 0.85rem;
+         padding: 0 8px; /* Menos espacio entre items en tablet */
+         margin-right: 15px; /* Ajustar margen */
+         font-size: 0.8rem; /* Letra un poco más pequeña */
      }
+
+     .price-item i {
+         font-size: 1rem;
+     }
+
+     /* Ajustar la animación y el ancho del inner para la nueva cantidad/tamaño de ítems */
+     .price-ticker-inner {
+         width: 250%; /* Puede necesitar ajuste fino */
+         animation-duration: 40s; /* Ajustar duración */
+     }
+     @keyframes scroll-left {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-125%); } /* Ajusta este porcentaje si el ancho del inner/content cambia */
+     }
+
+
      /* Footer sigue fijo, no necesita cambio aquí */
      /* Sidebar sigue fijo, no necesita cambio aquí */
      /* Main content sigue con margin/padding left/bottom, no necesita cambio aquí */
@@ -519,14 +548,27 @@ footer {
 
     .price-ticker-inner {
         /* Puede que necesites ajustar el width y la animación aquí si el contenido es muy largo */
-        width: 250%; /* Puede requerir más ancho en móvil */
-        animation: scroll-left 40s linear infinite; /* Más lento en móvil */
+        width: 300%; /* Puede requerir más ancho en móvil por el número de items */
+        animation-duration: 50s; /* Más lento en móvil por más items */
     }
 
      @keyframes scroll-left {
          0% { transform: translateX(0); }
-         100% { transform: translateX(-50%); } /* Mismo porcentaje, puede necesitar ajuste */
+         /* Si inner es 300% y tiene 2 bloques, cada bloque es 150%. Animamos -150% */
+         100% { transform: translateX(-150%); } /* Ajusta este porcentaje */
      }
+
+     .price-item {
+         padding: 0 5px; /* Menos padding en móvil */
+         margin-right: 10px; /* Ajustar margen */
+         font-size: 0.8rem;
+     }
+     .price-item i {
+         font-size: 1rem;
+     }
+    .price-item-spacer {
+        width: 30px; /* Espaciador más pequeño en móvil */
+    }
 
 
     .container {
