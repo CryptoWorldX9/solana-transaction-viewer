@@ -6,8 +6,7 @@
     <title>QuantyX - Crypto AI Platform</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"> </head>
 <body>
     <div class="background-animation"></div> <header>
         <div class="logo">
@@ -149,30 +148,33 @@
                  </div>
                  <div id="wallet-data-display">
                      <p id="initial-message">Introduce una dirección de billetera de Solana para ver sus detalles.</p>
-                     <div id="loading-indicator" class="hidden">Cargando datos de la billetera... <i class="fas fa-spinner fa-spin"></i></div>
-                     <div id="error-message" class="hidden"></div>
-
-                     <div id="sol-balance-card" class="data-card hidden">
+                     <div id="loading-indicator" class="loading-spinner hidden">Cargando datos de la billetera... <i class="fas fa-spinner fa-spin"></i></div>
+                     <div id="error-message" class="error-message hidden"></div> <div id="sol-balance-card" class="data-card hidden">
                           <h3><i class="fab fa-solana"></i> Saldo SOL</h3>
-                          <p><span id="sol-balance">-</span> SOL</p>
+                          <div class="card-content centered-value"> <p><span id="sol-balance">-</span> SOL</p>
+                          </div>
                      </div>
 
                      <div id="token-balances-card" class="data-card hidden">
                           <h3><i class="fas fa-coins"></i> Tokens (SPL)</h3>
-                          <ul id="token-list">
-                              </ul>
+                          <div class="card-content">
+                              <ul id="token-list" class="data-list"> </ul>
+                          </div>
                      </div>
 
-                      <div id="nfts-card" class="data-card hidden">
+                     <div id="nfts-card" class="data-card hidden">
                           <h3><i class="fas fa-image"></i> NFTs</h3>
-                          <div id="nft-gallery">
-                              </div>
+                           <div class="card-content">
+                              <div id="nft-gallery">
+                                  </div>
+                           </div>
                      </div>
 
-                      <div id="transactions-card" class="data-card hidden">
+                     <div id="transactions-card" class="data-card hidden">
                           <h3><i class="fas fa-exchange-alt"></i> Transacciones Recientes</h3>
-                          <ul id="transaction-list">
-                              </ul>
+                           <div class="card-content">
+                               <ul id="transaction-list" class="data-list"> </ul>
+                           </div>
                      </div>
 
                  </div>
