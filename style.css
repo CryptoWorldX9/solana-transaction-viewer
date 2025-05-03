@@ -94,7 +94,7 @@ header {
 
 .logo {
     /* Estilos para el logo de solo texto */
-    font-size: 3rem; /* <-- ¡Tamaño grande para el logo! */
+    font-size: 3rem; /* <-- Tamaño grande para el logo! */
     font-weight: 600; /* Peso de la fuente para el logo */
     color: var(--corp-blue); /* Color del logo */
     text-shadow: 0 0 6px var(--corp-blue); /* <-- Ajustar glow si es necesario */
@@ -480,6 +480,43 @@ footer {
      text-shadow: 0 0 5px var(--close-button-hover);
 }
 
+/* Estilos para el input de búsqueda dentro del modal */
+#search-input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    margin-bottom: 20px; /* Espacio antes de los resultados */
+    border: 1px solid var(--line-color);
+    background-color: #1a1a1a;
+    color: #fff;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1rem;
+}
+
+/* Estilos para el contenedor de resultados de búsqueda */
+#search-results {
+    max-height: 300px; /* Altura máxima antes de que aparezca scroll */
+    overflow-y: auto; /* Añadir scroll si hay muchos resultados */
+    padding-right: 10px; /* Espacio para la barra de scroll */
+}
+
+/* Estilos para cada resultado individual */
+#search-results a {
+    display: block; /* Cada resultado en su propia línea */
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: rgba(255, 255, 255, 0.05); /* Fondo sutil */
+    border-radius: 5px;
+    color: var(--neon-white); /* Color del texto del resultado */
+    transition: background-color 0.3s ease;
+}
+
+#search-results a:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo al pasar el mouse */
+    color: var(--corp-blue); /* Color del texto al pasar el mouse */
+}
+
 
 .modal-content h2 {
     margin-top: 0;
@@ -490,19 +527,12 @@ footer {
     font-weight: 600; /* Peso para títulos de modal */
 }
 
+/* Eliminados: Input styles duplicados si ya se definieron para #search-input */
+/*
 .modal-content input[type="text"],
-.modal-content input[type="email"], /* Si añades email inputs en modales */
-.modal-content input[type="password"] { /* Si añades password inputs en modales */
-     width: 100%;
-     padding: 12px;
-     margin-top: 10px;
-     border: 1px solid var(--line-color);
-     background-color: #1a1a1a;
-     color: #fff;
-     border-radius: 5px;
-     outline: none;
-     font-size: 1rem;
-}
+.modal-content input[type="email"],
+.modal-content input[type="password"] { ... }
+*/
 
 
 /* Responsive Design */
@@ -717,6 +747,26 @@ footer {
      .modal-content h2 {
          font-size: 1.8rem;
      }
+
+     /* Estilos para el input de búsqueda dentro del modal en móvil */
+    #search-input {
+        margin-bottom: 15px;
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+     /* Estilos para el contenedor de resultados de búsqueda en móvil */
+    #search-results {
+        max-height: 200px; /* Menor altura en móvil */
+        padding-right: 5px;
+    }
+
+    #search-results a {
+        padding: 8px;
+        margin-bottom: 6px;
+        font-size: 0.9rem;
+    }
+
 
      /* Ocultar la línea animada en móvil */
     .container::after {
