@@ -16,6 +16,14 @@
 
     /* Definir un color pink suave solo para el hover del botón cerrar */
     --close-button-hover: #ffb6c1; /* LightPink para el hover de cerrar */
+
+    /* Definir altura del footer fijo */
+    --footer-height: 80px;
+    /* Definir ancho del sidebar fijo */
+    --sidebar-width: 250px;
+    /* Definir altura del header fijo */
+    --header-height: 80px; /* Basado en padding 1rem arriba/abajo + borde */
+
 }
 
 /* Fondo Animado - Ajustado a esta paleta y más sutil */
@@ -47,7 +55,7 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Importante para el cálculo de width/height con padding/border */
 }
 
 body {
@@ -81,6 +89,7 @@ header {
     left: 0;
     z-index: 1000; /* Asegura que esté por encima de otros elementos */
     border-bottom: 1px solid var(--line-color); /* Línea de separación */
+    height: var(--header-height); /* Altura fija del header */
 }
 
 .logo {
@@ -203,25 +212,27 @@ header {
 /* Contenedor Principal (Sidebar + Main Content) */
 .container {
     display: flex;
-    padding-top: 80px; /* Espacio para el header fijo */
-    /* Añadir padding-bottom para dejar espacio al footer fijo */
-    min-height: calc(100vh - 80px - 150px); /* Altura mínima original */
+    /* Espacio para el header fijo */
+    padding-top: var(--header-height);
+    /* Espacio para el footer fijo - Ajustar según la altura del footer */
+    padding-bottom: var(--footer-height);
+    min-height: 100vh; /* Altura mínima para ocupar toda la ventana */
     position: relative; /* Necesario para la línea animada */
 }
 
 /* Sidebar */
 .sidebar {
-    width: 250px; /* Ancho fijo del sidebar */
+    width: var(--sidebar-width); /* Ancho fijo del sidebar */
     background-color: rgba(0, 0, 0, 0.75); /* Fondo semi-transparente */
     backdrop-filter: blur(10px); /* Desenfoque */
     padding: 20px;
-    /* Añadir padding-bottom para dejar espacio al footer fijo */
-    padding-bottom: 100px; /* Ajustar según la altura del footer */
+    /* Espacio para el footer fijo - Ajustar según la altura del footer */
+    padding-bottom: var(--footer-height);
     border-right: 1px solid var(--line-color); /* Línea de separación */
     position: fixed; /* Sidebar fijo */
-    top: 80px; /* Debajo del header */
+    top: var(--header-height); /* Debajo del header */
     left: 0;
-    bottom: 0; /* Extendido hasta el fondo */
+    bottom: 0; /* Extendido hasta el fondo (excluyendo el espacio del footer) */
     overflow-y: auto; /* Añade scroll si el contenido es largo */
     z-index: 900; /* Menor que el header */
 }
@@ -268,12 +279,12 @@ header {
 /* Main Content Area */
 .main-content {
     flex-grow: 1; /* Ocupa el espacio restante */
-    margin-left: 250px; /* Espacio para el sidebar fijo */
+    margin-left: var(--sidebar-width); /* Espacio para el sidebar fijo */
     padding: 2rem;
-    /* Añadir padding-bottom para dejar espacio al footer fijo */
-    padding-bottom: 100px; /* Ajustar según la altura del footer */
+    /* Espacio para el footer fijo - Ajustar según la altura del footer */
+    padding-bottom: var(--footer-height);
     position: relative; /* Necesario para posicionar secciones */
-    overflow-y: auto;
+    overflow-y: auto; /* Permite scroll interno si el contenido es muy largo */
 }
 
 /* Secciones de herramientas (inicialmente ocultas) */
@@ -312,22 +323,25 @@ header {
 }
 
 
-/* Footer - HECHO FIJO */
+/* Footer - HECHO FIJO Y POSICIONADO CORRECTAMENTE */
 footer {
     background-color: var(--dark-background);
-    padding: 1rem 2rem; /* Reducir padding si es necesario para el tamaño fijo */
-    border-top: 1px solid var(--line-color); /* Línea de separación */
+    padding: 1rem 2rem;
+    border-top: 1px solid var(--line-color);
     text-align: center;
     /* Propiedades para hacerlo fijo en la parte inferior */
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 80px; /* <-- Altura fija estimada del footer */
+    /* Ajustar para que empiece después del sidebar */
+    left: var(--sidebar-width); /* <-- Empieza después del ancho del sidebar fijo */
+    width: calc(100% - var(--sidebar-width)); /* <-- Ocupa el resto del ancho */
+    height: var(--footer-height); /* <-- Altura fija estimada del footer */
     display: flex; /* Usar flexbox para centrar contenido verticalmente */
     justify-content: center; /* Centrar horizontalmente */
     align-items: center; /* Centrar verticalmente */
     z-index: 950; /* Asegura que esté por encima del contenido principal, pero debajo de modales/header */
+    flex-direction: column; /* Asegurar apilamiento vertical de elementos internos */
+    box-sizing: border-box; /* Asegura que el padding esté incluido en height/width */
 }
 
 .footer-content {
@@ -339,12 +353,8 @@ footer {
     display: flex;
     justify-content: center; /* Centrar contenido si solo queda un elemento */
     align-items: center;
-    flex-direction: column; /* Apilar contenido en móvil */
+    flex-direction: column; /* Apilar contenido verticalmente */
 }
-
-/* Eliminar estilos específicos de newsletter */
-/* .newsletter h3, */
-/* .newsletter form { display: none; } */
 
 
 .social-media h3 {
@@ -457,7 +467,9 @@ footer {
 
 
 /* Responsive Design */
-@media (max-width: 992px) { /* Ajuste breakpoint para incluir el ticker en tablet */
+
+/* Ajustes para pantallas medianas donde el sidebar y footer son fijos */
+@media (min-width: 769px) and (max-width: 992px) {
     .price-ticker {
         margin-left: 15px;
         margin-right: 15px;
@@ -468,8 +480,13 @@ footer {
          padding: 0 10px; /* Menos espacio entre items en tablet */
          font-size: 0.85rem;
      }
+     /* Footer sigue fijo, no necesita cambio aquí */
+     /* Sidebar sigue fijo, no necesita cambio aquí */
+     /* Main content sigue con margin/padding left/bottom, no necesita cambio aquí */
 }
 
+
+/* Ajustes para pantallas pequeñas (móviles) donde header, sidebar y footer no son fijos */
 @media (max-width: 768px) {
      header {
         padding: 0.8rem 1rem;
@@ -515,7 +532,7 @@ footer {
     .container {
         flex-direction: column; /* Apila sidebar y main content */
         padding-top: 0; /* No necesita padding top ya que el header no es fijo */
-        /* Eliminar padding-bottom fijo en móvil si el footer no es fijo */
+        /* Eliminar padding-bottom fijo en móvil ya que el footer no es fijo */
          padding-bottom: 0;
     }
 
@@ -570,7 +587,7 @@ footer {
     .main-content {
         margin-left: 0; /* Sin margen a la izquierda en móvil */
         padding: 1rem; /* Ajusta padding */
-         /* Eliminar padding-bottom fijo en móvil si el footer no es fijo */
+         /* Eliminar padding-bottom fijo en móvil ya que el footer no es fijo */
          padding-bottom: 1rem; /* Restaurar padding normal o ajustado */
     }
 
@@ -589,7 +606,9 @@ footer {
 
     /* Footer en móvil no es fijo */
     footer {
-        position: static;
+        position: static; /* <-- Footer estático en móvil */
+        left: 0; /* <-- Reset left */
+        width: 100%; /* <-- Reset width */
         height: auto; /* Altura automática */
         padding-bottom: 1rem; /* Padding normal */
         margin-top: 2rem; /* Espacio arriba del footer estático */
@@ -624,6 +643,11 @@ footer {
      .modal-content h2 {
          font-size: 1.8rem;
      }
+
+     /* Ocultar la línea animada en móvil */
+    .container::after {
+        display: none;
+    }
 }
 
 /* Animación de las líneas de separación */
@@ -631,7 +655,7 @@ footer {
     content: '';
     position: absolute;
     top: 0;
-    left: 250px; /* Posición de la línea vertical */
+    left: var(--sidebar-width); /* <-- Empieza después del sidebar */
     width: 1px;
     height: 100%;
     /* Degradado con colores corporativos */
