@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
      const langSpans = languageDropdown.querySelectorAll('span');
      const menuTexts = document.querySelectorAll('.sidebar .menu-item .menu-text');
      const headerLogo = document.querySelector('.logo');
-     // Seleccionar el título principal para traducir
      const mainHeading = document.querySelector('#home h1'); // Selecciona el h1 DENTRO de la sección #home
 
 
@@ -235,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
      const newsletterForm = document.getElementById('newsletter-form');
      const subscriptionMessage = document.querySelector('.subscription-message');
       // Obtener el color de éxito traducido para mostrar el mensaje
-      const successColor = '#00ff00'; // Usar el valor hexadecimal directamente
+      const successColor = '#39da8a'; // Usar el valor hexadecimal del nuevo color verde corporativo
 
      newsletterForm.addEventListener('submit', (e) => {
          e.preventDefault(); // Evita que el formulario se envíe realmente
