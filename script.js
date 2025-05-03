@@ -1,3 +1,5 @@
+// script.js - FINAL CORRECTION attempt for TypeError in getParsedTokenAccountsByOwner
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- Lógica para mostrar secciones al hacer clic en el menú ---
     const menuLinks = document.querySelectorAll('.sidebar .menu-item a');
@@ -170,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
              walletTrackerTitle: 'Suivi de Portefeuille',
              walletInputPlaceholder: 'Entrez l\'adresse du portefeuille Solana',
              trackButtonText: 'Suivre',
-             walletInitialMessage: 'Entrez une adresse de portefeuille Solana pour voir ses détails.',
+             walletInitialMessage: 'Entrez une adresse de portefeuille Solana para ver sus detalles.',
              walletLoadingMessage: 'Chargement des données du portefeuille...',
              walletErrorInvalidAddress: 'Adresse de portefeuille Solana invalide.',
              walletErrorFetching: 'Erreur lors de la récupération des données du portefeuille. Code : ',
@@ -490,6 +492,7 @@ document.addEventListener('DOMContentLoaded', () => {
          try {
              // Validar formato de la dirección usando la librería de Solana
              publicKey = new solanaWeb3.PublicKey(address);
+             console.log("Wallet address validated:", address);
          } catch (error) {
              errorMessage.textContent = translations[currentLang].walletErrorInvalidAddress;
              showElement(errorMessage);
@@ -498,137 +501,179 @@ document.addEventListener('DOMContentLoaded', () => {
              return;
          }
 
+         // Use a general try...catch for overall errors,
+         // but also specific catches for known problematic API calls if needed.
+         // El error TypeError: Cannot read properties of undefined (reading 'toBase58')
+         // en connection.getParsedTokenAccountsByOwner indica un problema DENTRO de esa llamada
+         // al procesar la respuesta del RPC para cierta data de billetera.
+         // Lo aislamos con un try/catch específico para que no falle toda la función.
          try {
              // --- Obtener Datos de la Blockchain usando Helius y web3.js ---
 
              // 1. Obtener Saldo SOL (usando web3.js con el RPC de Helius)
-             const solBalanceLamports = await connection.getBalance(publicKey);
-             const solBalance = solBalanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
-             solBalanceSpan.textContent = solBalance.toFixed(4);
-             showElement(solBalanceCard);
+             console.log("Attempting to fetch SOL balance...");
+             try {
+                 const solBalanceLamports = await connection.getBalance(publicKey);
+                 const solBalance = solBalanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
+                 solBalanceSpan.textContent = solBalance.toFixed(4);
+                 showElement(solBalanceCard);
+                 console.log("SOL balance fetched:", solBalance);
+             } catch (error) {
+                  console.error("Error fetching SOL balance:", error);
+                  // Opcional: Mostrar un mensaje de error solo para el saldo SOL si falla
+                  // solBalanceSpan.textContent = 'Error';
+             }
 
 
              // 2. Obtener Cuentas de Token (SPL) (usando web3.js con el RPC de Helius)
-             // getParsedTokenAccountsByOwner es bastante eficiente incluso en RPCs estándar/Helius
-             const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, {
-                 programId: solanaWeb3.TOKEN_PROGRAM_ID,
-             });
-
-             if (tokenAccounts.value.length > 0) {
-                 let tokensFoundWithBalance = 0;
-                 tokenAccounts.value.forEach(account => {
-                     // Asegurarse de que la cuenta sea un token y esté parseada
-                     if (account.account && account.account.data && account.account.data.parsed && account.account.data.parsed.info) {
-                          const accountInfo = account.account.data.parsed.info;
-                          const mintAddress = accountInfo.mint;
-                          const tokenBalance = accountInfo.tokenAmount.uiAmount;
-                          // const decimals = accountInfo.tokenAmount.decimals; // Si necesitaras los decimales
-
-                          // Omitir tokens con balance 0 (o muy pequeño si lo deseas)
-                          if (tokenBalance > 0) {
-                                tokensFoundWithBalance++;
-                               const listItem = document.createElement('li');
-                               // Mejorar la info del token si Helius RPC proporciona symbol/name en esta llamada (a veces lo hace)
-                               // o si usas una API de Helius específica para token balances con metadata
-                               const tokenName = accountInfo.tokenAmount.uiAmountString.includes(mintAddress.substring(0,4)) ? mintAddress.substring(0, 6) + '...' + mintAddress.substring(mintAddress.length - 6) : accountInfo.tokenAmount.uiAmountString.split(' ')[1] || mintAddress.substring(0, 6) + '...'; // Intento muy básico de obtener símbolo/nombre
-                               listItem.innerHTML = `
-                                    <span class="item-info">
-                                         <i class="fas fa-dot-circle"></i> <span>${tokenName}</span> </span>
-                                    <span class="item-value">${tokenBalance}</span>
-                               `;
-                               tokenListUl.appendChild(listItem);
-                          }
-                     }
+             console.log("Attempting to fetch token accounts...");
+             let tokenAccounts = { value: [] }; // Initialize in case of error
+             let tokenFetchError = false;
+             try {
+                 // THIS IS THE CALL THAT HAS BEEN CAUSING THE TypeError
+                 tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, {
+                     programId: solanaWeb3.TOKEN_PROGRAM_ID,
                  });
-                  // Mostrar tarjeta de tokens si hubo alguna cuenta con balance > 0
-                  if (tokensFoundWithBalance > 0) {
-                      showElement(tokenBalancesCard);
-                  } else {
-                       // Si todas las cuentas tenían balance 0 o no había cuentas válidas
+                 console.log("Raw token accounts response:", tokenAccounts); // Log raw response for debugging
+                 console.log("Token accounts fetched:", tokenAccounts.value ? tokenAccounts.value.length : 0, "accounts");
+
+
+                 // Process token accounts ONLY if fetching was successful and returned a valid structure
+                 if (tokenAccounts && Array.isArray(tokenAccounts.value) && tokenAccounts.value.length > 0) {
+                      let tokensFoundWithBalance = 0;
+                      tokenAccounts.value.forEach(account => {
+                          // Asegurarse de que la cuenta sea un token y esté parseada
+                          if (account.account && account.account.data && account.account.data.parsed && account.account.data.parsed.info) {
+                               const accountInfo = account.account.data.parsed.info;
+                               const mintAddress = accountInfo.mint;
+                               const tokenBalance = accountInfo.tokenAmount.uiAmount;
+
+                               if (tokenBalance > 0) {
+                                     tokensFoundWithBalance++;
+                                    const listItem = document.createElement('li');
+                                    const tokenName = accountInfo.tokenAmount.uiAmountString.includes(mintAddress.substring(0,4)) ? mintAddress.substring(0, 6) + '...' + mintAddress.substring(mintAddress.length - 6) : accountInfo.tokenAmount.uiAmountString.split(' ')[1] || mintAddress.substring(0, 6) + '...';
+                                     listItem.innerHTML = `
+                                          <span class="item-info">
+                                               <i class="fas fa-dot-circle"></i> <span>${tokenName}</span> </span>
+                                          <span class="item-value">${tokenBalance}</span>
+                                     `;
+                                     tokenListUl.appendChild(listItem);
+                                }
+                          } else {
+                              console.warn("Skipping unparsed or invalid token account:", account);
+                          }
+                      });
+                       if (tokensFoundWithBalance > 0) {
+                           showElement(tokenBalancesCard);
+                       } else {
+                            const noTokensLi = document.createElement('li');
+                            noTokensLi.textContent = translations[currentLang].noTokensFound;
+                            noTokensLi.style.justifyContent = 'center';
+                            noTokensLi.style.color = '#a0a0a0';
+                            noTokensLi.style.fontStyle = 'italic';
+                            tokenListUl.appendChild(noTokensLi);
+                            showElement(tokenBalancesCard);
+                       }
+                  } else { // tokenAccounts.value is null, undefined, or an empty array
                        const noTokensLi = document.createElement('li');
                        noTokensLi.textContent = translations[currentLang].noTokensFound;
                        noTokensLi.style.justifyContent = 'center';
-                       noTokensLi.style.color = '#a0a0a0'; // Usar valor hex directo
+                       noTokensLi.style.color = '#a0a0a0';
                        noTokensLi.style.fontStyle = 'italic';
                        tokenListUl.appendChild(noTokensLi);
-                       showElement(tokenBalancesCard); // Mostrar tarjeta aunque esté vacía
+                       showElement(tokenBalancesCard);
                   }
-             } else {
-                  // Mostrar mensaje si no hay cuentas de token
-                   const noTokensLi = document.createElement('li');
-                   noTokensLi.textContent = translations[currentLang].noTokensFound;
-                   noTokensLi.style.justifyContent = 'center';
-                   noTokensLi.style.color = '#a0a0a0'; // Usar valor hex directo
-                   noTokensLi.style.fontStyle = 'italic';
-                   tokenListUl.appendChild(noTokensLi);
-                   showElement(tokenBalancesCard);
+
+             } catch (error) {
+                 // Catching the specific error from getParsedTokenAccountsByOwner
+                 tokenFetchError = true; // Mark that this specific fetch failed
+                 console.error("Error fetching or parsing token accounts:", error);
+                 const errorTokenLi = document.createElement('li');
+                 // Display the error message from the catch
+                 errorTokenLi.textContent = `Error al cargar tokens: ${error.message || 'Desconocido'}`;
+                 errorTokenLi.style.justifyContent = 'center';
+                 errorTokenLi.style.color = '#ff6b6b'; // Color rojo para errores
+                 errorTokenLi.style.fontStyle = 'normal'; // No itálica para errores
+                 tokenListUl.appendChild(errorTokenLi);
+                 showElement(tokenBalancesCard); // Show the card with the error message
+
+                 // Crucial: If this fetch failed, ensure tokenAccounts.value is an empty array
+                 // so the subsequent processing doesn't try to loop over undefined/null
+                 tokenAccounts = { value: [] };
              }
 
 
              // 3. Obtener NFTs (Usando Helius Digital Assets API)
-             // Helius API hace esto mucho más fácil, incluyendo metadatos
-             // Documentación: https://docs.helius.dev/api-reference/enhanced-api/digital-asset-api
-             const nftsResponse = await fetch(`${HELIUS_API_URL}addresses/${address}/nfts?api-key=${HELIUS_API_KEY}`);
-             const nftsData = await nftsResponse.json();
+             console.log("Attempting to fetch NFTs from Helius...");
+             // Use a specific try/catch for Helius API calls as well
+             try {
+                 const nftsResponse = await fetch(`${HELIUS_API_URL}addresses/${address}/nfts?api-key=${HELIUS_API_KEY}`);
+                 const nftsData = await nftsResponse.json();
+                 console.log("NFTs response received:", nftsResponse.status, nftsData);
 
-             // Limpiar el mensaje de "No NFTs" inicial antes de añadir resultados
-             const existingNoNftsMsg = nftGalleryDiv.querySelector('p');
-             if(existingNoNftsMsg) hideElement(existingNoNftsMsg);
+                 const existingNoNftsMsg = nftGalleryDiv.querySelector('p');
+                 if(existingNoNftsMsg) hideElement(existingNoNftsMsg);
 
+                 if (nftsResponse.ok && Array.isArray(nftsData) && nftsData.length > 0) {
+                     nftsData.forEach(nft => {
+                         const imageUrl = nft.content && nft.content.files && nft.content.files.length > 0 ?
+                                          (nft.content.links ? nft.content.links.cdn : nft.content.files[0].cdn_uri || nft.content.files[0].uri)
+                                          : null;
+                         const nftName = nft.content && nft.content.metadata ? nft.content.metadata.name : 'Sin Nombre';
+                         const mint = nft.mint;
 
-             if (nftsResponse.ok && Array.isArray(nftsData) && nftsData.length > 0) { // Asegurarse de que es un array
-                 nftsData.forEach(nft => {
-                     // Helius proporciona cdn_uri para las imágenes de forma muy conveniente
-                     const imageUrl = nft.content && nft.content.files && nft.content.files.length > 0 ?
-                                      (nft.content.links ? nft.content.links.cdn : nft.content.files[0].cdn_uri || nft.content.files[0].uri) // Usar cdn link si existe, si no file uri
-                                      : null;
-                     const nftName = nft.content && nft.content.metadata ? nft.content.metadata.name : 'Sin Nombre';
-                     const mint = nft.mint; // Dirección del mint para enlace al explorer
-
-                     if (imageUrl) { // Solo mostramos si tenemos una URL de imagen
-                          const nftItem = document.createElement('div');
-                          nftItem.classList.add('nft-item');
-                           // Enlace al explorador
-                          const explorerLink = `https://solscan.io/token/${mint}`; // Enlace al mint del NFT en Solscan
-                           nftItem.innerHTML = `
-                                <a href="${explorerLink}" target="_blank" style="text-decoration: none; color: inherit;">
-                                     <img src="${imageUrl}" alt="${nftName}">
-                                     <p title="${nftName}">${nftName}</p> </a>
-                           `;
-                           nftGalleryDiv.appendChild(nftItem);
-                     }
-                 });
-                  // Mostrar tarjeta de NFTs solo si se encontraron NFTs con imagen válida
-                  if (nftGalleryDiv.children.length > 0) {
-                       showElement(nftsCard);
-                  } else {
-                       // Si la API devolvió NFTs pero ninguno con imagen válida
-                       const noNftsP = document.createElement('p');
-                       noNftsP.textContent = translations[currentLang].noNftsFound;
-                       noNftsP.style.textAlign = 'center';
-                       noNftsP.style.color = '#a0a0a0'; // Usar valor hex directo
-                       noNftsP.style.fontStyle = 'italic';
-                       noNftsP.style.paddingTop = '10px';
-                       nftGalleryDiv.appendChild(noNftsP);
-                       showElement(nftsCard); // Mostrar la tarjeta aunque esté vacía
-                  }
-             } else if (nftsResponse.ok && Array.isArray(nftsData) && nftsData.length === 0) { // Asegurarse de que es un array vacío
-                 // Mostrar mensaje de no NFTs si la API devolvió una lista vacía
-                  const noNftsP = document.createElement('p');
-                  noNftsP.textContent = translations[currentLang].noNftsFound;
-                  noNftsP.style.textAlign = 'center';
-                  noNftsP.style.color = '#a0a0a0'; // Usar valor hex directo
-                  noNftsP.style.fontStyle = 'italic';
-                  noNftsP.style.paddingTop = '10px';
-                  nftGalleryDiv.appendChild(noNftsP);
-                  showElement(nftsCard);
-             }
-             else {
-                 // Manejar error en la llamada a la API de NFTs
-                 const errorDetails = await nftsResponse.text(); // Intentar leer el cuerpo del error
-                 console.error("Error fetching NFTs from Helius:", nftsResponse.status, errorDetails);
+                         if (imageUrl) {
+                              const nftItem = document.createElement('div');
+                              nftItem.classList.add('nft-item');
+                               // Enlace al explorador
+                              const explorerLink = `https://solscan.io/token/${mint}`;
+                               nftItem.innerHTML = `
+                                    <a href="${explorerLink}" target="_blank" style="text-decoration: none; color: inherit;">
+                                         <img src="${imageUrl}" alt="${nftName}">
+                                         <p title="${nftName}">${nftName}</p>
+                                    </a>
+                               `;
+                               nftGalleryDiv.appendChild(nftItem);
+                         }
+                     });
+                      if (nftGalleryDiv.children.length > 0) {
+                           showElement(nftsCard);
+                      } else {
+                           const noNftsP = document.createElement('p');
+                           noNftsP.textContent = translations[currentLang].noNftsFound;
+                           noNftsP.style.textAlign = 'center';
+                           noNftsP.style.color = '#a0a0a0';
+                           noNftsP.style.fontStyle = 'italic';
+                           noNftsP.style.paddingTop = '10px';
+                           nftGalleryDiv.appendChild(noNftsP);
+                           showElement(nftsCard);
+                      }
+                 } else if (nftsResponse.ok && Array.isArray(nftsData) && nftsData.length === 0) {
+                      const noNftsP = document.createElement('p');
+                      noNftsP.textContent = translations[currentLang].noNftsFound;
+                      noNftsP.style.textAlign = 'center';
+                      noNftsP.style.color = '#a0a0a0';
+                      noNftsP.style.fontStyle = 'italic';
+                      noNftsP.style.paddingTop = '10px';
+                      nftGalleryDiv.appendChild(noNftsP);
+                      showElement(nftsCard);
+                 }
+                 else {
+                     // Handle API error response (e.g., status is not ok)
+                      const errorDetails = await nftsResponse.text();
+                     console.error("Error fetching NFTs from Helius:", nftsResponse.status, errorDetails);
+                     const errorNftsP = document.createElement('p');
+                     errorNftsP.textContent = `Error al cargar NFTs: ${nftsResponse.status}`;
+                     errorNftsP.style.textAlign = 'center';
+                     errorNftsP.style.color = '#ff6b6b';
+                     nftGalleryDiv.appendChild(errorNftsP);
+                     showElement(nftsCard);
+                 }
+             } catch (error) {
+                  // Catch errors during the fetch itself (network issues, CORS, etc.)
+                 console.error("Fetch error for NFTs from Helius:", error);
                  const errorNftsP = document.createElement('p');
-                 errorNftsP.textContent = `Error al cargar NFTs: ${nftsResponse.status}`;
+                 errorNftsP.textContent = `Error de conexión al cargar NFTs.`;
                  errorNftsP.style.textAlign = 'center';
                  errorNftsP.style.color = '#ff6b6b';
                  nftGalleryDiv.appendChild(errorNftsP);
@@ -637,85 +682,90 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
              // 4. Obtener Transacciones Recientes (Usando Helius Transaction History API)
-             // Documentación: https://docs.helius.dev/api-reference/enhanced-api/transaction-history-api
-             // Limitamos a 15 transacciones para empezar
-             const txsResponse = await fetch(`${HELIUS_API_URL}addresses/${address}/transactions?api-key=${HELIUS_API_KEY}&limit=15`);
-             const txsData = await txsResponse.json();
+             console.log("Attempting to fetch Transactions from Helius...");
+             // Use a specific try/catch for Helius API calls as well
+             try {
+                 const txsResponse = await fetch(`${HELIUS_API_URL}addresses/${address}/transactions?api-key=${HELIUS_API_KEY}&limit=15`);
+                 const txsData = await txsResponse.json();
+                 console.log("Transactions response received:", txsResponse.status, txsData);
 
-             if (txsResponse.ok && Array.isArray(txsData) && txsData.length > 0) { // Asegurarse de que es un array
-                 txsData.forEach(tx => {
-                     const listItem = document.createElement('li');
-                     const explorerLink = `https://solscan.io/tx/${tx.signature}`; // Enlace al explorador
 
-                     // Simplificar la información de la transacción - Helius la parsea bastante bien
-                     let type = tx.type || translations[currentLang].transactionTypeUnknown;
-                     let description = '';
-                     let value = '';
-                     let directionClass = ''; // Clase para pintar el texto de envío/recepción
+                 if (txsResponse.ok && Array.isArray(txsData) && txsData.length > 0) {
+                     txsData.forEach(tx => {
+                         const listItem = document.createElement('li');
+                         const explorerLink = `https://solscan.io/tx/${tx.signature}`;
 
-                     // Helius agrupa acciones. Buscamos la acción principal relacionada con la wallet rastreada.
-                     // Priorizamos Native, luego Token, luego NFT transferencias
-                     const primaryAction = tx.nativeTransfers.find(t => t.fromUserAccount === address || t.toUserAccount === address) ||
-                                           tx.tokenTransfers.find(t => t.fromUserAccount === address || t.toUserAccount === address) ||
-                                           tx.nftTransfers.find(t => t.fromUserAccount === address || t.toUserAccount === address);
+                         let type = tx.type || translations[currentLang].transactionTypeUnknown;
+                         let description = '';
+                         let value = '';
+                         let directionClass = '';
 
-                     if (primaryAction) {
-                         if (primaryAction.fromUserAccount === address) {
-                             // Es un envío (de token, NFT o SOL nativo)
-                             description = `${translations[currentLang].transactionDirectionSent} ${primaryAction.toUserAccount.substring(0, 6)}...${primaryAction.toUserAccount.substring(primaryAction.toUserAccount.length - 4)}`;
-                             directionClass = 'tx-sent'; // Clase CSS para envíos (rojo)
-                             if (primaryAction.tokenAmount) value = `- ${primaryAction.tokenAmount} ${primaryAction.tokenSymbol || primaryAction.mint.substring(0, 4)}`; // Token SPL
-                             else if (primaryAction.amount) value = `- ${(primaryAction.amount / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`; // Nativos
-                             else if (primaryAction.nftMint) value = `- 1 NFT${primaryAction.nftTokenStandard ? ' (' + primaryAction.nftTokenStandard + ')' : ''}`; // NFT
-                         } else { // toUserAccount === address
-                             // Es una recepción (de token, NFT o SOL nativo)
-                              description = `${translations[currentLang].transactionDirectionReceived} ${primaryAction.fromUserAccount.substring(0, 6)}...${primaryAction.fromUserAccount.length > 10 ? primaryAction.fromUserAccount.substring(primaryAction.fromUserAccount.length - 4) : ''}`; // Añadir ... solo si es largo
-                             directionClass = 'tx-received'; // Clase CSS para recepciones (verde)
-                             if (primaryAction.tokenAmount) value = `+ ${primaryAction.tokenAmount} ${primaryAction.tokenSymbol || primaryAction.mint.substring(0, 4)}`; // Token SPL
-                             else if (primaryAction.amount) value = `+ ${(primaryAction.amount / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`; // Nativos
-                             else if (primaryAction.nftMint) value = `+ 1 NFT${primaryAction.nftTokenStandard ? ' (' + primaryAction.nftTokenStandard + ')' : ''}`; // NFT
+                         const primaryAction = tx.nativeTransfers.find(t => t.fromUserAccount === address || t.toUserAccount === address) ||
+                                               tx.tokenTransfers.find(t => t.fromUserAccount === address || t.toUserAccount === address) ||
+                                               tx.nftTransfers.find(t => t.fromUserAccount === address || t.toUserAccount === address);
+
+                         if (primaryAction) {
+                             if (primaryAction.fromUserAccount === address) {
+                                 description = `${translations[currentLang].transactionDirectionSent} ${primaryAction.toUserAccount.substring(0, 6)}...${primaryAction.toUserAccount.length > 10 ? primaryAction.toUserAccount.substring(primaryAction.toUserAccount.length - 4) : ''}`;
+                                 directionClass = 'tx-sent';
+                                 if (primaryAction.tokenAmount) value = `- ${primaryAction.tokenAmount} ${primaryAction.tokenSymbol || (primaryAction.mint ? primaryAction.mint.substring(0, 4) : '')}`; // Add check for primaryAction.mint
+                                 else if (primaryAction.amount) value = `- ${(primaryAction.amount / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`;
+                                 else if (primaryAction.nftMint) value = `- 1 NFT${primaryAction.nftTokenStandard ? ' (' + primaryAction.nftTokenStandard + ')' : ''}`;
+                             } else {
+                                  description = `${translations[currentLang].transactionDirectionReceived} ${primaryAction.fromUserAccount.substring(0, 6)}...${primaryAction.fromUserAccount.length > 10 ? primaryAction.fromUserAccount.substring(primaryAction.fromUserAccount.length - 4) : ''}`;
+                                 directionClass = 'tx-received';
+                                 if (primaryAction.tokenAmount) value = `+ ${primaryAction.tokenAmount} ${primaryAction.tokenSymbol || (primaryAction.mint ? primaryAction.mint.substring(0, 4) : '')}`; // Add check for primaryAction.mint
+                                 else if (primaryAction.amount) value = `+ ${(primaryAction.amount / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`;
+                                 else if (primaryAction.nftMint) value = `+ 1 NFT${primaryAction.nftTokenStandard ? ' (' + primaryAction.nftTokenStandard + ')' : ''}`;
+                             }
+                         } else {
+                               description = tx.signature.substring(0, 10) + '...' + tx.signature.substring(tx.signature.length - 10);
+                               value = '';
+                               directionClass = 'tx-unknown';
                          }
-                     } else {
-                          // Si no encontramos una acción principal clara, mostramos el tipo de Helius y la firma
-                           description = tx.signature.substring(0, 10) + '...' + tx.signature.substring(tx.signature.length - 10);
-                           value = ''; // No hay valor claro
-                           directionClass = 'tx-unknown'; // Clase para color neutro
-                     }
 
-                       // Mejorar el formato del tipo de transacción de Helius (ej. "TRANSFER" -> "Transfer")
-                       const formattedType = type.replace(/([A-Z])/g, ' $1').trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+                           const formattedType = type.replace(/([A-Z])/g, ' $1').trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 
 
-                       listItem.innerHTML = `
-                            <span class="item-info" style="flex-direction: column; align-items: flex-start;">
-                                 <i class="fas fa-file-code"></i> <span style="font-weight: 600;">${formattedType}</span>
-                                 <span style="font-size: 0.8em; color: var(--soft-text-color);">${description}</span>
-                                  <a href="${explorerLink}" target="_blank" style="font-size: 0.7em; color: var(--soft-text-color); text-decoration: underline; margin-top: 4px;">Ver en Explorer</a>
-                            </span>
-                            <span class="item-value ${directionClass}" style="text-align: right;">
-                                ${value || '---'}<br>
-                                <span style="font-size: 0.8em; color: var(--soft-text-color);">Tarifa: ${(tx.fee / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6)} SOL</span>
-                            </span>
-                       `;
-                       transactionListUl.appendChild(listItem);
-                  });
-                   showElement(transactionsCard);
+                           listItem.innerHTML = `
+                                <span class="item-info" style="flex-direction: column; align-items: flex-start;">
+                                     <i class="fas fa-file-code"></i>
+                                     <span style="font-weight: 600;">${formattedType}</span>
+                                     <span style="font-size: 0.8em; color: var(--soft-text-color);">${description}</span>
+                                      <a href="${explorerLink}" target="_blank" style="font-size: 0.7em; color: var(--soft-text-color); text-decoration: underline; margin-top: 4px;">Ver en Explorer</a>
+                                </span>
+                                <span class="item-value ${directionClass}" style="text-align: right;">
+                                    ${value || '---'}<br>
+                                    <span style="font-size: 0.8em; color: var(--soft-text-color);">Tarifa: ${(tx.fee / solanaWeb3.LAMPORTS_PER_SOL).toFixed(6)} SOL</span>
+                                </span>
+                           `;
+                           transactionListUl.appendChild(listItem);
+                      });
+                       showElement(transactionsCard);
 
-             } else if (txsResponse.ok && Array.isArray(txsData) && txsData.length === 0) { // Asegurarse de que es un array vacío
-                  const noTxsLi = document.createElement('li');
-                  noTxsLi.textContent = translations[currentLang].noTransactionsFound;
-                  noTxsLi.style.justifyContent = 'center';
-                  noTxsLi.style.color = '#a0a0a0'; // Usar valor hex directo
-                  noTxsLi.style.fontStyle = 'italic';
-                  transactionListUl.appendChild(noTxsLi);
-                  showElement(transactionsCard);
-             }
-             else {
-                 // Manejar error en la llamada a la API de Transacciones
-                  const errorDetails = await txsResponse.text();
-                 console.error("Error fetching Transactions from Helius:", txsResponse.status, errorDetails);
+                 } else if (txsResponse.ok && Array.isArray(txsData) && txsData.length === 0) {
+                      const noTxsLi = document.createElement('li');
+                      noTxsLi.textContent = translations[currentLang].noTransactionsFound;
+                      noTxsLi.style.justifyContent = 'center';
+                      noTxsLi.style.color = '#a0a0a0';
+                      noTxsLi.style.fontStyle = 'italic';
+                      transactionListUl.appendChild(noTxsLi);
+                      showElement(transactionsCard);
+                 }
+                 else {
+                      const errorDetails = await txsResponse.text();
+                     console.error("Error fetching Transactions from Helius:", txsResponse.status, errorDetails);
+                     const errorTxsLi = document.createElement('li');
+                     errorTxsLi.textContent = `Error al cargar transacciones: ${txsResponse.status}`;
+                     errorTxsLi.style.justifyContent = 'center';
+                     errorTxsLi.style.color = '#ff6b6b';
+                     transactionListUl.appendChild(errorTxsLi);
+                     showElement(transactionsCard);
+                 }
+             } catch (error) {
+                 console.error("Fetch error for Transactions from Helius:", error);
                  const errorTxsLi = document.createElement('li');
-                 errorTxsLi.textContent = `Error al cargar transacciones: ${txsResponse.status}`;
+                 errorTxsLi.textContent = `Error de conexión al cargar transacciones.`;
                  errorTxsLi.style.justifyContent = 'center';
                  errorTxsLi.style.color = '#ff6b6b';
                  transactionListUl.appendChild(errorTxsLi);
@@ -726,21 +776,23 @@ document.addEventListener('DOMContentLoaded', () => {
              // --- Ocultar estado de carga ---
              hideElement(loadingIndicator);
 
-
          } catch (error) {
-             // --- Manejo de Errores Generales de Fetch/RPC ---
-             console.error("Error tracing wallet (General Catch):", error);
+             // This catch should now only be for errors *not* caught by specific blocks above
+             // or errors happening *after* all fetches but before the function ends.
+             // Given the console output, it seems the error from getParsedTokenAccountsByOwner
+             // is STILL falling into this general catch, indicating the specific catch is not active.
+             console.error("Error tracing wallet (General Catch - Specific catch likely failed or was not hit):", error);
              hideElement(loadingIndicator);
-             // Mejorar el mensaje de error general
+             // Fallback error message
              errorMessage.textContent = `${translations[currentLang].walletErrorFetching} ${error.message || 'Desconocido'}. Consulta la consola para más detalles.`;
              showElement(errorMessage);
 
-             // Ocultar todas las tarjetas de datos si hubo un error grave
+             // Ensure data cards are hidden if a general unexpected error occurs
              hideElement(solBalanceCard);
              hideElement(tokenBalancesCard);
              hideElement(nftsCard);
              hideElement(transactionsCard);
-             hideElement(initialMessage);
+             hideElement(initialMessage); // Hide initial message on error
          }
      };
 
@@ -774,4 +826,4 @@ document.addEventListener('DOMContentLoaded', () => {
       applyLanguage('es');
 
 
-});
+}); // End of DOMContentLoaded listener
