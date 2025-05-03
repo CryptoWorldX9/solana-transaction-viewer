@@ -34,7 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
      const langSpans = languageDropdown.querySelectorAll('span');
      const menuTexts = document.querySelectorAll('.sidebar .menu-item .menu-text');
      const headerLogo = document.querySelector('.logo');
-     const mainHeading = document.querySelector('.main-content h1'); // Título principal
+     // Seleccionar el título principal para traducir
+     const mainHeading = document.querySelector('#home h1'); // Selecciona el h1 DENTRO de la sección #home
+
 
      // Diccionario de traducciones básicas (expandir según necesites)
      const translations = {
@@ -51,6 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
              knowledgeBase: 'Base de Conocimiento',
              chatbot: 'ChatBot',
              // ... agregar más traducciones para el pie de página, modales, etc.
+             searchTitle: 'Buscar en QuantiX',
+             walletConnectTitle: 'Conectar Wallet',
+             userProfileTitle: 'Perfil de Usuario / Acceso',
+             newsletterTitle: 'Suscríbete a nuestro Boletín',
+             newsletterPlaceholder: 'Tu email',
+             newsletterButton: 'Suscribirse',
+             newsletterSuccess: '¡Gracias por suscribirte!',
+             socialTitle: 'Síguenos',
+             footerBottom: '© 2025 QuantiX. Todos los derechos reservados.'
          },
          'en': {
              logo: 'QuantiX',
@@ -65,6 +76,15 @@ document.addEventListener('DOMContentLoaded', () => {
              knowledgeBase: 'Knowledge Base',
              chatbot: 'ChatBot',
              // ...
+             searchTitle: 'Search QuantiX',
+             walletConnectTitle: 'Connect Wallet',
+             userProfileTitle: 'User Profile / Access',
+             newsletterTitle: 'Subscribe to our Newsletter',
+             newsletterPlaceholder: 'Your email',
+             newsletterButton: 'Subscribe',
+             newsletterSuccess: 'Thank you for subscribing!',
+             socialTitle: 'Follow Us',
+             footerBottom: '© 2025 QuantiX. All rights reserved.'
          },
          'fr': {
              logo: 'QuantiX',
@@ -79,45 +99,77 @@ document.addEventListener('DOMContentLoaded', () => {
              knowledgeBase: 'Base de Connaissances',
              chatbot: 'ChatBot',
              // ...
+              searchTitle: 'Rechercher dans QuantiX',
+              walletConnectTitle: 'Connecter le Portefeuille',
+              userProfileTitle: 'Profil Utilisateur / Accès',
+              newsletterTitle: 'Abonnez-vous à notre Newsletter',
+              newsletterPlaceholder: 'Votre email',
+              newsletterButton: "S'abonner",
+              newsletterSuccess: 'Merci de vous être abonné !',
+              socialTitle: 'Suivez-nous',
+              footerBottom: '© 2025 QuantiX. Tous droits réservés.'
          }
      };
 
      const applyLanguage = (lang) => {
+         const texts = translations[lang];
+         if (!texts) return; // Si el idioma no existe en el diccionario
+
          // Aplica traducciones al menú lateral
          menuTexts.forEach(textSpan => {
              const dataSection = textSpan.parentElement.getAttribute('data-section');
-             const key = Object.keys(translations[lang]).find(k => {
-                 // Buscar la clave de traducción que coincide con el data-section
-                 // Esto es un poco manual, mejor si data-section = clave_traduccion
-                 switch(dataSection) {
-                     case 'sentiment-analyzer': return k === 'sentimentAnalyzer';
-                     case 'wallet-tracker': return k === 'walletTracker';
-                     case 'bot-trading': return k === 'botTrading';
-                     case 'sniper': return k === 'sniper';
-                     case 'token-creator': return k === 'tokenCreator';
-                     case 'staking': return k === 'staking';
-                     case 'gaming': return k === 'gaming';
-                     case 'knowledge-base': return k === 'knowledgeBase';
-                     case 'chatbot': return k === 'chatbot';
-                     default: return false;
-                 }
-             });
-             if (key) {
-                 textSpan.textContent = translations[lang][key];
+             // Usar un switch o mapa directo si las claves del diccionario coinciden con data-section
+             switch(dataSection) {
+                 case 'sentiment-analyzer': textSpan.textContent = texts.sentimentAnalyzer; break;
+                 case 'wallet-tracker': textSpan.textContent = texts.walletTracker; break;
+                 case 'bot-trading': textSpan.textContent = texts.botTrading; break;
+                 case 'sniper': textSpan.textContent = texts.sniper; break;
+                 case 'token-creator': textSpan.textContent = texts.tokenCreator; break;
+                 case 'staking': textSpan.textContent = texts.staking; break;
+                 case 'gaming': textSpan.textContent = texts.gaming; break;
+                 case 'knowledge-base': textSpan.textContent = texts.knowledgeBase; break;
+                 case 'chatbot': textSpan.textContent = texts.chatbot; break;
              }
          });
 
-         // Aplica traducción al logo (si cambia)
-         if (translations[lang].logo) {
-             headerLogo.textContent = translations[lang].logo;
+         // Aplica traducción al logo
+         if (headerLogo && texts.logo) {
+             headerLogo.textContent = texts.logo;
          }
 
-          // Aplica traducción al título principal (si cambia)
-         if (translations[lang].homeTitle && mainHeading) {
-             mainHeading.textContent = translations[lang].homeTitle;
+         // Aplica traducción al título principal de la sección home
+         if (mainHeading && texts.homeTitle) {
+             mainHeading.textContent = texts.homeTitle;
          }
 
-         // TODO: Aplicar traducciones a otras partes de la página (footer, modales, contenido principal)
+         // Aplica traducciones a modales (ejemplo)
+         const searchModalTitle = document.querySelector('#search-modal h2');
+         if (searchModalTitle && texts.searchTitle) searchModalTitle.textContent = texts.searchTitle;
+
+         const walletModalTitle = document.querySelector('#wallet-modal h2');
+         if (walletModalTitle && texts.walletConnectTitle) walletModalTitle.textContent = texts.walletConnectTitle;
+
+         const userModalTitle = document.querySelector('#user-modal h2');
+         if (userModalTitle && texts.userProfileTitle) userModalTitle.textContent = texts.userProfileTitle;
+
+         // Aplica traducciones a pie de página (ejemplo)
+         const newsletterTitle = document.querySelector('.newsletter h3');
+         if (newsletterTitle && texts.newsletterTitle) newsletterTitle.textContent = texts.newsletterTitle;
+
+         const newsletterInput = document.querySelector('.newsletter input[type="email"]');
+         if (newsletterInput && texts.newsletterPlaceholder) newsletterInput.placeholder = texts.newsletterPlaceholder;
+
+         const newsletterButton = document.querySelector('.newsletter button');
+         if (newsletterButton && texts.newsletterButton) newsletterButton.textContent = texts.newsletterButton;
+
+          const socialTitle = document.querySelector('.social-media h3');
+         if (socialTitle && texts.socialTitle) socialTitle.textContent = texts.socialTitle;
+
+         const footerBottomText = document.querySelector('.footer-bottom');
+         if (footerBottomText && texts.footerBottom) footerBottomText.textContent = texts.footerBottom;
+
+          // La traducción del mensaje de éxito del boletín se maneja dentro del listener del submit
+          // pero podrías guardar el texto traducido en una variable si fuera necesario
      };
 
      langSpans.forEach(span => {
@@ -125,16 +177,16 @@ document.addEventListener('DOMContentLoaded', () => {
              const selectedLang = e.target.getAttribute('data-lang');
              applyLanguage(selectedLang);
              // Opcional: Ocultar dropdown después de seleccionar
-             // languageDropdown.style.display = 'none';
+             // languageDropdown.style.display = 'none'; // Descomentar si quieres que se oculte
          });
      });
 
-     // Opcional: Ocultar dropdown si se hace click fuera de él
-     document.addEventListener('click', (e) => {
-         if (!languageSwitcher.contains(e.target)) {
-            // languageDropdown.style.display = 'none'; // Descomentar si se oculta al hacer click en un idioma
-         }
-     });
+     // Opcional: Ocultar dropdown si se hace click fuera de él (descomentar si se oculta al seleccionar)
+     // document.addEventListener('click', (e) => {
+     //     if (!languageSwitcher.contains(e.target)) {
+     //         languageDropdown.style.display = 'none';
+     //     }
+     // });
 
 
      // --- Lógica para mostrar/ocultar Modales ---
@@ -173,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
      // Cerrar modales al hacer clic fuera del contenido del modal
      window.addEventListener('click', (e) => {
+         // Asegúrate de que el clic ocurrió *directamente* en el fondo del modal
          if (e.target.classList.contains('modal')) {
              hideModal(e.target);
          }
@@ -181,6 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
      // --- Lógica básica para el formulario de boletín (solo demostración frontend) ---
      const newsletterForm = document.getElementById('newsletter-form');
      const subscriptionMessage = document.querySelector('.subscription-message');
+      // Obtener el color de éxito traducido para mostrar el mensaje
+      const successColor = '#00ff00'; // Usar el valor hexadecimal directamente
 
      newsletterForm.addEventListener('submit', (e) => {
          e.preventDefault(); // Evita que el formulario se envíe realmente
@@ -188,8 +243,12 @@ document.addEventListener('DOMContentLoaded', () => {
          // En un caso real, aquí enviarías los datos a tu servidor
          console.log('Email submitted:', newsletterForm.querySelector('input').value);
 
-         subscriptionMessage.textContent = '¡Gracias por suscribirte!';
-         subscriptionMessage.style.color = var(--neon-green); // Color de éxito
+         // Usar la traducción del mensaje de éxito
+         const currentLang = document.documentElement.lang || 'es'; // Obtiene el idioma actual o usa es por defecto
+         const messageText = translations[currentLang]?.newsletterSuccess || '¡Gracias por suscribirte!';
+
+         subscriptionMessage.textContent = messageText;
+         subscriptionMessage.style.color = successColor; // Usar el color correcto
          subscriptionMessage.style.marginTop = '10px';
          newsletterForm.reset(); // Limpia el formulario
      });
@@ -203,7 +262,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // --- Inicialización: Aplica el idioma por defecto (Español) ---
-       applyLanguage('es');
+      // Asegúrate de que el atributo lang en el HTML también esté en "es"
+      document.documentElement.lang = 'es';
+      applyLanguage('es');
 
 
 });
