@@ -158,83 +158,25 @@ document.addEventListener('DOMContentLoaded', () => {
          const footerBottomText = document.querySelector('.footer-bottom');
          if (footerBottomText && texts.footerBottom) footerBottomText.textContent = texts.footerBottom;
 
-          // El código de la newsletter se elimina, ya no necesitamos traducir el mensaje de éxito aquí
+          // El código de la Newsletter Eliminado - Las siguientes líneas *DEBEN* estar comentadas o eliminadas
      };
-
-     langSpans.forEach(span => {
-         span.addEventListener('click', (e) => {
-             const selectedLang = e.target.getAttribute('data-lang');
-             applyLanguage(selectedLang);
-             // Opcional: Ocultar dropdown después de seleccionar
-             // languageDropdown.style.display = 'none'; // Descomentar si quieres que se oculte
-         });
-     });
-
-     // Opcional: Ocultar dropdown si se hace click fuera de él (descomentar si se oculta al seleccionar)
-     // document.addEventListener('click', (e) => {
-     //     if (!languageSwitcher.contains(e.target)) {
-     //         languageDropdown.style.display = 'none';
-     //     }
-     // });
-
-
-     // --- Lógica para mostrar/ocultar Modales ---
-     const searchIcon = document.getElementById('search-icon');
-     const walletIcon = document.getElementById('wallet-icon');
-     const userIcon = document.getElementById('user-icon');
-     const searchModal = document.getElementById('search-modal');
-     const walletModal = document.getElementById('wallet-modal');
-     const userModal = document.getElementById('user-modal');
-     const closeButtons = document.querySelectorAll('.modal .close-button');
-
-     // Función para mostrar un modal
-     const showModal = (modalElement) => {
-         modalElement.classList.add('show');
-     };
-
-     // Función para ocultar un modal
-     const hideModal = (modalElement) => {
-         modalElement.classList.remove('show');
-     };
-
-     // Abrir modales al hacer clic en los iconos
-     searchIcon.addEventListener('click', () => showModal(searchModal));
-     walletIcon.addEventListener('click', () => showModal(walletModal));
-     userIcon.addEventListener('click', () => showModal(userModal));
-
-     // Cerrar modales al hacer clic en el botón de cerrar
-     closeButtons.forEach(button => {
-         button.addEventListener('click', (e) => {
-             const modalToClose = e.target.closest('.modal');
-             if (modalToClose) {
-                 hideModal(modalToClose);
-             }
-         });
-     });
-
-     // Cerrar modales al hacer clic fuera del contenido del modal
-     window.addEventListener('click', (e) => {
-         // Asegúrate de que el clic ocurrió *directamente* en el fondo del modal
-         if (e.target.classList.contains('modal')) {
-             hideModal(e.target);
-         }
-     });
 
      // --- Código de la Newsletter Eliminado ---
-     // const newsletterForm = document.getElementById('newsletter-form');
-     // const subscriptionMessage = document.querySelector('.subscription-message');
-     // const successColor = '#39da8a'; // Usar el valor hexadecimal del color verde corporativo
+     // const newsletterForm = document.getElementById('newsletter-form'); // <-- Esta línea debe estar comentada o eliminada
+     // const subscriptionMessage = document.querySelector('.subscription-message'); // <-- Esta línea debe estar comentada o eliminada
+     //  // Usar el valor hexadecimal del color verde corporativo
+     //  const successColor = '#39da8a'; // <-- Esta línea debe estar comentada o eliminada
 
-     // newsletterForm.addEventListener('submit', (e) => {
-     //     e.preventDefault(); // Evita que el formulario se envíe realmente
-     //     console.log('Email submitted:', newsletterForm.querySelector('input').value);
-     //     const currentLang = document.documentElement.lang || 'es';
-     //     const messageText = translations[currentLang]?.newsletterSuccess || '¡Gracias por suscribirte!';
-     //     subscriptionMessage.textContent = messageText;
-     //     subscriptionMessage.style.color = successColor; // Usar el color verde
-     //     subscriptionMessage.style.marginTop = '10px';
-     //     newsletterForm.reset(); // Limpia el formulario
-     // });
+     // // newsletterForm.addEventListener('submit', (e) => { // <-- Y MUY IMPORTANTE: Esta línea debe estar comentada o eliminada
+     // //     e.preventDefault(); // Evita que el formulario se envíe realmente
+     // //     console.log('Email submitted:', newsletterForm.querySelector('input').value);
+     // //     const currentLang = document.documentElement.lang || 'es';
+     // //     const messageText = translations[currentLang]?.newsletterSuccess || '¡Gracias por suscribirte!';
+     // //     subscriptionMessage.textContent = messageText;
+     // //     subscriptionMessage.style.color = successColor; // Usar el color verde
+     // //     subscriptionMessage.style.marginTop = '10px';
+     // //     newsletterForm.reset(); // Limpia el formulario
+     // // });
 
 
      // --- Inicialización: Muestra la sección 'home' al cargar la página ---
