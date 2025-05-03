@@ -576,7 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
              if(existingNoNftsMsg) hideElement(existingNoNftsMsg);
 
 
-             if (nftsResponse.ok && nftsData.length > 0) {
+             if (nftsResponse.ok && Array.isArray(nftsData) && nftsData.length > 0) { // Asegurarse de que es un array
                  nftsData.forEach(nft => {
                      // Helius proporciona cdn_uri para las imágenes de forma muy conveniente
                      const imageUrl = nft.content && nft.content.files && nft.content.files.length > 0 ?
@@ -612,7 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
                        nftGalleryDiv.appendChild(noNftsP);
                        showElement(nftsCard); // Mostrar la tarjeta aunque esté vacía
                   }
-             } else if (nftsResponse.ok && nftsData.length === 0) {
+             } else if (nftsResponse.ok && Array.isArray(nftsData) && nftsData.length === 0) { // Asegurarse de que es un array vacío
                  // Mostrar mensaje de no NFTs si la API devolvió una lista vacía
                   const noNftsP = document.createElement('p');
                   noNftsP.textContent = translations[currentLang].noNftsFound;
@@ -642,7 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
              const txsResponse = await fetch(`${HELIUS_API_URL}addresses/${address}/transactions?api-key=${HELIUS_API_KEY}&limit=15`);
              const txsData = await txsResponse.json();
 
-             if (txsResponse.ok && txsData.length > 0) {
+             if (txsResponse.ok && Array.isArray(txsData) && txsData.length > 0) { // Asegurarse de que es un array
                  txsData.forEach(tx => {
                      const listItem = document.createElement('li');
                      const explorerLink = `https://solscan.io/tx/${tx.signature}`; // Enlace al explorador
@@ -654,8 +654,9 @@ document.addEventListener('DOMContentLoaded', () => {
                      let directionClass = ''; // Clase para pintar el texto de envío/recepción
 
                      // Helius agrupa acciones. Buscamos la acción principal relacionada con la wallet rastreada.
-                     const primaryAction = tx.tokenTransfers.find(t => t.fromUserAccount === address || t.toUserAccount === address) ||
-                                           tx.nativeTransfers.find(t => t.fromUserAccount === address || t.toUserAccount === address) ||
+                     // Priorizamos Native, luego Token, luego NFT transferencias
+                     const primaryAction = tx.nativeTransfers.find(t => t.fromUserAccount === address || t.toUserAccount === address) ||
+                                           tx.tokenTransfers.find(t => t.fromUserAccount === address || t.toUserAccount === address) ||
                                            tx.nftTransfers.find(t => t.fromUserAccount === address || t.toUserAccount === address);
 
                      if (primaryAction) {
@@ -663,14 +664,14 @@ document.addEventListener('DOMContentLoaded', () => {
                              // Es un envío (de token, NFT o SOL nativo)
                              description = `${translations[currentLang].transactionDirectionSent} ${primaryAction.toUserAccount.substring(0, 6)}...${primaryAction.toUserAccount.substring(primaryAction.toUserAccount.length - 4)}`;
                              directionClass = 'tx-sent'; // Clase CSS para envíos (rojo)
-                             if (primaryAction.tokenAmount) value = `- ${primaryAction.tokenAmount} ${primaryAction.tokenSymbol || primaryAction.mint.substring(0, 4)}`;
+                             if (primaryAction.tokenAmount) value = `- ${primaryAction.tokenAmount} ${primaryAction.tokenSymbol || primaryAction.mint.substring(0, 4)}`; // Token SPL
                              else if (primaryAction.amount) value = `- ${(primaryAction.amount / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`; // Nativos
                              else if (primaryAction.nftMint) value = `- 1 NFT${primaryAction.nftTokenStandard ? ' (' + primaryAction.nftTokenStandard + ')' : ''}`; // NFT
                          } else { // toUserAccount === address
                              // Es una recepción (de token, NFT o SOL nativo)
-                              description = `${translations[currentLang].transactionDirectionReceived} ${primaryAction.fromUserAccount.substring(0, 6)}...${primaryAction.fromUserAccount.substring(primaryAction.fromUserAccount.length - 4)}`;
+                              description = `${translations[currentLang].transactionDirectionReceived} ${primaryAction.fromUserAccount.substring(0, 6)}...${primaryAction.fromUserAccount.length > 10 ? primaryAction.fromUserAccount.substring(primaryAction.fromUserAccount.length - 4) : ''}`; // Añadir ... solo si es largo
                              directionClass = 'tx-received'; // Clase CSS para recepciones (verde)
-                             if (primaryAction.tokenAmount) value = `+ ${primaryAction.tokenAmount} ${primaryAction.tokenSymbol || primaryAction.mint.substring(0, 4)}`;
+                             if (primaryAction.tokenAmount) value = `+ ${primaryAction.tokenAmount} ${primaryAction.tokenSymbol || primaryAction.mint.substring(0, 4)}`; // Token SPL
                              else if (primaryAction.amount) value = `+ ${(primaryAction.amount / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`; // Nativos
                              else if (primaryAction.nftMint) value = `+ 1 NFT${primaryAction.nftTokenStandard ? ' (' + primaryAction.nftTokenStandard + ')' : ''}`; // NFT
                          }
@@ -681,12 +682,15 @@ document.addEventListener('DOMContentLoaded', () => {
                            directionClass = 'tx-unknown'; // Clase para color neutro
                      }
 
+                       // Mejorar el formato del tipo de transacción de Helius (ej. "TRANSFER" -> "Transfer")
+                       const formattedType = type.replace(/([A-Z])/g, ' $1').trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+
 
                        listItem.innerHTML = `
                             <span class="item-info" style="flex-direction: column; align-items: flex-start;">
-                                 <i class="fas fa-file-code"></i> <span style="font-weight: 600;">${type}</span>
+                                 <i class="fas fa-file-code"></i> <span style="font-weight: 600;">${formattedType}</span>
                                  <span style="font-size: 0.8em; color: var(--soft-text-color);">${description}</span>
-                                  <a href="${explorerLink}" target="_blank" style="font-size: 0.7em; color: var(--soft-text-color); text-decoration: underline;">Ver en Explorer</a>
+                                  <a href="${explorerLink}" target="_blank" style="font-size: 0.7em; color: var(--soft-text-color); text-decoration: underline; margin-top: 4px;">Ver en Explorer</a>
                             </span>
                             <span class="item-value ${directionClass}" style="text-align: right;">
                                 ${value || '---'}<br>
@@ -697,7 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   });
                    showElement(transactionsCard);
 
-             } else if (txsResponse.ok && txsData.length === 0) {
+             } else if (txsResponse.ok && Array.isArray(txsData) && txsData.length === 0) { // Asegurarse de que es un array vacío
                   const noTxsLi = document.createElement('li');
                   noTxsLi.textContent = translations[currentLang].noTransactionsFound;
                   noTxsLi.style.justifyContent = 'center';
