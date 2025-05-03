@@ -51,20 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
              staking: 'Staking',
              gaming: 'Gaming',
              nftCollection: 'Colección NFTs', // Nuevo texto para menú
-             detox: 'Detox', // Nuevo texto para menú
-             reclaim: 'Reclaim', // Nuevo texto para menú
+             detoxReclaim: 'Detox & Reclaim', // Texto unificado para el menú
              knowledgeBase: 'Base de Conocimiento',
              chatbot: 'ChatBot',
              // ... agregar más traducciones para el pie de página, modales, etc.
              searchTitle: 'Buscar en QuantyX',
              walletConnectTitle: 'Conectar Wallet',
              userProfileTitle: 'Perfil de Usuario / Acceso',
-             newsletterTitle: 'Suscríbete a nuestro Boletín', // Este ya no se usa pero se mantiene en el dict
-             newsletterPlaceholder: 'Tu email', // Este ya no se usa
-             newsletterButton: 'Suscribirse', // Este ya no se usa
-             newsletterSuccess: '¡Gracias por suscribirte!', // Este ya no se usa
              socialTitle: 'Síguenos',
              footerBottom: '© 2025 QuantyX. Todos los derechos reservados.'
+             // Eliminados: detox, reclaim, newsletter...
          },
          'en': {
              logo: 'QuantyX',
@@ -78,20 +74,16 @@ document.addEventListener('DOMContentLoaded', () => {
              staking: 'Staking',
              gaming: 'Gaming',
              nftCollection: 'NFT Collection', // Nuevo texto para menú
-             detox: 'Detox', // Nuevo texto para menú
-             reclaim: 'Reclaim', // Nuevo texto para menú
+             detoxReclaim: 'Detox & Reclaim', // Texto unificado para el menú
              knowledgeBase: 'Knowledge Base',
              chatbot: 'ChatBot',
              // ...
              searchTitle: 'Search QuantyX',
              walletConnectTitle: 'Connect Wallet',
              userProfileTitle: 'User Profile / Access',
-             newsletterTitle: 'Subscribe to our Newsletter',
-             newsletterPlaceholder: 'Your email',
-             newsletterButton: 'Subscribe',
-             newsletterSuccess: 'Thank you for subscribing!',
              socialTitle: 'Follow Us',
              footerBottom: '© 2025 QuantyX. All rights reserved.'
+             // Eliminados: detox, reclaim, newsletter...
          },
          'fr': {
              logo: 'QuantyX',
@@ -105,20 +97,16 @@ document.addEventListener('DOMContentLoaded', () => {
              staking: 'Staking',
              gaming: 'Gaming',
              nftCollection: 'Collection NFTs', // Nuevo texto para menú
-             detox: 'Detox', // Nuevo texto para menú
-             reclaim: 'Réclamer', // Nuevo texto para menú
+             detoxReclaim: 'Détox & Réclamation', // Texto unificado para el menú (traducción aproximada)
              knowledgeBase: 'Base de Connaissances',
              chatbot: 'ChatBot',
              // ...
               searchTitle: 'Rechercher dans QuantyX',
               walletConnectTitle: 'Connecter le Portefeuille',
               userProfileTitle: 'Profil Utilisateur / Accès',
-              newsletterTitle: 'Abonnez-vous à notre Newsletter',
-              newsletterPlaceholder: 'Votre email',
-              newsletterButton: "S'abonner",
-              newsletterSuccess: 'Merci de vous être abonné !',
               socialTitle: 'Suivez-nous',
               footerBottom: '© 2025 QuantyX. Tous droits réservés.'
+              // Eliminados: detox, reclaim, newsletter...
          }
      };
 
@@ -140,22 +128,22 @@ document.addEventListener('DOMContentLoaded', () => {
                  case 'staking': textSpan.textContent = texts.staking; break;
                  case 'gaming': textSpan.textContent = texts.gaming; break;
                  case 'nft-collection': textSpan.textContent = texts.nftCollection; break; // Aplicar texto de NFT
-                 case 'detox': textSpan.textContent = texts.detox; break; // Aplicar texto de Detox
-                 case 'reclaim': textSpan.textContent = texts.reclaim; break; // Aplicar texto de Reclaim
+                 case 'detox-reclaim': textSpan.textContent = texts.detoxReclaim; break; // Aplicar texto unificado
                  case 'knowledge-base': textSpan.textContent = texts.knowledgeBase; break;
                  case 'chatbot': textSpan.textContent = texts.chatbot; break;
              }
          });
 
          // Aplica traducción al logo
-         if (headerLogo && texts.logo) {
-             headerLogo.textContent = texts.logo;
-         }
+         // El texto del logo principal "QuantyX" se maneja en el HTML,
+         // pero la traducción del diccionario es útil si el logo fuera solo texto traducible.
+         // En este caso, el texto "QuantyX" es parte del div.logo
+         // if (headerLogo && texts.logo) { headerLogo.textContent = texts.logo; } // No lo hacemos para mantener la estructura del icono
 
          // Aplica traducción al título principal de la sección home
-         if (mainHeading && texts.homeTitle) {
-             mainHeading.textContent = texts.homeTitle;
-         }
+         const homeSectionHeading = document.querySelector('#home h1');
+         if (homeSectionHeading && texts.homeTitle) { homeSectionHeading.textContent = texts.homeTitle; }
+
 
          // Aplica traducciones a modales (ejemplo)
          const searchModalTitle = document.querySelector('#search-modal h2');
@@ -224,67 +212,40 @@ document.addEventListener('DOMContentLoaded', () => {
              const modalToClose = e.target.closest('.modal');
              if (modalToClose) {
                  hideModal(modalToClose);
-             To do this in your environment, you would typically:
+             }
+         });
+     });
 
-1.  **Install the OpenAI Python Library:** If you haven't already, install it using pip:
-    ```bash
-    pip install openai
-    ```
+     // Cerrar modales al hacer clic fuera del contenido del modal
+     window.addEventListener('click', (e) => {
+         // Asegúrate de que el clic ocurrió *directamente* en el fondo del modal
+         if (e.target.classList.contains('modal')) {
+             hideModal(e.target);
+         }
+     });
 
-2.  **Get an OpenAI API Key:** You need an API key from OpenAI. If you don't have one, sign up on the [OpenAI website](https://platform.openai.com/) and generate an API key.
+     // --- Código de la Newsletter Eliminado
+     // ... (newsletter code was here) ...
 
-3.  **Set up the API Key:** Store your API key securely. The recommended way is to set it as an environment variable (`OPENAI_API_KEY`). You can do this in your shell or in your script before making API calls.
 
-    * **Shell (Linux/macOS):**
-        ```bash
-        export OPENAI_API_KEY='your-api-key-here'
-        ```
-        (Replace `'your-api-key-here'` with your actual key). You might want to add this line to your shell's startup file (like `.bashrc`, `.zshrc`, or `.profile`) to make it permanent.
+     // --- Inicialización: Muestra la sección 'home' al cargar la página ---
+      // Aseguramos que la sección 'home' sea la que se muestre al cargar
+      const homeSection = document.getElementById('home');
+      if (homeSection) { // Verificamos que la sección Home exista
+           homeSection.classList.add('active');
+      }
 
-    * **Shell (Windows Command Prompt):**
-        ```cmd
-        set OPENAI_API_KEY=your-api-key-here
-        ```
 
-    * **Shell (Windows PowerShell):**
-        ```powershell
-        $env:OPENAI_API_KEY='your-api-key-here'
-        ```
+      // Opcional: Activa el primer enlace del menú por defecto (ahora es 'Home')
+      const firstMenuItemLink = document.querySelector('.sidebar .menu-item a[data-section="home"]'); // Seleccionamos específicamente el enlace de Home
+      if (firstMenuItemLink) {
+          firstMenuItemLink.classList.add('active-menu');
+      }
 
-    * **Directly in script (less secure, not recommended for production):**
-        ```python
-        import os
-        os.environ["OPENAI_API_KEY"] = "your-api-key-here"
-        # Or using the openai library's built-in setting (deprecated in favor of environment variables)
-        # import openai
-        # openai.api_key = "your-api-key-here"
-        ```
+      // --- Inicialización: Aplica el idioma por defecto (Español) ---
+      // Asegúrate de que el atributo lang en el HTML también esté en "es"
+      document.documentElement.lang = 'es';
+      applyLanguage('es');
 
-4.  **Use the OpenAI API in Python:** Once the key is set, you can use the Python library to interact with the models.
 
-Here's a simple example using the `openai` library (version 1.0+):
-
-```python
-import os
-from openai import OpenAI
-
-# Initialize the client.
-# It automatically reads the OPENAI_API_KEY environment variable.
-# If not using environment variable, you can pass api_key='your-api-key' here.
-client = OpenAI()
-
-# Make an API call to create a completion (text generation)
-try:
-    response = client.chat.completions.create(
-      model="gpt-4o-mini", # Or "gpt-3.5-turbo", "gpt-4", etc.
-      messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "What is the capital of France?"}
-      ]
-    )
-
-    # Print the generated response
-    print(response.choices[0].message.content)
-
-except Exception as e:
-    print(f"An error occurred: {e}")
+});
