@@ -55,10 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
              searchTitle: 'Buscar en QuantyX', // Nombre cambiado aquí
              walletConnectTitle: 'Conectar Wallet',
              userProfileTitle: 'Perfil de Usuario / Acceso',
-             newsletterTitle: 'Suscríbete a nuestro Boletín',
-             newsletterPlaceholder: 'Tu email',
-             newsletterButton: 'Suscribirse',
-             newsletterSuccess: '¡Gracias por suscribirte!', // Este texto se mantiene igual, solo cambia el color en JS
+             newsletterTitle: 'Suscríbete a nuestro Boletín', // Este ya no se usa pero se mantiene en el dict
+             newsletterPlaceholder: 'Tu email', // Este ya no se usa
+             newsletterButton: 'Suscribirse', // Este ya no se usa
+             newsletterSuccess: '¡Gracias por suscribirte!', // Este ya no se usa
              socialTitle: 'Síguenos',
              footerBottom: '© 2025 QuantyX. Todos los derechos reservados.' // Nombre cambiado aquí
          },
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
              newsletterTitle: 'Subscribe to our Newsletter',
              newsletterPlaceholder: 'Your email',
              newsletterButton: 'Subscribe',
-             newsletterSuccess: 'Thank you for subscribing!', // Este texto se mantiene igual
+             newsletterSuccess: 'Thank you for subscribing!',
              socialTitle: 'Follow Us',
              footerBottom: '© 2025 QuantyX. All rights reserved.' // Nombre cambiado aquí
          },
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
               newsletterTitle: 'Abonnez-vous à notre Newsletter',
               newsletterPlaceholder: 'Votre email',
               newsletterButton: "S'abonner",
-              newsletterSuccess: 'Merci de vous être abonné !', // Este texto se mantiene igual
+              newsletterSuccess: 'Merci de vous être abonné !',
               socialTitle: 'Suivez-nous',
               footerBottom: '© 2025 QuantyX. Tous droits réservés.' // Nombre cambiado aquí
          }
@@ -151,24 +151,14 @@ document.addEventListener('DOMContentLoaded', () => {
          const userModalTitle = document.querySelector('#user-modal h2');
          if (userModalTitle && texts.userProfileTitle) userModalTitle.textContent = texts.userProfileTitle;
 
-         // Aplica traducciones a pie de página (ejemplo)
-         const newsletterTitle = document.querySelector('.newsletter h3');
-         if (newsletterTitle && texts.newsletterTitle) newsletterTitle.textContent = texts.newsletterTitle;
-
-         const newsletterInput = document.querySelector('.newsletter input[type="email"]');
-         if (newsletterInput && texts.newsletterPlaceholder) newsletterInput.placeholder = texts.newsletterPlaceholder;
-
-         const newsletterButton = document.querySelector('.newsletter button');
-         if (newsletterButton && texts.newsletterButton) newsletterButton.textContent = texts.newsletterButton;
-
-          const socialTitle = document.querySelector('.social-media h3');
+         // Aplica traducciones a pie de página (solo redes sociales y copyright ahora)
+         const socialTitle = document.querySelector('.social-media h3');
          if (socialTitle && texts.socialTitle) socialTitle.textContent = texts.socialTitle;
 
          const footerBottomText = document.querySelector('.footer-bottom');
          if (footerBottomText && texts.footerBottom) footerBottomText.textContent = texts.footerBottom;
 
-          // La traducción del mensaje de éxito del boletín se maneja dentro del listener del submit
-          // usando el texto fijo, solo cambia el color
+          // El código de la newsletter se elimina, ya no necesitamos traducir el mensaje de éxito aquí
      };
 
      langSpans.forEach(span => {
@@ -230,27 +220,22 @@ document.addEventListener('DOMContentLoaded', () => {
          }
      });
 
-     // --- Lógica básica para el formulario de boletín (solo demostración frontend) ---
-     const newsletterForm = document.getElementById('newsletter-form');
-     const subscriptionMessage = document.querySelector('.subscription-message');
-      // Usar el valor hexadecimal del color verde corporativo
-      const successColor = '#39da8a';
+     // --- Código de la Newsletter Eliminado ---
+     // const newsletterForm = document.getElementById('newsletter-form');
+     // const subscriptionMessage = document.querySelector('.subscription-message');
+     // const successColor = '#39da8a'; // Usar el valor hexadecimal del color verde corporativo
 
-     newsletterForm.addEventListener('submit', (e) => {
-         e.preventDefault(); // Evita que el formulario se envíe realmente
+     // newsletterForm.addEventListener('submit', (e) => {
+     //     e.preventDefault(); // Evita que el formulario se envíe realmente
+     //     console.log('Email submitted:', newsletterForm.querySelector('input').value);
+     //     const currentLang = document.documentElement.lang || 'es';
+     //     const messageText = translations[currentLang]?.newsletterSuccess || '¡Gracias por suscribirte!';
+     //     subscriptionMessage.textContent = messageText;
+     //     subscriptionMessage.style.color = successColor; // Usar el color verde
+     //     subscriptionMessage.style.marginTop = '10px';
+     //     newsletterForm.reset(); // Limpia el formulario
+     // });
 
-         // En un caso real, aquí enviarías los datos a tu servidor
-         console.log('Email submitted:', newsletterForm.querySelector('input').value);
-
-         // Usar la traducción del mensaje de éxito (el texto ya está en el diccionario)
-         const currentLang = document.documentElement.lang || 'es';
-         const messageText = translations[currentLang]?.newsletterSuccess || '¡Gracias por suscribirte!';
-
-         subscriptionMessage.textContent = messageText;
-         subscriptionMessage.style.color = successColor; // Usar el color verde
-         subscriptionMessage.style.marginTop = '10px';
-         newsletterForm.reset(); // Limpia el formulario
-     });
 
      // --- Inicialización: Muestra la sección 'home' al cargar la página ---
       document.getElementById('home').classList.add('active');
