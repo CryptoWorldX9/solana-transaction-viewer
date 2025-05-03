@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Muestra la sección objetivo
                 targetSection.classList.add('active');
 
-                // Opcional: Remover la clase 'active' de otros enlaces del menú si solo uno debe estar activo a la vez
+                // Remover la clase 'active' de otros enlaces del menú y añadirla al clicado
                  menuLinks.forEach(item => item.classList.remove('active-menu'));
                  link.classList.add('active-menu');
             }
@@ -33,14 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
      const languageDropdown = languageSwitcher.querySelector('.language-dropdown');
      const langSpans = languageDropdown.querySelectorAll('span');
      const menuTexts = document.querySelectorAll('.sidebar .menu-item .menu-text');
-     const headerLogo = document.querySelector('.logo');
+     // const headerLogo = document.querySelector('.logo'); // No lo usamos para traducir el texto del logo
      const mainHeading = document.querySelector('#home h1'); // Selecciona el h1 DENTRO de la sección #home
 
 
      // Diccionario de traducciones básicas (expandir según necesites)
      const translations = {
          'es': {
-             logo: 'QuantyX',
+             // Logo text is fixed as QUANTYX in HTML
              homeTitle: 'Bienvenido a QuantyX',
              homeMenuItem: 'Inicio', // Texto para el menú Home
              sentimentAnalyzer: 'Analizador de Sentimientos',
@@ -59,11 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
              walletConnectTitle: 'Conectar Wallet',
              userProfileTitle: 'Perfil de Usuario / Acceso',
              socialTitle: 'Síguenos',
-             footerBottom: '© 2025 QuantyX. Todos los derechos reservados.'
-             // Eliminados: detox, reclaim, newsletter...
+             footerBottom: '© 2025 QuantyX. Todos los derechos reservados.',
+             noSearchResults: 'No se encontraron resultados.' // Texto para cuando no hay resultados
          },
          'en': {
-             logo: 'QuantyX',
+             // Logo text is fixed as QUANTYX in HTML
              homeTitle: 'Welcome to QuantyX',
              homeMenuItem: 'Home', // Texto para el menú Home
              sentimentAnalyzer: 'Sentiment Analyzer',
@@ -82,11 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
              walletConnectTitle: 'Connect Wallet',
              userProfileTitle: 'User Profile / Access',
              socialTitle: 'Follow Us',
-             footerBottom: '© 2025 QuantyX. All rights reserved.'
-             // Eliminados: detox, reclaim, newsletter...
+             footerBottom: '© 2025 QuantyX. All rights reserved.',
+             noSearchResults: 'No results found.' // Texto para cuando no hay resultados
          },
          'fr': {
-             logo: 'QuantyX',
+             // Logo text is fixed as QUANTYX in HTML
              homeTitle: 'Bienvenue chez QuantyX',
              homeMenuItem: 'Accueil', // Texto para el menú Home
              sentimentAnalyzer: 'Analyseur de Sentiments',
@@ -105,14 +105,19 @@ document.addEventListener('DOMContentLoaded', () => {
               walletConnectTitle: 'Connecter le Portefeuille',
               userProfileTitle: 'Profil Utilisateur / Accès',
               socialTitle: 'Suivez-nous',
-              footerBottom: '© 2025 QuantyX. Tous droits réservés.'
-              // Eliminados: detox, reclaim, newsletter...
+              footerBottom: '© 2025 QuantyX. Tous droits réservés.',
+              noSearchResults: 'Aucun résultat trouvé.' // Texto para cuando no hay resultados
          }
      };
+
+     let currentLang = document.documentElement.lang || 'es'; // Obtener idioma actual o usar 'es' por defecto
+
 
      const applyLanguage = (lang) => {
          const texts = translations[lang];
          if (!texts) return; // Si el idioma no existe en el diccionario
+
+         currentLang = lang; // Actualizar el idioma actual
 
          // Aplica traducciones al menú lateral
          menuTexts.forEach(textSpan => {
@@ -133,12 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
                  case 'chatbot': textSpan.textContent = texts.chatbot; break;
              }
          });
-
-         // Aplica traducción al logo
-         // El texto del logo principal "QuantyX" se maneja en el HTML,
-         // pero la traducción del diccionario es útil si el logo fuera solo texto traducible.
-         // En este caso, el texto "QuantyX" es parte del div.logo
-         // if (headerLogo && texts.logo) { headerLogo.textContent = texts.logo; } // No lo hacemos para mantener la estructura del icono
 
          // Aplica traducción al título principal de la sección home
          const homeSectionHeading = document.querySelector('#home h1');
@@ -162,9 +161,16 @@ document.addEventListener('DOMContentLoaded', () => {
          const footerBottomText = document.querySelector('.footer-bottom');
          if (footerBottomText && texts.footerBottom) footerBottomText.textContent = texts.footerBottom;
 
-          // El código de la Newsletter Eliminado
+         // Opcional: Volver a realizar la búsqueda con el nuevo idioma si el modal está abierto y tiene texto
+         const searchModal = document.getElementById('search-modal');
+         const searchInput = document.getElementById('search-input');
+         if(searchModal.classList.contains('show') && searchInput.value.trim() !== '') {
+              performSearch(); // Re-ejecutar búsqueda con el texto actual pero nuevo idioma
+         }
+
      };
 
+     // Event listeners para el cambio de idioma
      langSpans.forEach(span => {
          span.addEventListener('click', (e) => {
              const selectedLang = e.target.getAttribute('data-lang');
@@ -173,13 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
              // languageDropdown.style.display = 'none'; // Descomentar si quieres que se oculte
          });
      });
-
-     // Opcional: Ocultar dropdown si se hace click fuera de él (descomentar si se oculta al seleccionar)
-     // document.addEventListener('click', (e) => {
-     //     if (!languageSwitcher.contains(e.target)) {
-     //         languageDropdown.style.display = 'none';
-     //     }
-     // });
 
 
      // --- Lógica para mostrar/ocultar Modales ---
@@ -202,7 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
      };
 
      // Abrir modales al hacer clic en los iconos
-     searchIcon.addEventListener('click', () => showModal(searchModal));
+     searchIcon.addEventListener('click', () => {
+         showModal(searchModal);
+         document.getElementById('search-input').focus(); // Poner el foco en el input al abrir
+     });
      walletIcon.addEventListener('click', () => showModal(walletModal));
      userIcon.addEventListener('click', () => showModal(userModal));
 
@@ -212,6 +214,11 @@ document.addEventListener('DOMContentLoaded', () => {
              const modalToClose = e.target.closest('.modal');
              if (modalToClose) {
                  hideModal(modalToClose);
+                 // Limpiar resultados y input al cerrar modal de búsqueda
+                 if(modalToClose.id === 'search-modal') {
+                      document.getElementById('search-input').value = '';
+                      document.getElementById('search-results').innerHTML = '';
+                 }
              }
          });
      });
@@ -220,13 +227,72 @@ document.addEventListener('DOMContentLoaded', () => {
      window.addEventListener('click', (e) => {
          // Asegúrate de que el clic ocurrió *directamente* en el fondo del modal
          if (e.target.classList.contains('modal')) {
-             hideModal(e.target);
+              // Limpiar resultados y input solo si se cierra el modal de búsqueda haciendo clic fuera
+              if(e.target.id === 'search-modal') {
+                   document.getElementById('search-input').value = '';
+                   document.getElementById('search-results').innerHTML = '';
+              }
+              hideModal(e.target);
          }
      });
 
-     // --- Código de la Newsletter Eliminado
-     // ... (newsletter code was here) ...
 
+     // --- Lógica de Búsqueda Básica ---
+     const searchInput = document.getElementById('search-input');
+     const searchResultsContainer = document.getElementById('search-results');
+     const contentSections = document.querySelectorAll('.main-content section'); // Todas las secciones para buscar en ellas
+
+
+     const performSearch = () => {
+         const query = searchInput.value.trim().toLowerCase(); // Obtener texto, limpiar espacios y convertir a minúsculas
+         searchResultsContainer.innerHTML = ''; // Limpiar resultados anteriores
+
+         if (query.length < 2) { // Opcional: No buscar si el texto es muy corto
+              return;
+         }
+
+         let resultsFound = false;
+
+         contentSections.forEach(section => {
+             // Obtener todo el texto de la sección (título y párrafo)
+             const sectionText = section.textContent ? section.textContent.toLowerCase() : '';
+             const sectionId = section.id; // Obtener el ID para el enlace
+             // Obtener el título de la sección para mostrar en el resultado
+             const sectionTitleElement = section.querySelector('h2');
+             const sectionTitle = sectionTitleElement ? sectionTitleElement.textContent : sectionId; // Usar H2 o ID si no hay H2
+
+
+             // Comprobar si la consulta está en el texto de la sección
+             if (sectionText.includes(query)) {
+                 resultsFound = true;
+                 // Crear un enlace para el resultado
+                 const resultLink = document.createElement('a');
+                 resultLink.href = `#${sectionId}`; // Enlaza a la sección por su ID
+                 resultLink.textContent = `Encontrado en: ${sectionTitle}`; // Muestra dónde se encontró
+
+                 // Añadir evento click al enlace para cerrar el modal e ir a la sección
+                 resultLink.addEventListener('click', () => {
+                     hideModal(searchModal); // Cierra el modal
+                     // La navegación a la sección con el # en la URL ya la maneja el navegador
+                 });
+
+                 searchResultsContainer.appendChild(resultLink); // Añadir el resultado al contenedor
+             }
+         });
+
+         // Mostrar mensaje si no se encontraron resultados
+         if (!resultsFound) {
+             const noResultsMessage = document.createElement('p');
+             noResultsMessage.textContent = translations[currentLang].noSearchResults; // Usar traducción
+             noResultsMessage.style.color = '#888'; // Color tenue
+             noResultsMessage.style.textAlign = 'center';
+             searchResultsContainer.appendChild(noResultsMessage);
+         }
+     };
+
+     // Añadir evento para buscar mientras se escribe en el input
+     searchInput.addEventListener('input', performSearch);
+     // También podrías añadir un evento 'keyup' o 'change' si prefieres
 
      // --- Inicialización: Muestra la sección 'home' al cargar la página ---
       // Aseguramos que la sección 'home' sea la que se muestre al cargar
