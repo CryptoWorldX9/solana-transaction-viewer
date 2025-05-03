@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
      // Diccionario de traducciones básicas (expandir según necesites)
      const translations = {
          'es': {
-             logo: 'QuantiX',
-             homeTitle: 'Bienvenido a QuantiX',
+             logo: 'QuantyX', // Nombre cambiado aquí
+             homeTitle: 'Bienvenido a QuantyX', // Nombre cambiado aquí
              sentimentAnalyzer: 'Analizador de Sentimientos',
              walletTracker: 'Wallet Tracker',
              botTrading: 'Bot Trading',
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
              knowledgeBase: 'Base de Conocimiento',
              chatbot: 'ChatBot',
              // ... agregar más traducciones para el pie de página, modales, etc.
-             searchTitle: 'Buscar en QuantiX',
+             searchTitle: 'Buscar en QuantyX', // Nombre cambiado aquí
              walletConnectTitle: 'Conectar Wallet',
              userProfileTitle: 'Perfil de Usuario / Acceso',
              newsletterTitle: 'Suscríbete a nuestro Boletín',
@@ -60,11 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
              newsletterButton: 'Suscribirse',
              newsletterSuccess: '¡Gracias por suscribirte!', // Este texto se mantiene igual, solo cambia el color en JS
              socialTitle: 'Síguenos',
-             footerBottom: '© 2025 QuantiX. Todos los derechos reservados.'
+             footerBottom: '© 2025 QuantyX. Todos los derechos reservados.' // Nombre cambiado aquí
          },
          'en': {
-             logo: 'QuantiX',
-             homeTitle: 'Welcome to QuantiX',
+             logo: 'QuantyX', // Nombre cambiado aquí
+             homeTitle: 'Welcome to QuantyX', // Nombre cambiado aquí
              sentimentAnalyzer: 'Sentiment Analyzer',
              walletTracker: 'Wallet Tracker',
              botTrading: 'Trading Bot',
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
              knowledgeBase: 'Knowledge Base',
              chatbot: 'ChatBot',
              // ...
-             searchTitle: 'Search QuantiX',
+             searchTitle: 'Search QuantyX', // Nombre cambiado aquí
              walletConnectTitle: 'Connect Wallet',
              userProfileTitle: 'User Profile / Access',
              newsletterTitle: 'Subscribe to our Newsletter',
@@ -83,11 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
              newsletterButton: 'Subscribe',
              newsletterSuccess: 'Thank you for subscribing!', // Este texto se mantiene igual
              socialTitle: 'Follow Us',
-             footerBottom: '© 2025 QuantiX. All rights reserved.'
+             footerBottom: '© 2025 QuantyX. All rights reserved.' // Nombre cambiado aquí
          },
          'fr': {
-             logo: 'QuantiX',
-             homeTitle: 'Bienvenue chez QuantiX',
+             logo: 'QuantyX', // Nombre cambiado aquí
+             homeTitle: 'Bienvenue chez QuantyX', // Nombre cambiado aquí
              sentimentAnalyzer: 'Analyseur de Sentiments',
              walletTracker: 'Suivi de Wallet',
              botTrading: 'Bot de Trading',
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
              knowledgeBase: 'Base de Connaissances',
              chatbot: 'ChatBot',
              // ...
-              searchTitle: 'Rechercher dans QuantiX',
+              searchTitle: 'Rechercher dans QuantyX', // Nombre cambiado aquí
               walletConnectTitle: 'Connecter le Portefeuille',
               userProfileTitle: 'Profil Utilisateur / Accès',
               newsletterTitle: 'Abonnez-vous à notre Newsletter',
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
               newsletterButton: "S'abonner",
               newsletterSuccess: 'Merci de vous être abonné !', // Este texto se mantiene igual
               socialTitle: 'Suivez-nous',
-              footerBottom: '© 2025 QuantiX. Tous droits réservés.'
+              footerBottom: '© 2025 QuantyX. Tous droits réservés.' // Nombre cambiado aquí
          }
      };
 
@@ -233,8 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
      // --- Lógica básica para el formulario de boletín (solo demostración frontend) ---
      const newsletterForm = document.getElementById('newsletter-form');
      const subscriptionMessage = document.querySelector('.subscription-message');
-      // Usar el valor hexadecimal del nuevo color dorado para el mensaje de éxito
-      const successColor = '#FFD700';
+      // Usar el valor hexadecimal del color verde corporativo
+      const successColor = '#39da8a';
 
      newsletterForm.addEventListener('submit', (e) => {
          e.preventDefault(); // Evita que el formulario se envíe realmente
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
          const messageText = translations[currentLang]?.newsletterSuccess || '¡Gracias por suscribirte!';
 
          subscriptionMessage.textContent = messageText;
-         subscriptionMessage.style.color = successColor; // Usar el color dorado
+         subscriptionMessage.style.color = successColor; // Usar el color verde
          subscriptionMessage.style.marginTop = '10px';
          newsletterForm.reset(); // Limpia el formulario
      });
