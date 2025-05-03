@@ -94,7 +94,7 @@ header {
 
 .logo {
     /* Estilos para el logo de solo texto */
-    font-size: 3rem; /* <-- Tamaño grande para el logo! */
+    font-size: 3rem; /* <-- Tamaño grande para el logo! (Ajustado de 3.5rem a 3rem) */
     font-weight: 600; /* Peso de la fuente para el logo */
     color: var(--corp-blue); /* Color del logo */
     text-shadow: 0 0 6px var(--corp-blue); /* <-- Ajustar glow si es necesario */
@@ -102,13 +102,6 @@ header {
     display: block; /* O flex si quieres centrar el texto dentro del div logo */
     padding: 0; /* Reset padding si se añadió para el icono */
 }
-
-/* Eliminar estilos para el icono del logo si ya no existe la estructura */
-/*
-.logo-icon { ... }
-.logo-icon i { ... }
-.ai-text { ... }
-*/
 
 
 /* Carrusel de Precios */
@@ -128,17 +121,14 @@ header {
 
 .price-ticker-inner {
     display: flex; /* Permite que los dos price-ticker-content estén en fila */
-    /* Ancho ajustado para acomodar más items sin romper el loop */
-    /* Este valor 250% es una estimación; podría necesitar ajuste fino */
-    width: 250%; /* <-- Ajuste de ancho para la animación */
-    animation: scroll-left 45s linear infinite; /* <-- Aumentar duración por más items */
+    width: 250%; /* Puede necesitar ajuste fino */
+    animation: scroll-left 45s linear infinite; /* <-- Aumentar duración */
 }
 
 .price-ticker-content {
     display: flex;
     white-space: nowrap; /* Evita que los ítems se envuelvan */
     flex-shrink: 0; /* Evita que se encojan */
-    /* width: 50%; <-- Ya no se necesita un ancho fijo si se usa margin-right */
      align-items: center;
 }
 
@@ -149,8 +139,8 @@ header {
     margin-right: 20px; /* <-- Añadir margen derecho para separar ítems */
     color: var(--text-color);
     font-size: 0.9rem;
-    flex-shrink: 0; /* Importante para el scroll, evita que los items se encojan */
-    font-weight: 400; /* Fuente normal para items del ticker */
+    flex-shrink: 0; /* Importante para el scroll */
+    font-weight: 400;
 }
 
 .price-item i {
@@ -159,19 +149,16 @@ header {
     color: var(--corp-green); /* Color del icono del precio (ej: verde) */
 }
 
-/* Espaciador al final de cada bloque de contenido para asegurar el loop */
+/* Espaciador al final de cada bloque de contenido */
 .price-item-spacer {
     display: inline-block;
-    width: 50px; /* <-- Ancho del espaciador, ajusta si el loop no es suave */
+    width: 50px; /* <-- Ancho del espaciador */
     flex-shrink: 0;
 }
 
-/* Animación de scroll para el ticker */
 @keyframes scroll-left {
     0% { transform: translateX(0%); }
-    /* La traducción debe coincidir con el ancho exacto de un bloque de contenido */
-    /* Si inner es 250% y tiene 2 bloques, cada bloque es 125%. Animamos -125% */
-    100% { transform: translateX(-125%); } /* <-- Ajuste de la traducción */
+    100% { transform: translateX(-125%); } /* Ajuste de la traducción */
 }
 
 
@@ -179,20 +166,20 @@ header {
     display: flex;
     align-items: center;
     gap: 1.5rem; /* Espacio entre iconos */
-    flex-shrink: 0; /* Evita que los iconos se encojan */
+    flex-shrink: 0;
 }
 
 .header-icons .icon {
     font-size: 1.3rem;
     cursor: pointer;
-    color: var(--text-color); /* Color por defecto suave */
-    transition: color 0.3s ease, text-shadow 0.3s ease; /* Transición suave */
+    color: var(--text-color);
+    transition: color 0.3s ease, text-shadow 0.3s ease;
     position: relative; /* Para el dropdown del idioma */
 }
 
 .header-icons .icon:hover {
-    color: #fff; /* Blanco puro al pasar el mouse para contraste */
-    text-shadow: var(--hover-glow); /* Efecto de neón al pasar el mouse */
+    color: #fff;
+    text-shadow: var(--hover-glow);
 }
 
 /* Dropdown de Idioma */
@@ -202,32 +189,32 @@ header {
 
 .language-dropdown {
     position: absolute;
-    top: 100%; /* Debajo del icono */
+    top: 100%;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.95); /* Fondo más oscuro */
+    background-color: rgba(0, 0, 0, 0.95);
     border: 1px solid var(--line-color);
     padding: 10px;
     border-radius: 5px;
-    display: none; /* Oculto por defecto */
+    display: none;
     flex-direction: column;
     gap: 8px;
     z-index: 1010;
-    min-width: 120px; /* Ancho mínimo */
+    min-width: 120px;
 }
 
 .language-switcher:hover .language-dropdown {
-    display: flex; /* Muestra el dropdown al hacer hover en el icono */
+    display: flex;
 }
 
 .language-dropdown span {
     cursor: pointer;
     padding: 5px;
     transition: color 0.3s ease, text-shadow 0.3s ease;
-    color: var(--text-color); /* Color por defecto en el dropdown */
+    color: var(--text-color);
 }
 
 .language-dropdown span:hover {
-     color: var(--corp-purple); /* Color al pasar el mouse */
+     color: var(--corp-purple);
      text-shadow: 0 0 3px var(--corp-purple);
 }
 
@@ -235,34 +222,30 @@ header {
 /* Contenedor Principal (Sidebar + Main Content) */
 .container {
     display: flex;
-    /* Espacio para el header fijo */
     padding-top: var(--header-height);
-    /* Espacio para el footer fijo - Ajustar según la altura del footer */
     padding-bottom: var(--footer-height);
-    min-height: 100vh; /* Altura mínima para ocupar toda la ventana */
+    min-height: 100vh;
     position: relative; /* Necesario para la línea animada */
 }
 
 /* Sidebar */
 .sidebar {
-    width: var(--sidebar-width); /* Ancho fijo del sidebar */
-    background-color: rgba(0, 0, 0, 0.75); /* Fondo semi-transparente */
-    backdrop-filter: blur(10px); /* Desenfoque */
+    width: var(--sidebar-width);
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(10px);
     padding: 20px;
-    /* Espacio para el footer fijo - Ajustar según la altura del footer */
     padding-bottom: var(--footer-height);
-    border-right: 1px solid var(--line-color); /* Línea de separación */
-    position: fixed; /* Sidebar fijo */
-    top: var(--header-height); /* Debajo del header */
+    border-right: 1px solid var(--line-color);
+    position: fixed;
+    top: var(--header-height);
     left: 0;
-    bottom: 0; /* Extendido hasta el fondo (excluyendo el espacio del footer) */
-    overflow-y: auto; /* Permite scroll si el contenido es largo */
-    z-index: 900; /* Menor que el header */
+    bottom: 0;
+    overflow-y: auto;
 
     /* Ocultar barra de scroll en desktop */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-    &::-webkit-scrollbar { /* Chrome, Safari y Opera */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
         display: none;
     }
 }
@@ -270,7 +253,7 @@ header {
 .sidebar nav ul {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Espacio entre items del menú */
+    gap: 15px;
 }
 
 .sidebar .menu-item a {
@@ -278,57 +261,52 @@ header {
     align-items: center;
     padding: 10px 15px;
     border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease; /* Transiciones */
-    /* font-size: 1.1rem; <-- Ajustado */
-    /* Fuente y peso para el menú */
+    transition: background-color 0.3s ease, color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
     font-family: 'Montserrat', sans-serif;
     font-weight: 400; /* Peso más fino */
-    font-size: 1rem; /* <-- Tamaño ligeramente menor */
-    /* Color y Glow del menú por defecto - Blanco Neón Elegante */
+    font-size: 1rem; /* Tamaño ligeramente menor */
     color: var(--neon-white);
-    text-shadow: 0 0 2px var(--neon-white); /* Glow sutil */
+    text-shadow: 0 0 2px var(--neon-white);
 }
 
 .sidebar .menu-item a i {
     margin-right: 15px;
     font-size: 1.4rem;
-    /* Color y Glow del icono por defecto - Blanco Neón Elegante */
     color: var(--neon-white);
-     text-shadow: 0 0 2px var(--neon-white); /* Glow sutil */
+    text-shadow: 0 0 2px var(--neon-white);
     transition: color 0.3s ease;
 }
 
 .sidebar .menu-item a:hover {
-    background-color: rgba(255, 255, 255, 0.08); /* Fondo muy sutil al pasar el mouse */
-    color: var(--corp-blue); /* Color del texto al pasar el mouse */
-    text-shadow: 0 0 5px var(--corp-blue); /* Efecto de neón en texto al pasar el mouse */
-    transform: translateX(5px); /* Pequeño movimiento */
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--corp-blue);
+    text-shadow: 0 0 5px var(--corp-blue);
+    transform: translateX(5px);
 }
 
 .sidebar .menu-item a:hover i {
-     color: var(--corp-green); /* Color del icono al pasar el mouse */
-     text-shadow: 0 0 5px var(--corp-green); /* Efecto de neón en icono al pasar el mouse */
+     color: var(--corp-green);
+     text-shadow: 0 0 5px var(--corp-green);
 }
 
 /* Main Content Area */
 .main-content {
-    flex-grow: 1; /* Ocupa el espacio restante */
-    margin-left: var(--sidebar-width); /* Espacio para el sidebar fijo */
+    flex-grow: 1;
+    margin-left: var(--sidebar-width);
     padding: 2rem;
-    /* Espacio para el footer fijo - Ajustar según la altura del footer */
     padding-bottom: var(--footer-height);
-    position: relative; /* Necesario para posicionar secciones */
-    overflow-y: auto; /* Permite scroll interno si el contenido es muy largo */
+    position: relative;
+    overflow-y: auto;
 }
 
 /* Secciones de herramientas (inicialmente ocultas) */
 .main-content section {
-    display: none; /* Oculta todas las secciones por defecto */
+    display: none;
 }
 
 .main-content section.active {
-    display: block; /* Muestra solo la sección activa */
-    animation: fadeIn 0.5s ease-in-out; /* Animación de aparición */
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -336,27 +314,219 @@ header {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Estilos de contenido placeholder */
-.main-content h1 {
-    color: var(--corp-purple); /* Color para H1 */
+/* Estilos generales para títulos y párrafos dentro de tool-section */
+.tool-section h2 {
+    color: var(--corp-green); /* Color para H2 */
+    text-shadow: 0 0 4px var(--corp-green); /* Glow ajustado */
+    margin-bottom: 1.5rem; /* Espacio debajo del título principal de la sección */
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.tool-section p {
+    line-height: 1.8;
+    color: var(--text-color);
+    font-weight: 400;
+    margin-bottom: 1rem; /* Espacio debajo de los párrafos generales */
+}
+
+/* Estilos específicos para la sección HOME */
+#home h1 {
+    color: var(--corp-purple); /* Color para H1 en Home */
     text-shadow: 0 0 6px var(--corp-purple); /* Glow ajustado */
     margin-bottom: 1.5rem;
     font-size: 2.5rem;
-    font-weight: 600; /* Peso para H1 */
+    font-weight: 600;
 }
 
-.main-content h2 {
-    color: var(--corp-green); /* Color para H2 */
-    text-shadow: 0 0 4px var(--corp-green); /* Glow ajustado */
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
-    font-weight: 600; /* Peso para H2 */
+/* Estilos específicos para el Wallet Tracker */
+#wallet-tracker .input-area {
+    display: flex;
+    gap: 15px; /* Espacio entre input y botón */
+    margin-bottom: 30px; /* Espacio debajo del área de input */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en móvil */
+    align-items: center;
 }
 
-.main-content p {
-    line-height: 1.8; /* Espacio entre líneas mejorado */
+#wallet-tracker #solana-wallet-address {
+    flex-grow: 1; /* Permite que el input ocupe el espacio disponible */
+    padding: 12px;
+    border: 1px solid var(--line-color);
+    background-color: #1a1a1a;
+    color: #fff;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1rem;
+    min-width: 200px; /* Ancho mínimo */
+}
+
+#wallet-tracker #track-wallet-btn {
+    padding: 12px 20px;
+    background-color: var(--corp-blue);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    font-weight: 600;
+    display: flex; /* Para alinear icono y texto si lo hay */
+    align-items: center;
+    gap: 8px;
+}
+
+#wallet-tracker #track-wallet-btn:hover {
+    background-color: var(--corp-purple);
+    opacity: 0.9;
+}
+
+#wallet-tracker #track-wallet-btn:active {
+    opacity: 0.7;
+}
+
+
+#wallet-data-display {
+     margin-top: 20px;
+}
+
+#initial-message {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}
+
+#loading-indicator {
+    text-align: center;
+    color: var(--corp-blue);
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+#loading-indicator i {
+    margin-left: 10px;
+}
+
+
+#error-message {
+    color: #ff4d4d; /* Color rojo para errores */
+    text-align: center;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+/* Estilos para las tarjetas de datos (Balances, NFTs, Transacciones) */
+.data-card {
+    background-color: rgba(255, 255, 255, 0.05); /* Fondo sutil */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borde suave */
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px; /* Espacio entre tarjetas */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.data-card h3 {
+    color: var(--neon-white); /* Color blanco neón para subtítulos de tarjeta */
+    text-shadow: 0 0 3px var(--neon-white);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre icono y texto del título */
+}
+
+.data-card h3 i {
+    font-size: 1.5rem;
+    color: var(--corp-green); /* Color del icono en el título de la tarjeta */
+    text-shadow: 0 0 4px var(--corp-green);
+}
+
+/* Estilo específico para el saldo SOL */
+#sol-balance-card p {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--corp-green); /* Color verde para el saldo SOL */
+    text-shadow: 0 0 4px var(--corp-green);
+    margin: 0;
+}
+
+/* Estilos para listas dentro de tarjetas (Tokens, Transacciones) */
+.data-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.data-card ul li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Separador entre ítems de lista */
+    display: flex;
+    justify-content: space-between; /* Distribuye contenido a los lados */
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.data-card ul li:last-child {
+    border-bottom: none; /* Elimina el borde del último ítem */
+}
+
+.data-card ul li .item-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre icono/nombre/símbolo */
+}
+
+.data-card ul li .item-info i {
+    font-size: 1.2rem;
+    color: var(--corp-purple); /* Color de íconos en listas */
+}
+
+.data-card ul li .item-value {
+    font-weight: 600;
+    color: var(--neon-white); /* Color del valor (cantidad, monto) */
+}
+
+/* Estilos para la galería de NFTs */
+#nft-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Grilla responsiva de NFTs */
+    gap: 15px; /* Espacio entre NFTs */
+}
+
+#nft-gallery .nft-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    cursor: pointer; /* Indica que es clickeable (ej. para ver detalles) */
+}
+
+#nft-gallery .nft-item:hover {
+    transform: translateY(-5px); /* Efecto hover sutil */
+}
+
+#nft-gallery .nft-item img {
+    max-width: 100%;
+    height: auto; /* Mantiene la proporción */
+    border-radius: 3px;
+    margin-bottom: 8px;
+}
+
+#nft-gallery .nft-item p {
+    font-size: 0.8rem;
     color: var(--text-color);
-    font-weight: 400; /* Peso normal para párrafos */
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Añade ... si el texto es muy largo */
+}
+
+
+/* Utilería para ocultar elementos */
+.hidden {
+    display: none;
 }
 
 
@@ -366,39 +536,35 @@ footer {
     padding: 1rem 2rem;
     border-top: 1px solid var(--line-color);
     text-align: center;
-    /* Propiedades para hacerlo fijo en la parte inferior */
     position: fixed;
     bottom: 0;
-    /* Ajustar para que empiece después del sidebar */
-    left: var(--sidebar-width); /* <-- Empieza después del ancho del sidebar fijo */
-    width: calc(100% - var(--sidebar-width)); /* <-- Ocupa el resto del ancho */
-    height: var(--footer-height); /* <-- Altura fija estimada del footer */
-    display: flex; /* Usar flexbox para centrar contenido verticalmente */
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-    z-index: 950; /* Asegura que esté por encima del contenido principal, pero debajo de modales/header */
-    flex-direction: column; /* Asegurar apilamiento vertical de elementos internos */
-    box-sizing: border-box; /* Asegura que el padding esté incluido en height/width */
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    height: var(--footer-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 950;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .footer-content {
-    /* flex-direction: space-around; Ya no necesitamos justificar espacio si solo hay un elemento */
-    flex-wrap: wrap; /* Permite que el elemento se envuelva en pantallas pequeñas */
-    gap: 30px; /* Espacio entre elementos del footer (ahora solo social media) */
-    margin-bottom: 0; /* Eliminar margin bottom ya que el footer es fijo */
-    width: 100%; /* Ocupa todo el ancho del footer */
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 0;
+    width: 100%;
     display: flex;
-    justify-content: center; /* Centrar contenido si solo queda un elemento */
+    justify-content: center;
     align-items: center;
-    flex-direction: column; /* Apilar contenido verticalmente */
+    flex-direction: column;
 }
 
-
 .social-media h3 {
-    color: var(--corp-blue); /* Títulos del footer */
-    margin-bottom: 10px; /* Mantener un pequeño margen debajo del título */
-    text-shadow: 0 0 4px var(--corp-blue); /* Glow ajustado */
-    font-weight: 600; /* Peso para títulos del footer */
+    color: var(--corp-blue);
+    margin-bottom: 10px;
+    text-shadow: 0 0 4px var(--corp-blue);
+    font-weight: 600;
 }
 
 .social-media ul {
@@ -409,53 +575,53 @@ footer {
 
 .social-media a {
     font-size: 1.8rem;
-    color: var(--text-color); /* Color por defecto */
+    color: var(--text-color);
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .social-media a:hover {
-    color: var(--corp-purple); /* Color al pasar el mouse */
-    text-shadow: var(--hover-glow); /* Efecto de glow */
+    color: var(--corp-purple);
+    text-shadow: var(--hover-glow);
 }
 
 .footer-bottom {
     color: #555;
     font-size: 0.9rem;
-    margin-top: 10px; /* Ajustar margen si es necesario */
-    width: 100%; /* Ocupa todo el ancho */
+    margin-top: 10px;
+    width: 100%;
 }
 
 /* Modales */
 .modal {
-    display: none; /* Oculto por defecto */
-    position: fixed; /* Posición fija en la pantalla */
-    z-index: 2000; /* Por encima de todo */
+    display: none;
+    position: fixed;
+    z-index: 2000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Permite scroll si el contenido es largo */
-    background-color: rgba(0, 0, 0, 0.9); /* Fondo oscuro más opaco */
-    backdrop-filter: blur(8px); /* Desenfoque */
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(8px);
     justify-content: center;
     align-items: center;
 }
 
 .modal.show {
-    display: flex; /* Muestra el modal */
+    display: flex;
 }
 
 .modal-content {
     background-color: var(--dark-background);
-    margin: auto; /* Centrar */
+    margin: auto;
     padding: 30px;
-    border: 1px solid var(--corp-purple); /* Borde con color corporativo */
-    box-shadow: 0 0 20px var(--corp-purple); /* Sombra con color corporativo - Ajustado */
+    border: 1px solid var(--corp-purple);
+    box-shadow: 0 0 20px var(--corp-purple);
     border-radius: 10px;
-    width: 80%; /* Ancho del modal */
-    max-width: 700px; /* Ancho máximo un poco mayor */
+    width: 80%;
+    max-width: 700px;
     position: relative;
-    animation: scaleIn 0.3s ease-out; /* Animación de aparición */
+    animation: scaleIn 0.3s ease-out;
 }
 
 @keyframes scaleIn {
@@ -464,7 +630,7 @@ footer {
 }
 
 .close-button {
-    color: var(--text-color); /* Color del botón cerrar */
+    color: var(--text-color);
     font-size: 28px;
     font-weight: bold;
     position: absolute;
@@ -481,7 +647,7 @@ footer {
 }
 
 /* Estilos para el input de búsqueda dentro del modal */
-#search-input {
+#search-modal #search-input {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
@@ -527,13 +693,6 @@ footer {
     font-weight: 600; /* Peso para títulos de modal */
 }
 
-/* Eliminados: Input styles duplicados si ya se definieron para #search-input */
-/*
-.modal-content input[type="text"],
-.modal-content input[type="email"],
-.modal-content input[type="password"] { ... }
-*/
-
 
 /* Responsive Design */
 
@@ -542,34 +701,77 @@ footer {
     .price-ticker {
         margin-left: 15px;
         margin-right: 15px;
-        /* Reducir ancho máximo para dejar espacio al logo/iconos en tablets */
         max-width: 250px; /* Ajusta este valor si es necesario */
     }
 
      .price-item {
-         padding: 0 8px; /* Menos espacio entre items en tablet */
-         margin-right: 15px; /* Ajustar margen */
-         font-size: 0.8rem; /* Letra un poco más pequeña */
+         padding: 0 8px;
+         margin-right: 15px;
+         font-size: 0.8rem;
      }
 
      .price-item i {
          font-size: 1rem;
      }
 
-     /* Ajustar la animación y el ancho del inner para la nueva cantidad/tamaño de ítems */
      .price-ticker-inner {
-         width: 250%; /* Puede necesitar ajuste fino */
-         animation-duration: 40s; /* Ajustar duración */
+         width: 250%;
+         animation-duration: 40s;
      }
      @keyframes scroll-left {
         0% { transform: translateX(0%); }
-        100% { transform: translateX(-125%); } /* Ajusta este porcentaje si el ancho del inner/content cambia */
+        100% { transform: translateX(-125%); }
+     }
+
+    /* Ajustes para Wallet Tracker en tablets */
+    #wallet-tracker .input-area {
+        gap: 10px;
+    }
+    #wallet-tracker #solana-wallet-address {
+        min-width: 150px;
+    }
+    #wallet-tracker #track-wallet-btn {
+         padding: 10px 15px;
+         font-size: 0.9rem;
+    }
+     .data-card {
+        padding: 15px;
+     }
+     .data-card h3 {
+        font-size: 1.2rem;
+        gap: 8px;
+     }
+     .data-card h3 i {
+        font-size: 1.4rem;
+     }
+      #sol-balance-card p {
+        font-size: 1.3rem;
+     }
+     .data-card ul li {
+        padding: 10px 0;
+        font-size: 0.9rem;
+     }
+     .data-card ul li .item-info i {
+        font-size: 1.1rem;
+     }
+      #nft-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 10px;
+     }
+     #nft-gallery .nft-item {
+        padding: 8px;
+     }
+      #nft-gallery .nft-item img {
+        margin-bottom: 5px;
+     }
+     #nft-gallery .nft-item p {
+        font-size: 0.75rem;
+     }
+     #search-results {
+         max-height: 250px;
      }
 
 
-     /* Footer sigue fijo, no necesita cambio aquí */
-     /* Sidebar sigue fijo, no necesita cambio aquí */
-     /* Main content sigue con margin/padding left/bottom, no necesita cambio aquí */
 }
 
 
@@ -577,25 +779,24 @@ footer {
 @media (max-width: 768px) {
      header {
         padding: 0.8rem 1rem;
-        flex-direction: column; /* Apilar header items en móvil */
-        align-items: flex-start; /* Alinear a la izquierda */
-        gap: 10px; /* Espacio entre elementos apilados */
-        height: auto; /* Altura automática */
-        position: static; /* Quitar fixed en móvil */
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        height: auto;
+        position: static;
      }
 
      .logo {
          font-size: 2.5rem; /* Ajustar tamaño del logo en móvil */
-         text-shadow: 0 0 4px var(--corp-blue); /* Ajustar glow en móvil */
+         text-shadow: 0 0 4px var(--corp-blue);
          display: block;
          padding: 0;
      }
 
-
     .header-icons {
-         width: 100%; /* Ocupar todo el ancho */
-         justify-content: space-around; /* Distribuir iconos */
-         gap: 0.5rem; /* Menos espacio */
+         width: 100%;
+         justify-content: space-around;
+         gap: 0.5rem;
     }
 
     .header-icons .icon {
@@ -603,161 +804,169 @@ footer {
     }
 
     .price-ticker {
-        margin: 0; /* Eliminar márgenes laterales en móvil */
-        width: 100%; /* Ocupar todo el ancho */
-        max-width: none; /* Eliminar ancho máximo */
+        margin: 0;
+        width: 100%;
+        max-width: none;
     }
 
     .price-ticker-inner {
-        /* Puede que necesites ajustar el width y la animación aquí si el contenido es muy largo */
-        width: 300%; /* Puede requerir más ancho en móvil por el número de items */
-        animation-duration: 50s; /* Más lento en móvil por más items */
+        width: 300%;
+        animation-duration: 50s;
     }
 
      @keyframes scroll-left {
          0% { transform: translateX(0); }
-         /* Si inner es 300% y tiene 2 bloques, cada bloque es 150%. Animamos -150% */
-         100% { transform: translateX(-150%); } /* Ajusta este porcentaje */
+         100% { transform: translateX(-150%); }
      }
 
      .price-item {
-         padding: 0 5px; /* Menos padding en móvil */
-         margin-right: 10px; /* Ajustar margen */
+         padding: 0 5px;
+         margin-right: 10px;
          font-size: 0.8rem;
      }
      .price-item i {
          font-size: 1rem;
      }
     .price-item-spacer {
-        width: 30px; /* Espaciador más pequeño en móvil */
+        width: 30px;
     }
 
 
     .container {
-        flex-direction: column; /* Apila sidebar y main content */
-        padding-top: 0; /* No necesita padding top ya que el header no es fijo */
-        /* Eliminar padding-bottom fijo en móvil ya que el footer no es fijo */
-         padding-bottom: 0;
+        flex-direction: column;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 
     .sidebar {
-        position: static; /* Deja de ser fijo en móvil */
-        width: 100%; /* Ocupa todo el ancho */
-        height: auto; /* Altura automática */
-        border-right: none; /* Elimina la línea de la derecha */
-        border-bottom: 1px solid var(--line-color); /* Añade línea abajo */
-        overflow-y: visible; /* No necesita scroll interno en esta disposición */
-        padding: 10px 10px; /* Ajusta padding */
-        /* Eliminar padding-bottom fijo en móvil si el footer no es fijo */
-        padding-bottom: 10px; /* Restaurar padding normal o ajustado */
+        position: static;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line-color);
+        overflow-y: visible;
+        padding: 10px 10px;
+        padding-bottom: 10px;
     }
 
     .sidebar nav ul {
-        flex-direction: row; /* Menú horizontal en móvil */
-        overflow-x: auto; /* Permite scroll horizontal si hay muchos items */
-        padding-bottom: 10px; /* Espacio debajo para scroll */
-        gap: 8px; /* Espacio entre items */
-         /* Ocultar scrollbar por defecto */
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        gap: 8px;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 
-    /* Ocultar scrollbar en Chrome, Safari y Opera */
      .sidebar nav ul::-webkit-scrollbar {
         display: none;
      }
 
-
     .sidebar .menu-item a {
-         flex-direction: column; /* Icono arriba, texto abajo */
+         flex-direction: column;
          text-align: center;
-         padding: 8px 5px; /* Ajusta padding */
+         padding: 8px 5px;
          font-size: 0.9rem;
-         min-width: 70px; /* Ancho mínimo para cada botón */
-         gap: 5px; /* Espacio entre icono y texto en móvil */
+         min-width: 70px;
+         gap: 5px;
     }
 
     .sidebar .menu-item a i {
-        margin-right: 0; /* Sin margen a la derecha */
-        margin-bottom: 0; /* Sin margen abajo (usamos gap en el flex) */
+        margin-right: 0;
+        margin-bottom: 0;
         font-size: 1.2rem;
     }
 
     .sidebar .menu-item a .menu-text {
-        display: block; /* Asegura que el texto esté en su propia línea */
-        font-size: 0.7rem; /* Texto más pequeño en móvil */
+        display: block;
+        font-size: 0.7rem;
     }
 
     .main-content {
-        margin-left: 0; /* Sin margen a la izquierda en móvil */
-        padding: 1rem; /* Ajusta padding */
-         /* Eliminar padding-bottom fijo en móvil ya que el footer no es fijo */
-         padding-bottom: 1rem; /* Restaurar padding normal o ajustado */
+        margin-left: 0;
+        padding: 1rem;
+        padding-bottom: 1rem;
     }
 
-    .main-content h1 {
+    .tool-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    #home h1 {
         font-size: 2rem;
     }
 
-     .main-content h2 {
-        font-size: 1.5rem;
+     /* Ajustes para Wallet Tracker en móvil */
+     #wallet-tracker .input-area {
+        flex-direction: column; /* Apilar input y botón */
+        gap: 10px;
+        margin-bottom: 20px;
+        align-items: stretch; /* Estirar elementos */
     }
-
-     .main-content p {
-         line-height: 1.6;
+    #wallet-tracker #solana-wallet-address {
+        min-width: auto; /* Eliminar ancho mínimo fijo */
+        width: 100%; /* Ocupar ancho completo */
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    #wallet-tracker #track-wallet-btn {
+         padding: 10px 15px;
+         font-size: 0.9rem;
+         justify-content: center; /* Centrar contenido del botón */
+    }
+     .data-card {
+        padding: 15px;
+        margin-bottom: 15px;
+     }
+     .data-card h3 {
+        font-size: 1.1rem;
+        gap: 6px;
+        margin-bottom: 10px;
+     }
+      .data-card h3 i {
+        font-size: 1.3rem;
+     }
+     #sol-balance-card p {
+        font-size: 1.2rem;
+     }
+      .data-card ul li {
+        padding: 8px 0;
+        font-size: 0.85rem;
+     }
+     .data-card ul li .item-info {
+         flex-direction: column; /* Apilar icono y texto del token */
+         align-items: flex-start;
+         gap: 4px;
+     }
+      .data-card ul li .item-info i {
+         font-size: 1rem;
+      }
+      .data-card ul li .item-value {
+         font-size: 0.9rem;
+      }
+      #nft-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); /* Grilla más pequeña */
+        gap: 10px;
+     }
+     #nft-gallery .nft-item {
+        padding: 5px;
+     }
+      #nft-gallery .nft-item img {
+        margin-bottom: 5px;
+     }
+     #nft-gallery .nft-item p {
+        font-size: 0.7rem;
      }
 
-
-    /* Footer en móvil no es fijo */
-    footer {
-        position: static; /* <-- Footer estático en móvil */
-        left: 0; /* <-- Reset left */
-        width: 100%; /* <-- Reset width */
-        height: auto; /* Altura automática */
-        padding-bottom: 1rem; /* Padding normal */
-        margin-top: 2rem; /* Espacio arriba del footer estático */
-    }
-
-     .footer-content {
-        flex-direction: column; /* Apila contenido del footer */
-        align-items: center;
-        gap: 20px;
-    }
-
-
-    .social-media ul {
-        gap: 15px;
-    }
-
-     .social-media a {
-         font-size: 1.5rem; /* Iconos de redes sociales más pequeños en móvil */
-     }
-
-
-     .modal-content {
-        width: 95%; /* Modal más ancho en móvil */
-        padding: 20px;
-    }
-
-     .close-button {
-        font-size: 24px;
-        right: 10px;
-     }
-
-     .modal-content h2 {
-         font-size: 1.8rem;
-     }
-
-     /* Estilos para el input de búsqueda dentro del modal en móvil */
-    #search-input {
+     #search-modal #search-input {
         margin-bottom: 15px;
         padding: 10px;
         font-size: 0.9rem;
     }
 
-     /* Estilos para el contenedor de resultados de búsqueda en móvil */
-    #search-results {
-        max-height: 200px; /* Menor altura en móvil */
+     #search-results {
+        max-height: 200px;
         padding-right: 5px;
     }
 
@@ -767,6 +976,29 @@ footer {
         font-size: 0.9rem;
     }
 
+
+    footer {
+        position: static;
+        left: 0;
+        width: 100%;
+        height: auto;
+        padding-bottom: 1rem;
+        margin-top: 2rem;
+    }
+
+     .footer-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .social-media ul {
+        gap: 15px;
+    }
+
+     .social-media a {
+         font-size: 1.5rem;
+     }
 
      /* Ocultar la línea animada en móvil */
     .container::after {
@@ -779,13 +1011,12 @@ footer {
     content: '';
     position: absolute;
     top: 0;
-    left: var(--sidebar-width); /* <-- Empieza después del sidebar */
+    left: var(--sidebar-width);
     width: 1px;
     height: 100%;
-    /* Degradado con colores corporativos */
     background: linear-gradient(to bottom, transparent, var(--corp-purple) 20%, var(--corp-blue) 80%, transparent);
-    animation: lineFlow 6s linear infinite; /* Animación */
-    z-index: 500; /* Por encima del fondo, por debajo del contenido */
+    animation: lineFlow 6s linear infinite;
+    z-index: 500;
 }
 
 @keyframes lineFlow {
