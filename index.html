@@ -140,9 +140,42 @@
                  <h2>Analizador de Sentimientos</h2>
                  <p>Aquí irá la herramienta de análisis de sentimientos.</p>
              </section>
-              <section id="wallet-tracker" class="tool-section">
+
+             <section id="wallet-tracker" class="tool-section">
                  <h2>Wallet Tracker</h2>
-                 <p>Aquí irá la herramienta de seguimiento de wallets.</p>
+                 <div class="input-area">
+                     <input type="text" id="solana-wallet-address" placeholder="Introduce la dirección de la billetera de Solana">
+                     <button id="track-wallet-btn"><i class="fas fa-search"></i> Rastrear</button>
+                 </div>
+                 <div id="wallet-data-display">
+                     <p id="initial-message">Introduce una dirección de billetera de Solana para ver sus detalles.</p>
+                     <div id="loading-indicator" class="hidden">Cargando datos de la billetera... <i class="fas fa-spinner fa-spin"></i></div>
+                     <div id="error-message" class="hidden"></div>
+
+                     <div id="sol-balance-card" class="data-card hidden">
+                          <h3><i class="fab fa-solana"></i> Saldo SOL</h3>
+                          <p><span id="sol-balance">-</span> SOL</p>
+                     </div>
+
+                     <div id="token-balances-card" class="data-card hidden">
+                          <h3><i class="fas fa-coins"></i> Tokens (SPL)</h3>
+                          <ul id="token-list">
+                              </ul>
+                     </div>
+
+                      <div id="nfts-card" class="data-card hidden">
+                          <h3><i class="fas fa-image"></i> NFTs</h3>
+                          <div id="nft-gallery">
+                              </div>
+                     </div>
+
+                      <div id="transactions-card" class="data-card hidden">
+                          <h3><i class="fas fa-exchange-alt"></i> Transacciones Recientes</h3>
+                          <ul id="transaction-list">
+                              </ul>
+                     </div>
+
+                 </div>
              </section>
              <section id="bot-trading" class="tool-section"><h2>Bot Trading</h2><p>Aquí irá la herramienta de trading automático.</p></section>
              <section id="sniper" class="tool-section"><h2>Sniper</h2><p>Aquí irá la herramienta Sniper.</p></section>
