@@ -6,10 +6,13 @@
     --dark-background: #080808; /* Negro un poco más profundo */
     --line-color: #181818;    /* Color para las líneas de separación */
     --text-color: #cccccc;   /* Color de texto general más suave */
-    --soft-highlight: #333333; /* Para fondos sutiles en hover (añadido en el intento anterior pero útil aquí) */
+    --soft-highlight: #333333; /* Para fondos sutiles en hover */
+    --neon-white: #e0f0ff;   /* Blanco neón elegante para el menú */
 
-    /* Ajuste del glow con los colores y menor intensidad de esta paleta */
-    --hover-glow: 0 0 6px var(--corp-blue), 0 0 8px var(--corp-purple), 0 0 10px var(--corp-green);
+
+    /* Ajuste del glow con los colores y menor intensidad ("más fino") */
+    /* Reducimos los valores del blur */
+    --hover-glow: 0 0 4px var(--corp-blue), 0 0 6px var(--corp-purple), 0 0 8px var(--corp-green);
 
     /* Definir un color pink suave solo para el hover del botón cerrar */
     --close-button-hover: #ffb6c1; /* LightPink para el hover de cerrar */
@@ -69,7 +72,7 @@ header {
     background-color: rgba(0, 0, 0, 0.85); /* Fondo más oscuro */
     backdrop-filter: blur(12px); /* Efecto de desenfoque ligeramente mayor */
     padding: 1rem 2rem;
-    display: flex;
+    display: flex; /* Permite que el logo, ticker e iconos estén en fila */
     justify-content: space-between;
     align-items: center;
     position: fixed; /* Barra superior fija */
@@ -84,13 +87,67 @@ header {
     font-size: 1.8rem;
     font-weight: bold;
     color: var(--corp-blue); /* Color del logo */
-    text-shadow: 0 0 5px var(--corp-blue); /* Efecto de neón simple */
+    text-shadow: 0 0 4px var(--corp-blue); /* Glow del logo ajustado */
+    flex-shrink: 0; /* Evita que el logo se encoja */
 }
+
+/* Carrusel de Precios */
+.price-ticker {
+    display: flex;
+    align-items: center;
+    height: 30px; /* Altura del ticker */
+    overflow: hidden; /* Oculta el contenido que se desborda */
+    margin-left: 30px; /* Espacio entre logo y ticker */
+    margin-right: 30px; /* Espacio entre ticker e iconos de header */
+    border: 1px solid var(--line-color);
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+    flex-grow: 1; /* Permite que el ticker ocupe el espacio disponible */
+    max-width: 600px; /* Ancho máximo en pantallas grandes */
+}
+
+.price-ticker-inner {
+    display: flex; /* Permite que los dos price-ticker-content estén en fila */
+    width: 200%; /* El doble del ancho del contenedor para el scroll continuo */
+    animation: scroll-left 30s linear infinite; /* Ajusta el tiempo y timing function */
+}
+
+.price-ticker-content {
+    display: flex;
+    white-space: nowrap; /* Evita que los ítems se envuelvan */
+    flex-shrink: 0; /* Evita que se encojan */
+     width: 50%; /* Cada copia ocupa el 50% del contenedor interno */
+     justify-content: space-around; /* Distribuye el espacio entre items */
+     align-items: center;
+}
+
+.price-item {
+    display: inline-flex; /* Permite alinear icono y texto */
+    align-items: center;
+    padding: 0 15px; /* Espacio entre ítems */
+    color: var(--text-color);
+    font-size: 0.9rem;
+     flex-shrink: 0; /* Importante para el scroll, evita que los items se encojan */
+}
+
+.price-item i {
+    margin-right: 5px;
+    font-size: 1.1rem;
+    color: var(--corp-green); /* Color del icono del precio (ej: verde) */
+}
+
+/* Animación de scroll para el ticker */
+@keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* Se desplaza un 50% del ancho del contenedor interno */
+}
+
 
 .header-icons {
     display: flex;
     align-items: center;
     gap: 1.5rem; /* Espacio entre iconos */
+    flex-shrink: 0; /* Evita que los iconos se encojan */
 }
 
 .header-icons .icon {
@@ -179,26 +236,30 @@ header {
     border-radius: 5px;
     transition: background-color 0.3s ease, color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease; /* Transiciones */
     font-size: 1.1rem;
-    color: var(--text-color); /* Color del texto por defecto */
+    /* Color y Glow del menú por defecto - Blanco Neón Elegante */
+    color: var(--neon-white);
+    text-shadow: 0 0 2px var(--neon-white); /* Glow sutil */
 }
 
 .sidebar .menu-item a i {
     margin-right: 15px;
     font-size: 1.4rem;
-    color: var(--corp-purple); /* Color de icono por defecto */
+    /* Color y Glow del icono por defecto - Blanco Neón Elegante */
+    color: var(--neon-white);
+     text-shadow: 0 0 2px var(--neon-white); /* Glow sutil */
     transition: color 0.3s ease;
 }
 
 .sidebar .menu-item a:hover {
     background-color: rgba(255, 255, 255, 0.08); /* Fondo muy sutil al pasar el mouse */
     color: var(--corp-blue); /* Color del texto al pasar el mouse */
-    text-shadow: 0 0 5px var(--corp-blue); /* Efecto de neón en texto */
+    text-shadow: 0 0 5px var(--corp-blue); /* Efecto de neón en texto al pasar el mouse */
     transform: translateX(5px); /* Pequeño movimiento */
 }
 
 .sidebar .menu-item a:hover i {
      color: var(--corp-green); /* Color del icono al pasar el mouse */
-     text-shadow: 0 0 5px var(--corp-green); /* Efecto de neón en icono */
+     text-shadow: 0 0 5px var(--corp-green); /* Efecto de neón en icono al pasar el mouse */
 }
 
 /* Main Content Area */
@@ -228,14 +289,14 @@ header {
 /* Estilos de contenido placeholder */
 .main-content h1 {
     color: var(--corp-purple); /* Color para H1 */
-    text-shadow: 0 0 8px var(--corp-purple);
+    text-shadow: 0 0 6px var(--corp-purple); /* Glow ajustado */
     margin-bottom: 1.5rem;
     font-size: 2.5rem;
 }
 
 .main-content h2 {
     color: var(--corp-green); /* Color para H2 */
-    text-shadow: 0 0 6px var(--corp-green);
+    text-shadow: 0 0 4px var(--corp-green); /* Glow ajustado */
     margin-bottom: 1rem;
     font-size: 1.8rem;
 }
@@ -268,7 +329,7 @@ footer {
 .social-media h3 {
     color: var(--corp-blue); /* Títulos del footer */
     margin-bottom: 10px;
-    text-shadow: 0 0 5px var(--corp-blue);
+    text-shadow: 0 0 4px var(--corp-blue); /* Glow ajustado */
 }
 
 .newsletter form {
@@ -354,7 +415,7 @@ footer {
     margin: auto; /* Centrar */
     padding: 30px;
     border: 1px solid var(--corp-purple); /* Borde con color corporativo */
-    box-shadow: 0 0 25px var(--corp-purple); /* Sombra con color corporativo */
+    box-shadow: 0 0 20px var(--corp-purple); /* Sombra con color corporativo - Ajustado */
     border-radius: 10px;
     width: 80%; /* Ancho del modal */
     max-width: 700px; /* Ancho máximo un poco mayor */
@@ -388,7 +449,7 @@ footer {
 .modal-content h2 {
     margin-top: 0;
     color: var(--corp-green); /* Color para títulos de modal */
-    text-shadow: 0 0 6px var(--corp-green);
+    text-shadow: 0 0 4px var(--corp-green); /* Glow ajustado */
     margin-bottom: 20px;
     font-size: 2rem;
 }
@@ -409,26 +470,64 @@ footer {
 
 
 /* Responsive Design */
-@media (max-width: 768px) {
-    header {
-        padding: 0.8rem 1rem;
+@media (max-width: 992px) { /* Ajuste breakpoint para incluir el ticker en tablet */
+    .price-ticker {
+        margin-left: 15px;
+        margin-right: 15px;
+        max-width: 300px; /* Reducir ancho máximo en tablets */
     }
 
-    .logo {
-        font-size: 1.4rem;
-    }
+     .price-item {
+         padding: 0 10px; /* Menos espacio entre items en tablet */
+         font-size: 0.85rem;
+     }
+}
+
+@media (max-width: 768px) {
+     header {
+        padding: 0.8rem 1rem;
+        flex-direction: column; /* Apilar header items en móvil */
+        align-items: flex-start; /* Alinear a la izquierda */
+        gap: 10px; /* Espacio entre elementos apilados */
+        height: auto; /* Altura automática */
+        position: static; /* Quitar fixed en móvil */
+     }
+
+     .logo {
+         font-size: 1.6rem;
+     }
 
     .header-icons {
-         gap: 0.8rem;
+         width: 100%; /* Ocupar todo el ancho */
+         justify-content: space-around; /* Distribuir iconos */
+         gap: 0.5rem; /* Menos espacio */
     }
 
     .header-icons .icon {
         font-size: 1.1rem;
     }
 
+    .price-ticker {
+        margin: 0; /* Eliminar márgenes laterales en móvil */
+        width: 100%; /* Ocupar todo el ancho */
+        max-width: none; /* Eliminar ancho máximo */
+    }
+
+    .price-ticker-inner {
+        /* Puede que necesites ajustar el width y la animación aquí si el contenido es muy largo */
+        width: 250%; /* Puede requerir más ancho en móvil */
+        animation: scroll-left 40s linear infinite; /* Más lento en móvil */
+    }
+
+     @keyframes scroll-left {
+         0% { transform: translateX(0); }
+         100% { transform: translateX(-50%); } /* Mismo porcentaje, puede necesitar ajuste */
+     }
+
+
     .container {
         flex-direction: column; /* Apila sidebar y main content */
-        padding-top: 60px; /* Ajusta si el header es más pequeño */
+        padding-top: 0; /* No necesita padding top ya que el header no es fijo */
     }
 
     .sidebar {
@@ -530,6 +629,11 @@ footer {
      .modal-content h2 {
          font-size: 1.8rem;
      }
+
+     /* Ocultar la línea animada en móvil */
+    .container::after {
+        display: none;
+    }
 }
 
 /* Animación de las líneas de separación */
@@ -542,18 +646,11 @@ footer {
     height: 100%;
     /* Degradado con colores corporativos */
     background: linear-gradient(to bottom, transparent, var(--corp-purple) 20%, var(--corp-blue) 80%, transparent);
-    animation: lineFlow 6s linear infinite; /* Animación un poco más lenta */
+    animation: lineFlow 6s linear infinite; /* Animación */
     z-index: 500; /* Por encima del fondo, por debajo del contenido */
 }
 
 @keyframes lineFlow {
     0% { transform: translateY(-100%); }
     100% { transform: translateY(100%); }
-}
-
-/* Ocultar la línea animada en móvil */
-@media (max-width: 768px) {
-    .container::after {
-        display: none;
-    }
 }
