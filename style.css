@@ -204,7 +204,8 @@ header {
 .container {
     display: flex;
     padding-top: 80px; /* Espacio para el header fijo */
-    min-height: calc(100vh - 80px - 150px); /* Altura mínima (vh - header - footer) */
+    /* Añadir padding-bottom para dejar espacio al footer fijo */
+    min-height: calc(100vh - 80px - 150px); /* Altura mínima original */
     position: relative; /* Necesario para la línea animada */
 }
 
@@ -214,6 +215,8 @@ header {
     background-color: rgba(0, 0, 0, 0.75); /* Fondo semi-transparente */
     backdrop-filter: blur(10px); /* Desenfoque */
     padding: 20px;
+    /* Añadir padding-bottom para dejar espacio al footer fijo */
+    padding-bottom: 100px; /* Ajustar según la altura del footer */
     border-right: 1px solid var(--line-color); /* Línea de separación */
     position: fixed; /* Sidebar fijo */
     top: 80px; /* Debajo del header */
@@ -267,6 +270,8 @@ header {
     flex-grow: 1; /* Ocupa el espacio restante */
     margin-left: 250px; /* Espacio para el sidebar fijo */
     padding: 2rem;
+    /* Añadir padding-bottom para dejar espacio al footer fijo */
+    padding-bottom: 100px; /* Ajustar según la altura del footer */
     position: relative; /* Necesario para posicionar secciones */
     overflow-y: auto;
 }
@@ -307,64 +312,45 @@ header {
 }
 
 
-/* Footer */
+/* Footer - HECHO FIJO */
 footer {
     background-color: var(--dark-background);
-    padding: 2rem;
+    padding: 1rem 2rem; /* Reducir padding si es necesario para el tamaño fijo */
     border-top: 1px solid var(--line-color); /* Línea de separación */
     text-align: center;
-    position: relative;
-    z-index: 900;
+    /* Propiedades para hacerlo fijo en la parte inferior */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px; /* <-- Altura fija estimada del footer */
+    display: flex; /* Usar flexbox para centrar contenido verticalmente */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    z-index: 950; /* Asegura que esté por encima del contenido principal, pero debajo de modales/header */
 }
 
 .footer-content {
+    /* flex-direction: space-around; Ya no necesitamos justificar espacio si solo hay un elemento */
+    flex-wrap: wrap; /* Permite que el elemento se envuelva en pantallas pequeñas */
+    gap: 30px; /* Espacio entre elementos del footer (ahora solo social media) */
+    margin-bottom: 0; /* Eliminar margin bottom ya que el footer es fijo */
+    width: 100%; /* Ocupa todo el ancho del footer */
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
-    gap: 30px;
-    margin-bottom: 20px;
+    justify-content: center; /* Centrar contenido si solo queda un elemento */
+    align-items: center;
+    flex-direction: column; /* Apilar contenido en móvil */
 }
 
-.newsletter h3,
+/* Eliminar estilos específicos de newsletter */
+/* .newsletter h3, */
+/* .newsletter form { display: none; } */
+
+
 .social-media h3 {
     color: var(--corp-blue); /* Títulos del footer */
-    margin-bottom: 10px;
+    margin-bottom: 10px; /* Mantener un pequeño margen debajo del título */
     text-shadow: 0 0 4px var(--corp-blue); /* Glow ajustado */
-}
-
-.newsletter form {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap; /* Asegura que el input y el botón se envuelvan en móvil */
-}
-
-.newsletter input[type="email"] {
-    padding: 10px;
-    border: 1px solid var(--line-color);
-    background-color: #1a1a1a;
-    color: #fff;
-    border-radius: 5px;
-    outline: none;
-    min-width: 200px; /* Asegura un ancho mínimo */
-}
-
-.newsletter button {
-    padding: 10px 20px;
-    background: linear-gradient(45deg, var(--corp-green), var(--corp-blue)); /* Degradado en el botón */
-    color: #fff; /* Texto blanco en botón degradado */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.newsletter button:hover {
-    opacity: 0.9; /* Opacidad reducida al pasar el mouse */
-    transform: translateY(-2px); /* Pequeño movimiento */
 }
 
 .social-media ul {
@@ -387,7 +373,8 @@ footer {
 .footer-bottom {
     color: #555;
     font-size: 0.9rem;
-    margin-top: 20px;
+    margin-top: 10px; /* Ajustar margen si es necesario */
+    width: 100%; /* Ocupa todo el ancho */
 }
 
 /* Modales */
@@ -528,6 +515,8 @@ footer {
     .container {
         flex-direction: column; /* Apila sidebar y main content */
         padding-top: 0; /* No necesita padding top ya que el header no es fijo */
+        /* Eliminar padding-bottom fijo en móvil si el footer no es fijo */
+         padding-bottom: 0;
     }
 
     .sidebar {
@@ -538,6 +527,8 @@ footer {
         border-bottom: 1px solid var(--line-color); /* Añade línea abajo */
         overflow-y: visible; /* No necesita scroll interno en esta disposición */
         padding: 10px 10px; /* Ajusta padding */
+        /* Eliminar padding-bottom fijo en móvil si el footer no es fijo */
+        padding-bottom: 10px; /* Restaurar padding normal o ajustado */
     }
 
     .sidebar nav ul {
@@ -579,6 +570,8 @@ footer {
     .main-content {
         margin-left: 0; /* Sin margen a la izquierda en móvil */
         padding: 1rem; /* Ajusta padding */
+         /* Eliminar padding-bottom fijo en móvil si el footer no es fijo */
+         padding-bottom: 1rem; /* Restaurar padding normal o ajustado */
     }
 
     .main-content h1 {
@@ -594,27 +587,29 @@ footer {
      }
 
 
-    .footer-content {
+    /* Footer en móvil no es fijo */
+    footer {
+        position: static;
+        height: auto; /* Altura automática */
+        padding-bottom: 1rem; /* Padding normal */
+        margin-top: 2rem; /* Espacio arriba del footer estático */
+    }
+
+     .footer-content {
         flex-direction: column; /* Apila contenido del footer */
         align-items: center;
         gap: 20px;
     }
 
-     .newsletter form {
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .newsletter input[type="email"],
-    .newsletter button {
-         width: 90%; /* Ocupa más ancho en móvil */
-         max-width: 300px; /* Máximo para el input/botón */
-    }
 
     .social-media ul {
         gap: 15px;
     }
+
+     .social-media a {
+         font-size: 1.5rem; /* Iconos de redes sociales más pequeños en móvil */
+     }
+
 
      .modal-content {
         width: 95%; /* Modal más ancho en móvil */
@@ -629,11 +624,6 @@ footer {
      .modal-content h2 {
          font-size: 1.8rem;
      }
-
-     /* Ocultar la línea animada en móvil */
-    .container::after {
-        display: none;
-    }
 }
 
 /* Animación de las líneas de separación */
