@@ -1,712 +1,225 @@
-/* Variables para colores - Paleta corporativa/elegante anterior */
-:root {
-    --corp-blue: #00aaff;    /* Un azul tecnológico más suave */
-    --corp-purple: #a35ee0;  /* Un púrpura elegante y desaturado */
-    --corp-green: #39da8a;   /* Un verde aqua sutil */
-    --dark-background: #080808; /* Negro un poco más profundo */
-    --line-color: #181818;    /* Color para las líneas de separación */
-    --text-color: #cccccc;   /* Color de texto general más suave */
-    --soft-highlight: #333333; /* Para fondos sutiles en hover */
-    --neon-white: #e0f0ff;   /* Blanco neón elegante para el menú */
-
-
-    /* Ajuste del glow con los colores y menor intensidad ("más fino") */
-    /* Reducimos los valores del blur */
-    --hover-glow: 0 0 4px var(--corp-blue), 0 0 6px var(--corp-purple), 0 0 8px var(--corp-green);
-
-    /* Definir un color pink suave solo para el hover del botón cerrar */
-    --close-button-hover: #ffb6c1; /* LightPink para el hover de cerrar */
-
-    /* Definir altura del footer fijo */
-    --footer-height: 80px;
-    /* Definir ancho del sidebar fijo */
-    --sidebar-width: 250px;
-    /* Definir altura del header fijo */
-    --header-height: 80px; /* Basado en padding 1rem arriba/abajo + borde */
-
-}
-
-/* Fondo Animado - Ajustado a esta paleta y más sutil */
-.background-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Usar rgba con menor opacidad para el degradado */
-    background: radial-gradient(circle at center,
-                rgba(0, 170, 255, 0.08), /* Corp Blue */
-                rgba(163, 94, 224, 0.08), /* Corp Purple */
-                rgba(57, 218, 138, 0.08), /* Corp Green */
-                transparent 75%); /* Aumentar el área transparente */
-    background-size: 400% 400%;
-    animation: backgroundGlow 25s ease infinite alternate; /* Animación un poco más lenta */
-    z-index: -1; /* Asegura que esté detrás de todo */
-}
-
-@keyframes backgroundGlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-
-/* Reset y Estilos Generales */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box; /* Importante para el cálculo de width/height con padding/border */
-}
-
-body {
-    font-family: 'Arial', sans-serif; /* O una fuente más futurista si tienes */
-    background-color: var(--dark-background);
-    color: var(--text-color); /* Usar el color de texto general */
-    overflow-x: hidden; /* Evita scroll horizontal por si acaso */
-    line-height: 1.6; /* Mejora la legibilidad del texto general */
-}
-
-a {
-    text-decoration: none;
-    color: inherit; /* Hereda el color del padre */
-}
-
-ul {
-    list-style: none;
-}
-
-/* Header */
-header {
-    background-color: rgba(0, 0, 0, 0.85); /* Fondo más oscuro */
-    backdrop-filter: blur(12px); /* Efecto de desenfoque ligeramente mayor */
-    padding: 1rem 2rem;
-    display: flex; /* Permite que el logo, ticker e iconos estén en fila */
-    justify-content: space-between;
-    align-items: center;
-    position: fixed; /* Barra superior fija */
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
-    border-bottom: 1px solid var(--line-color); /* Línea de separación */
-    height: var(--header-height); /* Altura fija del header */
-}
-
-.logo {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: var(--corp-blue); /* Color del logo */
-    text-shadow: 0 0 4px var(--corp-blue); /* Glow del logo ajustado */
-    flex-shrink: 0; /* Evita que el logo se encoja */
-}
-
-/* Carrusel de Precios */
-.price-ticker {
-    display: flex;
-    align-items: center;
-    height: 30px; /* Altura del ticker */
-    overflow: hidden; /* Oculta el contenido que se desborda */
-    margin-left: 30px; /* Espacio entre logo y ticker */
-    margin-right: 30px; /* Espacio entre ticker e iconos de header */
-    border: 1px solid var(--line-color);
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.3);
-    flex-grow: 1; /* Permite que el ticker ocupe el espacio disponible */
-    max-width: 700px; /* <-- Aumentar ancho máximo para mostrar más items */
-}
-
-.price-ticker-inner {
-    display: flex; /* Permite que los dos price-ticker-content estén en fila */
-    /* Ancho ajustado para acomodar más items sin romper el loop */
-    /* Este valor 250% es una estimación; podría necesitar ajuste fino */
-    width: 250%; /* <-- Ajuste de ancho para la animación */
-    animation: scroll-left 45s linear infinite; /* <-- Aumentar duración por más items */
-}
-
-.price-ticker-content {
-    display: flex;
-    white-space: nowrap; /* Evita que los ítems se envuelvan */
-    flex-shrink: 0; /* Evita que se encojan */
-    /* width: 50%; <-- Ya no se necesita un ancho fijo si se usa margin-right */
-     align-items: center;
-}
-
-.price-item {
-    display: inline-flex; /* Permite alinear icono y texto */
-    align-items: center;
-    padding: 0 0; /* Eliminar padding lateral interno */
-    margin-right: 20px; /* <-- Añadir margen derecho para separar ítems */
-    color: var(--text-color);
-    font-size: 0.9rem;
-    flex-shrink: 0; /* Importante para el scroll, evita que los items se encojan */
-}
-
-.price-item i {
-    margin-right: 5px;
-    font-size: 1.1rem;
-    color: var(--corp-green); /* Color del icono del precio (ej: verde) */
-}
-
-/* Espaciador al final de cada bloque de contenido para asegurar el loop */
-.price-item-spacer {
-    display: inline-block;
-    width: 50px; /* <-- Ancho del espaciador, ajusta si el loop no es suave */
-    flex-shrink: 0;
-}
-
-/* Animación de scroll para el ticker */
-@keyframes scroll-left {
-    0% { transform: translateX(0%); }
-    /* La traducción debe coincidir con el ancho exacto de un bloque de contenido */
-    /* Si inner es 250% y tiene 2 bloques, cada bloque es 125%. Animamos -125% */
-    100% { transform: translateX(-125%); } /* <-- Ajuste de la traducción */
-}
-
-
-.header-icons {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem; /* Espacio entre iconos */
-    flex-shrink: 0; /* Evita que los iconos se encojan */
-}
-
-.header-icons .icon {
-    font-size: 1.3rem;
-    cursor: pointer;
-    color: var(--text-color); /* Color por defecto suave */
-    transition: color 0.3s ease, text-shadow 0.3s ease; /* Transición suave */
-    position: relative; /* Para el dropdown del idioma */
-}
-
-.header-icons .icon:hover {
-    color: #fff; /* Blanco puro al pasar el mouse para contraste */
-    text-shadow: var(--hover-glow); /* Efecto de neón al pasar el mouse */
-}
-
-/* Dropdown de Idioma */
-.language-switcher {
-    position: relative;
-}
-
-.language-dropdown {
-    position: absolute;
-    top: 100%; /* Debajo del icono */
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.95); /* Fondo más oscuro */
-    border: 1px solid var(--line-color);
-    padding: 10px;
-    border-radius: 5px;
-    display: none; /* Oculto por defecto */
-    flex-direction: column;
-    gap: 8px;
-    z-index: 1010;
-    min-width: 120px; /* Ancho mínimo */
-}
-
-.language-switcher:hover .language-dropdown {
-    display: flex; /* Muestra el dropdown al hacer hover en el icono */
-}
-
-.language-dropdown span {
-    cursor: pointer;
-    padding: 5px;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-    color: var(--text-color); /* Color por defecto en el dropdown */
-}
-
-.language-dropdown span:hover {
-     color: var(--corp-purple); /* Color al pasar el mouse */
-     text-shadow: 0 0 3px var(--corp-purple);
-}
-
-
-/* Contenedor Principal (Sidebar + Main Content) */
-.container {
-    display: flex;
-    /* Espacio para el header fijo */
-    padding-top: var(--header-height);
-    /* Espacio para el footer fijo - Ajustar según la altura del footer */
-    padding-bottom: var(--footer-height);
-    min-height: 100vh; /* Altura mínima para ocupar toda la ventana */
-    position: relative; /* Necesario para la línea animada */
-}
-
-/* Sidebar */
-.sidebar {
-    width: var(--sidebar-width); /* Ancho fijo del sidebar */
-    background-color: rgba(0, 0, 0, 0.75); /* Fondo semi-transparente */
-    backdrop-filter: blur(10px); /* Desenfoque */
-    padding: 20px;
-    /* Espacio para el footer fijo - Ajustar según la altura del footer */
-    padding-bottom: var(--footer-height);
-    border-right: 1px solid var(--line-color); /* Línea de separación */
-    position: fixed; /* Sidebar fijo */
-    top: var(--header-height); /* Debajo del header */
-    left: 0;
-    bottom: 0; /* Extendido hasta el fondo (excluyendo el espacio del footer) */
-    overflow-y: auto; /* Añade scroll si el contenido es largo */
-    z-index: 900; /* Menor que el header */
-}
-
-.sidebar nav ul {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Espacio entre items del menú */
-}
-
-.sidebar .menu-item a {
-    display: flex;
-    align-items: center;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease; /* Transiciones */
-    font-size: 1.1rem;
-    /* Color y Glow del menú por defecto - Blanco Neón Elegante */
-    color: var(--neon-white);
-    text-shadow: 0 0 2px var(--neon-white); /* Glow sutil */
-}
-
-.sidebar .menu-item a i {
-    margin-right: 15px;
-    font-size: 1.4rem;
-    /* Color y Glow del icono por defecto - Blanco Neón Elegante */
-    color: var(--neon-white);
-     text-shadow: 0 0 2px var(--neon-white); /* Glow sutil */
-    transition: color 0.3s ease;
-}
-
-.sidebar .menu-item a:hover {
-    background-color: rgba(255, 255, 255, 0.08); /* Fondo muy sutil al pasar el mouse */
-    color: var(--corp-blue); /* Color del texto al pasar el mouse */
-    text-shadow: 0 0 5px var(--corp-blue); /* Efecto de neón en texto al pasar el mouse */
-    transform: translateX(5px); /* Pequeño movimiento */
-}
-
-.sidebar .menu-item a:hover i {
-     color: var(--corp-green); /* Color del icono al pasar el mouse */
-     text-shadow: 0 0 5px var(--corp-green); /* Efecto de neón en icono al pasar el mouse */
-}
-
-/* Main Content Area */
-.main-content {
-    flex-grow: 1; /* Ocupa el espacio restante */
-    margin-left: var(--sidebar-width); /* Espacio para el sidebar fijo */
-    padding: 2rem;
-    /* Espacio para el footer fijo - Ajustar según la altura del footer */
-    padding-bottom: var(--footer-height);
-    position: relative; /* Necesario para posicionar secciones */
-    overflow-y: auto; /* Permite scroll interno si el contenido es muy largo */
-}
-
-/* Secciones de herramientas (inicialmente ocultas) */
-.main-content section {
-    display: none; /* Oculta todas las secciones por defecto */
-}
-
-.main-content section.active {
-    display: block; /* Muestra solo la sección activa */
-    animation: fadeIn 0.5s ease-in-out; /* Animación de aparición */
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Estilos de contenido placeholder */
-.main-content h1 {
-    color: var(--corp-purple); /* Color para H1 */
-    text-shadow: 0 0 6px var(--corp-purple); /* Glow ajustado */
-    margin-bottom: 1.5rem;
-    font-size: 2.5rem;
-}
-
-.main-content h2 {
-    color: var(--corp-green); /* Color para H2 */
-    text-shadow: 0 0 4px var(--corp-green); /* Glow ajustado */
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
-}
-
-.main-content p {
-    line-height: 1.8; /* Espacio entre líneas mejorado */
-    color: var(--text-color);
-}
-
-
-/* Footer - HECHO FIJO Y POSICIONADO CORRECTAMENTE */
-footer {
-    background-color: var(--dark-background);
-    padding: 1rem 2rem;
-    border-top: 1px solid var(--line-color);
-    text-align: center;
-    /* Propiedades para hacerlo fijo en la parte inferior */
-    position: fixed;
-    bottom: 0;
-    /* Ajustar para que empiece después del sidebar */
-    left: var(--sidebar-width); /* <-- Empieza después del ancho del sidebar fijo */
-    width: calc(100% - var(--sidebar-width)); /* <-- Ocupa el resto del ancho */
-    height: var(--footer-height); /* <-- Altura fija estimada del footer */
-    display: flex; /* Usar flexbox para centrar contenido verticalmente */
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-    z-index: 950; /* Asegura que esté por encima del contenido principal, pero debajo de modales/header */
-    flex-direction: column; /* Asegurar apilamiento vertical de elementos internos */
-    box-sizing: border-box; /* Asegura que el padding esté incluido en height/width */
-}
-
-.footer-content {
-    /* flex-direction: space-around; Ya no necesitamos justificar espacio si solo hay un elemento */
-    flex-wrap: wrap; /* Permite que el elemento se envuelva en pantallas pequeñas */
-    gap: 30px; /* Espacio entre elementos del footer (ahora solo social media) */
-    margin-bottom: 0; /* Eliminar margin bottom ya que el footer es fijo */
-    width: 100%; /* Ocupa todo el ancho del footer */
-    display: flex;
-    justify-content: center; /* Centrar contenido si solo queda un elemento */
-    align-items: center;
-    flex-direction: column; /* Apilar contenido verticalmente */
-}
-
-
-.social-media h3 {
-    color: var(--corp-blue); /* Títulos del footer */
-    margin-bottom: 10px; /* Mantener un pequeño margen debajo del título */
-    text-shadow: 0 0 4px var(--corp-blue); /* Glow ajustado */
-}
-
-.social-media ul {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.social-media a {
-    font-size: 1.8rem;
-    color: var(--text-color); /* Color por defecto */
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-.social-media a:hover {
-    color: var(--corp-purple); /* Color al pasar el mouse */
-    text-shadow: var(--hover-glow); /* Efecto de glow */
-}
-
-.footer-bottom {
-    color: #555;
-    font-size: 0.9rem;
-    margin-top: 10px; /* Ajustar margen si es necesario */
-    width: 100%; /* Ocupa todo el ancho */
-}
-
-/* Modales */
-.modal {
-    display: none; /* Oculto por defecto */
-    position: fixed; /* Posición fija en la pantalla */
-    z-index: 2000; /* Por encima de todo */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto; /* Permite scroll si el contenido es largo */
-    background-color: rgba(0, 0, 0, 0.9); /* Fondo oscuro más opaco */
-    backdrop-filter: blur(8px); /* Desenfoque */
-    justify-content: center;
-    align-items: center;
-}
-
-.modal.show {
-    display: flex; /* Muestra el modal */
-}
-
-.modal-content {
-    background-color: var(--dark-background);
-    margin: auto; /* Centrar */
-    padding: 30px;
-    border: 1px solid var(--corp-purple); /* Borde con color corporativo */
-    box-shadow: 0 0 20px var(--corp-purple); /* Sombra con color corporativo - Ajustado */
-    border-radius: 10px;
-    width: 80%; /* Ancho del modal */
-    max-width: 700px; /* Ancho máximo un poco mayor */
-    position: relative;
-    animation: scaleIn 0.3s ease-out; /* Animación de aparición */
-}
-
-@keyframes scaleIn {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-.close-button {
-    color: var(--text-color); /* Color del botón cerrar */
-    font-size: 28px;
-    font-weight: bold;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    cursor: pointer;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-.close-button:hover,
-.close-button:focus {
-     color: var(--close-button-hover);
-     text-shadow: 0 0 5px var(--close-button-hover);
-}
-
-
-.modal-content h2 {
-    margin-top: 0;
-    color: var(--corp-green); /* Color para títulos de modal */
-    text-shadow: 0 0 4px var(--corp-green); /* Glow ajustado */
-    margin-bottom: 20px;
-    font-size: 2rem;
-}
-
-.modal-content input[type="text"],
-.modal-content input[type="email"], /* Si añades email inputs en modales */
-.modal-content input[type="password"] { /* Si añades password inputs en modales */
-     width: 100%;
-     padding: 12px;
-     margin-top: 10px;
-     border: 1px solid var(--line-color);
-     background-color: #1a1a1a;
-     color: #fff;
-     border-radius: 5px;
-     outline: none;
-     font-size: 1rem;
-}
-
-
-/* Responsive Design */
-
-/* Ajustes para pantallas medianas donde el sidebar y footer son fijos */
-@media (min-width: 769px) and (max-width: 992px) {
-    .price-ticker {
-        margin-left: 15px;
-        margin-right: 15px;
-        /* Reducir ancho máximo para dejar espacio al logo/iconos en tablets */
-        max-width: 250px; /* Ajusta este valor si es necesario */
-    }
-
-     .price-item {
-         padding: 0 8px; /* Menos espacio entre items en tablet */
-         margin-right: 15px; /* Ajustar margen */
-         font-size: 0.8rem; /* Letra un poco más pequeña */
-     }
-
-     .price-item i {
-         font-size: 1rem;
-     }
-
-     /* Ajustar la animación y el ancho del inner para la nueva cantidad/tamaño de ítems */
-     .price-ticker-inner {
-         width: 250%; /* Puede necesitar ajuste fino */
-         animation-duration: 40s; /* Ajustar duración */
-     }
-     @keyframes scroll-left {
-        0% { transform: translateX(0%); }
-        100% { transform: translateX(-125%); } /* Ajusta este porcentaje si el ancho del inner/content cambia */
-     }
-
-
-     /* Footer sigue fijo, no necesita cambio aquí */
-     /* Sidebar sigue fijo, no necesita cambio aquí */
-     /* Main content sigue con margin/padding left/bottom, no necesita cambio aquí */
-}
-
-
-/* Ajustes para pantallas pequeñas (móviles) donde header, sidebar y footer no son fijos */
-@media (max-width: 768px) {
-     header {
-        padding: 0.8rem 1rem;
-        flex-direction: column; /* Apilar header items en móvil */
-        align-items: flex-start; /* Alinear a la izquierda */
-        gap: 10px; /* Espacio entre elementos apilados */
-        height: auto; /* Altura automática */
-        position: static; /* Quitar fixed en móvil */
-     }
-
-     .logo {
-         font-size: 1.6rem;
-     }
-
-    .header-icons {
-         width: 100%; /* Ocupar todo el ancho */
-         justify-content: space-around; /* Distribuir iconos */
-         gap: 0.5rem; /* Menos espacio */
-    }
-
-    .header-icons .icon {
-        font-size: 1.1rem;
-    }
-
-    .price-ticker {
-        margin: 0; /* Eliminar márgenes laterales en móvil */
-        width: 100%; /* Ocupar todo el ancho */
-        max-width: none; /* Eliminar ancho máximo */
-    }
-
-    .price-ticker-inner {
-        /* Puede que necesites ajustar el width y la animación aquí si el contenido es muy largo */
-        width: 300%; /* Puede requerir más ancho en móvil por el número de items */
-        animation-duration: 50s; /* Más lento en móvil por más items */
-    }
-
-     @keyframes scroll-left {
-         0% { transform: translateX(0); }
-         /* Si inner es 300% y tiene 2 bloques, cada bloque es 150%. Animamos -150% */
-         100% { transform: translateX(-150%); } /* Ajusta este porcentaje */
-     }
-
-     .price-item {
-         padding: 0 5px; /* Menos padding en móvil */
-         margin-right: 10px; /* Ajustar margen */
-         font-size: 0.8rem;
-     }
-     .price-item i {
-         font-size: 1rem;
-     }
-    .price-item-spacer {
-        width: 30px; /* Espaciador más pequeño en móvil */
-    }
-
-
-    .container {
-        flex-direction: column; /* Apila sidebar y main content */
-        padding-top: 0; /* No necesita padding top ya que el header no es fijo */
-        /* Eliminar padding-bottom fijo en móvil ya que el footer no es fijo */
-         padding-bottom: 0;
-    }
-
-    .sidebar {
-        position: static; /* Deja de ser fijo en móvil */
-        width: 100%; /* Ocupa todo el ancho */
-        height: auto; /* Altura automática */
-        border-right: none; /* Elimina la línea de la derecha */
-        border-bottom: 1px solid var(--line-color); /* Añade línea abajo */
-        overflow-y: visible; /* No necesita scroll interno en esta disposición */
-        padding: 10px 10px; /* Ajusta padding */
-        /* Eliminar padding-bottom fijo en móvil si el footer no es fijo */
-        padding-bottom: 10px; /* Restaurar padding normal o ajustado */
-    }
-
-    .sidebar nav ul {
-        flex-direction: row; /* Menú horizontal en móvil */
-        overflow-x: auto; /* Permite scroll horizontal si hay muchos items */
-        padding-bottom: 10px; /* Espacio debajo para scroll */
-        gap: 8px; /* Espacio entre items */
-         /* Ocultar scrollbar por defecto */
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-    }
-
-    /* Ocultar scrollbar en Chrome, Safari y Opera */
-     .sidebar nav ul::-webkit-scrollbar {
-        display: none;
-     }
-
-
-    .sidebar .menu-item a {
-         flex-direction: column; /* Icono arriba, texto abajo */
-         text-align: center;
-         padding: 8px 5px; /* Ajusta padding */
-         font-size: 0.9rem;
-         min-width: 70px; /* Ancho mínimo para cada botón */
-         gap: 5px; /* Espacio entre icono y texto en móvil */
-    }
-
-    .sidebar .menu-item a i {
-        margin-right: 0; /* Sin margen a la derecha */
-        margin-bottom: 0; /* Sin margen abajo (usamos gap en el flex) */
-        font-size: 1.2rem;
-    }
-
-    .sidebar .menu-item a .menu-text {
-        display: block; /* Asegura que el texto esté en su propia línea */
-        font-size: 0.7rem; /* Texto más pequeño en móvil */
-    }
-
-    .main-content {
-        margin-left: 0; /* Sin margen a la izquierda en móvil */
-        padding: 1rem; /* Ajusta padding */
-         /* Eliminar padding-bottom fijo en móvil ya que el footer no es fijo */
-         padding-bottom: 1rem; /* Restaurar padding normal o ajustado */
-    }
-
-    .main-content h1 {
-        font-size: 2rem;
-    }
-
-     .main-content h2 {
-        font-size: 1.5rem;
-    }
-
-     .main-content p {
-         line-height: 1.6;
-     }
-
-
-    /* Footer en móvil no es fijo */
-    footer {
-        position: static; /* <-- Footer estático en móvil */
-        left: 0; /* <-- Reset left */
-        width: 100%; /* <-- Reset width */
-        height: auto; /* Altura automática */
-        padding-bottom: 1rem; /* Padding normal */
-        margin-top: 2rem; /* Espacio arriba del footer estático */
-    }
-
-     .footer-content {
-        flex-direction: column; /* Apila contenido del footer */
-        align-items: center;
-        gap: 20px;
-    }
-
-
-    .social-media ul {
-        gap: 15px;
-    }
-
-     .social-media a {
-         font-size: 1.5rem; /* Iconos de redes sociales más pequeños en móvil */
-     }
-
-
-     .modal-content {
-        width: 95%; /* Modal más ancho en móvil */
-        padding: 20px;
-    }
-
-     .close-button {
-        font-size: 24px;
-        right: 10px;
-     }
-
-     .modal-content h2 {
-         font-size: 1.8rem;
-     }
-
-     /* Ocultar la línea animada en móvil */
-    .container::after {
-        display: none;
-    }
-}
-
-/* Animación de las líneas de separación */
-.container::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: var(--sidebar-width); /* <-- Empieza después del sidebar */
-    width: 1px;
-    height: 100%;
-    /* Degradado con colores corporativos */
-    background: linear-gradient(to bottom, transparent, var(--corp-purple) 20%, var(--corp-blue) 80%, transparent);
-    animation: lineFlow 6s linear infinite; /* Animación */
-    z-index: 500; /* Por encima del fondo, por debajo del contenido */
-}
-
-@keyframes lineFlow {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(100%); }
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantyX - Crypto AI Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-animation"></div> <header>
+        <div class="logo">QuantyX</div>
+
+        <div class="price-ticker">
+            <div class="price-ticker-inner"> <div class="price-ticker-content">
+                    <span class="price-item"><i class="fab fa-btc"></i> BTC: $62,500</span>
+                    <span class="price-item"><i class="fab fa-ethereum"></i> ETH: $3,180</span>
+                    <span class="price-item"><i class="fab fa-solana"></i> SOL: $145</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> BNB: $590</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> NOT: $0.025</span>
+                    <span class="price-item"><i class="fab fa-xrp"></i> XRP: $0.52</span>
+                    <span class="price-item"><i class="fab fa-ada"></i> ADA: $0.70</span>
+                    <span class="price-item"><i class="fab fa-doge"></i> DOGE: $0.15</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> SHIB: $0.00002</span>
+                    <span class="price-item"><i class="fas fa-dot-circle"></i> DOT: $7.50</span>
+                     <span class="price-item-spacer"></span>
+                </div>
+                <div class="price-ticker-content">
+                     <span class="price-item"><i class="fab fa-btc"></i> BTC: $62,500</span>
+                    <span class="price-item"><i class="fab fa-ethereum"></i> ETH: $3,180</span>
+                    <span class="price-item"><i class="fab fa-solana"></i> SOL: $145</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> BNB: $590</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> NOT: $0.025</span>
+                    <span class="price-item"><i class="fab fa-xrp"></i> XRP: $0.52</span>
+                    <span class="price-item"><i class="fab fa-ada"></i> ADA: $0.70</span>
+                    <span class="price-item"><i class="fab fa-doge"></i> DOGE: $0.15</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> SHIB: $0.00002</span>
+                    <span class="price-item"><i class="fas fa-dot-circle"></i> DOT: $7.50</span>
+                     <span class="price-item-spacer"></span>
+                </div>
+            </div>
+        </div>
+        <div class="header-icons">
+            <div class="icon language-switcher" id="language-switcher">
+                <i class="fas fa-globe"></i>
+                <div class="language-dropdown">
+                    <span data-lang="es">Español</span>
+                    <span data-lang="en">English</span>
+                    <span data-lang="fr">Français</span>
+                </div>
+            </div>
+            <div class="icon search-icon" id="search-icon"><i class="fas fa-search"></i></div>
+            <div class="icon wallet-icon" id="wallet-icon"><i class="fas fa-wallet"></i></div>
+            <div class="icon user-icon" id="user-icon"><i class="fas fa-user-circle"></i></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <nav>
+                <ul>
+                    <li class="menu-item">
+                        <a href="#" data-section="home">
+                            <i class="fas fa-home"></i> <span class="menu-text">Inicio</span> </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="sentiment-analyzer">
+                            <i class="fas fa-chart-line"></i>
+                            <span class="menu-text">Analizador de Sentimientos</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="wallet-tracker">
+                            <i class="fas fa-wallet"></i>
+                            <span class="menu-text">Wallet Tracker</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="bot-trading">
+                            <i class="fas fa-robot"></i>
+                            <span class="menu-text">Bot Trading</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="sniper">
+                            <i class="fas fa-crosshairs"></i>
+                            <span class="menu-text">Sniper</span>
+                        </a>
+                    </li>
+                     <li class="menu-item">
+                        <a href="#" data-section="token-creator">
+                            <i class="fas fa-coins"></i>
+                            <span class="menu-text">Creador de Token</span>
+                        </a>
+                    </li>
+                     <li class="menu-item">
+                        <a href="#" data-section="staking">
+                            <i class="fas fa-lock"></i>
+                            <span class="menu-text">Staking</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="gaming">
+                            <i class="fas fa-gamepad"></i>
+                            <span class="menu-text">Gaming</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                         <a href="#" data-section="nft-collection">
+                             <i class="fas fa-image"></i> <span class="menu-text">Colección NFTs</span> </a>
+                     </li>
+                      <li class="menu-item">
+                         <a href="#" data-section="detox">
+                             <i class="fas fa-broom"></i> <span class="menu-text">Detox</span> </a>
+                     </li>
+                      <li class="menu-item">
+                         <a href="#" data-section="reclaim">
+                             <i class="fas fa-redo"></i> <span class="menu-text">Reclaim</span> </a>
+                     </li>
+                     <li class="menu-item">
+                        <a href="#" data-section="knowledge-base">
+                            <i class="fas fa-book"></i>
+                            <span class="menu-text">Base de Conocimiento</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="chatbot">
+                             <i class="fas fa-comments"></i>
+                            <span class="menu-text">ChatBot</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section id="home" class="active">
+                <h1>Bienvenido a QuantyX</h1>
+                <p>Tu centro neural impulsado por IA para herramientas Crypto.</p>
+                </section>
+
+             <section id="sentiment-analyzer" class="tool-section">
+                 <h2>Analizador de Sentimientos</h2>
+                 <p>Aquí irá la herramienta de análisis de sentimientos.</p>
+             </section>
+              <section id="wallet-tracker" class="tool-section">
+                 <h2>Wallet Tracker</h2>
+                 <p>Aquí irá la herramienta de seguimiento de wallets.</p>
+             </section>
+             <section id="bot-trading" class="tool-section"><h2>Bot Trading</h2><p>Aquí irá la herramienta de trading automático.</p></section>
+             <section id="sniper" class="tool-section"><h2>Sniper</h2><p>Aquí irá la herramienta Sniper.</p></section>
+             <section id="token-creator" class="tool-section"><h2>Creador de Token</h2><p>Aquí irá la herramienta de creación de tokens.</p></section>
+             <section id="staking" class="tool-section"><h2>Staking</h2><p>Aquí irá la herramienta de staking.</p></p></section>
+             <section id="gaming" class="tool-section"><h2>Gaming</h2><p>Aquí irá la sección de gaming.</p></section>
+             <section id="nft-collection" class="tool-section">
+                 <h2>Colección NFTs</h2>
+                 <p>Aquí irá el contenido de tu colección de NFTs.</p>
+             </section>
+              <section id="detox" class="tool-section">
+                 <h2>Detox</h2>
+                 <p>Aquí irá la herramienta de Detox.</p>
+             </section>
+              <section id="reclaim" class="tool-section">
+                 <h2>Reclaim</h2>
+                 <p>Aquí irá la herramienta de Reclaim.</p>
+             </section>
+             <section id="knowledge-base" class="tool-section">
+                <h2>Base de Conocimiento</h2>
+                <p>Aquí irá la base de conocimiento.</p>
+            </section>
+            <section id="chatbot" class="tool-section">
+                 <h2>ChatBot</h2>
+                 <p>Aquí irá el ChatBot.</p>
+             </section>
+
+
+             <div id="search-modal" class="modal">
+                 <div class="modal-content">
+                     <span class="close-button">&times;</span>
+                     <h2>Buscar en QuantyX</h2>
+                     <input type="text" placeholder="Escribe para buscar...">
+                     </div>
+             </div>
+
+              <div id="wallet-modal" class="modal">
+                 <div class="modal-content">
+                     <span class="close-button">&times;</span>
+                     <h2>Conectar Wallet</h2>
+                     <p>Aquí irán las opciones para conectar tu wallet (ej: MetaMask, WalletConnect).</p>
+                     </div>
+             </div>
+
+              <div id="user-modal" class="modal">
+                 <div class="modal-content">
+                     <span class="close-button">&times;</span>
+                     <h2>Perfil de Usuario / Acceso</h2>
+                     <p>Aquí irá el formulario de login/registro o la información del usuario.</p>
+                     </div>
+             </div>
+
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="social-media">
+                <h3>Síguenos</h3>
+                <ul>
+                    <li><a href="#" target="_blank"><i class="fab fa-x-twitter"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-youtube"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-tiktok"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-telegram"></i></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 QuantyX. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
