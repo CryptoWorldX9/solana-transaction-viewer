@@ -1,47 +1,45 @@
-/* Variables para colores - Paleta corporativa/elegante anterior */
+/* Variables para colores - Paleta corporativa/elegante refinada */
 :root {
-    --corp-blue: #00aaff;    /* Un azul tecnológico más suave */
-    --corp-purple: #a35ee0;  /* Un púrpura elegante y desaturado */
-    --corp-green: #39da8a;   /* Un verde aqua sutil */
-    --dark-background: #080808; /* Negro un poco más profundo */
-    --line-color: #181818;    /* Color para las líneas de separación */
-    --text-color: #cccccc;   /* Color de texto general más suave */
-    --soft-highlight: #333333; /* Para fondos sutiles en hover */
-    --neon-white: #e0f0ff;   /* Blanco neón elegante para el menú */
-
-
-    /* Ajuste del glow con los colores y menor intensidad ("más fino") */
-    /* Reducimos los valores del blur */
-    --hover-glow: 0 0 4px var(--corp-blue), 0 0 6px var(--corp-purple), 0 0 8px var(--corp-green);
+    --corp-blue: #00b0ff;    /* Un azul tecnológico más vibrante pero elegante */
+    --corp-purple: #b36aff;  /* Un púrpura más rico */
+    --corp-green: #42e6a4;   /* Un verde aqua brillante */
+    --dark-background: #0b0b0b; /* Negro muy oscuro */
+    --medium-dark-background: #1a1a1a; /* Fondo para tarjetas/modales */
+    --line-color: #2c2c2c;    /* Color para las líneas de separación más definidas */
+    --text-color: #e0e0e0;   /* Color de texto general más claro */
+    --soft-text-color: #a0a0a0; /* Color para texto secundario/placeholder */
+    --soft-highlight: rgba(255, 255, 255, 0.08); /* Para fondos sutiles en hover */
+    --neon-glow-blue: 0 0 8px var(--corp-blue); /* Glow más definido */
+    --neon-glow-purple: 0 0 8px var(--corp-purple);
+    --neon-glow-green: 0 0 8px var(--corp-green);
+    --hover-glow: var(--neon-glow-blue), var(--neon-glow-purple), var(--neon-glow-green); /* Glow combinado */
 
     /* Definir un color pink suave solo para el hover del botón cerrar */
     --close-button-hover: #ffb6c1; /* LightPink para el hover de cerrar */
 
     /* Definir altura del footer fijo */
-    --footer-height: 80px;
+    --footer-height: 70px; /* Ajustado ligeramente */
     /* Definir ancho del sidebar fijo */
-    --sidebar-width: 250px;
+    --sidebar-width: 260px; /* Ajustado ligeramente */
     /* Definir altura del header fijo */
-    --header-height: 80px; /* Basado en padding 1rem arriba/abajo + borde */
-
+    --header-height: 70px; /* Ajustado ligeramente */
 }
 
-/* Fondo Animado - Ajustado a esta paleta y más sutil */
+/* Fondo Animado */
 .background-animation {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Usar rgba con menor opacidad para el degradado */
     background: radial-gradient(circle at center,
-                rgba(0, 170, 255, 0.08), /* Corp Blue */
-                rgba(163, 94, 224, 0.08), /* Corp Purple */
-                rgba(57, 218, 138, 0.08), /* Corp Green */
-                transparent 75%); /* Aumentar el área transparente */
+                rgba(0, 176, 255, 0.06), /* Corp Blue */
+                rgba(179, 106, 255, 0.06), /* Corp Purple */
+                rgba(66, 230, 164, 0.06), /* Corp Green */
+                transparent 70%); /* Ajustar tamaño transparente */
     background-size: 400% 400%;
-    animation: backgroundGlow 25s ease infinite alternate; /* Animación un poco más lenta */
-    z-index: -1; /* Asegura que esté detrás de todo */
+    animation: backgroundGlow 25s ease infinite alternate;
+    z-index: -1;
 }
 
 @keyframes backgroundGlow {
@@ -55,20 +53,20 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* Importante para el cálculo de width/height con padding/border */
+    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Montserrat', sans-serif; /* Usar Montserrat como fuente principal */
+    font-family: 'Montserrat', sans-serif;
     background-color: var(--dark-background);
-    color: var(--text-color); /* Usar el color de texto general */
-    overflow-x: hidden; /* Evita scroll horizontal por si acaso */
-    line-height: 1.6; /* Mejora la legibilidad del texto general */
+    color: var(--text-color);
+    overflow-x: hidden;
+    line-height: 1.6;
 }
 
 a {
     text-decoration: none;
-    color: inherit; /* Hereda el color del padre */
+    color: inherit;
 }
 
 ul {
@@ -77,30 +75,34 @@ ul {
 
 /* Header */
 header {
-    background-color: rgba(0, 0, 0, 0.85); /* Fondo más oscuro */
-    backdrop-filter: blur(12px); /* Efecto de desenfoque ligeramente mayor */
-    padding: 1rem 2rem;
-    display: flex; /* Permite que el logo, ticker e iconos estén en fila */
+    background-color: rgba(0, 0, 0, 0.9); /* Fondo más opaco */
+    backdrop-filter: blur(15px); /* Desenfoque ligeramente mayor */
+    padding: 0.8rem 2rem; /* Ajustar padding */
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    position: fixed; /* Barra superior fija */
+    position: fixed;
     width: 100%;
     top: 0;
     left: 0;
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
-    border-bottom: 1px solid var(--line-color); /* Línea de separación */
-    height: var(--header-height); /* Altura fija del header */
+    z-index: 1000;
+    border-bottom: 1px solid var(--line-color);
+    height: var(--header-height);
 }
 
 .logo {
-    /* Estilos para el logo de solo texto */
-    font-size: 3rem; /* <-- Tamaño grande para el logo! (Ajustado de 3.5rem a 3rem) */
-    font-weight: 600; /* Peso de la fuente para el logo */
-    color: var(--corp-blue); /* Color del logo */
-    text-shadow: 0 0 6px var(--corp-blue); /* <-- Ajustar glow si es necesario */
-    flex-shrink: 0; /* Evita que el logo se encoja */
-    display: block; /* O flex si quieres centrar el texto dentro del div logo */
-    padding: 0; /* Reset padding si se añadió para el icono */
+    font-size: 2.8rem; /* <-- Tamaño del logo (ajustado de 3rem) */
+    font-weight: 600;
+    color: var(--corp-blue);
+    /* Efecto de texto más profesional */
+    text-shadow: var(--neon-glow-blue);
+    /* Opcional: Combinar sombras para un efecto más rico */
+    /* text-shadow: 0 0 5px var(--corp-blue), 0 0 10px var(--corp-blue), 0 0 15px var(--corp-blue); */
+    flex-shrink: 0;
+    display: block;
+    padding: 0;
+    /* Opcional: Centrar el texto dentro del div logo si el div tiene ancho fijo */
+    /* text-align: center; */
 }
 
 
@@ -108,78 +110,77 @@ header {
 .price-ticker {
     display: flex;
     align-items: center;
-    height: 30px; /* Altura del ticker */
-    overflow: hidden; /* Oculta el contenido que se desborda */
-    margin-left: 30px; /* Espacio entre logo y ticker */
-    margin-right: 30px; /* Espacio entre ticker e iconos de header */
+    height: 30px;
+    overflow: hidden;
+    margin-left: 30px;
+    margin-right: 30px;
     border: 1px solid var(--line-color);
     border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.3);
-    flex-grow: 1; /* Permite que el ticker ocupe el espacio disponible */
-    max-width: 700px; /* <-- Aumentar ancho máximo para mostrar más items */
+    background-color: rgba(255, 255, 255, 0.05); /* Fondo más sutil */
+    flex-grow: 1;
+    max-width: 700px;
 }
 
 .price-ticker-inner {
-    display: flex; /* Permite que los dos price-ticker-content estén en fila */
-    width: 250%; /* Puede necesitar ajuste fino */
-    animation: scroll-left 45s linear infinite; /* <-- Aumentar duración */
+    display: flex;
+    width: 250%;
+    animation: scroll-left 45s linear infinite;
 }
 
 .price-ticker-content {
     display: flex;
-    white-space: nowrap; /* Evita que los ítems se envuelvan */
-    flex-shrink: 0; /* Evita que se encojan */
+    white-space: nowrap;
+    flex-shrink: 0;
      align-items: center;
 }
 
 .price-item {
-    display: inline-flex; /* Permite alinear icono y texto */
+    display: inline-flex;
     align-items: center;
-    padding: 0 0; /* Eliminar padding lateral interno */
-    margin-right: 20px; /* <-- Añadir margen derecho para separar ítems */
+    padding: 0 0;
+    margin-right: 25px; /* Aumentar un poco el espacio entre items */
     color: var(--text-color);
     font-size: 0.9rem;
-    flex-shrink: 0; /* Importante para el scroll */
+    flex-shrink: 0;
     font-weight: 400;
 }
 
 .price-item i {
-    margin-right: 5px;
-    font-size: 1.1rem;
-    color: var(--corp-green); /* Color del icono del precio (ej: verde) */
+    margin-right: 6px; /* Ajustar espacio con icono */
+    font-size: 1rem; /* Ajustar tamaño icono */
+    color: var(--corp-green);
 }
 
-/* Espaciador al final de cada bloque de contenido */
 .price-item-spacer {
     display: inline-block;
-    width: 50px; /* <-- Ancho del espaciador */
+    width: 50px;
     flex-shrink: 0;
 }
 
 @keyframes scroll-left {
     0% { transform: translateX(0%); }
-    100% { transform: translateX(-125%); } /* Ajuste de la traducción */
+    100% { transform: translateX(-125%); }
 }
 
 
 .header-icons {
     display: flex;
     align-items: center;
-    gap: 1.5rem; /* Espacio entre iconos */
+    gap: 1.2rem; /* Ajustar espacio entre iconos */
     flex-shrink: 0;
 }
 
 .header-icons .icon {
-    font-size: 1.3rem;
+    font-size: 1.2rem; /* Ajustar tamaño icono */
     cursor: pointer;
-    color: var(--text-color);
+    color: var(--soft-text-color); /* Color por defecto más suave */
     transition: color 0.3s ease, text-shadow 0.3s ease;
-    position: relative; /* Para el dropdown del idioma */
+    position: relative;
 }
 
 .header-icons .icon:hover {
-    color: #fff;
-    text-shadow: var(--hover-glow);
+    color: var(--text-color); /* Color más claro al pasar el mouse */
+    text-shadow: var(--hover-glow); /* Efecto de neón */
 }
 
 /* Dropdown de Idioma */
@@ -191,7 +192,7 @@ header {
     position: absolute;
     top: 100%;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.95);
+    background-color: rgba(0, 0, 0, 0.98); /* Fondo casi opaco */
     border: 1px solid var(--line-color);
     padding: 10px;
     border-radius: 5px;
@@ -200,6 +201,7 @@ header {
     gap: 8px;
     z-index: 1010;
     min-width: 120px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Sombra sutil */
 }
 
 .language-switcher:hover .language-dropdown {
@@ -210,7 +212,8 @@ header {
     cursor: pointer;
     padding: 5px;
     transition: color 0.3s ease, text-shadow 0.3s ease;
-    color: var(--text-color);
+    color: var(--soft-text-color);
+    font-size: 0.9rem;
 }
 
 .language-dropdown span:hover {
@@ -225,15 +228,15 @@ header {
     padding-top: var(--header-height);
     padding-bottom: var(--footer-height);
     min-height: 100vh;
-    position: relative; /* Necesario para la línea animada */
+    position: relative;
 }
 
 /* Sidebar */
 .sidebar {
     width: var(--sidebar-width);
-    background-color: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(10px);
-    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.85); /* Fondo más opaco */
+    backdrop-filter: blur(12px); /* Desenfoque ligeramente mayor */
+    padding: 20px 15px; /* Ajustar padding */
     padding-bottom: var(--footer-height);
     border-right: 1px solid var(--line-color);
     position: fixed;
@@ -253,41 +256,44 @@ header {
 .sidebar nav ul {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px; /* Ajustar espacio entre items */
 }
 
 .sidebar .menu-item a {
     display: flex;
     align-items: center;
-    padding: 10px 15px;
-    border-radius: 5px;
+    padding: 10px 12px; /* Ajustar padding */
+    border-radius: 4px; /* Ajustar radio */
     transition: background-color 0.3s ease, color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 400; /* Peso más fino */
-    font-size: 1rem; /* Tamaño ligeramente menor */
-    color: var(--neon-white);
-    text-shadow: 0 0 2px var(--neon-white);
+    font-weight: 400;
+    font-size: 0.95rem; /* Ajustar tamaño */
+    color: var(--soft-text-color); /* Color por defecto más suave */
+    text-shadow: none; /* Sin glow por defecto */
 }
 
 .sidebar .menu-item a i {
-    margin-right: 15px;
-    font-size: 1.4rem;
-    color: var(--neon-white);
-    text-shadow: 0 0 2px var(--neon-white);
+    margin-right: 12px; /* Ajustar espacio */
+    font-size: 1.3rem; /* Ajustar tamaño */
+    color: var(--soft-text-color);
+    text-shadow: none;
     transition: color 0.3s ease;
 }
 
-.sidebar .menu-item a:hover {
+.sidebar .menu-item a:hover,
+.sidebar .menu-item a.active-menu { /* Estilo para hover y activo */
     background-color: rgba(255, 255, 255, 0.08);
-    color: var(--corp-blue);
-    text-shadow: 0 0 5px var(--corp-blue);
-    transform: translateX(5px);
+    color: var(--text-color); /* Color más claro al pasar mouse/activo */
+    text-shadow: 0 0 3px var(--corp-blue); /* Glow sutil en texto */
+    transform: translateX(3px); /* Movimiento sutil */
 }
 
-.sidebar .menu-item a:hover i {
-     color: var(--corp-green);
-     text-shadow: 0 0 5px var(--corp-green);
+.sidebar .menu-item a:hover i,
+.sidebar .menu-item a.active-menu i {
+     color: var(--corp-blue); /* Color del icono al pasar mouse/activo */
+     text-shadow: 0 0 3px var(--corp-blue); /* Glow sutil en icono */
 }
+
 
 /* Main Content Area */
 .main-content {
@@ -302,6 +308,7 @@ header {
 /* Secciones de herramientas (inicialmente ocultas) */
 .main-content section {
     display: none;
+    padding-top: 20px; /* Espacio superior dentro de la sección */
 }
 
 .main-content section.active {
@@ -316,72 +323,94 @@ header {
 
 /* Estilos generales para títulos y párrafos dentro de tool-section */
 .tool-section h2 {
-    color: var(--corp-green); /* Color para H2 */
-    text-shadow: 0 0 4px var(--corp-green); /* Glow ajustado */
-    margin-bottom: 1.5rem; /* Espacio debajo del título principal de la sección */
-    font-size: 1.8rem;
+    color: var(--corp-green);
+    text-shadow: 0 0 4px var(--corp-green);
+    margin-bottom: 2rem; /* Aumentar espacio debajo */
+    font-size: 2rem; /* Aumentar tamaño */
     font-weight: 600;
+    /* Opcional: text-align: center; si quieres centrarlos */
 }
 
 .tool-section p {
-    line-height: 1.8;
+    line-height: 1.7; /* Ajustar espaciado */
     color: var(--text-color);
     font-weight: 400;
-    margin-bottom: 1rem; /* Espacio debajo de los párrafos generales */
+    margin-bottom: 1.5rem; /* Ajustar espacio */
 }
 
 /* Estilos específicos para la sección HOME */
+#home {
+    padding-top: 0; /* No necesita padding-top si es la primera sección */
+}
 #home h1 {
-    color: var(--corp-purple); /* Color para H1 en Home */
-    text-shadow: 0 0 6px var(--corp-purple); /* Glow ajustado */
+    color: var(--corp-purple);
+    text-shadow: 0 0 6px var(--corp-purple);
     margin-bottom: 1.5rem;
     font-size: 2.5rem;
     font-weight: 600;
+    /* Opcional: text-align: center; si quieres centrarlo */
 }
+
 
 /* Estilos específicos para el Wallet Tracker */
 #wallet-tracker .input-area {
     display: flex;
-    gap: 15px; /* Espacio entre input y botón */
-    margin-bottom: 30px; /* Espacio debajo del área de input */
-    flex-wrap: wrap; /* Permite que los elementos se envuelvan en móvil */
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
     align-items: center;
+    background-color: var(--medium-dark-background); /* Fondo para agrupar input/button */
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--line-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 #wallet-tracker #solana-wallet-address {
-    flex-grow: 1; /* Permite que el input ocupe el espacio disponible */
-    padding: 12px;
+    flex-grow: 1;
+    padding: 12px 15px; /* Ajustar padding */
     border: 1px solid var(--line-color);
-    background-color: #1a1a1a;
-    color: #fff;
+    background-color: var(--dark-background); /* Fondo más oscuro para el input */
+    color: var(--text-color);
     border-radius: 5px;
     outline: none;
     font-size: 1rem;
-    min-width: 200px; /* Ancho mínimo */
+    min-width: 200px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+#wallet-tracker #solana-wallet-address::placeholder {
+    color: var(--soft-text-color); /* Color para el placeholder */
+}
+#wallet-tracker #solana-wallet-address:focus {
+    border-color: var(--corp-blue);
+    box-shadow: 0 0 8px rgba(0, 176, 255, 0.5); /* Glow al enfocar */
 }
 
+
 #wallet-tracker #track-wallet-btn {
-    padding: 12px 20px;
+    padding: 12px 25px; /* Ajustar padding */
     background-color: var(--corp-blue);
-    color: #fff;
+    color: var(--dark-background); /* Texto oscuro sobre fondo azul */
     border: none;
     border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
+    transition: background-color 0.3s ease, opacity 0.3s ease, transform 0.1s ease;
     font-weight: 600;
-    display: flex; /* Para alinear icono y texto si lo hay */
+    display: flex;
     align-items: center;
     gap: 8px;
+    text-shadow: none; /* Quitar text-shadow por defecto si lo hay */
 }
 
 #wallet-tracker #track-wallet-btn:hover {
-    background-color: var(--corp-purple);
-    opacity: 0.9;
+    background-color: var(--corp-purple); /* Cambiar color al pasar mouse */
+    opacity: 1; /* Asegurar opacidad */
 }
 
 #wallet-tracker #track-wallet-btn:active {
-    opacity: 0.7;
+    transform: scale(0.98); /* Efecto click */
+    opacity: 0.8;
 }
 
 
@@ -392,7 +421,8 @@ header {
 #initial-message {
     text-align: center;
     font-style: italic;
-    color: #888;
+    color: var(--soft-text-color);
+    margin-top: 20px;
 }
 
 #loading-indicator {
@@ -400,55 +430,60 @@ header {
     color: var(--corp-blue);
     font-weight: 600;
     margin-top: 20px;
+    font-size: 1.1rem;
 }
 
 #loading-indicator i {
     margin-left: 10px;
 }
 
-
 #error-message {
-    color: #ff4d4d; /* Color rojo para errores */
+    color: #ff6b6b; /* Color rojo ligeramente más suave */
     text-align: center;
     font-weight: 600;
     margin-top: 20px;
+    font-size: 1.1rem;
 }
+
 
 /* Estilos para las tarjetas de datos (Balances, NFTs, Transacciones) */
 .data-card {
-    background-color: rgba(255, 255, 255, 0.05); /* Fondo sutil */
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Borde suave */
+    background-color: var(--medium-dark-background); /* Fondo para las tarjetas */
+    border: 1px solid var(--line-color); /* Borde más definido */
     border-radius: 8px;
     padding: 20px;
-    margin-bottom: 20px; /* Espacio entre tarjetas */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Sombra más profesional */
 }
 
 .data-card h3 {
-    color: var(--neon-white); /* Color blanco neón para subtítulos de tarjeta */
-    text-shadow: 0 0 3px var(--neon-white);
+    color: var(--text-color); /* Títulos de tarjeta más claros */
+    text-shadow: none; /* Quitar glow en títulos */
     margin-top: 0;
     margin-bottom: 15px;
     font-size: 1.3rem;
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 10px; /* Espacio entre icono y texto del título */
+    gap: 10px;
+    padding-bottom: 10px; /* Espacio debajo del título */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Separador bajo el título */
 }
 
 .data-card h3 i {
     font-size: 1.5rem;
     color: var(--corp-green); /* Color del icono en el título de la tarjeta */
-    text-shadow: 0 0 4px var(--corp-green);
+    text-shadow: 0 0 4px var(--corp-green); /* Mantener glow en iconos de título */
 }
 
 /* Estilo específico para el saldo SOL */
 #sol-balance-card p {
-    font-size: 1.5rem;
+    font-size: 1.6rem; /* Tamaño ligeramente mayor */
     font-weight: 600;
-    color: var(--corp-green); /* Color verde para el saldo SOL */
-    text-shadow: 0 0 4px var(--corp-green);
+    color: var(--corp-green);
+    text-shadow: 0 0 5px var(--corp-green); /* Glow en el valor */
     margin: 0;
+    padding-top: 10px; /* Espacio arriba del valor */
 }
 
 /* Estilos para listas dentro de tarjetas (Tokens, Transacciones) */
@@ -456,71 +491,80 @@ header {
     list-style: none;
     padding: 0;
     margin: 0;
+    padding-top: 10px; /* Espacio arriba de la lista si el título tiene borde inferior */
 }
 
 .data-card ul li {
     padding: 12px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Separador entre ítems de lista */
     display: flex;
-    justify-content: space-between; /* Distribuye contenido a los lados */
+    justify-content: space-between;
     align-items: center;
     font-size: 0.95rem;
+    color: var(--text-color); /* Color del texto principal del item */
 }
 
 .data-card ul li:last-child {
-    border-bottom: none; /* Elimina el borde del último ítem */
+    border-bottom: none;
 }
 
 .data-card ul li .item-info {
     display: flex;
     align-items: center;
-    gap: 10px; /* Espacio entre icono/nombre/símbolo */
+    gap: 10px;
+    color: var(--soft-text-color); /* Color más suave para la info del item (nombre/símbolo) */
 }
 
 .data-card ul li .item-info i {
     font-size: 1.2rem;
-    color: var(--corp-purple); /* Color de íconos en listas */
+    color: var(--corp-purple);
+    text-shadow: 0 0 3px var(--corp-purple); /* Glow sutil en iconos de lista */
 }
 
 .data-card ul li .item-value {
     font-weight: 600;
-    color: var(--neon-white); /* Color del valor (cantidad, monto) */
+    color: var(--text-color); /* Color más claro para el valor */
 }
 
 /* Estilos para la galería de NFTs */
 #nft-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Grilla responsiva de NFTs */
-    gap: 15px; /* Espacio entre NFTs */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Grilla ligeramente más grande */
+    gap: 20px; /* Aumentar espacio */
+    padding-top: 10px; /* Espacio arriba si el título tiene borde inferior */
 }
 
 #nft-gallery .nft-item {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 5px;
-    padding: 10px;
+    background-color: var(--dark-background); /* Fondo más oscuro para items */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px; /* Ajustar radio */
+    padding: 12px; /* Ajustar padding */
     text-align: center;
-    transition: transform 0.3s ease;
-    cursor: pointer; /* Indica que es clickeable (ej. para ver detalles) */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
 }
 
 #nft-gallery .nft-item:hover {
-    transform: translateY(-5px); /* Efecto hover sutil */
+    transform: translateY(-5px);
+     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(66, 230, 164, 0.3); /* Sombra con glow */
 }
 
 #nft-gallery .nft-item img {
     max-width: 100%;
-    height: auto; /* Mantiene la proporción */
-    border-radius: 3px;
+    height: auto;
+    border-radius: 4px;
     margin-bottom: 8px;
 }
 
 #nft-gallery .nft-item p {
-    font-size: 0.8rem;
+    font-size: 0.9rem; /* Ajustar tamaño */
     color: var(--text-color);
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Añade ... si el texto es muy largo */
+    text-overflow: ellipsis;
+    font-weight: 400;
 }
 
 
@@ -530,10 +574,10 @@ header {
 }
 
 
-/* Footer - HECHO FIJO Y POSICIONADO CORRECTAMENTE */
+/* Footer */
 footer {
     background-color: var(--dark-background);
-    padding: 1rem 2rem;
+    padding: 0.8rem 2rem; /* Ajustar padding */
     border-top: 1px solid var(--line-color);
     text-align: center;
     position: fixed;
@@ -551,7 +595,7 @@ footer {
 
 .footer-content {
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 25px; /* Ajustar espacio */
     margin-bottom: 0;
     width: 100%;
     display: flex;
@@ -562,32 +606,33 @@ footer {
 
 .social-media h3 {
     color: var(--corp-blue);
-    margin-bottom: 10px;
-    text-shadow: 0 0 4px var(--corp-blue);
+    margin-bottom: 8px; /* Ajustar espacio */
+    text-shadow: 0 0 3px var(--corp-blue); /* Ajustar glow */
     font-weight: 600;
+    font-size: 1.1rem; /* Ajustar tamaño */
 }
 
 .social-media ul {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 18px; /* Ajustar espacio */
 }
 
 .social-media a {
-    font-size: 1.8rem;
-    color: var(--text-color);
+    font-size: 1.5rem; /* Ajustar tamaño */
+    color: var(--soft-text-color); /* Color por defecto más suave */
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .social-media a:hover {
-    color: var(--corp-purple);
+    color: var(--text-color); /* Color más claro */
     text-shadow: var(--hover-glow);
 }
 
 .footer-bottom {
     color: #555;
-    font-size: 0.9rem;
-    margin-top: 10px;
+    font-size: 0.85rem; /* Ajustar tamaño */
+    margin-top: 8px; /* Ajustar espacio */
     width: 100%;
 }
 
@@ -601,8 +646,8 @@ footer {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.95); /* Fondo más opaco */
+    backdrop-filter: blur(10px); /* Desenfoque mayor */
     justify-content: center;
     align-items: center;
 }
@@ -612,14 +657,14 @@ footer {
 }
 
 .modal-content {
-    background-color: var(--dark-background);
+    background-color: var(--medium-dark-background); /* Fondo más claro que el principal */
     margin: auto;
     padding: 30px;
     border: 1px solid var(--corp-purple);
-    box-shadow: 0 0 20px var(--corp-purple);
+    box-shadow: 0 0 20px rgba(179, 106, 255, 0.4); /* Sombra con color y opacidad */
     border-radius: 10px;
     width: 80%;
-    max-width: 700px;
+    max-width: 600px; /* Ancho máximo ajustado */
     position: relative;
     animation: scaleIn 0.3s ease-out;
 }
@@ -630,7 +675,7 @@ footer {
 }
 
 .close-button {
-    color: var(--text-color);
+    color: var(--soft-text-color); /* Color del botón cerrar */
     font-size: 28px;
     font-weight: bold;
     position: absolute;
@@ -649,48 +694,70 @@ footer {
 /* Estilos para el input de búsqueda dentro del modal */
 #search-modal #search-input {
     width: 100%;
-    padding: 12px;
+    padding: 12px 15px; /* Ajustar padding */
     margin-top: 10px;
-    margin-bottom: 20px; /* Espacio antes de los resultados */
+    margin-bottom: 20px;
     border: 1px solid var(--line-color);
-    background-color: #1a1a1a;
-    color: #fff;
+    background-color: var(--dark-background); /* Fondo más oscuro para el input */
+    color: var(--text-color);
     border-radius: 5px;
     outline: none;
     font-size: 1rem;
+     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+#search-modal #search-input::placeholder {
+    color: var(--soft-text-color);
+}
+#search-modal #search-input:focus {
+    border-color: var(--corp-blue);
+    box-shadow: 0 0 8px rgba(0, 176, 255, 0.5); /* Glow al enfocar */
+}
+
 
 /* Estilos para el contenedor de resultados de búsqueda */
 #search-results {
-    max-height: 300px; /* Altura máxima antes de que aparezca scroll */
-    overflow-y: auto; /* Añadir scroll si hay muchos resultados */
-    padding-right: 10px; /* Espacio para la barra de scroll */
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
 }
 
 /* Estilos para cada resultado individual */
 #search-results a {
-    display: block; /* Cada resultado en su propia línea */
+    display: block;
     padding: 10px;
     margin-bottom: 8px;
-    background-color: rgba(255, 255, 255, 0.05); /* Fondo sutil */
+    background-color: rgba(255, 255, 255, 0.05);
     border-radius: 5px;
-    color: var(--neon-white); /* Color del texto del resultado */
-    transition: background-color 0.3s ease;
+    color: var(--text-color); /* Color del texto del resultado */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Separador */
+}
+#search-results a:last-child {
+    border-bottom: none;
 }
 
+
 #search-results a:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Fondo al pasar el mouse */
+    background-color: rgba(255, 255, 255, 0.1);
     color: var(--corp-blue); /* Color del texto al pasar el mouse */
 }
 
-
-.modal-content h2 {
+#search-modal .modal-content h2 {
     margin-top: 0;
-    color: var(--corp-green); /* Color para títulos de modal */
-    text-shadow: 0 0 4px var(--corp-green); /* Glow ajustado */
+    color: var(--corp-green);
+    text-shadow: 0 0 4px var(--corp-green);
     margin-bottom: 20px;
-    font-size: 2rem;
-    font-weight: 600; /* Peso para títulos de modal */
+    font-size: 1.8rem; /* Ajustar tamaño del título del modal */
+    font-weight: 600;
+     text-align: center; /* Centrar título del modal */
+}
+
+#search-results p { /* Estilo para el mensaje de "No resultados" */
+     color: var(--soft-text-color);
+     text-align: center;
+     font-style: italic;
+     margin-top: 15px;
 }
 
 
@@ -701,7 +768,7 @@ footer {
     .price-ticker {
         margin-left: 15px;
         margin-right: 15px;
-        max-width: 250px; /* Ajusta este valor si es necesario */
+        max-width: 250px;
     }
 
      .price-item {
@@ -726,26 +793,37 @@ footer {
     /* Ajustes para Wallet Tracker en tablets */
     #wallet-tracker .input-area {
         gap: 10px;
+         padding: 12px 15px;
     }
     #wallet-tracker #solana-wallet-address {
         min-width: 150px;
+         padding: 10px 12px;
+         font-size: 0.9rem;
     }
     #wallet-tracker #track-wallet-btn {
-         padding: 10px 15px;
+         padding: 10px 20px;
          font-size: 0.9rem;
+         gap: 6px;
     }
      .data-card {
         padding: 15px;
+        margin-bottom: 15px;
      }
      .data-card h3 {
         font-size: 1.2rem;
         gap: 8px;
+         margin-bottom: 10px;
+         padding-bottom: 8px;
      }
      .data-card h3 i {
         font-size: 1.4rem;
      }
       #sol-balance-card p {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
+         padding-top: 8px;
+     }
+     .data-card ul {
+         padding-top: 8px;
      }
      .data-card ul li {
         padding: 10px 0;
@@ -755,20 +833,34 @@ footer {
         font-size: 1.1rem;
      }
       #nft-gallery {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-        gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 15px;
+         padding-top: 8px;
      }
      #nft-gallery .nft-item {
-        padding: 8px;
+        padding: 10px;
      }
       #nft-gallery .nft-item img {
-        margin-bottom: 5px;
+        margin-bottom: 6px;
      }
      #nft-gallery .nft-item p {
-        font-size: 0.75rem;
+        font-size: 0.8rem;
      }
      #search-results {
          max-height: 250px;
+         padding-right: 8px;
+     }
+     #search-results a {
+         padding: 8px;
+         margin-bottom: 6px;
+         font-size: 0.9rem;
+     }
+     .modal-content {
+         max-width: 500px;
+         padding: 25px;
+     }
+     #search-modal .modal-content h2 {
+         font-size: 1.6rem;
      }
 
 
@@ -787,8 +879,8 @@ footer {
      }
 
      .logo {
-         font-size: 2.5rem; /* Ajustar tamaño del logo en móvil */
-         text-shadow: 0 0 4px var(--corp-blue);
+         font-size: 2rem; /* Ajustar tamaño del logo en móvil */
+         text-shadow: 0 0 3px var(--corp-blue);
          display: block;
          padding: 0;
      }
@@ -866,20 +958,20 @@ footer {
          flex-direction: column;
          text-align: center;
          padding: 8px 5px;
-         font-size: 0.9rem;
-         min-width: 70px;
-         gap: 5px;
+         font-size: 0.85rem; /* Ajustar tamaño menú móvil */
+         min-width: 60px; /* Ajustar ancho mínimo */
+         gap: 4px; /* Ajustar espacio */
     }
 
     .sidebar .menu-item a i {
         margin-right: 0;
         margin-bottom: 0;
-        font-size: 1.2rem;
+        font-size: 1.1rem; /* Ajustar tamaño icono menú móvil */
     }
 
     .sidebar .menu-item a .menu-text {
         display: block;
-        font-size: 0.7rem;
+        font-size: 0.65rem; /* Texto más pequeño en móvil */
     }
 
     .main-content {
@@ -891,29 +983,33 @@ footer {
     .tool-section h2 {
         font-size: 1.5rem;
         margin-bottom: 1rem;
+        /* Opcional: text-align: center; si quieres centrarlos */
     }
 
     #home h1 {
         font-size: 2rem;
+        /* Opcional: text-align: center; si quieres centrarlo */
     }
 
      /* Ajustes para Wallet Tracker en móvil */
      #wallet-tracker .input-area {
-        flex-direction: column; /* Apilar input y botón */
+        flex-direction: column;
         gap: 10px;
         margin-bottom: 20px;
-        align-items: stretch; /* Estirar elementos */
+        align-items: stretch;
+         padding: 10px 15px;
     }
     #wallet-tracker #solana-wallet-address {
-        min-width: auto; /* Eliminar ancho mínimo fijo */
-        width: 100%; /* Ocupar ancho completo */
+        min-width: auto;
+        width: 100%;
         padding: 10px;
         font-size: 0.9rem;
     }
     #wallet-tracker #track-wallet-btn {
          padding: 10px 15px;
          font-size: 0.9rem;
-         justify-content: center; /* Centrar contenido del botón */
+         justify-content: center;
+         gap: 6px;
     }
      .data-card {
         padding: 15px;
@@ -923,19 +1019,24 @@ footer {
         font-size: 1.1rem;
         gap: 6px;
         margin-bottom: 10px;
+         padding-bottom: 8px;
      }
       .data-card h3 i {
         font-size: 1.3rem;
      }
      #sol-balance-card p {
         font-size: 1.2rem;
+        padding-top: 8px;
+     }
+      .data-card ul {
+        padding-top: 8px;
      }
       .data-card ul li {
         padding: 8px 0;
         font-size: 0.85rem;
      }
      .data-card ul li .item-info {
-         flex-direction: column; /* Apilar icono y texto del token */
+         flex-direction: column;
          align-items: flex-start;
          gap: 4px;
      }
@@ -946,11 +1047,12 @@ footer {
          font-size: 0.9rem;
       }
       #nft-gallery {
-        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); /* Grilla más pequeña */
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
         gap: 10px;
+         padding-top: 8px;
      }
      #nft-gallery .nft-item {
-        padding: 5px;
+        padding: 8px;
      }
       #nft-gallery .nft-item img {
         margin-bottom: 5px;
@@ -959,11 +1061,15 @@ footer {
         font-size: 0.7rem;
      }
 
+     #search-modal .modal-content h2 {
+         font-size: 1.5rem;
+         margin-bottom: 15px;
+     }
      #search-modal #search-input {
         margin-bottom: 15px;
         padding: 10px;
         font-size: 0.9rem;
-    }
+     }
 
      #search-results {
         max-height: 200px;
@@ -976,13 +1082,17 @@ footer {
         font-size: 0.9rem;
     }
 
+     #search-results p {
+         margin-top: 10px;
+     }
+
 
     footer {
         position: static;
         left: 0;
         width: 100%;
         height: auto;
-        padding-bottom: 1rem;
+        padding: 1rem;
         margin-top: 2rem;
     }
 
@@ -999,6 +1109,10 @@ footer {
      .social-media a {
          font-size: 1.5rem;
      }
+     .footer-bottom {
+        font-size: 0.8rem;
+     }
+
 
      /* Ocultar la línea animada en móvil */
     .container::after {
