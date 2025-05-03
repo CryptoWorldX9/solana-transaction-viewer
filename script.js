@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
              newsletterTitle: 'Suscríbete a nuestro Boletín',
              newsletterPlaceholder: 'Tu email',
              newsletterButton: 'Suscribirse',
-             newsletterSuccess: '¡Gracias por suscribirte!',
+             newsletterSuccess: '¡Gracias por suscribirte!', // Este texto se mantiene igual, solo cambia el color en JS
              socialTitle: 'Síguenos',
              footerBottom: '© 2025 QuantiX. Todos los derechos reservados.'
          },
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
              newsletterTitle: 'Subscribe to our Newsletter',
              newsletterPlaceholder: 'Your email',
              newsletterButton: 'Subscribe',
-             newsletterSuccess: 'Thank you for subscribing!',
+             newsletterSuccess: 'Thank you for subscribing!', // Este texto se mantiene igual
              socialTitle: 'Follow Us',
              footerBottom: '© 2025 QuantiX. All rights reserved.'
          },
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
               newsletterTitle: 'Abonnez-vous à notre Newsletter',
               newsletterPlaceholder: 'Votre email',
               newsletterButton: "S'abonner",
-              newsletterSuccess: 'Merci de vous être abonné !',
+              newsletterSuccess: 'Merci de vous être abonné !', // Este texto se mantiene igual
               socialTitle: 'Suivez-nous',
               footerBottom: '© 2025 QuantiX. Tous droits réservés.'
          }
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
          if (footerBottomText && texts.footerBottom) footerBottomText.textContent = texts.footerBottom;
 
           // La traducción del mensaje de éxito del boletín se maneja dentro del listener del submit
-          // pero podrías guardar el texto traducido en una variable si fuera necesario
+          // usando el texto fijo, solo cambia el color
      };
 
      langSpans.forEach(span => {
@@ -233,8 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
      // --- Lógica básica para el formulario de boletín (solo demostración frontend) ---
      const newsletterForm = document.getElementById('newsletter-form');
      const subscriptionMessage = document.querySelector('.subscription-message');
-      // Obtener el color de éxito traducido para mostrar el mensaje
-      const successColor = '#39da8a'; // Usar el valor hexadecimal del nuevo color verde corporativo
+      // Usar el valor hexadecimal del nuevo color dorado para el mensaje de éxito
+      const successColor = '#FFD700';
 
      newsletterForm.addEventListener('submit', (e) => {
          e.preventDefault(); // Evita que el formulario se envíe realmente
@@ -242,12 +242,12 @@ document.addEventListener('DOMContentLoaded', () => {
          // En un caso real, aquí enviarías los datos a tu servidor
          console.log('Email submitted:', newsletterForm.querySelector('input').value);
 
-         // Usar la traducción del mensaje de éxito
-         const currentLang = document.documentElement.lang || 'es'; // Obtiene el idioma actual o usa es por defecto
+         // Usar la traducción del mensaje de éxito (el texto ya está en el diccionario)
+         const currentLang = document.documentElement.lang || 'es';
          const messageText = translations[currentLang]?.newsletterSuccess || '¡Gracias por suscribirte!';
 
          subscriptionMessage.textContent = messageText;
-         subscriptionMessage.style.color = successColor; // Usar el color correcto
+         subscriptionMessage.style.color = successColor; // Usar el color dorado
          subscriptionMessage.style.marginTop = '10px';
          newsletterForm.reset(); // Limpia el formulario
      });
