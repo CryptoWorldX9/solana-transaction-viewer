@@ -1,18 +1,21 @@
-/* Variables para colores - Paleta inspirada en estilo "Smithii" */
+/* Variables para colores - Paleta corporativa/elegante anterior */
 :root {
-    --theme-blue: #00bfff;   /* Azul tecnológico vibrante (Deep Sky Blue) */
-    --theme-purple: #a020f0; /* Púrpura/Violeta intenso */
-    --theme-gold: #FFD700;   /* Dorado brillante */
-    --dark-background: #070707; /* Negro casi puro */
-    --line-color: #151515;     /* Color para líneas de separación */
-    --text-color: #bcbcbc;    /* Color de texto general gris suave */
-    --soft-highlight: #333333; /* Para fondos sutiles en hover */
+    --corp-blue: #00aaff;    /* Un azul tecnológico más suave */
+    --corp-purple: #a35ee0;  /* Un púrpura elegante y desaturado */
+    --corp-green: #39da8a;   /* Un verde aqua sutil */
+    --dark-background: #080808; /* Negro un poco más profundo */
+    --line-color: #181818;    /* Color para las líneas de separación */
+    --text-color: #cccccc;   /* Color de texto general más suave */
+    --soft-highlight: #333333; /* Para fondos sutiles en hover (añadido en el intento anterior pero útil aquí) */
 
-    /* Ajuste del glow con los nuevos colores y sensación "fina" */
-    --hover-glow: 0 0 5px var(--theme-blue), 0 0 8px var(--theme-purple), 0 0 12px var(--theme-gold);
+    /* Ajuste del glow con los colores y menor intensidad de esta paleta */
+    --hover-glow: 0 0 6px var(--corp-blue), 0 0 8px var(--corp-purple), 0 0 10px var(--corp-green);
+
+    /* Definir un color pink suave solo para el hover del botón cerrar */
+    --close-button-hover: #ffb6c1; /* LightPink para el hover de cerrar */
 }
 
-/* Fondo Animado - Ajustado a la nueva paleta y más sutil */
+/* Fondo Animado - Ajustado a esta paleta y más sutil */
 .background-animation {
     position: fixed;
     top: 0;
@@ -21,12 +24,12 @@
     height: 100%;
     /* Usar rgba con menor opacidad para el degradado */
     background: radial-gradient(circle at center,
-                rgba(0, 191, 255, 0.06), /* Theme Blue */
-                rgba(160, 32, 240, 0.06), /* Theme Purple */
-                rgba(255, 215, 0, 0.06), /* Theme Gold */
-                transparent 80%); /* Aumentar el área transparente para mayor sutileza */
+                rgba(0, 170, 255, 0.08), /* Corp Blue */
+                rgba(163, 94, 224, 0.08), /* Corp Purple */
+                rgba(57, 218, 138, 0.08), /* Corp Green */
+                transparent 75%); /* Aumentar el área transparente */
     background-size: 400% 400%;
-    animation: backgroundGlow 30s ease infinite alternate; /* Animación más lenta y suave */
+    animation: backgroundGlow 25s ease infinite alternate; /* Animación un poco más lenta */
     z-index: -1; /* Asegura que esté detrás de todo */
 }
 
@@ -45,11 +48,11 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif; /* Considera fuentes como 'Montserrat', 'Poppins', 'Rajdhani' de Google Fonts */
+    font-family: 'Arial', sans-serif; /* O una fuente más futurista si tienes */
     background-color: var(--dark-background);
     color: var(--text-color); /* Usar el color de texto general */
     overflow-x: hidden; /* Evita scroll horizontal por si acaso */
-    line-height: 1.7; /* Mejora la legibilidad */
+    line-height: 1.6; /* Mejora la legibilidad del texto general */
 }
 
 a {
@@ -63,8 +66,8 @@ ul {
 
 /* Header */
 header {
-    background-color: rgba(0, 0, 0, 0.9); /* Fondo más opaco */
-    backdrop-filter: blur(15px); /* Efecto de desenfoque mayor */
+    background-color: rgba(0, 0, 0, 0.85); /* Fondo más oscuro */
+    backdrop-filter: blur(12px); /* Efecto de desenfoque ligeramente mayor */
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
@@ -80,18 +83,18 @@ header {
 .logo {
     font-size: 1.8rem;
     font-weight: bold;
-    color: var(--theme-blue); /* Color del logo */
-    text-shadow: 0 0 8px var(--theme-blue); /* Efecto de brillo */
+    color: var(--corp-blue); /* Color del logo */
+    text-shadow: 0 0 5px var(--corp-blue); /* Efecto de neón simple */
 }
 
 .header-icons {
     display: flex;
     align-items: center;
-    gap: 1.8rem; /* Espacio entre iconos */
+    gap: 1.5rem; /* Espacio entre iconos */
 }
 
 .header-icons .icon {
-    font-size: 1.4rem; /* Iconos ligeramente más grandes */
+    font-size: 1.3rem;
     cursor: pointer;
     color: var(--text-color); /* Color por defecto suave */
     transition: color 0.3s ease, text-shadow 0.3s ease; /* Transición suave */
@@ -99,8 +102,8 @@ header {
 }
 
 .header-icons .icon:hover {
-    color: var(--theme-gold); /* Color dorado al pasar el mouse */
-    text-shadow: var(--hover-glow); /* Efecto de glow al pasar el mouse */
+    color: #fff; /* Blanco puro al pasar el mouse para contraste */
+    text-shadow: var(--hover-glow); /* Efecto de neón al pasar el mouse */
 }
 
 /* Dropdown de Idioma */
@@ -110,18 +113,17 @@ header {
 
 .language-dropdown {
     position: absolute;
-    top: calc(100% + 10px); /* Debajo del icono con espacio */
+    top: 100%; /* Debajo del icono */
     right: 0;
-    background-color: rgba(0, 0, 0, 0.98); /* Fondo casi opaco */
+    background-color: rgba(0, 0, 0, 0.95); /* Fondo más oscuro */
     border: 1px solid var(--line-color);
     padding: 10px;
-    border-radius: 8px; /* Bordes más redondeados */
+    border-radius: 5px;
     display: none; /* Oculto por defecto */
     flex-direction: column;
     gap: 8px;
     z-index: 1010;
-    min-width: 130px; /* Ancho mínimo */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra sutil */
+    min-width: 120px; /* Ancho mínimo */
 }
 
 .language-switcher:hover .language-dropdown {
@@ -131,12 +133,13 @@ header {
 .language-dropdown span {
     cursor: pointer;
     padding: 5px;
-    transition: color 0.2s ease;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
     color: var(--text-color); /* Color por defecto en el dropdown */
 }
 
 .language-dropdown span:hover {
-     color: var(--theme-purple); /* Color al pasar el mouse */
+     color: var(--corp-purple); /* Color al pasar el mouse */
+     text-shadow: 0 0 3px var(--corp-purple);
 }
 
 
@@ -144,15 +147,15 @@ header {
 .container {
     display: flex;
     padding-top: 80px; /* Espacio para el header fijo */
-    min-height: calc(100vh - 80px - 180px); /* Altura mínima (vh - header - footer) - ajustado para footer más grande */
+    min-height: calc(100vh - 80px - 150px); /* Altura mínima (vh - header - footer) */
     position: relative; /* Necesario para la línea animada */
 }
 
 /* Sidebar */
 .sidebar {
-    width: 260px; /* Ancho ligeramente mayor */
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo semi-transparente */
-    backdrop-filter: blur(12px); /* Desenfoque */
+    width: 250px; /* Ancho fijo del sidebar */
+    background-color: rgba(0, 0, 0, 0.75); /* Fondo semi-transparente */
+    backdrop-filter: blur(10px); /* Desenfoque */
     padding: 20px;
     border-right: 1px solid var(--line-color); /* Línea de separación */
     position: fixed; /* Sidebar fijo */
@@ -166,15 +169,15 @@ header {
 .sidebar nav ul {
     display: flex;
     flex-direction: column;
-    gap: 18px; /* Espacio entre items del menú */
+    gap: 15px; /* Espacio entre items del menú */
 }
 
 .sidebar .menu-item a {
     display: flex;
     align-items: center;
-    padding: 12px 15px; /* Padding ligeramente mayor */
-    border-radius: 6px; /* Bordes redondeados */
-    transition: background-color 0.3s ease, color 0.3s ease, text-shadow 0.3s ease, transform 0.2s ease; /* Transiciones */
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease; /* Transiciones */
     font-size: 1.1rem;
     color: var(--text-color); /* Color del texto por defecto */
 }
@@ -182,27 +185,27 @@ header {
 .sidebar .menu-item a i {
     margin-right: 15px;
     font-size: 1.4rem;
-    color: var(--theme-purple); /* Color de icono por defecto */
+    color: var(--corp-purple); /* Color de icono por defecto */
     transition: color 0.3s ease;
 }
 
 .sidebar .menu-item a:hover {
-    background-color: var(--soft-highlight); /* Fondo sutil al pasar el mouse */
-    color: var(--theme-blue); /* Color del texto al pasar el mouse */
-    text-shadow: 0 0 6px var(--theme-blue); /* Efecto de brillo en texto */
+    background-color: rgba(255, 255, 255, 0.08); /* Fondo muy sutil al pasar el mouse */
+    color: var(--corp-blue); /* Color del texto al pasar el mouse */
+    text-shadow: 0 0 5px var(--corp-blue); /* Efecto de neón en texto */
     transform: translateX(5px); /* Pequeño movimiento */
 }
 
 .sidebar .menu-item a:hover i {
-     color: var(--theme-gold); /* Color del icono al pasar el mouse */
-     text-shadow: 0 0 8px var(--theme-gold); /* Efecto de brillo en icono */
+     color: var(--corp-green); /* Color del icono al pasar el mouse */
+     text-shadow: 0 0 5px var(--corp-green); /* Efecto de neón en icono */
 }
 
 /* Main Content Area */
 .main-content {
     flex-grow: 1; /* Ocupa el espacio restante */
-    margin-left: 260px; /* Espacio para el sidebar fijo - ajustado al nuevo ancho */
-    padding: 2.5rem; /* Padding ligeramente mayor */
+    margin-left: 250px; /* Espacio para el sidebar fijo */
+    padding: 2rem;
     position: relative; /* Necesario para posicionar secciones */
     overflow-y: auto;
 }
@@ -214,7 +217,7 @@ header {
 
 .main-content section.active {
     display: block; /* Muestra solo la sección activa */
-    animation: fadeIn 0.6s ease-in-out; /* Animación de aparición más suave */
+    animation: fadeIn 0.5s ease-in-out; /* Animación de aparición */
 }
 
 @keyframes fadeIn {
@@ -224,24 +227,22 @@ header {
 
 /* Estilos de contenido placeholder */
 .main-content h1 {
-    color: var(--theme-gold); /* Color para H1 - Dorado */
-    text-shadow: 0 0 10px var(--theme-gold);
-    margin-bottom: 1.8rem;
-    font-size: 2.8rem; /* Tamaño de H1 */
-    font-weight: bold;
+    color: var(--corp-purple); /* Color para H1 */
+    text-shadow: 0 0 8px var(--corp-purple);
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
 }
 
 .main-content h2 {
-    color: var(--theme-blue); /* Color para H2 - Azul */
-    text-shadow: 0 0 8px var(--theme-blue);
-    margin-bottom: 1.2rem;
-    font-size: 2rem; /* Tamaño de H2 */
+    color: var(--corp-green); /* Color para H2 */
+    text-shadow: 0 0 6px var(--corp-green);
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
 }
 
 .main-content p {
     line-height: 1.8; /* Espacio entre líneas mejorado */
     color: var(--text-color);
-    margin-bottom: 1rem; /* Espacio debajo de los párrafos */
 }
 
 
@@ -259,23 +260,15 @@ footer {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
-    gap: 40px; /* Espacio entre elementos del footer */
-    margin-bottom: 25px;
-}
-
-.newsletter,
-.social-media {
-    flex: 1; /* Permite que cada sección ocupe espacio */
-    min-width: 250px; /* Ancho mínimo para evitar que se colapsen demasiado */
-    max-width: 350px; /* Ancho máximo */
+    gap: 30px;
+    margin-bottom: 20px;
 }
 
 .newsletter h3,
 .social-media h3 {
-    color: var(--theme-blue); /* Títulos del footer */
-    margin-bottom: 15px;
-    text-shadow: 0 0 6px var(--theme-blue);
-    font-size: 1.3rem;
+    color: var(--corp-blue); /* Títulos del footer */
+    margin-bottom: 10px;
+    text-shadow: 0 0 5px var(--corp-blue);
 }
 
 .newsletter form {
@@ -286,57 +279,54 @@ footer {
 }
 
 .newsletter input[type="email"] {
-    padding: 12px; /* Padding ligeramente mayor */
+    padding: 10px;
     border: 1px solid var(--line-color);
     background-color: #1a1a1a;
     color: #fff;
-    border-radius: 6px;
+    border-radius: 5px;
     outline: none;
-    min-width: 200px;
-    flex-grow: 1; /* Permite que el input crezca */
+    min-width: 200px; /* Asegura un ancho mínimo */
 }
 
 .newsletter button {
-    padding: 12px 25px; /* Padding ligeramente mayor */
-    background: linear-gradient(45deg, var(--theme-blue), var(--theme-purple)); /* Degradado con colores del tema */
-    color: #fff; /* Texto blanco */
+    padding: 10px 20px;
+    background: linear-gradient(45deg, var(--corp-green), var(--corp-blue)); /* Degradado en el botón */
+    color: #fff; /* Texto blanco en botón degradado */
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: opacity 0.3s ease, transform 0.2s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Sombra sutil */
 }
 
 .newsletter button:hover {
     opacity: 0.9; /* Opacidad reducida al pasar el mouse */
-    transform: translateY(-3px); /* Movimiento */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); /* Sombra mayor al pasar el mouse */
+    transform: translateY(-2px); /* Pequeño movimiento */
 }
 
 .social-media ul {
     display: flex;
     justify-content: center;
-    gap: 25px; /* Espacio entre iconos */
+    gap: 20px;
 }
 
 .social-media a {
-    font-size: 2rem; /* Iconos más grandes */
+    font-size: 1.8rem;
     color: var(--text-color); /* Color por defecto */
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .social-media a:hover {
-    color: var(--theme-gold); /* Color dorado al pasar el mouse */
+    color: var(--corp-purple); /* Color al pasar el mouse */
     text-shadow: var(--hover-glow); /* Efecto de glow */
 }
 
 .footer-bottom {
     color: #555;
     font-size: 0.9rem;
-    margin-top: 25px; /* Espacio arriba */
+    margin-top: 20px;
 }
 
 /* Modales */
@@ -349,8 +339,8 @@ footer {
     width: 100%;
     height: 100%;
     overflow: auto; /* Permite scroll si el contenido es largo */
-    background-color: rgba(0, 0, 0, 0.95); /* Fondo oscuro más opaco */
-    backdrop-filter: blur(10px); /* Desenfoque */
+    background-color: rgba(0, 0, 0, 0.9); /* Fondo oscuro más opaco */
+    backdrop-filter: blur(8px); /* Desenfoque */
     justify-content: center;
     align-items: center;
 }
@@ -362,70 +352,59 @@ footer {
 .modal-content {
     background-color: var(--dark-background);
     margin: auto; /* Centrar */
-    padding: 35px; /* Padding mayor */
-    border: 1px solid var(--theme-purple); /* Borde con color corporativo */
-    box-shadow: 0 0 30px var(--theme-purple); /* Sombra con color corporativo */
+    padding: 30px;
+    border: 1px solid var(--corp-purple); /* Borde con color corporativo */
+    box-shadow: 0 0 25px var(--corp-purple); /* Sombra con color corporativo */
     border-radius: 10px;
-    width: 90%; /* Ancho del modal en pantallas grandes */
-    max-width: 700px; /* Ancho máximo */
+    width: 80%; /* Ancho del modal */
+    max-width: 700px; /* Ancho máximo un poco mayor */
     position: relative;
     animation: scaleIn 0.3s ease-out; /* Animación de aparición */
 }
 
 @keyframes scaleIn {
-    from { transform: scale(0.9); opacity: 0; } /* Empieza un poco más grande */
+    from { transform: scale(0.8); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
 }
 
 .close-button {
     color: var(--text-color); /* Color del botón cerrar */
-    font-size: 30px; /* Tamaño ligeramente mayor */
+    font-size: 28px;
     font-weight: bold;
     position: absolute;
-    top: 15px; /* Posición ajustada */
-    right: 25px; /* Posición ajustada */
+    top: 10px;
+    right: 20px;
     cursor: pointer;
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .close-button:hover,
 .close-button:focus {
-     color: var(--theme-gold); /* Color dorado al pasar el mouse */
-     text-shadow: 0 0 10px var(--theme-gold); /* Brillo dorado */
+     color: var(--close-button-hover);
+     text-shadow: 0 0 5px var(--close-button-hover);
 }
 
 
 .modal-content h2 {
     margin-top: 0;
-    color: var(--theme-blue); /* Color para títulos de modal - Azul */
-    text-shadow: 0 0 8px var(--theme-blue);
+    color: var(--corp-green); /* Color para títulos de modal */
+    text-shadow: 0 0 6px var(--corp-green);
     margin-bottom: 20px;
     font-size: 2rem;
 }
 
 .modal-content input[type="text"],
-.modal-content input[type="email"],
-.modal-content input[type="password"],
-.modal-content button { /* Estilos generales para inputs y botones dentro del modal */
-     width: 100%; /* Ancho completo */
+.modal-content input[type="email"], /* Si añades email inputs en modales */
+.modal-content input[type="password"] { /* Si añades password inputs en modales */
+     width: 100%;
      padding: 12px;
-     margin-bottom: 15px; /* Espacio entre elementos del formulario */
+     margin-top: 10px;
      border: 1px solid var(--line-color);
      background-color: #1a1a1a;
      color: #fff;
-     border-radius: 6px;
+     border-radius: 5px;
      outline: none;
      font-size: 1rem;
-}
-
-.modal-content button {
-    background: linear-gradient(45deg, var(--theme-purple), var(--theme-blue)); /* Degradado en botones dentro del modal */
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-}
-
-.modal-content button:hover {
-     opacity: 0.9;
 }
 
 
@@ -444,7 +423,7 @@ footer {
     }
 
     .header-icons .icon {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 
     .container {
@@ -490,7 +469,7 @@ footer {
     .sidebar .menu-item a i {
         margin-right: 0; /* Sin margen a la derecha */
         margin-bottom: 0; /* Sin margen abajo (usamos gap en el flex) */
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
 
     .sidebar .menu-item a .menu-text {
@@ -504,11 +483,11 @@ footer {
     }
 
     .main-content h1 {
-        font-size: 2.2rem;
+        font-size: 2rem;
     }
 
      .main-content h2 {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
     }
 
      .main-content p {
@@ -522,42 +501,30 @@ footer {
         gap: 20px;
     }
 
-     .newsletter, .social-media {
-         min-width: auto;
-         width: 95%; /* Ocupa más ancho */
-         max-width: 400px;
-     }
-
      .newsletter form {
         flex-direction: column;
         align-items: center;
-        gap: 10px;
+        gap: 15px;
     }
 
     .newsletter input[type="email"],
     .newsletter button {
-         width: 100%; /* Ocupa todo el ancho disponible en su contenedor */
-         max-width: none; /* Elimina el max-width fijo del desktop */
+         width: 90%; /* Ocupa más ancho en móvil */
+         max-width: 300px; /* Máximo para el input/botón */
     }
 
     .social-media ul {
         gap: 15px;
     }
 
-     .social-media a {
-         font-size: 1.5rem; /* Iconos de redes sociales más pequeños en móvil */
-     }
-
-
      .modal-content {
         width: 95%; /* Modal más ancho en móvil */
-        padding: 25px;
+        padding: 20px;
     }
 
      .close-button {
-        font-size: 26px;
-        right: 15px;
-        top: 10px;
+        font-size: 24px;
+        right: 10px;
      }
 
      .modal-content h2 {
@@ -570,12 +537,12 @@ footer {
     content: '';
     position: absolute;
     top: 0;
-    left: 260px; /* Posición de la línea vertical - ajustado a nuevo ancho sidebar */
+    left: 250px; /* Posición de la línea vertical */
     width: 1px;
     height: 100%;
     /* Degradado con colores corporativos */
-    background: linear-gradient(to bottom, transparent, var(--theme-purple) 20%, var(--theme-blue) 80%, transparent);
-    animation: lineFlow 8s linear infinite; /* Animación un poco más lenta y suave */
+    background: linear-gradient(to bottom, transparent, var(--corp-purple) 20%, var(--corp-blue) 80%, transparent);
+    animation: lineFlow 6s linear infinite; /* Animación un poco más lenta */
     z-index: 500; /* Por encima del fondo, por debajo del contenido */
 }
 
