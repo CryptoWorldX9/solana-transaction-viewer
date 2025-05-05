@@ -1,4 +1,4 @@
-// script.js - Implementando API Helius y Sidebar Colapsable (Corregido v2)
+// script.js - Implementando API Helius y Sidebar Colapsable (Corregido v3)
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -6,19 +6,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const HELIUS_API_KEY = '6fbed4b2-ce46-4c7d-b827-2c1d5a539ff2';
     // ------------------------------------------------------------------
     const HELIUS_RPC_URL = `https://rpc.helius.xyz/?api-key=${HELIUS_API_KEY}`;
-    const HELIUS_API_BASE = `https://api.helius.xyz/v0`; // Base para llamadas REST
+    const HELIUS_API_BASE = `https://api.helius.xyz/v0`;
 
-    // Conexión Solana usando el RPC de Helius
     const connection = new solanaWeb3.Connection(HELIUS_RPC_URL);
     const LAMPORTS_PER_SOL = solanaWeb3.LAMPORTS_PER_SOL;
 
     // --- Selección de Elementos DOM Generales ---
     const body = document.body;
     const sidebar = document.getElementById('sidebar');
-    const contentWrapper = document.getElementById('content-wrapper'); // Wrapper de contenido y footer
-    const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn'); // Botón de toggle explícito
+    const contentWrapper = document.getElementById('content-wrapper'); // Wrapper
+    const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
     const menuLinks = document.querySelectorAll('.sidebar .menu-item a');
-    const sections = document.querySelectorAll('.main-content > section'); // Solo secciones principales
+    const sections = document.querySelectorAll('.main-content > section');
     const searchIcon = document.getElementById('search-icon');
     const walletIcon = document.getElementById('wallet-icon');
     const userIcon = document.getElementById('user-icon');
@@ -31,14 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Selección de Elementos DOM para Wallet Tracker ---
     const walletTrackerSection = document.getElementById('wallet-tracker');
-    const trackerWalletInput = document.getElementById('solana-wallet-address-input'); // Input específico del tracker
-    const trackWalletButton = document.getElementById('track-wallet-button'); // Botón específico del tracker
+    const trackerWalletInput = document.getElementById('solana-wallet-address-input');
+    const trackWalletButton = document.getElementById('track-wallet-button');
     const trackerLoading = document.getElementById('tracker-loading');
     const trackerError = document.getElementById('tracker-error');
     const displayWalletAddress = document.getElementById('display-wallet-address');
     const copyAddressButton = walletTrackerSection?.querySelector('.account-info .copy-button');
     const qrCodeButton = walletTrackerSection?.querySelector('.qr-button');
-    // Elementos de búsqueda eliminados
     const solBalanceValue = document.getElementById('sol-balance-value');
     const solBalanceUsd = document.getElementById('sol-balance-usd');
     const tokenCount = document.getElementById('token-count');
@@ -59,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const transactionsTableBody = document.getElementById('transaction-list-body');
     const itemsPerPageSelector = document.getElementById('items-per-page');
 
-    // --- Lógica Sidebar Colapsable (CORREGIDA v2) ---
+    // --- Lógica Sidebar Colapsable (CORREGIDA v3) ---
     const collapseSidebar = () => {
         // Solo colapsar si no estamos en móvil y si no está ya colapsado
         if (window.innerWidth > 768 && !body.classList.contains('sidebar-collapsed')) {
@@ -69,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const expandSidebar = () => {
+        // Solo expandir si está colapsado
         if (body.classList.contains('sidebar-collapsed')) {
             body.classList.remove('sidebar-collapsed');
             console.log("Sidebar expanded");
@@ -79,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
          // Solo permitir toggle en pantallas grandes
          if (window.innerWidth > 768) {
             body.classList.toggle('sidebar-collapsed');
-            console.log("Sidebar toggled");
+            console.log("Sidebar toggled via button");
          }
     };
 
@@ -106,18 +105,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     resetWalletTrackerVisuals();
                 }
             }
-             // Detener la propagación aquí puede ser útil si el listener del sidebar interfiere
-             // e.stopPropagation(); // Descomentar si es necesario
         });
     });
 
     // Expandir al hacer clic en el sidebar (cuando está colapsado)
-    sidebar?.addEventListener('click', (e) => {
+    sidebar?.addEventListener('click', () => {
         // Verificar si está colapsado ANTES de expandir
         if (body.classList.contains('sidebar-collapsed')) {
-            // Verificar si el clic fue DIRECTAMENTE sobre el sidebar o sus hijos inmediatos
-            // (evitar que clicks profundos como en un input dentro de un modal lo activen si estuviera abierto)
-            // Una forma simple es solo verificar si está colapsado.
             expandSidebar();
         }
     });
@@ -132,11 +126,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Lógica Modales (Sin cambios) ---
     const openModal = (modal) => { if (modal) modal.style.display = 'block'; };
     const closeModal = (modal) => { if (modal) modal.style.display = 'none'; };
-
     searchIcon?.addEventListener('click', () => openModal(searchModal));
     walletIcon?.addEventListener('click', () => openModal(walletModal));
     userIcon?.addEventListener('click', () => openModal(userModal));
-
     closeButtons.forEach(button => {
         button.addEventListener('click', () => {
             const modal = button.closest('.modal');
@@ -144,16 +136,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     window.addEventListener('click', (event) => {
-        if (event.target.classList.contains('modal')) {
-            closeModal(event.target);
-        }
+        if (event.target.classList.contains('modal')) closeModal(event.target);
     });
 
     // --- Lógica Idioma (Placeholder) ---
     const applyLanguage = (lang) => {
         console.log(`Idioma cambiado a: ${lang}`);
         document.documentElement.lang = lang;
-        // TODO: Añadir lógica de traducción real aquí si es necesario
+        // TODO: Lógica de traducción real
     };
     languageOptions?.forEach(option => {
         option.addEventListener('click', () => {
@@ -185,15 +175,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const copyToClipboard = (text, buttonElement) => {
-        if (!text || text === '-' || text.includes('...')) {
-            console.warn("Intento de copiar texto inválido o placeholder:", text);
-            return;
-        }
+        if (!text || text === '-' || text.includes('...')) return;
         navigator.clipboard.writeText(text).then(() => {
             showCopyFeedback(buttonElement);
         }).catch(err => {
-            console.error('Error al copiar: ', err);
-            alert("Error al copiar.");
+            console.error('Error al copiar: ', err); alert("Error al copiar.");
         });
     };
 
@@ -236,12 +222,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     trackerWalletInput?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            trackWalletButton.click();
-        }
+        if (e.key === 'Enter') { e.preventDefault(); trackWalletButton.click(); }
     });
-
 
     // Botones Copiar
     copyAddressButton?.addEventListener('click', (e) => {
@@ -305,20 +287,15 @@ document.addEventListener('DOMContentLoaded', () => {
                      const txData = JSON.parse(txDataString);
                      alert(`Mostrar detalles para firma: ${txData.signature} (funcionalidad pendiente)\nDatos:\n${JSON.stringify(txData, null, 2)}`);
                      // TODO: Mostrar en modal
-                 } catch (jsonError) {
-                     console.error("Error parsing transaction data:", jsonError);
-                     alert("Error al leer los datos de la transacción.");
-                 }
+                 } catch (jsonError) { console.error("Error parsing transaction data:", jsonError); alert("Error al leer los datos."); }
             }
         }
     });
 
-    // Selector de Items por Página (funcionalidad pendiente)
+    // Selector de Items por Página
     itemsPerPageSelector?.addEventListener('change', () => {
         const currentAddress = trackerWalletInput?.value.trim();
-        if (currentAddress) {
-             trackWallet(currentAddress); // Recargar con nuevo límite
-        }
+        if (currentAddress) trackWallet(currentAddress); // Recargar con nuevo límite
     });
 
      // Link Creador de Tokens Tag (funcionalidad pendiente)
@@ -333,16 +310,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Función Principal de Rastreo con API Helius ---
     const trackWallet = async (walletAddress) => {
         if (!walletAddress) return;
-
         console.log(`Iniciando rastreo para: ${walletAddress}`);
         resetWalletTrackerVisuals();
-        showElement(trackerLoading);
-        hideElement(trackerError);
+        showElement(trackerLoading); hideElement(trackerError);
 
         let publicKey;
-        try {
-            publicKey = new solanaWeb3.PublicKey(walletAddress);
-        } catch (error) {
+        try { publicKey = new solanaWeb3.PublicKey(walletAddress); }
+        catch (error) {
             trackerError.textContent = "Dirección de billetera inválida.";
             showElement(trackerError); hideElement(trackerLoading);
             displayWalletAddress.textContent = 'Dirección Inválida';
@@ -357,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const apiUrl = `${HELIUS_API_BASE}addresses/${walletAddress}`;
         const itemsPerPage = parseInt(itemsPerPageSelector?.value || '10', 10);
 
-        await new Promise(resolve => setTimeout(resolve, 300)); // Pequeño delay visual
+        await new Promise(resolve => setTimeout(resolve, 300)); // Delay visual
 
         try {
             const [balanceResult, accountInfoResult, transactionsResult] = await Promise.allSettled([
@@ -390,13 +364,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
                 if (tokensDisplayed === 0) tokenListDetailed.innerHTML = '<li>No se encontraron tokens con saldo.</li>';
-
-            } else { /* Manejar error de balance... */
-                 console.error("Error fetching balances:", balanceResult.reason || balanceResult.value.status);
-                 solBalanceValue.textContent = 'Error';
-                 solBalanceUsd.textContent = 'Error';
-                 tokenCount.textContent = 'Error';
-                 tokenListDetailed.innerHTML = '<li>Error al cargar tokens.</li>';
+            } else { /* Manejar error balance */
+                 console.error("Error fetching balances:", balanceResult.reason || balanceResult.value?.status);
+                 solBalanceValue.textContent = 'Error'; solBalanceUsd.textContent = 'Error';
+                 tokenCount.textContent = 'Error'; tokenListDetailed.innerHTML = '<li>Error al cargar tokens.</li>';
             }
 
             // Procesar Info Cuenta
@@ -404,18 +375,14 @@ document.addEventListener('DOMContentLoaded', () => {
                  const accountInfoData = accountInfoResult.value;
                  const ownerPk = accountInfoData.owner.toBase58();
                  ownerAddress.textContent = `${ownerPk.substring(0, 5)}...${ownerPk.substring(ownerPk.length - 5)}`;
-                 ownerAddress.title = ownerPk;
-                 ownerAddress.dataset.fullAddress = ownerPk;
+                 ownerAddress.title = ownerPk; ownerAddress.dataset.fullAddress = ownerPk;
                  onCurveStatus.textContent = !accountInfoData.executable ? 'Verdadero' : 'Falso (Programa)';
-            } else { /* Manejar error de info cuenta... */
+            } else { /* Manejar error info cuenta */
                   console.warn("Error fetching account info:", accountInfoResult.reason || "Account not found");
-                  ownerAddress.textContent = 'Error/No encontrado';
-                  onCurveStatus.textContent = 'Error/No encontrado';
+                  ownerAddress.textContent = 'Error/No encontrado'; onCurveStatus.textContent = 'Error/No encontrado';
             }
             // Stake y Tags no implementados
-            stakeAmount.textContent = '-';
-            tagsDisplay.innerHTML = '<small>(No implementado)</small>';
-
+            stakeAmount.textContent = '-'; tagsDisplay.innerHTML = '<small>(No implementado)</small>';
 
             // Procesar Transacciones
             if (transactionsResult.status === 'fulfilled' && transactionsResult.value.ok) {
@@ -423,7 +390,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 transactionsTableBody.innerHTML = '';
                 if (Array.isArray(transactionsData) && transactionsData.length > 0) {
                     transactionsData.forEach(tx => {
-                        // ... (Misma lógica de renderizado de filas que antes) ...
                          const tr = document.createElement('tr');
                          const date = tx.timestamp ? new Date(tx.timestamp * 1000).toLocaleString('sv-SE') : '-';
                          const signatureShort = `${tx.signature.substring(0, 4)}...${tx.signature.substring(tx.signature.length - 4)}`;
@@ -431,18 +397,16 @@ document.addEventListener('DOMContentLoaded', () => {
                          let source = tx.source || 'Desconocido';
                          let program = tx.type || 'Desconocido';
                          if(tx.events?.nft?.source) source = tx.events.nft.source;
-                         if (tx.type === 'UNKNOWN' && tx.instructions?.length > 0) {
-                             program = tx.instructions[0].programId?.substring(0, 10) + '...' || program;
-                         }
+                         if (tx.type === 'UNKNOWN' && tx.instructions?.length > 0) program = tx.instructions[0].programId?.substring(0, 10) + '...' || program;
                         let mainValue = '---'; let valueClass = '';
                         const nativeTransfer = tx.nativeTransfers?.find(t => t.fromUserAccount === walletAddress || t.toUserAccount === walletAddress);
                         const tokenTransfer = tx.tokenTransfers?.find(t => t.fromUserAccount === walletAddress || t.toUserAccount === walletAddress);
-                         if (nativeTransfer) { /* ... lógica valor SOL ... */
+                         if (nativeTransfer) {
                              const amount = (nativeTransfer.amount / LAMPORTS_PER_SOL).toFixed(4);
                              const prefix = nativeTransfer.fromUserAccount === walletAddress ? '-' : '+';
                              mainValue = `<i class="fab fa-solana sol-icon-small"></i> ${prefix} ${amount} SOL`;
                              valueClass = nativeTransfer.fromUserAccount === walletAddress ? 'tx-sent' : 'tx-received';
-                         } else if (tokenTransfer) { /* ... lógica valor Token ... */
+                         } else if (tokenTransfer) {
                              const amount = tokenTransfer.tokenAmount.toLocaleString(undefined, { maximumFractionDigits: tokenTransfer.tokenDecimals || 2 });
                              const symbol = tokenTransfer.tokenSymbol || tokenTransfer.mint?.substring(0,4) || '?';
                              const prefix = tokenTransfer.fromUserAccount === walletAddress ? '-' : '+';
@@ -450,7 +414,6 @@ document.addEventListener('DOMContentLoaded', () => {
                               valueClass = tokenTransfer.fromUserAccount === walletAddress ? 'tx-sent' : 'tx-received';
                          }
                           const formattedType = program.replace(/([A-Z])/g, ' $1').trim().split(/[\s_]+/).map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
-
                         tr.innerHTML = `
                             <td><button class="icon-button view-details-button" title="Ver detalles"><i class="fas fa-eye"></i></button></td>
                             <td><span class="tx-signature" title="${tx.signature}">${signatureShort}</span></td>
@@ -468,14 +431,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     transactionsTableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;">No se encontraron transacciones recientes.</td></tr>';
                 }
-            } else { /* Manejar error de transacciones... */
+            } else { /* Manejar error transacciones */
                  console.error("Error fetching transactions:", transactionsResult.reason || transactionsResult.value.status);
                  transactionsTableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Error al cargar transacciones.</td></tr>';
             }
 
             hideElement(trackerLoading);
 
-        } catch (error) { // Catch para errores inesperados
+        } catch (error) { // Catch errores inesperados
             console.error("Error general al procesar datos de la billetera:", error);
             trackerError.textContent = `Error inesperado: ${error.message}. Intenta de nuevo.`;
             showElement(trackerError);
@@ -494,6 +457,6 @@ document.addEventListener('DOMContentLoaded', () => {
      if (homeSection) homeSection.classList.add('active');
      if (homeMenuItemLink) homeMenuItemLink.classList.add('active-menu');
      applyLanguage(document.documentElement.lang || 'es');
-     body.classList.remove('sidebar-collapsed'); // Asegurar estado inicial expandido
+     body.classList.remove('sidebar-collapsed'); // Estado inicial: expandido
 
 }); // Fin de DOMContentLoaded
