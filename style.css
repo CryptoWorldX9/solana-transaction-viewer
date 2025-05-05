@@ -1,3 +1,47 @@
+/* Added Beta Tag Styles */
+.logo {
+    position: relative; /* Needed for absolute positioning */
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: var(--corp-blue);
+    text-shadow: var(--neon-glow-blue);
+    flex-shrink: 0;
+    display: block; /* Or inline-block */
+    padding: 0;
+}
+
+.beta-tag {
+    position: absolute;
+    top: 0;
+    right: -45px; /* Adjust horizontal position */
+    background-color: var(--corp-purple);
+    color: var(--dark-background);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 5px rgba(179, 106, 255, 0.7);
+    z-index: 1;
+    line-height: 1;
+}
+
+/* Responsive adjustments for Beta Tag */
+@media (max-width: 768px) {
+    .logo {
+         font-size: 2rem; /* Match original mobile logo size */
+         text-shadow: 0 0 3px var(--corp-blue); /* Match original mobile logo glow */
+    }
+    .beta-tag {
+        font-size: 0.6rem;
+        padding: 1px 4px;
+        right: -35px; /* Adjust position */
+        top: 2px;
+    }
+}
+
+/* Original style.css content starts here */
 /* Variables para colores - Paleta corporativa/elegante refinada */
 :root {
     --corp-blue: #00b0ff;    /* Un azul tecnológico más vibrante pero elegante */
@@ -9,58 +53,59 @@
     --text-color: #e0e0e0;   /* Color de texto general más claro */
     --soft-text-color: #a0a0a0; /* Color para texto secundario/placeholder */
     --soft-highlight: rgba(255, 255, 255, 0.08); /* Para fondos sutiles en hover */
-    --error-color: #ff4d4d; /* Rojo para errores */
-    --success-color: #42e6a4; /* Verde para éxito */
-    --info-color: #00b0ff;   /* Azul para información */
     --neon-glow-blue: 0 0 8px var(--corp-blue); /* Glow más definido */
     --neon-glow-purple: 0 0 8px var(--corp-purple);
     --neon-glow-green: 0 0 8px var(--corp-green);
     --hover-glow: var(--neon-glow-blue), var(--neon-glow-purple), var(--neon-glow-green); /* Glow combinado */
-    --scrollbar-thumb-color: var(--corp-blue);
-    --scrollbar-track-color: var(--medium-dark-background);
+
+    /* Definir un color pink suave solo para el ticker (o donde se necesite algo diferente) */
+    --corp-pink-soft: #ff80ab; /* Ejemplo de pink */
+     --success-color: #2ecc71;
+     --error-color: #e74c3c;
+     --warning-color: #f39c12;
 }
 
-/* Estilos globales */
-*, *::before, *::after {
-    box-sizing: border-box;
+
+/* Reset básico y estilos generales */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
 }
 
-html {
-    scroll-behavior: smooth;
+html, body {
+    height: 100%;
+    background-color: var(--dark-background);
+    color: var(--text-color);
+    overflow-x: hidden; /* Evitar scroll horizontal por animación de ticker */
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: var(--dark-background);
-    color: var(--text-color);
-    line-height: 1.6;
-    overflow-x: hidden; /* Evita el desbordamiento horizontal */
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Asegura que el body ocupe al menos toda la altura */
+    min-height: 100vh;
 }
 
-/* Contenedor principal */
 .container {
     display: flex;
-    width: 100%;
-    flex-grow: 1; /* Permite que el contenedor crezca para llenar el espacio */
+    flex-grow: 1;
+    /* padding-top: 60px; Altura del header fijo */
+    padding-top: 100px; /* Espacio para header + ticker */
 }
 
-/* Animación de fondo */
+
+/* Animación de fondo sutil */
 .background-animation {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, var(--corp-blue), var(--corp-purple), var(--corp-green), var(--dark-background));
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
     z-index: -1;
-    opacity: 0.1; /* Muy sutil */
+    background: linear-gradient(-45deg, #000000, #111111, #050515, #100515);
+    background-size: 400% 400%;
+    animation: gradientBG 25s ease infinite;
 }
 
 @keyframes gradientBG {
@@ -69,606 +114,550 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* Sidebar */
-.sidebar {
-    width: 250px;
-    background-color: rgba(11, 11, 11, 0.8); /* Fondo oscuro semi-transparente */
-    backdrop-filter: blur(10px); /* Efecto de desenfoque */
-    border-right: 1px solid var(--line-color);
-    padding: 2rem 1rem;
-    display: flex;
-    flex-direction: column;
-    transition: width 0.3s ease;
-    position: sticky; /* Fija el sidebar */
+
+/* --- Header --- */
+header {
+    position: fixed; /* Header fijo */
     top: 0;
-    height: 100vh; /* Ocupa toda la altura de la ventana */
-    z-index: 100; /* Encima del contenido principal */
-}
-
-.logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 2.5rem;
-    color: var(--corp-blue);
-    text-shadow: var(--neon-glow-blue);
-    position: relative; /* Para posicionar el tag beta */
-}
-
-.beta-tag {
-    position: absolute;
-    top: -5px; /* Ajusta según sea necesario */
-    right: 10px; /* Ajusta según sea necesario */
-    background-color: var(--corp-purple);
-    color: var(--dark-background);
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 2px 5px;
-    border-radius: 4px;
-    text-shadow: none;
-}
-
-
-.menu ul {
-    list-style: none;
-}
-
-.menu-item a {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Espacio entre icono y texto */
-    padding: 12px 15px;
-    color: var(--text-color);
-    text-decoration: none;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-    font-weight: 600;
-}
-
-.menu-item a i {
-    width: 20px; /* Ancho fijo para los iconos */
-    text-align: center;
-    transition: transform 0.2s ease;
-}
-
-.menu-item a:hover {
-    background-color: var(--soft-highlight);
-    color: var(--corp-green);
-    box-shadow: inset 0 0 8px rgba(66, 230, 164, 0.3); /* Sutil glow interior */
-}
-
-.menu-item a:hover i {
-    transform: scale(1.1); /* Efecto ligero en el icono */
-}
-
-/* Estilo para el enlace activo en el menú */
-.menu-item a.active-menu {
-    background: linear-gradient(90deg, var(--corp-blue), var(--corp-purple));
-    color: var(--dark-background); /* Texto oscuro para contraste */
-    font-weight: 700; /* Más destacado */
-    box-shadow: 0 2px 10px rgba(0, 176, 255, 0.4), 0 2px 10px rgba(179, 106, 255, 0.4); /* Glow externo */
-}
-
-.menu-item a.active-menu i {
-    color: var(--dark-background); /* Icono oscuro también */
-}
-
-
-.sidebar-footer {
-    margin-top: auto; /* Empuja al fondo */
-    padding-top: 1rem;
-    border-top: 1px solid var(--line-color);
+    left: 0;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.language-selector button {
-    background: none;
-    border: none;
-    color: var(--soft-text-color);
-    cursor: pointer;
-    padding: 5px;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
-}
-
-.language-selector button:hover,
-.language-selector button.active {
-    color: var(--corp-blue);
-    text-shadow: var(--neon-glow-blue);
-}
-
-.theme-switch {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--soft-text-color);
-}
-
-.theme-switch i {
-     font-size: 1rem;
-}
-
-/* Estilo del switch de tema */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 40px; /* Más pequeño */
-  height: 20px; /* Más pequeño */
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #444; /* Fondo gris oscuro */
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 14px; /* Más pequeño */
-  width: 14px; /* Más pequeño */
-  left: 3px;   /* Ajuste */
-  bottom: 3px; /* Ajuste */
-  background-color: white;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: var(--corp-blue); /* Color activo */
-}
-input:focus + .slider { /* Opcional: outline al enfocar */
- box-shadow: 0 0 1px var(--corp-blue);
-}
-
-
-input:checked + .slider:before {
-  transform: translateX(20px); /* Mover el círculo */
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 20px; /* Completamente redondeado */
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-
-/* Contenido Principal */
-.main-content {
-    flex-grow: 1;
-    padding: 1.5rem 2rem;
-    overflow-y: auto; /* Permite scroll si el contenido es largo */
-    max-height: 100vh; /* Limita la altura al viewport */
-}
-
-/* Barra de header dentro del main content */
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
-    margin-bottom: 1.5rem;
+    padding: 1rem 2rem;
+    background-color: rgba(11, 11, 11, 0.85); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(10px); /* Efecto de desenfoque */
     border-bottom: 1px solid var(--line-color);
+    z-index: 1000;
+    flex-wrap: wrap; /* Permite que el ticker vaya abajo si no hay espacio */
+    height: 60px; /* Altura fija del header principal */
 }
 
-.header-left, .header-right {
+/* Logo */
+/* .logo definido al principio con el beta tag */
+
+/* Ticker de Precios */
+.price-ticker {
+    position: fixed; /* Fijo debajo del header */
+    top: 60px; /* Justo debajo del header */
+    left: 0;
+    width: 100%;
+    height: 40px; /* Altura del ticker */
+    background-color: var(--medium-dark-background);
+    overflow: hidden;
+    border-bottom: 1px solid var(--line-color);
+    z-index: 999; /* Debajo del header pero sobre el contenido */
     display: flex;
     align-items: center;
-    gap: 15px; /* Espacio entre botones */
-}
-
-/* Price Ticker */
-.price-ticker {
-    flex-grow: 1;
-    overflow: hidden; /* Oculta el contenido que se desborda */
-    background: var(--medium-dark-background);
-    border-radius: 5px;
-    margin: 0 20px; /* Espacio a los lados */
-    position: relative; /* Para que el inner se posicione bien */
-    height: 30px; /* Altura fija */
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
 .price-ticker-inner {
-    display: flex; /* Hace que los contenidos estén uno al lado del otro */
-    width: fit-content; /* Ajusta el ancho al contenido */
-    animation: ticker-scroll 40s linear infinite; /* Ajusta duración según necesites */
-    position: absolute; /* Permite la animación */
-    left: 0;
-    top: 0;
+    display: inline-block;
+    white-space: nowrap;
+    animation: ticker-scroll 60s linear infinite; /* Ajusta la duración para la velocidad */
     height: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .price-ticker-content {
     display: flex;
     align-items: center;
-    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
-    padding: 0 15px; /* Espacio interno */
-    height: 100%;
+     gap: 25px; /* Espacio entre items */
+     padding: 0 25px; /* Espacio al inicio/final del grupo */
 }
 
+
 .price-item {
-    margin-right: 25px; /* Espacio entre precios */
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--soft-text-color);
-    display: inline-flex; /* Para alinear icono y texto */
+    display: flex;
     align-items: center;
     gap: 6px; /* Espacio entre icono y texto */
 }
 
 .price-item i {
-    color: var(--corp-green); /* Color del icono */
-    font-size: 0.9rem;
+     color: var(--corp-pink-soft); /* Color específico para iconos del ticker */
+     font-size: 1rem;
+     text-shadow: 0 0 5px var(--corp-pink-soft); /* Sutil glow pink */
 }
-.price-item.loading {
-    color: var(--info-color);
-}
-
 
 @keyframes ticker-scroll {
-    0% {
-        transform: translateX(0%);
-    }
-    100% {
-        transform: translateX(-50%); /* Se desplaza la mitad (la longitud del primer set de contenido) */
-    }
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); } /* Se mueve la mitad (longitud del contenido duplicado) */
 }
 
 
-/* Botones comunes */
-.button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
-    font-size: 0.9rem;
-    display: inline-flex; /* Para alinear icono y texto */
+/* Iconos del Header */
+.header-icons {
+    display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 25px;
 }
 
-.button:active {
-    transform: scale(0.98); /* Ligero encogimiento al hacer clic */
-}
-
-.primary-button {
-    background: linear-gradient(90deg, var(--corp-blue), var(--corp-purple));
-    color: #fff; /* Texto blanco para contraste */
-    box-shadow: 0 2px 8px rgba(0, 176, 255, 0.3), 0 2px 8px rgba(179, 106, 255, 0.3);
-}
-
-.primary-button:hover {
-    box-shadow: 0 4px 12px rgba(0, 176, 255, 0.5), 0 4px 12px rgba(179, 106, 255, 0.5);
-}
-
-
-.icon-button {
-    background: none;
-    border: none;
+.header-icons i {
+    font-size: 1.3rem;
     color: var(--soft-text-color);
-    font-size: 1.4rem; /* Tamaño del icono */
     cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: color 0.3s ease, background-color 0.3s ease;
-    position: relative; /* Para el badge */
+    transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-.icon-button:hover {
+.header-icons i:hover {
     color: var(--corp-blue);
+    text-shadow: var(--neon-glow-blue);
+}
+
+/* Language Switcher */
+#language-switcher {
+    position: relative;
+    cursor: pointer;
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 150%; /* Debajo del icono */
+    right: 0;
+    background-color: var(--medium-dark-background);
+    border: 1px solid var(--line-color);
+    border-radius: 5px;
+    padding: 5px 0;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.language-dropdown span {
+    padding: 8px 15px;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.language-dropdown span:hover {
+    background-color: var(--soft-highlight);
+    color: var(--corp-blue);
+}
+
+
+/* --- Sidebar --- */
+.sidebar {
+    width: 240px; /* Ancho fijo del sidebar */
+    background-color: rgba(11, 11, 11, 0.5); /* Más transparente que el header */
+    padding: 1.5rem 0;
+    border-right: 1px solid var(--line-color);
+    flex-shrink: 0; /* Evita que se encoja */
+    position: fixed; /* Sidebar fijo */
+    left: 0;
+    top: 100px; /* Debajo del header + ticker */
+    bottom: 0; /* Ocupa el resto de la altura */
+    overflow-y: auto; /* Scroll si el menú es largo */
+    transition: width 0.3s ease;
+}
+
+.menu ul {
+    list-style: none;
+}
+
+.menu-item {
+    margin-bottom: 5px;
+}
+
+.menu-item a {
+    display: flex;
+    align-items: center;
+    padding: 12px 2rem;
+    color: var(--soft-text-color);
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, border-left 0.3s ease;
+    border-left: 4px solid transparent; /* Indicador activo */
+}
+
+.menu-item a i {
+    margin-right: 15px;
+    width: 20px; /* Ancho fijo para alinear iconos */
+    text-align: center;
+    font-size: 1.1rem;
+    transition: text-shadow 0.3s ease;
+}
+
+.menu-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.menu-item a:hover {
+    background-color: var(--soft-highlight);
+    color: var(--text-color);
+}
+
+.menu-item a.active-menu {
+    color: var(--corp-blue);
+    border-left-color: var(--corp-blue);
     background-color: var(--soft-highlight);
 }
 
-/* Badge de notificación */
-.notification-badge {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 8px;
-    height: 8px;
-    background-color: var(--corp-green);
-    border-radius: 50%;
-    border: 1px solid var(--dark-background); /* Borde para separarlo */
-    box-shadow: 0 0 5px var(--corp-green);
+.menu-item a.active-menu i {
+    text-shadow: var(--neon-glow-blue);
 }
 
 
-/* Secciones de contenido */
-.content-section {
-    display: none; /* Ocultas por defecto */
-    padding-top: 1rem;
-    animation: fadeIn 0.5s ease-out;
+/* --- Main Content --- */
+.main-content {
+    flex-grow: 1;
+    padding: 2rem 3rem;
+    margin-left: 240px; /* Espacio para el sidebar fijo */
+    transition: margin-left 0.3s ease;
 }
 
-.content-section.active {
-    display: block; /* Muestra la sección activa */
+.main-content section {
+    display: none; /* Ocultar secciones por defecto */
+    animation: fadeIn 0.5s ease-in-out;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--line-color);
+    margin-bottom: 2rem;
 }
+
+.main-content section:last-child {
+     border-bottom: none;
+     margin-bottom: 0;
+}
+
+
+.main-content section.active {
+    display: block; /* Mostrar sección activa */
+}
+
+.main-content h1, .main-content h2 {
+    color: var(--corp-blue);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-shadow: var(--neon-glow-blue);
+     display: flex;
+     align-items: center;
+     gap: 10px;
+}
+ .main-content h2 i {
+     font-size: 1.1em; /* Icono un poco más grande que el texto h2 */
+ }
+
+.main-content p {
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Títulos de sección */
-.content-section h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    color: var(--text-color);
-    border-bottom: 2px solid var(--corp-blue);
-    padding-bottom: 0.5rem;
-    display: inline-block; /* Para que el borde solo ocupe el ancho del texto */
+
+/* --- Estilos específicos para Wallet Tracker --- */
+#wallet-tracker {
+    /* Estilos generales si son necesarios */
 }
 
-/* Estilos para el Wallet Tracker */
-.input-group {
+.wallet-input-area {
     display: flex;
     gap: 10px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    align-items: center;
 }
 
-#wallet-address-input {
+#solana-wallet-address {
     flex-grow: 1;
     padding: 12px 15px;
     background-color: var(--medium-dark-background);
     border: 1px solid var(--line-color);
-    border-radius: 6px;
+    border-radius: 5px;
     color: var(--text-color);
     font-size: 0.95rem;
     outline: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-#wallet-address-input:focus {
+#solana-wallet-address:focus {
     border-color: var(--corp-blue);
     box-shadow: 0 0 8px rgba(0, 176, 255, 0.3);
 }
 
-#wallet-address-input::placeholder {
-    color: var(--soft-text-color);
-    opacity: 0.7;
+#solana-wallet-address::placeholder {
+     color: var(--soft-text-color);
+     opacity: 0.7;
 }
 
-/* Indicador de carga */
-.loading-indicator {
+#track-wallet-btn {
+    padding: 12px 20px;
+    background: linear-gradient(90deg, var(--corp-blue), var(--corp-purple));
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-size: 1.1rem;
-    color: var(--info-color);
-    padding: 20px;
-    background-color: rgba(0, 176, 255, 0.1);
-    border: 1px dashed var(--info-color);
-    border-radius: 6px;
-    margin-bottom: 1.5rem;
-}
-.loading-indicator i {
-    font-size: 1.3rem;
+    gap: 8px;
 }
 
-/* Mensaje de Error */
-.error-message {
-    color: var(--error-color);
-    background-color: rgba(255, 77, 77, 0.1);
-    border: 1px solid var(--error-color);
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 1.5rem;
+#track-wallet-btn i {
+    font-size: 1em;
+}
+
+
+#track-wallet-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 176, 255, 0.3), 0 4px 15px rgba(179, 106, 255, 0.3);
+}
+ #track-wallet-btn:active {
+     transform: translateY(0px);
+     box-shadow: 0 2px 8px rgba(0, 176, 255, 0.2), 0 2px 8px rgba(179, 106, 255, 0.2);
+ }
+
+
+/* Mensajes (Inicial, Carga, Error) */
+.message {
     text-align: center;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: var(--medium-dark-background);
+    border: 1px solid var(--line-color);
+    color: var(--soft-text-color);
+}
+
+.message.error {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-color: var(--error-color);
+    color: var(--error-color);
     font-weight: 600;
 }
 
-/* Mensaje Informativo (ej. mensaje inicial) */
-.info-message {
-    color: var(--info-color);
-    background-color: rgba(0, 176, 255, 0.1);
-    border: 1px solid var(--info-color);
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 1.5rem;
-    text-align: center;
+.message i.fa-spinner {
+    margin-right: 8px;
+    color: var(--corp-blue);
 }
 
-
-/* Contenedor de datos de la wallet */
-.wallet-data-container {
+/* Contenedor de tarjetas de datos */
+.data-cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Diseño de cuadrícula responsivo */
-    gap: 20px;
-    margin-top: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    gap: 1.5rem;
 }
 
-/* Tarjetas de datos */
 .data-card {
     background-color: var(--medium-dark-background);
-    padding: 20px;
+    padding: 1.5rem;
     border-radius: 8px;
     border: 1px solid var(--line-color);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .data-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+     transform: translateY(-5px);
+     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
-.data-card h2 {
-    font-size: 1.2rem;
-    color: var(--corp-green);
-    margin-bottom: 15px;
-    padding-bottom: 5px;
+
+.data-card h3 {
+    color: var(--corp-green); /* Color distinto para títulos de tarjetas */
+    margin-bottom: 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
     border-bottom: 1px solid var(--line-color);
+    padding-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
+ .data-card h3 i {
+      color: var(--corp-green); /* Iconos del mismo color que el título h3 */
+      text-shadow: var(--neon-glow-green);
+      font-size: 1.2em;
+ }
 
-.data-card p, .data-card ul {
+
+.data-card p {
+    font-size: 1.3rem;
+    font-weight: 600;
     color: var(--text-color);
-    font-size: 0.95rem;
+    margin-bottom: 0; /* Quitar margen inferior al párrafo de saldo */
 }
 
+.data-card p #sol-balance {
+    color: var(--corp-blue); /* Destacar el número del saldo SOL */
+}
+
+
+/* Lista de Tokens y Transacciones */
 .data-card ul {
     list-style: none;
-    padding-left: 0;
-    max-height: 250px; /* Altura máxima para listas largas */
-    overflow-y: auto; /* Scroll si es necesario */
+    max-height: 300px; /* Altura máxima para evitar listas muy largas */
+    overflow-y: auto;
+    padding-right: 10px; /* Espacio para la barra de scroll */
 }
 
-.data-card li {
-    padding: 8px 0;
-    border-bottom: 1px solid var(--line-color);
-    display: flex;
-    justify-content: space-between; /* Para balance de tokens */
-    align-items: center;
-    gap: 10px;
+/* Estilo de la barra de scroll */
+.data-card ul::-webkit-scrollbar {
+    width: 6px;
 }
+.data-card ul::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+.data-card ul::-webkit-scrollbar-thumb {
+    background: var(--line-color);
+    border-radius: 3px;
+}
+.data-card ul::-webkit-scrollbar-thumb:hover {
+    background: var(--soft-text-color);
+}
+
+
+.data-card li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line-color);
+    font-size: 0.9rem;
+}
+
 .data-card li:last-child {
     border-bottom: none;
 }
-.data-card li span:first-child { /* Nombre del token/tx */
-    font-weight: 600;
-    word-break: break-word; /* Evita desbordamiento */
-}
-.data-card li span:last-child { /* Balance/Detalle Tx */
-    color: var(--corp-blue);
-    font-weight: bold;
-    white-space: nowrap; /* Evita que el balance se rompa */
-}
 
-.data-card a { /* Para enlaces en transacciones */
-    color: var(--corp-purple);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-.data-card a:hover {
-    color: var(--corp-blue);
-    text-decoration: underline;
-}
-
-
-/* Tarjetas anchas (NFTs, Transacciones) */
-.wide-card {
-    grid-column: span 2; /* Ocupa dos columnas en layouts más anchos */
-}
-@media (max-width: 900px) { /* En pantallas más pequeñas, ocupan 1 columna */
-    .wide-card {
-        grid-column: span 1;
-    }
-}
-
-
-/* Galería de NFTs preview */
-.nft-gallery-preview {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Miniaturas responsivas */
-    gap: 15px;
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.nft-item {
-    border-radius: 6px;
-    overflow: hidden;
-    background-color: var(--dark-background);
-    border: 1px solid var(--line-color);
-    aspect-ratio: 1 / 1; /* Mantiene proporción cuadrada */
+.item-info {
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease;
+    gap: 10px;
+    color: var(--text-color);
 }
-.nft-item:hover {
-     transform: scale(1.05);
+
+.item-info i {
+    color: var(--corp-purple); /* Iconos de lista en púrpura */
+    font-size: 0.8em;
 }
+
+
+.item-value {
+    font-weight: 600;
+    color: var(--corp-green); /* Valor del token o transacción */
+}
+
+/* Colores para transacciones enviadas/recibidas */
+#transaction-list .tx-sent { color: var(--error-color); }
+#transaction-list .tx-received { color: var(--success-color); }
+#transaction-list .tx-unknown { color: var(--soft-text-color); }
+
+#transaction-list .item-info a { /* Estilo para enlace de explorer */
+     color: var(--soft-text-color);
+     text-decoration: none;
+     font-size: 0.85em;
+     margin-left: 5px; /* Separación del texto */
+     transition: color 0.3s ease;
+}
+ #transaction-list .item-info a:hover {
+      color: var(--corp-blue);
+      text-decoration: underline;
+ }
+
+
+/* Galería de NFTs */
+#nft-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Grid responsivo para NFTs */
+    gap: 1rem;
+    max-height: 300px; /* Altura máxima como las listas */
+    overflow-y: auto;
+    padding: 5px; /* Pequeño padding alrededor */
+}
+
+/* Estilo de la barra de scroll para NFT gallery */
+#nft-gallery::-webkit-scrollbar { width: 6px; }
+#nft-gallery::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 3px;}
+#nft-gallery::-webkit-scrollbar-thumb { background: var(--line-color); border-radius: 3px; }
+#nft-gallery::-webkit-scrollbar-thumb:hover { background: var(--soft-text-color); }
+
+.nft-item {
+    background-color: rgba(255, 255, 255, 0.03); /* Fondo muy sutil */
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+    border: 1px solid var(--line-color);
+     transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+ .nft-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+ }
+
 
 .nft-item img {
     width: 100%;
-    height: 100%;
-    object-fit: cover; /* Cubre el espacio sin distorsionar */
-    display: block; /* Evita espacio extra debajo */
+    height: 100px; /* Altura fija para la imagen */
+    object-fit: cover; /* Cubrir el espacio sin distorsionar */
+    display: block;
 }
 
-.nft-item span { /* Placeholder si no hay imagen */
+.nft-item p {
     font-size: 0.8rem;
     color: var(--soft-text-color);
-    text-align: center;
-    padding: 5px;
+    padding: 8px 5px;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Cortar texto largo */
 }
 
-/* Scrollbars personalizados */
-/* Para Webkit (Chrome, Safari, Edge) */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--scrollbar-track-color);
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb-color);
-  border-radius: 10px;
-  border: 2px solid var(--scrollbar-track-color); /* Espacio alrededor del thumb */
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--corp-purple); /* Cambio de color al pasar el ratón */
-}
-/* Para Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+/* Hacer la tarjeta de transacciones de ancho completo */
+.data-card.full-width {
+    grid-column: 1 / -1; /* Ocupa todas las columnas disponibles */
 }
 
 
-/* Modales */
+/* Helper para ocultar elementos */
+.hidden {
+    display: none !important; /* Usa !important para asegurar que se oculte */
+}
+
+
+/* --- Modales --- */
 .modal {
     display: none; /* Oculto por defecto */
     position: fixed;
-    z-index: 1000; /* Por encima de todo */
+    z-index: 1001; /* Encima de todo excepto quizás tooltips muy específicos */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Permite scroll si el contenido es largo */
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
-    backdrop-filter: blur(5px); /* Desenfoque del fondo */
+    overflow: auto; /* Permitir scroll si el contenido es largo */
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semitransparente */
     animation: fadeInModal 0.3s ease-out;
+}
+
+.modal.show {
+    display: flex; /* Usar flex para centrar el contenido */
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
     background-color: var(--medium-dark-background);
-    margin: 10% auto; /* Centrado vertical y horizontal */
-    padding: 25px 30px;
+    margin: auto;
+    padding: 2.5rem;
     border: 1px solid var(--line-color);
+    width: 80%;
+    max-width: 550px; /* Ancho máximo del modal */
     border-radius: 10px;
-    width: 80%; /* Ancho del modal */
-    max-width: 600px; /* Ancho máximo */
     position: relative;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-}
-
-.modal h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    color: var(--corp-blue);
-    font-size: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    animation: slideInModal 0.4s ease-out;
 }
 
 .close-button {
@@ -676,301 +665,334 @@ input:checked + .slider:before {
     position: absolute;
     top: 15px;
     right: 20px;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
-    line-height: 1;
     cursor: pointer;
     transition: color 0.3s ease;
 }
 
 .close-button:hover,
 .close-button:focus {
-    color: var(--error-color);
+    color: var(--corp-red); /* Usar un color corporativo para cerrar, ej: rojo */
     text-decoration: none;
 }
 
-/* Contenido específico de modales (ej. búsqueda) */
+.modal h2 {
+     color: var(--corp-purple); /* Color diferente para títulos de modales */
+     margin-bottom: 1.5rem;
+     text-align: center;
+     text-shadow: var(--neon-glow-purple);
+}
+
+.modal p {
+     text-align: center;
+     color: var(--text-color);
+}
+
+/* Estilos específicos para modal de búsqueda */
+#search-modal h2 {
+     color: var(--corp-blue); /* Azul para búsqueda */
+     text-shadow: var(--neon-glow-blue);
+}
+
 #search-modal #search-input {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 20px;
-    background-color: var(--dark-background);
-    border: 1px solid var(--line-color);
-    border-radius: 6px;
-    color: var(--text-color);
-    font-size: 1rem;
-    outline: none;
+     width: 100%;
+     padding: 12px 15px;
+     margin-bottom: 1.5rem;
+     background-color: #2a2a2a;
+     border: 1px solid var(--line-color);
+     border-radius: 5px;
+     color: var(--text-color);
+     font-size: 1rem;
+     outline: none;
+     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
-#search-modal #search-input:focus {
-    border-color: var(--corp-purple);
-    box-shadow: 0 0 8px rgba(179, 106, 255, 0.3);
-}
+ #search-modal #search-input:focus {
+      border-color: var(--corp-blue);
+      box-shadow: 0 0 8px rgba(0, 176, 255, 0.3);
+ }
 
-#search-results {
-    max-height: 300px; /* Límite de altura para resultados */
-    overflow-y: auto;
-    padding-right: 10px; /* Espacio para scrollbar */
-}
+ #search-results {
+      max-height: 250px;
+      overflow-y: auto;
+      margin-top: 1rem;
+      padding-right: 10px;
+ }
+  /* Scrollbar for search results */
+ #search-results::-webkit-scrollbar { width: 6px; }
+ #search-results::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 3px;}
+ #search-results::-webkit-scrollbar-thumb { background: var(--line-color); border-radius: 3px; }
+ #search-results::-webkit-scrollbar-thumb:hover { background: var(--soft-text-color); }
 
-#search-results a {
-    display: block;
-    padding: 10px 15px;
-    margin-bottom: 8px;
-    background-color: var(--soft-highlight);
-    color: var(--text-color);
-    text-decoration: none;
-    border-radius: 6px;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-#search-results a:hover {
-    background-color: var(--corp-blue);
-    color: var(--dark-background);
-}
-#search-results p { /* Mensaje inicial o "sin resultados" */
-    color: var(--soft-text-color);
-    text-align: center;
-    padding: 15px 0;
-}
+ #search-results a {
+      display: block;
+      padding: 10px 15px;
+      background-color: rgba(255, 255, 255, 0.05);
+      margin-bottom: 8px;
+      border-radius: 5px;
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      border-left: 3px solid transparent;
+ }
+ #search-results a:hover {
+      background-color: var(--soft-highlight);
+      color: var(--corp-blue);
+      border-left-color: var(--corp-blue);
+ }
 
-/* Notificaciones Modal List */
-#notifications-list {
-    list-style: none;
-    padding: 0;
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-#notifications-list li {
-    padding: 12px 0;
-    border-bottom: 1px solid var(--line-color);
-    color: var(--text-color);
-}
-#notifications-list li:last-child {
-    border-bottom: none;
-}
+  #search-results p { /* Mensaje "No se encontraron resultados" */
+       text-align: center;
+       color: var(--soft-text-color);
+       margin-top: 1rem;
+       font-style: italic;
+  }
 
 
-/* Footer */
+@keyframes fadeInModal {
+    from { background-color: rgba(0, 0, 0, 0); }
+    to { background-color: rgba(0, 0, 0, 0.8); }
+}
+
+@keyframes slideInModal {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+
+/* --- Footer --- */
 footer {
-    background-color: rgba(11, 11, 11, 0.9); /* Similar al sidebar pero en footer */
-    backdrop-filter: blur(8px);
+    background-color: #050505; /* Un poco más claro que el fondo principal */
+    padding: 2rem 3rem;
     border-top: 1px solid var(--line-color);
-    padding: 1.5rem 2rem;
-    margin-top: auto; /* Asegura que esté al final si el contenido es corto */
-    width: 100%;
-    color: var(--soft-text-color);
+    text-align: center;
+    margin-top: auto; /* Empuja el footer hacia abajo */
+    position: relative;
+    width: calc(100% - 240px); /* Ancho ajustado al main content */
+    margin-left: 240px; /* Alineado con el main content */
+     transition: width 0.3s ease, margin-left 0.3s ease;
 }
+
 
 .footer-content {
     display: flex;
-    justify-content: space-around; /* Distribuye el contenido */
-    align-items: flex-start; /* Alinea al inicio */
-    flex-wrap: wrap; /* Permite que los elementos se ajusten en pantallas pequeñas */
-    gap: 20px; /* Espacio entre secciones del footer */
-    margin-bottom: 1.5rem;
-    max-width: 1200px; /* Ancho máximo del contenido del footer */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.social-media h3, /* Otros títulos del footer si los hubiera */
-.footer-section h3 { /* Si añades más secciones */
-    color: var(--text-color);
-    font-size: 1.1rem;
+    justify-content: center; /* Centrar contenido del footer */
+    align-items: center;
     margin-bottom: 1rem;
-    position: relative;
 }
 
-.social-media h3::after,
-.footer-section h3::after { /* Línea decorativa bajo títulos */
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -5px;
-    width: 40px;
-    height: 2px;
-    background: linear-gradient(90deg, var(--corp-blue), var(--corp-green));
+.social-media h3 {
+    color: var(--soft-text-color);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .social-media ul {
     list-style: none;
     display: flex;
     gap: 20px; /* Espacio entre iconos sociales */
+    justify-content: center;
 }
 
 .social-media a {
     color: var(--soft-text-color);
-    font-size: 1.6rem; /* Iconos más grandes */
+    font-size: 1.6rem;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .social-media a:hover {
-    color: var(--corp-green); /* Cambia a verde al pasar el ratón */
-    transform: scale(1.1); /* Efecto de zoom ligero */
+    color: var(--corp-blue);
+    transform: scale(1.2);
 }
+
 
 .footer-bottom {
-    text-align: center;
-    padding-top: 1.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
     border-top: 1px solid var(--line-color);
-    font-size: 0.9rem;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 0.85rem;
+    color: var(--soft-text-color);
 }
 
-/* Keyframes para Modales */
-@keyframes fadeInModal {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
 
-@keyframes fadeOutModal {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
+/* --- Media Queries para Responsividad --- */
 
-/* Estilos responsivos */
-@media (max-width: 1024px) {
+/* Tablets y pantallas medianas */
+@media (max-width: 992px) {
+    .container {
+         padding-top: 100px; /* Mantener espacio para header+ticker */
+    }
+
     .sidebar {
-        width: 200px; /* Sidebar más estrecho */
-        padding: 1.5rem 0.8rem;
-    }
-    .logo {
-        font-size: 1.5rem;
-        margin-bottom: 2rem;
-    }
-    .beta-tag {
-       font-size: 0.6rem;
-       right: 5px;
-   }
-
-    .menu-item a {
-        padding: 10px 12px;
-        gap: 12px;
-    }
-    .menu-item a span {
-        font-size: 0.9rem; /* Texto del menú ligeramente más pequeño */
+        width: 200px;
     }
 
     .main-content {
-        padding: 1.5rem;
+        margin-left: 200px;
+        padding: 1.5rem 2rem;
     }
 
-    .main-header {
-        flex-wrap: wrap; /* Permite que los elementos del header se reordenen */
-        gap: 10px;
+    footer {
+        width: calc(100% - 200px);
+        margin-left: 200px;
+        padding: 1.5rem 2rem;
     }
 
+    header {
+         padding: 0.8rem 1.5rem;
+         height: 55px; /* Reducir altura header */
+    }
      .price-ticker {
-        order: 3; /* Mueve el ticker debajo en pantallas pequeñas */
-        width: 100%;
-        margin: 10px 0 0 0; /* Ajusta márgenes */
-        height: 28px;
-    }
-    .price-item {
-        font-size: 0.8rem;
-        margin-right: 20px;
-    }
+          top: 55px; /* Ajustar posición ticker */
+          height: 35px; /* Reducir altura ticker */
+     }
+     .price-item { font-size: 0.8rem;}
+     .price-item i { font-size: 0.9rem;}
 
-    .header-left { order: 1; }
-    .header-right { order: 2; }
 
-    .wallet-data-container {
-        grid-template-columns: 1fr; /* Una columna en pantallas medianas/pequeñas */
-    }
-    .wide-card {
-        grid-column: span 1; /* Asegura que ocupe una columna */
-    }
+    .logo { font-size: 2.4rem; } /* Ajustar tamaño logo */
+    /* .beta-tag ya se ajusta en su media query específica */
+
+    .header-icons { gap: 20px; }
+    .header-icons i { font-size: 1.2rem; }
+
+    .menu-item a { padding: 10px 1.5rem; }
+    .menu-text { font-size: 0.9rem; }
+     .menu-item a i { font-size: 1rem;}
+
+     .modal-content { width: 85%; }
+     .data-cards-container { grid-template-columns: 1fr; } /* 1 columna en tablet */
+     .data-card.full-width { grid-column: 1 / -1; } /* Asegurar que sigue full-width */
 }
 
+
+/* Móviles */
 @media (max-width: 768px) {
     .container {
-        flex-direction: column; /* Apila sidebar y contenido */
+        flex-direction: column; /* Cambiar a diseño de columna */
+        padding-top: 90px; /* Header + ticker más pequeños */
     }
+
+     header {
+          padding: 0.6rem 1rem;
+          height: 50px; /* Reducir más la altura */
+     }
+     .price-ticker {
+           top: 50px;
+           height: 30px;
+           /* Considerar ocultar el ticker en móviles si es muy largo */
+           /* display: none; */
+     }
+     .price-item { font-size: 0.7rem;}
+     .price-item i { font-size: 0.8rem;}
+
+
+    .logo { font-size: 2rem; } /* Tamaño logo más pequeño */
+    /* .beta-tag ya se ajusta en su media query específica */
+
+
+    .header-icons { gap: 15px; }
+    .header-icons i { font-size: 1.1rem; }
+
+     #language-switcher .fa-globe { font-size: 1.1rem; } /* Ajustar tamaño icono globo */
+     .language-dropdown span { font-size: 0.8rem; padding: 6px 12px;}
+
 
     .sidebar {
-        width: 100%; /* Ocupa todo el ancho */
-        height: auto; /* Altura automática */
-        position: static; /* Ya no es fijo */
+        position: static; /* Sidebar deja de ser fijo */
+        width: 100%;
+        height: auto;
         border-right: none;
         border-bottom: 1px solid var(--line-color);
-        padding: 1rem;
-        flex-direction: row; /* Elementos del sidebar en fila */
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .logo {
-        margin-bottom: 0;
-        font-size: 1.6rem;
-    }
-     .beta-tag {
-        position: static; /* Lo desvincula del logo para que no se solape */
-        margin-left: 8px; /* Espacio respecto al logo */
+        overflow-y: visible;
+        padding: 0.5rem 0;
     }
 
     .menu {
-       display: none; /* Oculta el menú principal, podrías implementar un menú hamburguesa */
-       /* TODO: Implementar lógica para menú hamburguesa si se desea */
-   }
-   /* Si decides mostrar el menú de otra forma (ej. horizontalmente), ajusta aquí */
-   /* .menu ul { display: flex; gap: 10px; } */
-   /* .menu-item a span { display: none; } Muestra solo iconos */
+        display: flex; /* Menú horizontal en móviles */
+        overflow-x: auto; /* Scroll horizontal si hay muchos ítems */
+        padding: 0 1rem; /* Padding horizontal */
+        justify-content: space-around; /* Distribuir items */
+    }
+     /* Estilo de la barra de scroll horizontal del menú */
+     .menu::-webkit-scrollbar { height: 4px; }
+     .menu::-webkit-scrollbar-track { background: transparent; }
+     .menu::-webkit-scrollbar-thumb { background: var(--line-color); border-radius: 2px;}
 
 
-    .sidebar-footer {
-        margin-top: 0;
-        border-top: none;
-        padding-top: 0;
-        /* Los elementos ya están en flex por el sidebar */
+    .menu ul {
+        display: flex;
+        gap: 5px; /* Espacio pequeño entre items */
+        width: max-content; /* Permitir que la lista crezca */
     }
 
+    .menu-item { margin-bottom: 0; }
+
+    .menu-item a {
+        padding: 10px 12px;
+        border-left: none; /* Quitar borde lateral */
+        border-bottom: 3px solid transparent; /* Indicador abajo */
+        flex-direction: column; /* Icono arriba, texto abajo */
+        align-items: center;
+        gap: 4px; /* Espacio entre icono y texto */
+        min-width: 70px; /* Ancho mínimo por item */
+        text-align: center;
+    }
+
+    .menu-item a i { margin-right: 0; font-size: 1.2rem; }
+    .menu-text { font-size: 0.7rem; font-weight: 400;}
+
+    .menu-item a:hover {
+         background-color: transparent; /* Quitar fondo hover */
+         color: var(--text-color); /* Mantener color texto */
+    }
+
+    .menu-item a.active-menu {
+        color: var(--corp-blue);
+        border-bottom-color: var(--corp-blue);
+        background-color: transparent;
+    }
+     .menu-item a.active-menu i {
+          text-shadow: none; /* Quitar sombra en móvil */
+     }
+
+
     .main-content {
-        max-height: none; /* Quita la limitación de altura */
+        margin-left: 0; /* Sin margen lateral */
         padding: 1rem;
     }
 
-    .main-header {
-        padding: 0.5rem 0;
-        margin-bottom: 1rem;
-    }
-    .header-left, .header-right {
-        gap: 10px;
-    }
-    .icon-button {
-        font-size: 1.2rem;
-        padding: 6px;
-    }
-    .button {
-        padding: 8px 15px;
-        font-size: 0.85rem;
-    }
-     #connect-wallet-button span { /* Ocultar texto en móvil si es necesario */
-       /* display: none; */
-    }
+     .main-content h1, .main-content h2 {
+         font-size: 1.6rem;
+         margin-bottom: 1rem;
+     }
+     .main-content p { font-size: 0.9rem; }
 
+     .wallet-input-area { flex-direction: column; gap: 15px; align-items: stretch; }
+     #solana-wallet-address { font-size: 0.9rem;}
+     #track-wallet-btn { font-size: 0.9rem; justify-content: center;}
 
-    .content-section h1 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-    }
+     .data-cards-container { gap: 1rem; }
+     .data-card { padding: 1rem; }
+     .data-card h3 { font-size: 1rem; margin-bottom: 1rem; padding-bottom: 0.6rem;}
+     .data-card p { font-size: 1.1rem; }
+     .data-card li { font-size: 0.85rem; }
+     .item-info { gap: 8px; }
+     #nft-gallery { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.8rem;}
+     .nft-item img { height: 80px; }
+     .nft-item p { font-size: 0.7rem;}
 
-    .input-group {
-        flex-direction: column; /* Apila input y botón */
-    }
-    #track-wallet-button {
-        width: 100%; /* Botón ocupa todo el ancho */
-        justify-content: center; /* Centra icono y texto */
-    }
 
     .modal-content {
-        width: 90%;
-        margin: 15% auto;
-        padding: 20px;
+         width: 90%;
+         padding: 1.5rem;
     }
     .modal h2 {
-         font-size: 1.3rem;
+         font-size: 1.5rem;
          margin-bottom: 15px;
      }
      #search-modal #search-input {
@@ -996,24 +1018,22 @@ footer {
 
 
     footer {
+        position: static; /* Footer normal en móvil */
+        left: 0;
+        width: 100%;
+        height: auto;
         padding: 1rem;
-        /* Se mantiene abajo por flex-direction: column y flex-grow: 1 en .container */
+        margin-top: 2rem;
+        margin-left: 0; /* Sin margen */
     }
 
      .footer-content {
         flex-direction: column;
-        align-items: center; /* Centra elementos del footer */
+        align-items: center;
         gap: 20px;
-        text-align: center; /* Centra texto dentro de las secciones */
-    }
-    .social-media h3::after,
-    .footer-section h3::after { /* Centrar la línea decorativa */
-        left: 50%;
-        transform: translateX(-50%);
     }
 
     .social-media ul {
-        justify-content: center; /* Centra los iconos sociales */
         gap: 15px;
     }
 
@@ -1023,28 +1043,12 @@ footer {
      .footer-bottom {
         font-size: 0.8rem;
      }
-}
 
-/* Ajustes finos para pantallas muy pequeñas */
-@media (max-width: 480px) {
-    .logo { font-size: 1.4rem; }
-    .beta-tag { font-size: 0.55rem; padding: 1px 4px; }
 
-    .price-item {
-        font-size: 0.75rem;
-        margin-right: 15px;
-        gap: 4px;
-    }
-    .price-item i { font-size: 0.8rem; }
-    .price-ticker { height: 26px; }
+     /* Ocultar ticker si se ve muy mal en pantallas muy pequeñas */
+     /* @media (max-width: 480px) {
+         .price-ticker { display: none; }
+         .container { padding-top: 50px; } /* Ajustar padding si se oculta ticker */
+     /* } */
 
-    .header-right { gap: 8px; }
-    .icon-button { font-size: 1.1rem; padding: 5px; }
-    .button { padding: 6px 12px; font-size: 0.8rem; }
-
-    .content-section h1 { font-size: 1.3rem; }
-
-    .data-card { padding: 15px; }
-    .data-card h2 { font-size: 1.1rem; }
-    .data-card p, .data-card ul { font-size: 0.9rem; }
 }
