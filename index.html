@@ -10,10 +10,9 @@
 </head>
 <body>
     <div class="background-animation"></div>
-
     <header>
         <div class="logo">
-            QUANTYX<span class="beta-tag">Beta</span>
+            QUANTYX
         </div>
 
         <div class="price-ticker">
@@ -23,230 +22,226 @@
                     <span class="price-item"><i class="fab fa-ethereum"></i> ETH: $3,180</span>
                     <span class="price-item"><i class="fab fa-solana"></i> SOL: $145</span>
                     <span class="price-item"><i class="fas fa-coins"></i> BNB: $590</span>
-                    <span class="price-item"><i class="fas fa-coins"></i> NOT: $0.018</span>
-                    <span class="price-item"><i class="fas fa-coins"></i> DOGE: $0.16</span>
-                    <span class="price-item"><i class="fas fa-coins"></i> SHIB: $0.000025</span>
-                     <span class="price-item"><i class="fab fa-btc"></i> BTC: $62,500</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> NOT: $0.025</span>
+                    <span class="fab fa-xrp price-item"> XRP: $0.52</span>
+                    <span class="fab fa-ada price-item"> ADA: $0.70</span>
+                    <span class="fab fa-doge price-item"> DOGE: $0.15</span>
+                    <span class="fas fa-coins price-item"> SHIB: $0.00002</span>
+                    <span class="fas fa-dot-circle price-item"> DOT: $7.50</span>
+                    <span class="price-item-spacer"></span>
+                </div>
+                <div class="price-ticker-content">
+                    <span class="price-item"><i class="fab fa-btc"></i> BTC: $62,500</span>
                     <span class="price-item"><i class="fab fa-ethereum"></i> ETH: $3,180</span>
                     <span class="price-item"><i class="fab fa-solana"></i> SOL: $145</span>
                     <span class="price-item"><i class="fas fa-coins"></i> BNB: $590</span>
-                    <span class="price-item"><i class="fas fa-coins"></i> NOT: $0.018</span>
-                    <span class="price-item"><i class="fas fa-coins"></i> DOGE: $0.16</span>
-                    <span class="price-item"><i class="fas fa-coins"></i> SHIB: $0.000025</span>
-                 </div>
+                    <span class="price-item"><i class="fas fa-coins"></i> NOT: $0.025</span>
+                    <span class="fab fa-xrp price-item"> XRP: $0.52</span>
+                    <span class="fab fa-ada price-item"> ADA: $0.70</span>
+                    <span class="fab fa-doge price-item"> DOGE: $0.15</span>
+                    <span class="fas fa-coins price-item"> SHIB: $0.00002</span>
+                    <span class="fas fa-dot-circle price-item"> DOT: $7.50</span>
+                    <span class="price-item-spacer"></span>
+                </div>
             </div>
         </div>
-
-
         <div class="header-icons">
-             <div id="language-switcher">
-                  <i class="fas fa-globe"></i>
-                  <div class="language-dropdown" style="display: none;">
-                     <span data-lang="es">ES</span>
-                     <span data-lang="en">EN</span>
-                     <span data-lang="fr">FR</span>
-                  </div>
-             </div>
-            <i class="fas fa-search" id="search-icon"></i>
-            <i class="fas fa-wallet" id="wallet-icon"></i>
-            <i class="fas fa-user" id="user-icon"></i>
+            <div class="icon language-switcher" id="language-switcher">
+                <i class="fas fa-globe"></i>
+                <div class="language-dropdown">
+                    <span data-lang="es">Español</span>
+                    <span data-lang="en">English</span>
+                    <span data-lang="fr">Français</span>
+                </div>
+            </div>
+            <div class="icon search-icon" id="search-icon"><i class="fas fa-search"></i></div>
+            <div class="icon wallet-icon" id="wallet-icon"><i class="fas fa-wallet"></i></div>
+            <div class="icon user-icon" id="user-icon"><i class="fas fa-user-circle"></i></div>
         </div>
     </header>
 
     <div class="container">
         <aside class="sidebar">
-             <nav class="menu">
-                 <ul>
+            <nav>
+                <ul>
+                    <li class="menu-item">
+                        <a href="#" data-section="home">
+                            <i class="fas fa-home"></i> <span class="menu-text">Inicio</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="sentiment-analyzer">
+                            <i class="fas fa-chart-line"></i>
+                            <span class="menu-text">Analizador de Sentimientos</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="wallet-tracker">
+                            <i class="fas fa-wallet"></i>
+                            <span class="menu-text">Wallet Tracker</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="bot-trading">
+                            <i class="fas fa-robot"></i>
+                            <span class="menu-text">Bot Trading</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="sniper">
+                            <i class="fas fa-crosshairs"></i>
+                            <span class="menu-text">Sniper</span>
+                        </a>
+                    </li>
                      <li class="menu-item">
-                         <a href="#" data-section="home" class="active-menu">
-                             <i class="fas fa-home"></i>
-                             <span class="menu-text">Inicio</span>
-                         </a>
-                     </li>
+                        <a href="#" data-section="token-creator">
+                            <i class="fas fa-coins"></i>
+                            <span class="menu-text">Creador de Token</span>
+                        </a>
+                    </li>
                      <li class="menu-item">
-                         <a href="#" data-section="sentiment-analyzer">
-                             <i class="fas fa-chart-line"></i>
-                             <span class="menu-text">Analizador de Sentimientos</span>
-                         </a>
-                     </li>
-                     <li class="menu-item">
-                         <a href="#" data-section="wallet-tracker">
-                             <i class="fas fa-search-dollar"></i>
-                             <span class="menu-text">Wallet Tracker</span>
-                         </a>
-                     </li>
-                     <li class="menu-item">
-                         <a href="#" data-section="bot-trading">
-                             <i class="fas fa-robot"></i>
-                             <span class="menu-text">Bot Trading</span>
+                        <a href="#" data-section="staking">
+                            <i class="fas fa-lock"></i>
+                            <span class="menu-text">Staking</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="gaming">
+                            <i class="fas fa-gamepad"></i>
+                            <span class="menu-text">Gaming</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                         <a href="#" data-section="nft-collection">
+                             <i class="fas fa-image"></i> <span class="menu-text">Colección NFTs</span>
                          </a>
                      </li>
                       <li class="menu-item">
-                         <a href="#" data-section="sniper">
-                             <i class="fas fa-crosshairs"></i>
-                             <span class="menu-text">Sniper</span>
+                         <a href="#" data-section="detox-reclaim"> <i class="fas fa-broom"></i> <span class="menu-text">Detox & Reclaim</span>
                          </a>
                      </li>
                      <li class="menu-item">
-                         <a href="#" data-section="token-creator">
-                             <i class="fas fa-coins"></i>
-                             <span class="menu-text">Creador de Token</span>
-                         </a>
-                     </li>
-                     <li class="menu-item">
-                         <a href="#" data-section="staking">
-                             <i class="fas fa-layer-group"></i>
-                             <span class="menu-text">Staking</span>
-                         </a>
-                     </li>
-                     <li class="menu-item">
-                         <a href="#" data-section="gaming">
-                             <i class="fas fa-gamepad"></i>
-                             <span class="menu-text">Gaming</span>
-                         </a>
-                     </li>
-                     <li class="menu-item">
-                         <a href="#" data-section="nft-collection">
-                             <i class="fas fa-image"></i>
-                             <span class="menu-text">Colección NFTs</span>
-                         </a>
-                     </li>
-                     <li class="menu-item">
-                         <a href="#" data-section="detox-reclaim">
-                             <i class="fas fa-shield-virus"></i>
-                             <span class="menu-text">Detox & Reclaim</span>
-                         </a>
-                     </li>
-                     <li class="menu-item">
-                         <a href="#" data-section="knowledge-base">
-                             <i class="fas fa-book"></i>
-                             <span class="menu-text">Base de Conocimiento</span>
-                         </a>
-                     </li>
-                     <li class="menu-item">
-                         <a href="#" data-section="chatbot">
+                        <a href="#" data-section="knowledge-base">
+                            <i class="fas fa-book"></i>
+                            <span class="menu-text">Base de Conocimiento</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" data-section="chatbot">
                              <i class="fas fa-comments"></i>
-                             <span class="menu-text">ChatBot</span>
-                         </a>
-                     </li>
-                 </ul>
-             </nav>
-         </aside>
+                            <span class="menu-text">ChatBot</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
 
         <main class="main-content">
-             <section id="home" class="active">
-                 <h1>Bienvenido a QuantyX</h1>
-                 <p>Tu plataforma integral de IA para el ecosistema Crypto.</p>
-                 <div class="feature-highlights">
-                     </div>
+            <section id="home" class="active">
+                <h1>Bienvenido a QuantyX</h1>
+                <p>Tu centro neural impulsado por IA para herramientas Crypto.</p>
+
+                <div class="carousel-container">
+                    <p style="color: yellow; text-align: center; padding: 20px; border: 1px dashed yellow;">
+                        [Espacio reservado para el carrusel. Reemplaza este párrafo con el código HTML de tu carrusel.]
+                    </p>
+
+                </div>
+                </section>
+
+             <section id="sentiment-analyzer" class="tool-section">
+                 <h2>Analizador de Sentimientos</h2>
+                 <p>Aquí irá la herramienta de análisis de sentimientos.</p>
              </section>
 
-             <section id="sentiment-analyzer">
-                 <h2><i class="fas fa-chart-line"></i> Analizador de Sentimientos</h2>
-                 <p>Contenido del Analizador de Sentimientos...</p>
-             </section>
-
-             <section id="wallet-tracker">
-                 <h2><i class="fas fa-search-dollar"></i> Wallet Tracker</h2>
-                 <div class="wallet-input-area">
+             <section id="wallet-tracker" class="tool-section">
+                 <h2>Wallet Tracker</h2>
+                 <div class="input-area">
                      <input type="text" id="solana-wallet-address" placeholder="Introduce la dirección de la billetera de Solana">
-                     <button id="track-wallet-btn">
-                          <i class="fas fa-search"></i> Rastrear
-                     </button>
+                     <button id="track-wallet-btn"><i class="fas fa-search"></i> Rastrear</button>
                  </div>
-                 <div id="wallet-data-display" class="hidden">
-                     <div id="initial-message" class="message">
-                         Introduce una dirección de billetera de Solana para ver sus detalles.
+                 <div id="wallet-data-display">
+                     <p id="initial-message">Introduce una dirección de billetera de Solana para ver sus detalles.</p>
+                     <div id="loading-indicator" class="loading-spinner hidden">Cargando datos de la billetera... <i class="fas fa-spinner fa-spin"></i></div>
+                     <div id="error-message" class="error-message hidden"></div>
+                     <div id="sol-balance-card" class="data-card hidden">
+                          <h3><i class="fab fa-solana"></i> Saldo SOL</h3>
+                          <div class="card-content centered-value">
+                              <p><span id="sol-balance">-</span> SOL</p>
+                          </div>
                      </div>
-                     <div id="loading-indicator" class="message hidden">
-                         <i class="fas fa-spinner fa-spin"></i> Cargando datos de la billetera...
+
+                     <div id="token-balances-card" class="data-card hidden">
+                          <h3><i class="fas fa-coins"></i> Tokens (SPL)</h3>
+                          <div class="card-content">
+                              <ul id="token-list" class="data-list"></ul>
+                          </div>
                      </div>
-                     <div id="error-message" class="message error hidden">
-                         </div>
 
-                     <div class="data-cards-container">
-                         <div class="data-card hidden" id="sol-balance-card">
-                             <h3><i class="fab fa-solana"></i> Saldo SOL</h3>
-                             <p><span id="sol-balance">-</span> SOL</p>
-                         </div>
-
-                         <div class="data-card hidden" id="token-balances-card">
-                             <h3><i class="fas fa-coins"></i> Tokens (SPL)</h3>
-                             <ul id="token-list">
-                                 </ul>
-                         </div>
-
-                         <div class="data-card hidden" id="nfts-card">
-                              <h3><i class="fas fa-image"></i> NFTs</h3>
-                              <div id="nft-gallery">
-                                   </div>
-                         </div>
-
-                         <div class="data-card full-width hidden" id="transactions-card">
-                              <h3><i class="fas fa-history"></i> Transacciones Recientes</h3>
-                              <ul id="transaction-list">
-                                   </ul>
-                         </div>
+                     <div id="nfts-card" class="data-card hidden">
+                          <h3><i class="fas fa-image"></i> NFTs</h3>
+                           <div class="card-content">
+                              <div id="nft-gallery"></div>
+                           </div>
                      </div>
+
+                     <div id="transactions-card" class="data-card hidden">
+                          <h3><i class="fas fa-exchange-alt"></i> Transacciones Recientes</h3>
+                           <div class="card-content">
+                               <ul id="transaction-list" class="data-list"></ul>
+                           </div>
+                     </div>
+
                  </div>
              </section>
-
-
-             <section id="bot-trading">
-                 <h2><i class="fas fa-robot"></i> Bot Trading</h2>
-                 <p>Contenido del Bot Trading...</p>
+             <section id="bot-trading" class="tool-section">
+                 <h2>Bot Trading</h2>
+                 <p>Aquí irá la herramienta de trading automático.</p>
+             </section>
+             <section id="sniper" class="tool-section">
+                 <h2>Sniper</h2>
+                 <p>Aquí irá la herramienta Sniper.</p>
+             </section>
+             <section id="token-creator" class="tool-section">
+                 <h2>Creador de Token</h2>
+                 <p>Aquí irá la herramienta de creación de tokens.</p>
+             </section>
+             <section id="staking" class="tool-section">
+                 <h2>Staking</h2>
+                 <p>Aquí irá la herramienta de staking.</p>
+             </section>
+             <section id="gaming" class="tool-section">
+                 <h2>Gaming</h2>
+                 <p>Aquí irá la sección de gaming.</p>
+             </section>
+             <section id="nft-collection" class="tool-section">
+                 <h2>Colección NFTs</h2>
+                 <p>Aquí irá el contenido de tu colección de NFTs.</p>
+             </section>
+              <section id="detox-reclaim" class="tool-section">
+                 <h2>Detox & Reclaim</h2>
+                 <p>Aquí irá la herramienta combinada de Detox & Reclaim.</p>
+             </section>
+             <section id="knowledge-base" class="tool-section">
+                <h2>Base de Conocimiento</h2>
+                <p>Aquí irá la base de conocimiento.</p>
+            </section>
+            <section id="chatbot" class="tool-section">
+                 <h2>ChatBot</h2>
+                 <p>Aquí irá el ChatBot.</p>
              </section>
 
-             <section id="sniper">
-                 <h2><i class="fas fa-crosshairs"></i> Sniper</h2>
-                 <p>Contenido de Sniper...</p>
-             </section>
-
-             <section id="token-creator">
-                 <h2><i class="fas fa-coins"></i> Creador de Token</h2>
-                 <p>Contenido del Creador de Token...</p>
-             </section>
-
-             <section id="staking">
-                 <h2><i class="fas fa-layer-group"></i> Staking</h2>
-                 <p>Contenido de Staking...</p>
-             </section>
-
-             <section id="gaming">
-                 <h2><i class="fas fa-gamepad"></i> Gaming</h2>
-                 <p>Contenido de Gaming...</p>
-             </section>
-
-             <section id="nft-collection">
-                 <h2><i class="fas fa-image"></i> Colección NFTs</h2>
-                 <p>Contenido de la Colección NFTs...</p>
-             </section>
-
-             <section id="detox-reclaim">
-                 <h2><i class="fas fa-shield-virus"></i> Detox & Reclaim</h2>
-                 <p>Contenido de Detox & Reclaim...</p>
-             </section>
-
-             <section id="knowledge-base">
-                 <h2><i class="fas fa-book"></i> Base de Conocimiento</h2>
-                 <p>Contenido de la Base de Conocimiento...</p>
-             </section>
-
-             <section id="chatbot">
-                 <h2><i class="fas fa-comments"></i> ChatBot</h2>
-                 <p>Contenido del ChatBot...</p>
-             </section>
 
              <div id="search-modal" class="modal">
                  <div class="modal-content">
                      <span class="close-button">&times;</span>
                      <h2>Buscar en QuantyX</h2>
-                     <input type="text" id="search-input" placeholder="Buscar...">
-                      <div id="search-results"></div>
-                     </div>
+                     <input type="text" id="search-input" placeholder="Escribe para buscar...">
+                     <div id="search-results"></div>
+                 </div>
              </div>
 
-             <div id="wallet-modal" class="modal">
+              <div id="wallet-modal" class="modal">
                  <div class="modal-content">
                      <span class="close-button">&times;</span>
                      <h2>Conectar Wallet</h2>
