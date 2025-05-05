@@ -137,13 +137,12 @@
         </aside>
 
         <main class="main-content">
-            <section id="home" class="active">
-                <h1>Bienvenido a QuantyX</h1>
+            <section id="home"> <h1>Bienvenido a QuantyX</h1>
                 <p>Tu centro neural impulsado por IA para herramientas Crypto.</p>
 
                 <div class="carousel-container">
                     </div>
-                </section>
+            </section>
 
              <section id="sentiment-analyzer" class="tool-section">
                  <h2>Analizador de Sentimientos</h2>
@@ -151,44 +150,173 @@
              </section>
 
              <section id="wallet-tracker" class="tool-section">
-                 <h2>Wallet Tracker</h2>
-                 <div class="input-area">
-                     <input type="text" id="solana-wallet-address" placeholder="Introduce la dirección de la billetera de Solana">
-                     <button id="track-wallet-btn"><i class="fas fa-search"></i> Rastrear</button>
+
+                 <div class="wallet-tracker-header">
+                     <div class="account-info">
+                         <h3 class="account-title">Cuenta</h3>
+                         <div class="address-line">
+                             <span id="display-wallet-address">B1t...C0in</span> <button class="icon-button copy-button" title="Copiar dirección">
+                                 <i class="fas fa-copy"></i>
+                             </button>
+                             <button class="icon-button qr-button" title="Mostrar código QR">
+                                 <i class="fas fa-qrcode"></i>
+                             </button>
+                         </div>
+                     </div>
+
+                     <div class="tracker-search-area">
+                         <input type="search" id="transaction-search-input" placeholder="buscar transacciones, Bloques, programas y tokens.">
+                         <button id="transaction-search-button" class="icon-button search-button-wt" title="Buscar">
+                             <i class="fas fa-search"></i>
+                         </button>
+                     </div>
                  </div>
-                 <div id="wallet-data-display">
-                     <p id="initial-message">Introduce una dirección de billetera de Solana para ver sus detalles.</p>
-                     <div id="loading-indicator" class="loading-spinner hidden">Cargando datos de la billetera... <i class="fas fa-spinner fa-spin"></i></div>
-                     <div id="error-message" class="error-message hidden"></div>
-                     <div id="sol-balance-card" class="data-card hidden">
-                          <h3><i class="fab fa-solana"></i> Saldo SOL</h3>
-                          <div class="card-content centered-value">
-                              <p><span id="sol-balance">-</span> SOL</p>
+
+                 <div class="info-boxes-container">
+                     <div class="info-box general-info-box">
+                         <h4>Descripción General</h4>
+                         <div class="info-item">
+                             <span class="info-label">Saldo SOL:</span>
+                             <span class="info-value">
+                                 <i class="fab fa-solana sol-icon-small"></i>
+                                 <span id="sol-balance-value">123.45</span> SOL
+                                 (<span id="sol-balance-usd">$12.15</span>)
+                             </span>
+                         </div>
+                         <div class="info-item">
+                             <span class="info-label">Saldo de token:</span>
+                             <span class="info-value" id="token-count">5 Tokens</span>
+                         </div>
+                         <details class="token-dropdown">
+                             <summary class="token-summary">
+                                 Mostrar Tokens
+                                 <i class="fas fa-chevron-down dropdown-arrow"></i>
+                             </summary>
+                             <ul id="token-list-detailed" class="token-list">
+                                 <li>
+                                     <img src="placeholder_token_icon.png" alt="TKN" class="token-icon">
+                                     <span class="token-name">Mi Token Ejemplo (TKN)</span>
+                                     <span class="token-amount">1,000.50</span>
+                                 </li>
+                                 <li>
+                                     <img src="placeholder_usdc_icon.png" alt="USDC" class="token-icon">
+                                     <span class="token-name">USD Coin (USDC)</span>
+                                     <span class="token-amount">500.75</span>
+                                 </li>
+                                 </ul>
+                         </details>
+                         <div class="wallet-details-link">
+                            <button class="icon-button" title="Más detalles de la billetera">
+                                <i class="fas fa-wallet"></i>
+                            </button>
+                         </div>
+                     </div>
+
+                     <div class="info-box more-info-box">
+                         <h4>Más Información</h4>
+                         <div class="info-item">
+                             <span class="info-label">Dueño:</span>
+                             <span class="info-value address-line-small">
+                                 <i class="fab fa-solana sol-icon-small"></i>
+                                 <span id="owner-address">Own3r...Addr3ss</span>
+                                 <button class="icon-button copy-button-small" title="Copiar dirección del dueño">
+                                     <i class="fas fa-copy"></i>
+                                 </button>
+                             </span>
+                         </div>
+                         <div class="info-item">
+                             <span class="info-label">Está en la Curva:</span>
+                             <span class="info-value" id="on-curve-status">Verdadero</span> </div>
+                         <div class="info-item">
+                             <span class="info-label">Stake:</span>
+                             <span class="info-value">
+                                <i class="fab fa-solana sol-icon-small"></i>
+                                <span id="stake-amount">10.00</span> SOL
+                             </span>
+                         </div>
+                          <div class="info-item tags-item">
+                             <span class="info-label">Etiquetas:</span>
+                             <span class="info-value tags-container">
+                                 <span class="tag pump-tag">pump.fun</span>
+                                 <a href="#" class="tag creator-tag" id="token-creator-tag">Creador de Tokens</a>
+                                 </span>
+                         </div>
+                     </div>
+
+                     <div class="info-box misc-info-box">
+                         <h4>Varios</h4>
+                         <div class="info-item">
+                             <span class="info-label">Nombre Privado:</span>
+                         </div>
+                          <div class="private-note-area">
+                              <div id="private-note-display">
+                                  </div>
+                              <a href="#" id="add-note-link" class="add-note-link">
+                                  <i class="fas fa-pencil-alt"></i> Añadir notas
+                              </a>
+                              <div id="add-note-form" class="add-note-form hidden">
+                                  <textarea id="private-note-input" placeholder="Escribe tu nota aquí..."></textarea>
+                                  <button id="save-note-button">Guardar</button>
+                                  <button id="cancel-note-button" type="button">Cancelar</button>
+                              </div>
                           </div>
                      </div>
-
-                     <div id="token-balances-card" class="data-card hidden">
-                          <h3><i class="fas fa-coins"></i> Tokens (SPL)</h3>
-                          <div class="card-content">
-                              <ul id="token-list" class="data-list"></ul>
-                          </div>
-                     </div>
-
-                     <div id="nfts-card" class="data-card hidden">
-                          <h3><i class="fas fa-image"></i> NFTs</h3>
-                           <div class="card-content">
-                              <div id="nft-gallery"></div>
-                           </div>
-                     </div>
-
-                     <div id="transactions-card" class="data-card hidden">
-                          <h3><i class="fas fa-exchange-alt"></i> Transacciones Recientes</h3>
-                           <div class="card-content">
-                               <ul id="transaction-list" class="data-list"></ul>
-                           </div>
-                     </div>
-
                  </div>
+
+                 <div class="transactions-table-container">
+                     <table id="transactions-table">
+                         <thead>
+                             <tr>
+                                 <th><i class="fas fa-question-circle" title="Detalles"></i></th>
+                                 <th>Firma</th>
+                                 <th>Bloque</th>
+                                 <th>Fecha (UTC)</th>
+                                 <th>Instrucciones</th>
+                                 <th>Por</th>
+                                 <th>Valor</th>
+                                 <th>Tarifa</th>
+                                 <th>Programa</th>
+                             </tr>
+                         </thead>
+                         <tbody id="transaction-list-body">
+                             <tr>
+                                 <td><button class="icon-button view-details-button" title="Ver detalles"><i class="fas fa-eye"></i></button></td>
+                                 <td><span class="tx-signature">5jZz...G3f4</span></td>
+                                 <td>234567890</td>
+                                 <td>2025-05-05 15:10:30</td>
+                                 <td>3</td>
+                                 <td>Raydium V4</td>
+                                 <td><i class="fab fa-solana sol-icon-small"></i> 0.5 SOL</td>
+                                 <td><i class="fab fa-solana sol-icon-small"></i> 0.00001 SOL</td>
+                                 <td>Tokenkeg...</td>
+                             </tr>
+                              <tr>
+                                 <td><button class="icon-button view-details-button" title="Ver detalles"><i class="fas fa-eye"></i></button></td>
+                                 <td><span class="tx-signature">4aBc...XyZ9</span></td>
+                                 <td>234567888</td>
+                                 <td>2025-05-05 15:05:15</td>
+                                 <td>1</td>
+                                 <td>System Program</td>
+                                 <td><i class="fab fa-solana sol-icon-small"></i> 1.2 SOL</td>
+                                 <td><i class="fab fa-solana sol-icon-small"></i> 0.000005 SOL</td>
+                                 <td>System...</td>
+                             </tr>
+                             </tbody>
+                     </table>
+                 </div>
+
+                 <div class="table-footer-controls">
+                     <div class="items-per-page-selector">
+                         <label for="items-per-page">Mostrar:</label>
+                         <select id="items-per-page" name="items-per-page">
+                             <option value="10" selected>10</option>
+                             <option value="20">20</option>
+                             <option value="30">30</option>
+                         </select>
+                         <span>transacciones</span>
+                     </div>
+                     </div>
+
              </section>
              <section id="bot-trading" class="tool-section">
                  <h2>Bot Trading</h2>
