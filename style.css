@@ -20,6 +20,7 @@
 
     /* Definir altura del header fijo */
     --header-height: 70px; /* Ajustado ligeramente */
+    /* ****** CAMBIO: Variables para anchos de sidebar ****** */
     --sidebar-width-expanded: 230px; /* Ancho normal del sidebar */
     --sidebar-width-collapsed: 80px;  /* Ancho colapsado del sidebar */
 }
@@ -98,7 +99,7 @@ header {
     /* color: var(--corp-green); */
 }
 
-/* ****** NUEVO: Estilos para el tag Beta ****** */
+/* Estilos para el tag Beta */
 .beta-tag {
     position: absolute;
     top: -5px; /* Ajusta la posición vertical */
@@ -233,7 +234,7 @@ header {
 
 /* --- Sidebar --- */
 .sidebar {
-    width: var(--sidebar-width-expanded); /* Ancho inicial */
+    width: var(--sidebar-width-expanded); /* Ancho inicial con variable */
     background-color: var(--medium-dark-background);
     padding: 1.5rem 0;
     transition: width 0.3s ease; /* Transición para colapsar/expandir */
@@ -263,7 +264,7 @@ header {
     padding: 0.8rem 1.5rem; /* Padding normal */
     color: var(--soft-text-color);
     text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, padding 0.3s ease; /* Añadir padding a transición */
     font-size: 0.95rem;
     position: relative;
     overflow: hidden; /* Importante para ocultar texto */
@@ -290,12 +291,12 @@ header {
     text-align: center;
     font-size: 1.1rem;
     flex-shrink: 0; /* Evitar que el icono se encoja */
-    transition: margin 0.3s ease; /* Transición para el centrado */
+    transition: margin 0.3s ease, font-size 0.3s ease; /* Transición para el centrado y tamaño */
 }
 
 .sidebar .menu-item a .menu-text {
     opacity: 1; /* Visible normal */
-    transition: opacity 0.2s ease; /* Transición para ocultar texto */
+    transition: opacity 0.2s 0.1s ease; /* Transición para ocultar texto (con pequeño delay) */
     white-space: nowrap; /* Evitar que el texto se rompa */
 }
 
@@ -316,25 +317,26 @@ header {
      box-shadow: var(--neon-glow-blue);
 }
 
-/* --- ESTILOS SIDEBAR COLAPSADO --- */
-.sidebar-collapsed .sidebar {
+/* --- ESTILOS SIDEBAR COLAPSADO (usando clase en body) --- */
+body.sidebar-collapsed .sidebar {
     width: var(--sidebar-width-collapsed); /* Ancho colapsado */
 }
 
-.sidebar-collapsed .sidebar .menu-item a {
+body.sidebar-collapsed .sidebar .menu-item a {
     padding: 0.8rem 0; /* Quitar padding lateral */
     justify-content: center; /* Centrar contenido (icono) */
 }
 
-.sidebar-collapsed .sidebar .menu-item a i {
+body.sidebar-collapsed .sidebar .menu-item a i {
     margin-right: 0; /* Quitar margen del icono */
     font-size: 1.3rem; /* Iconos un poco más grandes */
 }
 
-.sidebar-collapsed .sidebar .menu-item a .menu-text {
+body.sidebar-collapsed .sidebar .menu-item a .menu-text {
     opacity: 0; /* Ocultar texto */
     width: 0;
     overflow: hidden;
+    transition-delay: 0s; /* Ocultar inmediatamente */
 }
 
 /* --- Wrapper para Main Content y Footer --- */
@@ -348,7 +350,7 @@ header {
 }
 
 /* Ajustar margen cuando el sidebar se colapsa */
-.sidebar-collapsed .content-wrapper {
+body.sidebar-collapsed .content-wrapper {
     margin-left: var(--sidebar-width-collapsed);
 }
 
@@ -544,12 +546,6 @@ header {
 .icon-button.copy-button-small {
     font-size: 0.9rem;
 }
-
-/* ****** ELIMINADO: Área de Búsqueda ****** */
-/* .tracker-search-area { ... } */
-/* #transaction-search-input { ... } */
-/* .search-button-wt { ... } */
-
 
 /* Fila Media: 3 Cajas de Información */
 .info-boxes-container {
@@ -1046,8 +1042,7 @@ footer {
     padding: 1rem 2rem;
     text-align: center;
     border-top: 1px solid var(--line-color);
-    margin-top: auto; /* Empuja al fondo en layout flex del body */
-    /* No necesita position, left, width específicos si está en flujo flex */
+    /* Footer ahora es parte del wrapper, no necesita position ni margen especial */
 }
 
 .footer-content {
@@ -1111,10 +1106,10 @@ footer {
           width: var(--sidebar-width-expanded); /* Mantiene ancho expandido */
      }
       /* Estilos colapsado para tablet */
-      .sidebar-collapsed .sidebar {
+      body.sidebar-collapsed .sidebar {
            width: var(--sidebar-width-collapsed);
        }
-       .sidebar-collapsed .sidebar .menu-item a i {
+       body.sidebar-collapsed .sidebar .menu-item a i {
           font-size: 1.2rem; /* Ajustar icono colapsado */
        }
 
@@ -1122,7 +1117,7 @@ footer {
       .content-wrapper {
           margin-left: var(--sidebar-width-expanded); /* Margen normal */
        }
-       .sidebar-collapsed .content-wrapper {
+       body.sidebar-collapsed .content-wrapper {
            margin-left: var(--sidebar-width-collapsed); /* Margen colapsado */
        }
 
@@ -1204,32 +1199,32 @@ footer {
       }
      .sidebar .menu-item a .menu-text {
         /* Opcional: Ocultar texto y mostrar solo iconos */
-        /* display: none; */
+        /* display: block; */ /* Asegurarse que esté visible si no se oculta */
      }
 
     /* Ignorar estado colapsado en móvil */
-     .sidebar-collapsed .sidebar {
+     body.sidebar-collapsed .sidebar {
           width: 100%; /* Siempre ancho completo */
       }
-     .sidebar-collapsed .sidebar .menu-item a {
+     body.sidebar-collapsed .sidebar .menu-item a {
          padding: 0.8rem 1rem; /* Padding normal */
          justify-content: flex-start; /* Alinear normal */
      }
-      .sidebar-collapsed .sidebar .menu-item a i {
+      body.sidebar-collapsed .sidebar .menu-item a i {
          margin-right: 5px; /* Margen normal */
          font-size: 1.1rem; /* Tamaño normal */
      }
-      .sidebar-collapsed .sidebar .menu-item a .menu-text {
+      body.sidebar-collapsed .sidebar .menu-item a .menu-text {
          opacity: 1; /* Siempre visible */
          width: auto;
          overflow: visible;
      }
 
-
     .content-wrapper {
         margin-left: 0; /* Sin margen ya que no hay sidebar fijo */
         transition: none; /* Quitar transición */
     }
+
 
     .main-content {
         margin-left: 0; /* Sin margen ya que no hay sidebar fijo */
@@ -1240,12 +1235,12 @@ footer {
 
      /* Ajustes Wallet Tracker en móvil */
       .wallet-tracker-header {
-         flex-direction: column; /* Apilar cuenta y búsqueda */
+         flex-direction: column; /* Apilar cuenta */
          align-items: stretch; /* Ocupar todo el ancho */
          gap: 1rem;
          padding-bottom: 1rem; /* Menos padding */
      }
-      /* Ya no existe tracker-search-area */
+      /* Área de búsqueda eliminada */
       .info-boxes-container {
          flex-direction: column; /* Apilar cajas de info */
          gap: 1rem;
@@ -1274,7 +1269,6 @@ footer {
         height: auto;
         padding: 1rem;
         margin-top: 2rem;
-        transition: none;
     }
     .footer-content { flex-direction: column; gap: 15px;}
     .social-media ul { gap: 20px; }
