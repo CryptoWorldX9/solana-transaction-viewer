@@ -20,7 +20,7 @@
 
     /* Definir altura del header fijo */
     --header-height: 70px; /* Ajustado ligeramente */
-    /* ****** CAMBIO: Variables para anchos de sidebar ****** */
+    /* Variables para anchos de sidebar */
     --sidebar-width-expanded: 230px; /* Ancho normal del sidebar */
     --sidebar-width-collapsed: 80px;  /* Ancho colapsado del sidebar */
 }
@@ -245,6 +245,7 @@ header {
     overflow-y: auto; /* Scroll interno si es necesario */
     overflow-x: hidden; /* Ocultar scroll horizontal si texto sobresale */
     z-index: 900; /* Debajo del header pero sobre el main */
+    cursor: pointer; /* Indicar que se puede hacer clic para expandir */
 
     /* Ocultar scrollbar */
     -ms-overflow-style: none;  /* IE and Edge */
@@ -320,6 +321,7 @@ header {
 /* --- ESTILOS SIDEBAR COLAPSADO (usando clase en body) --- */
 body.sidebar-collapsed .sidebar {
     width: var(--sidebar-width-collapsed); /* Ancho colapsado */
+    cursor: pointer; /* Cursor indica que se puede expandir */
 }
 
 body.sidebar-collapsed .sidebar .menu-item a {
@@ -346,7 +348,7 @@ body.sidebar-collapsed .sidebar .menu-item a .menu-text {
     transition: margin-left 0.3s ease; /* Transición al cambiar margen */
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - var(--header-height)); /* Asegura altura mínima */
+    /* No necesita min-height aquí si body es flex column y este es flex-grow */
 }
 
 /* Ajustar margen cuando el sidebar se colapsa */
@@ -475,7 +477,6 @@ body.sidebar-collapsed .content-wrapper {
 /* Fila Superior: Cuenta (Búsqueda Eliminada) */
 .wallet-tracker-header {
     display: flex;
-    /* justify-content: space-between; (Ya no necesario si solo hay 1 item) */
     align-items: flex-start;
     margin-bottom: 2rem;
     padding-bottom: 1.5rem;
@@ -486,7 +487,6 @@ body.sidebar-collapsed .content-wrapper {
 
 /* Info Cuenta */
 .account-info {
-    /* flex: 1; (Ya no necesario si es el único item) */
     min-width: 250px;
 }
 
@@ -1042,7 +1042,8 @@ footer {
     padding: 1rem 2rem;
     text-align: center;
     border-top: 1px solid var(--line-color);
-    /* Footer ahora es parte del wrapper, no necesita position ni margen especial */
+    margin-top: auto; /* Empuja al fondo en layout flex del body/content-wrapper */
+    /* No necesita position, left, width específicos si está en flujo flex */
 }
 
 .footer-content {
@@ -1094,9 +1095,10 @@ footer {
 
 
 /* --- Responsive Design --- */
+/* (Pantallas Medianas / Tablets) */
 @media (max-width: 1024px) {
      .price-ticker {
-          display: none; /* Ocultar ticker en pantallas medianas */
+          display: none; /* Ocultar ticker */
      }
       /* Ajustar ancho colapsado si es necesario */
       :root {
@@ -1112,7 +1114,6 @@ footer {
        body.sidebar-collapsed .sidebar .menu-item a i {
           font-size: 1.2rem; /* Ajustar icono colapsado */
        }
-
 
       .content-wrapper {
           margin-left: var(--sidebar-width-expanded); /* Margen normal */
@@ -1136,10 +1137,9 @@ footer {
            padding: 0.8rem 1.5rem;
        }
        .sidebar-toggle-desktop { display: block; } /* Asegurar que se vea en tablet */
-
 }
 
-
+/* (Móviles) */
 @media (max-width: 768px) {
     /* Ajustes para estructura base */
     body {
@@ -1184,7 +1184,7 @@ footer {
         height: auto; /* Resetear height */
         z-index: auto;
         /* Quitar transición de ancho en móvil */
-        transition: none;
+        transition: none !important;
     }
     .sidebar nav ul {
         display: flex;
@@ -1198,11 +1198,14 @@ footer {
         margin-right: 5px; /* Menos espacio icono-texto */
       }
      .sidebar .menu-item a .menu-text {
-        /* Opcional: Ocultar texto y mostrar solo iconos */
-        /* display: block; */ /* Asegurarse que esté visible si no se oculta */
+         /* Mostrar texto en móvil */
+         opacity: 1;
+         width: auto;
+         overflow: visible;
+         transition-delay: 0s;
      }
 
-    /* Ignorar estado colapsado en móvil */
+    /* IGNORAR ESTADO COLAPSADO EN MÓVIL */
      body.sidebar-collapsed .sidebar {
           width: 100%; /* Siempre ancho completo */
       }
@@ -1220,16 +1223,14 @@ footer {
          overflow: visible;
      }
 
+
     .content-wrapper {
-        margin-left: 0; /* Sin margen ya que no hay sidebar fijo */
-        transition: none; /* Quitar transición */
+        margin-left: 0 !important; /* ****** !important para sobreescribir ****** */
+        transition: none !important;
     }
 
-
     .main-content {
-        margin-left: 0; /* Sin margen ya que no hay sidebar fijo */
         padding: 1rem; /* Reducir padding en móvil */
-        height: auto;
     }
      .main-content h1, .main-content h2 { font-size: 1.5rem; margin-bottom: 1rem;}
 
@@ -1240,7 +1241,6 @@ footer {
          gap: 1rem;
          padding-bottom: 1rem; /* Menos padding */
      }
-      /* Área de búsqueda eliminada */
       .info-boxes-container {
          flex-direction: column; /* Apilar cajas de info */
          gap: 1rem;
@@ -1264,9 +1264,6 @@ footer {
 
     footer {
         position: static;
-        margin-left: 0;
-        width: 100%;
-        height: auto;
         padding: 1rem;
         margin-top: 2rem;
     }
@@ -1315,12 +1312,12 @@ footer {
     margin-left: 5px;
     white-space: nowrap;
     opacity: 0;
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Añadir transición transform */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
     pointer-events: none;
     z-index: 10;
-    /* Posicionamiento inicial */
+    /* Posicionamiento */
     top: 50%;
-    left: 105%; /* Empezar justo a la derecha del contenedor del botón */
+    left: 105%; /* Empezar justo a la derecha */
     transform: translateY(-50%) translateX(-10px); /* Mover un poco a la izquierda y centrar V */
 }
 .copied-feedback.show {
