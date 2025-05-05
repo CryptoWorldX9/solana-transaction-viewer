@@ -20,8 +20,6 @@
 
     /* Definir altura del header fijo */
     --header-height: 70px; /* Ajustado ligeramente */
-    /* Variable para ancho de sidebar (ya no se usa --sidebar-width-collapsed) */
-    --sidebar-width-expanded: 230px;
 }
 
 /* --- Estilos Generales --- */
@@ -32,7 +30,7 @@
 }
 
 html {
-    height: 100%;
+    height: 100%; /* Asegurar que html ocupe toda la altura */
 }
 
 body {
@@ -40,10 +38,10 @@ body {
     background-color: var(--dark-background);
     color: var(--text-color);
     line-height: 1.6;
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    overflow-x: hidden; /* Prevenir scroll horizontal */
+    display: flex; /* ****** CAMBIO: Usar flexbox para controlar footer ****** */
+    flex-direction: column; /* Dirección vertical */
+    min-height: 100vh; /* Altura mínima del viewport */
 }
 
 /* --- Animación de Fondo --- */
@@ -57,7 +55,7 @@ body {
     background: linear-gradient(45deg, var(--corp-blue), var(--corp-purple), var(--corp-green), var(--dark-background));
     background-size: 400% 400%;
     animation: gradientBG 25s ease infinite;
-    opacity: 0.1;
+    opacity: 0.1; /* Muy sutil */
 }
 
 @keyframes gradientBG {
@@ -68,20 +66,20 @@ body {
 
 /* --- Header --- */
 header {
-    background-color: rgba(11, 11, 11, 0.8);
-    backdrop-filter: blur(10px);
+    background-color: rgba(11, 11, 11, 0.8); /* Fondo oscuro semi-transparente */
+    backdrop-filter: blur(10px); /* Efecto cristal */
     color: var(--text-color);
     padding: 0.8rem 2rem;
-    position: fixed;
+    position: fixed; /* ****** CAMBIO: Header fijo ****** */
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 1000; /* Encima de todo */
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--line-color);
-    min-height: var(--header-height);
+    min-height: var(--header-height); /* Usar variable para altura */
 }
 
 .logo {
@@ -90,27 +88,30 @@ header {
     letter-spacing: 1px;
     color: var(--corp-blue);
     text-shadow: var(--neon-glow-blue);
-    position: relative;
-    padding-right: 40px;
-    display: inline-block;
+    position: relative; /* Necesario para posicionar el tag beta */
+    padding-right: 40px; /* Espacio para el tag beta */
+    display: inline-block; /* Para que el padding-right funcione bien */
 }
-.logo-x { /* Opcional */ }
+.logo-x { /* Opcional: Para posible estilo diferente de la X */
+    /* color: var(--corp-green); */
+}
 
+/* ****** NUEVO: Estilos para el tag Beta ****** */
 .beta-tag {
     position: absolute;
-    top: -5px;
-    right: 0;
-    background-color: var(--corp-purple);
-    color: var(--dark-background);
-    padding: 2px 5px;
-    border-radius: 4px;
-    font-size: 0.6rem;
-    font-weight: bold;
-    line-height: 1;
-    text-transform: uppercase;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    z-index: 1;
-    text-shadow: none;
+    top: -5px; /* Ajusta la posición vertical */
+    right: 0; /* Posición relativa a la derecha del logo */
+    background-color: var(--corp-purple); /* Color de fondo que resalte */
+    color: var(--dark-background); /* Color de texto para contraste */
+    padding: 2px 5px; /* Relleno */
+    border-radius: 4px; /* Bordes redondeados */
+    font-size: 0.6rem; /* Tamaño de fuente pequeño */
+    font-weight: bold; /* Texto en negrita */
+    line-height: 1; /* Ajuste de altura de línea */
+    text-transform: uppercase; /* Opcional: mayúsculas */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3); /* Sombra sutil */
+    z-index: 1; /* Asegurar que esté sobre el texto del logo si hay solapamiento */
+    text-shadow: none; /* Quitar sombra de texto heredada */
 }
 
 /* --- Price Ticker --- */
@@ -118,303 +119,1166 @@ header {
     flex-grow: 1;
     overflow: hidden;
     white-space: nowrap;
-    margin: 0 2rem;
+    margin: 0 2rem; /* Espacio a los lados */
     mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
     -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
-.price-ticker-inner { display: flex; animation: ticker-scroll 40s linear infinite; }
-.price-ticker-content { display: inline-block; padding-right: 50px; }
-.price-item { margin-right: 25px; font-size: 0.85rem; color: var(--soft-text-color); }
-.price-item i { margin-right: 5px; color: var(--corp-green); }
+
+.price-ticker-inner {
+    display: flex; /* Permite que los dos contenidos estén en línea */
+    animation: ticker-scroll 40s linear infinite; /* Ajusta la duración según necesites */
+}
+
+.price-ticker-content {
+    display: inline-block; /* Hace que el contenido se comporte como un bloque pero fluya */
+    padding-right: 50px; /* Espacio entre las repeticiones */
+}
+
+.price-item {
+    margin-right: 25px; /* Espacio entre items */
+    font-size: 0.85rem;
+    color: var(--soft-text-color);
+}
+
+.price-item i {
+    margin-right: 5px;
+    color: var(--corp-green); /* Color para los iconos de monedas */
+}
+/* Iconos específicos si se quiere diferenciar */
 .price-item .fa-btc { color: #f7931a; }
 .price-item .fa-ethereum { color: #627eea; }
 .price-item .fa-solana { color: #00ffa3; }
-.price-ticker:hover .price-ticker-inner { animation-play-state: paused; }
-@keyframes ticker-scroll { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+
+
+/* Pausar animación en hover */
+.price-ticker:hover .price-ticker-inner {
+    animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); } /* Se mueve la mitad porque hay dos contenidos idénticos */
+}
 
 /* --- Header Icons --- */
-.header-icons { display: flex; align-items: center; gap: 20px; }
-.header-icons .icon { font-size: 1.4rem; color: var(--soft-text-color); cursor: pointer; transition: color 0.3s ease, text-shadow 0.3s ease; position: relative; background: none; border: none; padding: 0; }
-.header-icons .icon:hover { color: var(--corp-blue); text-shadow: var(--neon-glow-blue); }
-.language-switcher .language-dropdown { display: none; position: absolute; top: 100%; right: 0; background-color: var(--medium-dark-background); border: 1px solid var(--line-color); border-radius: 4px; padding: 5px 0; min-width: 100px; z-index: 1010; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
-.language-switcher:hover .language-dropdown { display: block; }
-.language-dropdown span { display: block; padding: 8px 15px; color: var(--soft-text-color); cursor: pointer; font-size: 0.9rem; transition: background-color 0.2s ease, color 0.2s ease; }
-.language-dropdown span:hover { background-color: var(--soft-highlight); color: var(--text-color); }
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espacio entre iconos */
+}
+
+.header-icons .icon {
+    font-size: 1.4rem; /* Tamaño de los iconos */
+    color: var(--soft-text-color);
+    cursor: pointer;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    position: relative; /* Para el dropdown */
+}
+
+.header-icons .icon:hover {
+    color: var(--corp-blue);
+    text-shadow: var(--neon-glow-blue);
+}
+
+/* Language Switcher Dropdown */
+.language-switcher .language-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--medium-dark-background);
+    border: 1px solid var(--line-color);
+    border-radius: 4px;
+    padding: 5px 0;
+    min-width: 100px;
+    z-index: 1010; /* Mayor que el header para que se vea */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.language-switcher:hover .language-dropdown {
+    display: block; /* Mostrar al hacer hover en el icono */
+}
+
+.language-dropdown span {
+    display: block;
+    padding: 8px 15px;
+    color: var(--soft-text-color);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.language-dropdown span:hover {
+    background-color: var(--soft-highlight);
+    color: var(--text-color);
+}
 
 
 /* --- Contenedor Principal --- */
 .container {
     display: flex;
-    flex-grow: 1;
-    margin-top: var(--header-height);
+    flex-grow: 1; /* Hace que el container ocupe el espacio restante verticalmente */
+    margin-top: var(--header-height); /* Empieza justo después del header fijo */
+    /* Quitamos padding-bottom porque el footer ya no es fijo */
 }
 
 /* --- Sidebar --- */
 .sidebar {
-    width: var(--sidebar-width-expanded); /* Ancho fijo normal */
+    width: 230px;
     background-color: var(--medium-dark-background);
     padding: 1.5rem 0;
-    /* Eliminada transición de width */
+    transition: width 0.3s ease;
     border-right: 1px solid var(--line-color);
-    height: calc(100vh - var(--header-height));
-    position: sticky;
-    top: var(--header-height);
-    overflow-y: auto;
-    overflow-x: hidden;
-    z-index: 900;
-    cursor: default; /* Cursor normal */
+    height: calc(100vh - var(--header-height)); /* Ocupa la altura restante */
+    position: sticky; /* Se queda fijo en el scroll del body */
+    top: var(--header-height); /* Se pega debajo del header */
+    overflow-y: auto; /* Scroll interno si es necesario */
+    z-index: 900; /* Debajo del header pero sobre el main */
 
+    /* ****** CAMBIO: Ocultar scrollbar ****** */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+/* Ocultar scrollbar para Chrome, Safari, Opera */
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+
+.sidebar nav ul {
+    list-style: none;
+}
+
+.sidebar .menu-item a {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    color: var(--soft-text-color);
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 0.95rem;
+    position: relative;
+    overflow: hidden; /* Para el efecto de borde */
+}
+
+.sidebar .menu-item a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px; /* Ancho del borde izquierdo */
+    background-color: var(--corp-blue);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+    transform-origin: bottom; /* Animación desde abajo */
+}
+
+
+.sidebar .menu-item a i {
+    margin-right: 15px; /* Espacio entre icono y texto */
+    width: 20px; /* Ancho fijo para alinear texto */
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.sidebar .menu-item a:hover {
+    background-color: var(--soft-highlight);
+    color: var(--text-color);
+}
+
+.sidebar .menu-item a.active-menu { /* Estilo para el enlace activo */
+    color: var(--text-color);
+    font-weight: 600;
+    background-color: var(--soft-highlight);
+}
+
+.sidebar .menu-item a.active-menu::before {
+     transform: scaleY(1); /* Muestra el borde */
+     box-shadow: var(--neon-glow-blue);
+}
+
+/* --- Main Content --- */
+.main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    /* Quitamos height porque el scroll es del body ahora */
+    /* overflow-y: auto; */
+    position: relative; /* Para contexto de apilamiento si es necesario */
+    z-index: 1; /* Por defecto debajo de sidebar/header */
+}
+
+.main-content section {
+    display: none; /* Ocultar todas las secciones por defecto */
+    animation: fadeIn 0.5s ease-in-out; /* Animación de entrada */
+}
+
+.main-content section.active {
+    display: block; /* Mostrar la sección activa */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.main-content h1, .main-content h2 {
+    color: var(--corp-blue);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+.main-content h2 {
+    color: var(--corp-green); /* Diferenciar h2 */
+     margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line-color);
+}
+
+
+.main-content p {
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+
+/* --- Estilos específicos para Wallet Tracker --- */
+#wallet-tracker {
+    /* Contenedor principal de la sección */
+}
+
+/* ****** NUEVO: Estilos para Input/Botón de rastreo ****** */
+.tracker-input-area {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+    align-items: center;
+    flex-wrap: wrap; /* Para que se adapte */
+}
+
+#solana-wallet-address-input {
+    flex-grow: 1; /* Ocupa espacio */
+    padding: 10px 15px;
+    background-color: var(--medium-dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    min-width: 250px; /* Ancho mínimo */
+}
+#solana-wallet-address-input::placeholder {
+    color: var(--soft-text-color);
+}
+#solana-wallet-address-input:focus {
+    border-color: var(--corp-blue);
+    box-shadow: 0 0 5px rgba(0, 176, 255, 0.4);
+}
+
+#track-wallet-button {
+    padding: 10px 20px;
+    background: linear-gradient(90deg, var(--corp-blue), var(--corp-purple));
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-shadow: none;
+}
+#track-wallet-button i { font-size: 1em; }
+#track-wallet-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 176, 255, 0.3), 0 4px 15px rgba(179, 106, 255, 0.3);
+}
+#track-wallet-button:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 8px rgba(0, 176, 255, 0.2), 0 2px 8px rgba(179, 106, 255, 0.2);
+}
+
+/* Mensajes de estado del Tracker */
+.tracker-message {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    background-color: var(--medium-dark-background);
+}
+.tracker-message.error {
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+    background-color: rgba(255, 107, 107, 0.1);
+}
+.tracker-message .fa-spinner {
+    margin-right: 8px;
+}
+
+/* Fila Superior: Cuenta y Búsqueda */
+.wallet-tracker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Alinear arriba */
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--line-color);
+    flex-wrap: wrap; /* Para responsividad */
+    gap: 1rem;
+}
+
+/* Info Cuenta (Izquierda) */
+.account-info {
+    flex: 1; /* Ocupa espacio disponible */
+    min-width: 250px; /* Ancho mínimo */
+}
+
+.account-title {
+    font-size: 1.3rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.address-line, .address-line-small {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Espacio entre dirección e iconos */
+    background-color: var(--medium-dark-background);
+    padding: 0.5rem 0.8rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    position: relative; /* Para el feedback de copiado */
+}
+.address-line-small {
+     padding: 0.3rem 0.6rem;
+     font-size: 0.9em;
+}
+
+#display-wallet-address, #owner-address {
+    font-family: 'Courier New', Courier, monospace; /* Fuente monoespaciada para direcciones */
+    color: var(--corp-green);
+    overflow: hidden;
+    text-overflow: ellipsis; /* Puntos suspensivos si es muy larga */
+    white-space: nowrap;
+    max-width: 200px; /* Límite de ancho para la dirección */
+    display: inline-block; /* Para que max-width funcione bien */
+    vertical-align: middle;
+}
+#owner-address {
+    max-width: 150px;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    color: var(--soft-text-color);
+    font-size: 1rem; /* Tamaño base iconos */
+    cursor: pointer;
+    padding: 0.3rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-flex; /* Para alinear bien el icono */
+    align-items: center;
+    justify-content: center;
+}
+.icon-button:hover {
+    color: var(--corp-blue);
+    transform: scale(1.1);
+}
+
+.icon-button.copy-button-small {
+    font-size: 0.9rem; /* Icono de copia más pequeño para owner */
+}
+
+/* Área de Búsqueda (Derecha) */
+.tracker-search-area {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 300px; /* Ancho mínimo */
+    flex: 1.5; /* Ocupa un poco más de espacio */
+    justify-content: flex-end; /* Alinear a la derecha */
+}
+
+#transaction-search-input {
+    flex-grow: 1; /* Input ocupa espacio disponible */
+    padding: 0.6rem 0.8rem;
+    background-color: var(--medium-dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    outline: none;
+}
+#transaction-search-input::placeholder {
+    color: var(--soft-text-color);
+}
+#transaction-search-input:focus {
+    border-color: var(--corp-blue);
+    box-shadow: 0 0 5px rgba(0, 176, 255, 0.5);
+}
+
+.search-button-wt {
+    font-size: 1.2rem;
+    padding: 0.6rem;
+    background-color: var(--corp-blue);
+    color: var(--dark-background);
+    border-radius: 4px;
+    border: none;
+}
+.search-button-wt:hover {
+    background-color: #0099e6; /* Azul un poco más oscuro */
+    transform: scale(1.05);
+    color: #fff;
+}
+
+
+/* Fila Media: 3 Cajas de Información */
+.info-boxes-container {
+    display: flex;
+    gap: 1.5rem; /* Espacio entre cajas */
+    margin-bottom: 2rem;
+    align-items: stretch; /* Asegura que todas las cajas tengan la misma altura */
+    flex-wrap: wrap; /* Para responsividad */
+}
+
+.info-box {
+    background-color: var(--medium-dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1.5rem;
+    flex: 1; /* Distribuye el espacio equitativamente */
+    min-width: 280px; /* Ancho mínimo para evitar que se aplasten demasiado */
+    display: flex;
+    flex-direction: column; /* Para alinear elementos internos verticalmente */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.info-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.info-box h4 {
+    color: var(--corp-green);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+    flex-wrap: wrap; /* Para items largos */
+    gap: 0.5rem;
+}
+
+.info-label {
+    color: var(--soft-text-color);
+    font-weight: 400;
+}
+
+.info-value {
+    color: var(--text-color);
+    font-weight: 600;
+    text-align: right;
+}
+
+.sol-icon-small {
+    color: #00ffa3; /* Color Solana */
+    margin-right: 4px;
+    font-size: 0.9em; /* Un poco más pequeño que el texto */
+}
+
+/* Dropdown de Tokens */
+.token-dropdown {
+    margin-top: 1rem;
+}
+
+.token-summary {
+    cursor: pointer;
+    color: var(--corp-blue);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--line-color);
+    margin-top: 0.5rem;
+}
+.token-summary:hover {
+    color: #33c6ff;
+}
+.token-summary .dropdown-arrow {
+    transition: transform 0.3s ease;
+}
+.token-dropdown[open] .token-summary .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.token-list {
+    list-style: none;
+    margin-top: 0.5rem;
+    max-height: 150px; /* Altura máxima para scroll si hay muchos tokens */
+    overflow-y: auto;
+    padding-right: 5px; /* Espacio para la barra de scroll */
     /* Ocultar scrollbar */
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
-.sidebar::-webkit-scrollbar { display: none; }
-
-.sidebar nav ul { list-style: none; }
-.sidebar .menu-item a { display: flex; align-items: center; padding: 0.8rem 1.5rem; color: var(--soft-text-color); text-decoration: none; transition: background-color 0.3s ease, color 0.3s ease; font-size: 0.95rem; position: relative; overflow: hidden; white-space: nowrap; cursor: pointer; }
-.sidebar .menu-item a::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background-color: var(--corp-blue); transform: scaleY(0); transition: transform 0.3s ease; transform-origin: bottom; }
-.sidebar .menu-item a i { margin-right: 15px; width: 20px; text-align: center; font-size: 1.1rem; flex-shrink: 0; /* Eliminada transición de margin/font-size */ }
-.sidebar .menu-item a .menu-text { opacity: 1; transition: opacity 0.2s ease; white-space: nowrap; }
-.sidebar .menu-item a:hover { background-color: var(--soft-highlight); color: var(--text-color); }
-.sidebar .menu-item a.active-menu { color: var(--text-color); font-weight: 600; background-color: var(--soft-highlight); }
-.sidebar .menu-item a.active-menu::before { transform: scaleY(1); box-shadow: var(--neon-glow-blue); }
-
-/* --- ELIMINADOS ESTILOS SIDEBAR COLAPSADO --- */
-/* body.sidebar-collapsed .sidebar { ... } */
-/* body.sidebar-collapsed .sidebar .menu-item a { ... } */
-/* body.sidebar-collapsed .sidebar .menu-item a i { ... } */
-/* body.sidebar-collapsed .sidebar .menu-item a .menu-text { ... } */
-
-
-/* --- Wrapper y Main Content --- */
-/* Eliminado .content-wrapper, volvemos a margen en .main-content */
-.main-content {
-    flex-grow: 1;
-    padding: 2rem;
-    margin-left: var(--sidebar-width-expanded); /* Margen fijo */
-    position: relative;
-    z-index: 1;
-    /* Eliminada transición de margin-left */
+.token-list::-webkit-scrollbar {
+    display: none;
 }
 
-/* body.sidebar-collapsed .content-wrapper { ... } */ /* Regla eliminada */
 
+.token-list li {
+    display: flex;
+    align-items: center;
+    padding: 0.4rem 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--line-color);
+}
+.token-list li:last-child {
+    border-bottom: none;
+}
 
-.main-content section { display: none; animation: fadeIn 0.5s ease-in-out; }
-.main-content section.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.main-content h1, .main-content h2 { color: var(--corp-blue); margin-bottom: 1.5rem; font-weight: 600; }
-.main-content h2 { color: var(--corp-green); margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--line-color); }
-.main-content p { margin-bottom: 1rem; color: var(--text-color); }
+.token-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    border-radius: 50%; /* Iconos redondos */
+    object-fit: cover; /* Para que la imagen no se deforme */
+    background-color: #555; /* Fondo mientras carga o si falla */
+}
 
+.token-name {
+    flex-grow: 1;
+    color: var(--text-color);
+}
 
-/* --- Estilos específicos para Wallet Tracker --- */
-/* Input y Botón específicos del tracker */
-.tracker-input-area { display: flex; gap: 10px; margin-bottom: 2rem; align-items: center; flex-wrap: wrap; }
-#solana-wallet-address-input { flex-grow: 1; padding: 10px 15px; background-color: var(--medium-dark-background); border: 1px solid var(--border-color); border-radius: 5px; color: var(--text-color); font-size: 0.95rem; outline: none; transition: border-color 0.3s ease, box-shadow 0.3s ease; min-width: 250px; }
-#solana-wallet-address-input::placeholder { color: var(--soft-text-color); }
-#solana-wallet-address-input:focus { border-color: var(--corp-blue); box-shadow: 0 0 5px rgba(0, 176, 255, 0.4); }
-#track-wallet-button { padding: 10px 20px; background: linear-gradient(90deg, var(--corp-blue), var(--corp-purple)); color: #ffffff; border: none; border-radius: 5px; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.3s ease; display: flex; align-items: center; gap: 8px; text-shadow: none; }
-#track-wallet-button i { font-size: 1em; }
-#track-wallet-button:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0, 176, 255, 0.3), 0 4px 15px rgba(179, 106, 255, 0.3); }
-#track-wallet-button:active { transform: translateY(0px); box-shadow: 0 2px 8px rgba(0, 176, 255, 0.2), 0 2px 8px rgba(179, 106, 255, 0.2); }
+.token-amount {
+    color: var(--soft-text-color);
+    font-weight: 600;
+}
 
-/* Mensajes de estado del Tracker */
-.tracker-message { padding: 1rem; margin-bottom: 1.5rem; border-radius: 5px; text-align: center; border: 1px solid var(--border-color); background-color: var(--medium-dark-background); }
-.tracker-message.error { color: #ff6b6b; border-color: #ff6b6b; background-color: rgba(255, 107, 107, 0.1); }
-.tracker-message .fa-spinner { margin-right: 8px; }
-
-/* Fila Superior: Cuenta (Búsqueda Eliminada) */
-.wallet-tracker-header { display: flex; align-items: flex-start; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line-color); flex-wrap: wrap; gap: 1rem; }
-.account-info { min-width: 250px; }
-.account-title { font-size: 1.3rem; color: var(--text-color); margin-bottom: 0.5rem; font-weight: 600; }
-.address-line, .address-line-small { display: flex; align-items: center; gap: 0.5rem; background-color: var(--medium-dark-background); padding: 0.5rem 0.8rem; border-radius: 4px; border: 1px solid var(--border-color); position: relative; }
-.address-line-small { padding: 0.3rem 0.6rem; font-size: 0.9em; }
-#display-wallet-address, #owner-address { font-family: 'Courier New', Courier, monospace; color: var(--corp-green); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; display: inline-block; vertical-align: middle; }
-#owner-address { max-width: 150px; }
-.icon-button { background: none; border: none; color: var(--soft-text-color); font-size: 1rem; cursor: pointer; padding: 0.3rem; transition: color 0.2s ease, transform 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
-.icon-button:hover { color: var(--corp-blue); transform: scale(1.1); }
-.icon-button.copy-button-small { font-size: 0.9rem; }
-
-/* Fila Media: 3 Cajas de Información */
-.info-boxes-container { display: flex; gap: 1.5rem; margin-bottom: 2rem; align-items: stretch; flex-wrap: wrap; }
-.info-box { background-color: var(--medium-dark-background); border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem; flex: 1; min-width: 280px; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-.info-box:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); }
-.info-box h4 { color: var(--corp-green); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--line-color); font-size: 1.1rem; font-weight: 600; }
-.info-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; font-size: 0.95rem; flex-wrap: wrap; gap: 0.5rem; }
-.info-label { color: var(--soft-text-color); font-weight: 400; }
-.info-value { color: var(--text-color); font-weight: 600; text-align: right; }
-.sol-icon-small { color: #00ffa3; margin-right: 4px; font-size: 0.9em; }
-
-/* Dropdown de Tokens */
-.token-dropdown { margin-top: 1rem; }
-.token-summary { cursor: pointer; color: var(--corp-blue); display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-top: 1px solid var(--line-color); margin-top: 0.5rem; }
-.token-summary:hover { color: #33c6ff; }
-.token-summary .dropdown-arrow { transition: transform 0.3s ease; }
-.token-dropdown[open] .token-summary .dropdown-arrow { transform: rotate(180deg); }
-.token-list { list-style: none; margin-top: 0.5rem; max-height: 150px; overflow-y: auto; padding-right: 5px; -ms-overflow-style: none; scrollbar-width: none; }
-.token-list::-webkit-scrollbar { display: none; }
-.token-list li { display: flex; align-items: center; padding: 0.4rem 0; font-size: 0.9rem; border-bottom: 1px solid var(--line-color); }
-.token-list li:last-child { border-bottom: none; }
-.token-icon { width: 20px; height: 20px; margin-right: 8px; border-radius: 50%; object-fit: cover; background-color: #555; }
-.token-name { flex-grow: 1; color: var(--text-color); }
-.token-amount { color: var(--soft-text-color); font-weight: 600; }
-.wallet-details-link { margin-top: auto; padding-top: 1rem; text-align: right; }
+.wallet-details-link {
+    margin-top: auto; /* Empuja este elemento al fondo de la caja */
+    padding-top: 1rem;
+    text-align: right;
+}
 
 /* Estilos Caja "Más Información" */
-.address-line-small .fa-copy { font-size: 0.9em; }
-.tags-item { align-items: flex-start; }
-.tags-container { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: flex-end; }
-.tag { background-color: #333; color: var(--soft-text-color); padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; text-decoration: none; transition: background-color 0.2s ease, color 0.2s ease; }
-.tag:hover { background-color: var(--corp-blue); color: var(--dark-background); }
-.tag.pump-tag { background-color: #e85d04; color: white; }
-.tag.creator-tag { cursor: pointer; }
+.address-line-small .fa-copy {
+    font-size: 0.9em;
+}
+
+.tags-item {
+    align-items: flex-start; /* Alinear texto de "Etiquetas" arriba */
+}
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end; /* Alinear etiquetas a la derecha */
+}
+.tag {
+    background-color: #333;
+    color: var(--soft-text-color);
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px; /* Píldoras */
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.tag:hover {
+    background-color: var(--corp-blue);
+    color: var(--dark-background);
+}
+.tag.pump-tag { background-color: #e85d04; color: white; } /* Color naranja para pump.fun */
+.tag.creator-tag { cursor: pointer; } /* Indicar que es clickeable */
+
 
 /* Estilos Caja "Varios" - Notas */
-.private-note-area { margin-top: 1rem; border-top: 1px solid var(--line-color); padding-top: 1rem; flex-grow: 1; display: flex; flex-direction: column; }
-#private-note-display { margin-bottom: 0.5rem; flex-grow: 1; overflow-y: auto; max-height: 100px; -ms-overflow-style: none; scrollbar-width: none; }
-#private-note-display::-webkit-scrollbar { display: none; }
-.private-note-link { display: block; color: var(--corp-purple); text-decoration: underline; cursor: pointer; margin-bottom: 0.3rem; font-size: 0.9rem; }
-.private-note-link:hover { color: #c980ff; }
-.add-note-link { color: var(--corp-blue); cursor: pointer; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 5px; margin-top: auto; padding-top: 0.5rem; }
-.add-note-link i { font-size: 0.8em; }
-.add-note-link:hover { text-decoration: underline; }
-.add-note-form { margin-top: 0.5rem; }
-#add-note-form textarea { width: 100%; min-height: 60px; padding: 0.5rem; background-color: var(--dark-background); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-color); font-size: 0.9rem; resize: vertical; margin-bottom: 0.5rem; }
-#add-note-form textarea:focus { outline: none; border-color: var(--corp-purple); box-shadow: 0 0 5px rgba(179, 106, 255, 0.5); }
-#add-note-form button { padding: 0.4rem 0.8rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-right: 0.5rem; transition: background-color 0.2s ease; }
-#save-note-button { background-color: var(--corp-purple); color: white; }
-#save-note-button:hover { background-color: #a34ee1; }
-#cancel-note-button { background-color: #555; color: var(--text-color); }
-#cancel-note-button:hover { background-color: #777; }
-.hidden { display: none !important; }
+.private-note-area {
+    margin-top: 1rem;
+    border-top: 1px solid var(--line-color);
+    padding-top: 1rem;
+    flex-grow: 1; /* Ocupa el espacio restante en la caja */
+    display: flex;
+    flex-direction: column;
+}
+
+#private-note-display {
+    margin-bottom: 0.5rem;
+    flex-grow: 1; /* Permite que las notas ocupen espacio */
+    overflow-y: auto; /* Scroll si hay muchas notas */
+    max-height: 100px; /* Limitar altura */
+    /* Ocultar scrollbar */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+#private-note-display::-webkit-scrollbar {
+    display: none;
+}
+
+
+.private-note-link {
+    display: block;
+    color: var(--corp-purple);
+    text-decoration: underline;
+    cursor: pointer;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+}
+.private-note-link:hover {
+    color: #c980ff;
+}
+
+.add-note-link {
+    color: var(--corp-blue);
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: auto; /* Empujar link hacia abajo si no hay notas */
+    padding-top: 0.5rem;
+}
+.add-note-link i {
+    font-size: 0.8em;
+}
+.add-note-link:hover {
+    text-decoration: underline;
+}
+
+.add-note-form {
+    margin-top: 0.5rem;
+    /* Inicialmente oculto por clase 'hidden' */
+}
+
+#add-note-form textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 0.5rem;
+    background-color: var(--dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    resize: vertical; /* Permitir redimensionar verticalmente */
+    margin-bottom: 0.5rem;
+}
+#add-note-form textarea:focus {
+     outline: none;
+     border-color: var(--corp-purple);
+     box-shadow: 0 0 5px rgba(179, 106, 255, 0.5);
+}
+
+#add-note-form button {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+#save-note-button {
+    background-color: var(--corp-purple);
+    color: white;
+}
+#save-note-button:hover {
+    background-color: #a34ee1;
+}
+#cancel-note-button {
+    background-color: #555;
+    color: var(--text-color);
+}
+#cancel-note-button:hover {
+    background-color: #777;
+}
+
+.hidden {
+    display: none !important; /* Asegura que esté oculto */
+}
 
 
 /* Tabla de Transacciones */
-.transactions-table-container { margin-top: 2rem; overflow-x: auto; }
-#transactions-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-#transactions-table th, #transactions-table td { padding: 0.8rem 0.6rem; text-align: left; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
-#transactions-table th { background-color: var(--medium-dark-background); color: var(--soft-text-color); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; position: sticky; top: 0px; z-index: 10; }
-#transactions-table th:first-child, #transactions-table td:first-child { text-align: center; padding: 0.8rem 0.4rem; width: 40px; }
-#transactions-table th:first-child i { color: var(--corp-blue); }
-#transactions-table tbody tr:hover { background-color: var(--soft-highlight); }
-#transactions-table td { color: var(--text-color); }
-.tx-sent { color: #ff8a80; } /* Rojo claro */
-.tx-received { color: #b9f6ca; } /* Verde claro */
-.view-details-button { font-size: 1.1rem; }
-.tx-signature { font-family: 'Courier New', Courier, monospace; display: inline-block; max-width: 100px; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; cursor: help; }
-#transactions-table td .sol-icon-small { vertical-align: middle; margin-bottom: 2px; }
-.table-footer-controls { margin-top: 1.5rem; display: flex; justify-content: flex-start; align-items: center; }
-.items-per-page-selector label { margin-right: 0.5rem; color: var(--soft-text-color); font-size: 0.9rem; }
-#items-per-page { padding: 0.4rem 0.6rem; background-color: var(--medium-dark-background); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-color); margin-right: 0.5rem; }
-.items-per-page-selector span { font-size: 0.9rem; color: var(--soft-text-color); }
+.transactions-table-container {
+    margin-top: 2rem;
+    overflow-x: auto; /* Scroll horizontal si la tabla es muy ancha */
+}
+
+#transactions-table {
+    width: 100%;
+    border-collapse: collapse; /* Bordes unidos */
+    font-size: 0.9rem;
+}
+
+#transactions-table th, #transactions-table td {
+    padding: 0.8rem 0.6rem; /* Más padding vertical */
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap; /* Evitar que el texto se rompa en varias líneas */
+}
+
+#transactions-table th {
+    background-color: var(--medium-dark-background);
+    color: var(--soft-text-color);
+    font-weight: 600;
+    text-transform: uppercase; /* Mayúsculas para encabezados */
+    font-size: 0.8rem;
+    position: sticky; /* Encabezado fijo al hacer scroll */
+    top: 0px; /* Ajustar si el scroll es del main-content y no del body */
+    z-index: 10; /* Encima del contenido */
+}
+#transactions-table th:first-child, #transactions-table td:first-child {
+    text-align: center; /* Centrar icono de ojo/pregunta */
+    padding: 0.8rem 0.4rem;
+    width: 40px; /* Ancho fijo para icono */
+}
+#transactions-table th:first-child i {
+    color: var(--corp-blue);
+}
+
+#transactions-table tbody tr:hover {
+    background-color: var(--soft-highlight);
+}
+
+#transactions-table td {
+    color: var(--text-color);
+}
+
+/* Icono de Ojo */
+.view-details-button {
+    font-size: 1.1rem;
+}
+
+/* Firma (Acortar visualmente) */
+.tx-signature {
+    font-family: 'Courier New', Courier, monospace;
+    display: inline-block;
+    max-width: 100px; /* Ancho máximo visible */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle; /* Alinear mejor con texto */
+    cursor: help; /* Indicar que hay más info (tooltip o click) */
+}
+
+/* Icono Solana en tabla */
+#transactions-table td .sol-icon-small {
+    vertical-align: middle; /* Alinear icono con texto */
+    margin-bottom: 2px; /* Pequeño ajuste vertical */
+}
+
+/* Controles inferiores de la tabla */
+.table-footer-controls {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-start; /* Alinear a la izquierda */
+    align-items: center;
+}
+
+.items-per-page-selector label {
+    margin-right: 0.5rem;
+    color: var(--soft-text-color);
+    font-size: 0.9rem;
+}
+
+#items-per-page {
+    padding: 0.4rem 0.6rem;
+    background-color: var(--medium-dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    margin-right: 0.5rem;
+}
+
+.items-per-page-selector span {
+    font-size: 0.9rem;
+    color: var(--soft-text-color);
+}
 
 /* --- Fin Estilos Wallet Tracker --- */
 
 /* --- Estilos para Modales --- */
-.modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); animation: fadeInModal 0.3s ease-out; }
-@keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
-.modal.show { display: flex; justify-content: center; align-items: center; }
-.modal-content { background-color: var(--medium-dark-background); margin: 10% auto; padding: 25px 30px; border: 1px solid var(--line-color); border-radius: 8px; width: 80%; max-width: 500px; position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: slideInModal 0.4s ease-out; }
-@keyframes slideInModal { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.modal-content h2 { color: var(--corp-blue); margin-top: 0; margin-bottom: 1.5rem; font-size: 1.5rem; }
-.modal-content p { color: var(--soft-text-color); font-size: 0.95rem; }
-.close-button { color: var(--soft-text-color); position: absolute; top: 15px; right: 20px; font-size: 1.8rem; font-weight: bold; cursor: pointer; transition: color 0.2s ease, transform 0.2s ease; }
-.close-button:hover, .close-button:focus { color: #ff6b6b; text-decoration: none; transform: scale(1.1); }
-#search-modal #search-input { width: 100%; padding: 12px; margin-bottom: 20px; background-color: var(--dark-background); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-color); font-size: 1rem; }
-#search-modal #search-input:focus { outline: none; border-color: var(--corp-blue); box-shadow: 0 0 5px rgba(0, 176, 255, 0.5); }
-#search-results { max-height: 300px; overflow-y: auto; margin-top: 10px; }
-#search-results a { display: block; padding: 10px 15px; margin-bottom: 8px; background-color: var(--soft-highlight); color: var(--text-color); text-decoration: none; border-radius: 4px; transition: background-color 0.2s ease; font-size: 0.9rem; }
-#search-results a:hover { background-color: var(--corp-blue); color: var(--dark-background); }
-#search-results p { color: var(--soft-text-color); text-align: center; margin-top: 20px; }
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 2000; /* Encima de todo */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(5px);
+    animation: fadeInModal 0.3s ease-out;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+.modal-content {
+    background-color: var(--medium-dark-background);
+    margin: 10% auto; /* Centrado vertical y horizontal */
+    padding: 25px 30px;
+    border: 1px solid var(--line-color);
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px; /* Ancho máximo */
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: slideInModal 0.4s ease-out;
+}
+
+@keyframes slideInModal {
+     from { transform: translateY(-30px); opacity: 0; }
+     to { transform: translateY(0); opacity: 1; }
+}
+
+
+.modal-content h2 {
+    color: var(--corp-blue);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+.modal-content p {
+     color: var(--soft-text-color);
+     font-size: 0.95rem;
+}
+
+.close-button {
+    color: var(--soft-text-color);
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #ff6b6b; /* Rojo para cerrar */
+    text-decoration: none;
+    transform: scale(1.1);
+}
+
+/* Específicos de Search Modal */
+#search-modal #search-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    background-color: var(--dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+#search-modal #search-input:focus {
+     outline: none;
+     border-color: var(--corp-blue);
+     box-shadow: 0 0 5px rgba(0, 176, 255, 0.5);
+}
+
+#search-results {
+    max-height: 300px; /* Más altura para resultados */
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+#search-results a {
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    background-color: var(--soft-highlight);
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    font-size: 0.9rem;
+}
+
+#search-results a:hover {
+    background-color: var(--corp-blue);
+    color: var(--dark-background);
+}
+
+#search-results p { /* Mensaje de "no resultados" */
+     color: var(--soft-text-color);
+     text-align: center;
+     margin-top: 20px;
+}
 
 
 /* --- Footer --- */
-footer { background-color: var(--dark-background); color: var(--soft-text-color); padding: 1rem 2rem; text-align: center; border-top: 1px solid var(--line-color); margin-top: auto; margin-left: var(--sidebar-width-expanded); /* Añadido margen para desktop */ transition: margin-left var(--sidebar-transition-speed) ease; /* Añadida transición */ }
-.footer-content { display: flex; justify-content: center; align-items: center; margin-bottom: 0.5rem; }
-.social-media h3 { color: var(--text-color); margin-bottom: 0.8rem; font-size: 1rem; font-weight: 600; text-shadow: none; }
-.social-media ul { list-style: none; display: flex; justify-content: center; gap: 20px; }
-.social-media a { color: var(--soft-text-color); font-size: 1.5rem; transition: color 0.3s ease, transform 0.3s ease; }
-.social-media a:hover { color: var(--corp-blue); transform: scale(1.1); }
-.fa-x-twitter:hover { color: #1DA1F2; } .fa-youtube:hover { color: #FF0000; } .fa-instagram:hover { color: #E4405F; } .fa-tiktok:hover { color: #EE1D52; } .fa-telegram:hover { color: #2AABEE; }
-.footer-bottom { font-size: 0.8rem; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid var(--line-color); }
+footer {
+    background-color: var(--dark-background); /* ****** CAMBIO: Usar color base ****** */
+    color: var(--soft-text-color);
+    padding: 1rem 2rem; /* ****** CAMBIO: Padding reducido ****** */
+    text-align: center;
+    border-top: 1px solid var(--line-color);
+    margin-top: auto; /* ****** CAMBIO: Empuja al fondo en layout flex ****** */
+    /* Quitar position fixed, left, width, height, z-index */
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center; /* Centrar contenido del footer */
+    align-items: center;
+    margin-bottom: 0.5rem; /* Reducir margen */
+}
+
+.social-media h3 {
+    color: var(--text-color); /* ****** CAMBIO: Color menos brillante ****** */
+    margin-bottom: 0.8rem;
+    font-size: 1rem; /* Reducir tamaño */
+    font-weight: 600;
+    text-shadow: none; /* Quitar sombra */
+}
+
+.social-media ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espacio entre iconos sociales */
+}
+
+.social-media a {
+    color: var(--soft-text-color);
+    font-size: 1.5rem; /* Iconos sociales */
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-media a:hover {
+    color: var(--corp-blue); /* O color específico de la red social */
+    transform: scale(1.1);
+}
+/* Colores específicos para iconos sociales (ejemplo) */
+.fa-x-twitter:hover { color: #1DA1F2; }
+.fa-youtube:hover { color: #FF0000; }
+.fa-instagram:hover { color: #E4405F; }
+.fa-tiktok:hover { color: #EE1D52; } /* Rosa TikTok */
+.fa-telegram:hover { color: #2AABEE; }
+
+
+.footer-bottom {
+    font-size: 0.8rem; /* Reducir tamaño */
+    margin-top: 0.8rem; /* Reducir margen */
+    padding-top: 0.8rem; /* Reducir padding */
+    border-top: 1px solid var(--line-color);
+}
 
 
 /* --- Responsive Design --- */
 @media (max-width: 1024px) {
-     .price-ticker { display: none; }
-     /* No definir --sidebar-width-collapsed aquí */
-     .sidebar { width: var(--sidebar-width-expanded); }
-     /* Quitar reglas específicas de colapso para tablet */
-     /* body.sidebar-collapsed .sidebar { ... } */
-     /* body.sidebar-collapsed .sidebar .menu-item a i { ... } */
+     .price-ticker {
+          display: none; /* Ocultar ticker en pantallas medianas */
+     }
+     .sidebar {
+          width: 200px; /* Sidebar más estrecho */
+     }
+      .sidebar .menu-item a {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+      }
+       .sidebar .menu-item a i {
+         margin-right: 10px;
+       }
+        .main-content {
+          padding: 1.5rem;
+          margin-left: 200px; /* ****** CAMBIO: Ajustar margen para nuevo ancho de sidebar ****** */
+       }
+       /* Ajustar cajas de info en tracker */
+       .info-boxes-container {
+           gap: 1rem;
+       }
+       .info-box {
+           padding: 1rem;
+           min-width: calc(50% - 0.5rem); /* Dos columnas */
+       }
+       footer {
+           /* ****** CAMBIO: No necesita left/width aquí si el body es flex ****** */
+           /* margin-left: 200px; */
+           padding: 0.8rem 1.5rem;
+       }
 
-     .main-content { margin-left: var(--sidebar-width-expanded); padding: 1.5rem; }
-     /* Quitar regla de colapso para content-wrapper */
-     /* body.sidebar-collapsed .content-wrapper { ... } */
 
-     .info-boxes-container { gap: 1rem; }
-     .info-box { padding: 1rem; min-width: calc(50% - 0.5rem); }
-     footer { margin-left: var(--sidebar-width-expanded); padding: 0.8rem 1.5rem; }
-     /* Ocultar botón toggle también en tablet */
-     .sidebar-toggle-desktop { display: none; }
 }
 
 
 @media (max-width: 768px) {
-    .container { flex-direction: column; margin-top: 0; }
-    header { padding: 0.6rem 1rem; min-height: 60px; position: static; z-index: auto; }
-    .logo { font-size: 1.5rem; padding-right: 35px; }
-    .beta-tag { font-size: 0.5rem; padding: 1px 3px; top: -2px; right: -5px; }
-    .header-icons { gap: 15px; } .header-icons .icon { font-size: 1.2rem; }
-    .sidebar-toggle-desktop { display: none; }
+    /* Ajustes para estructura base */
+    body {
+        /* Body ya es flex column */
+    }
+    .container {
+        flex-direction: column; /* Apilar sidebar y contenido */
+        margin-top: 0; /* Header ya no es fijo */
+    }
+    header {
+        padding: 0.6rem 1rem;
+        min-height: 60px;
+        position: static; /* ****** CAMBIO: Header no fijo en móvil ****** */
+        z-index: auto;
+    }
+    .logo {
+        font-size: 1.5rem;
+        padding-right: 35px; /* Espacio para beta tag más pequeño */
+    }
+    .beta-tag {
+        font-size: 0.5rem;
+        padding: 1px 3px;
+        top: -2px;
+        right: -5px; /* Ajustar posición */
+    }
+    .header-icons { gap: 15px; }
+    .header-icons .icon { font-size: 1.2rem; }
 
-    .sidebar { width: 100% !important; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--line-color); display: flex; overflow-x: auto; padding: 0.5rem 0; top: auto; z-index: auto; transition: none !important; cursor: default; }
-    .sidebar nav ul { flex-direction: row; width: max-content; }
-    .sidebar .menu-item a { padding: 0.8rem 1rem !important; justify-content: flex-start !important; }
-    .sidebar .menu-item a i { margin-right: 5px !important; font-size: 1.1rem !important; }
-    .sidebar .menu-item a .menu-text { opacity: 1 !important; width: auto !important; overflow: visible !important; transition-delay: 0s !important; }
-
-    /* Ignorar estado colapsado en móvil */
-     body.sidebar-collapsed .sidebar,
-     body.sidebar-collapsed .sidebar .menu-item a,
-     body.sidebar-collapsed .sidebar .menu-item a i,
-     body.sidebar-collapsed .sidebar .menu-item a .menu-text {
-          /* Heredar estilos base, no aplicar colapso */
-          width: 100% !important; /* Forzar ancho */
-          padding: 0.8rem 1rem !important; /* Forzar padding */
-          justify-content: flex-start !important; /* Alinear normal */
-          margin-right: 5px !important; /* Forzar margen */
-          font-size: 1.1rem !important; /* Forzar tamaño */
-          opacity: 1 !important; /* Forzar visibilidad */
-          overflow: visible !important;
+    .sidebar {
+        width: 100%; /* Ocupa todo el ancho */
+        height: auto; /* Altura automática */
+        position: static; /* Quitar sticky */
+        border-right: none;
+        border-bottom: 1px solid var(--line-color);
+        display: flex; /* Hacer horizontal el menú */
+        overflow-x: auto; /* Scroll horizontal para menú */
+        padding: 0.5rem 0;
+        top: auto; /* Resetear top */
+        height: auto; /* Resetear height */
+        z-index: auto;
+    }
+    .sidebar nav ul {
+        display: flex;
+        flex-direction: row; /* Menú en fila */
+        width: max-content; /* Evita que se rompa */
+    }
+     .sidebar .menu-item a {
+        padding: 0.8rem 1rem;
+     }
+      .sidebar .menu-item a i {
+        margin-right: 5px; /* Menos espacio icono-texto */
+      }
+     .sidebar .menu-item a .menu-text {
+        /* Opcional: Ocultar texto y mostrar solo iconos */
+        /* display: none; */
      }
 
-    .main-content { margin-left: 0 !important; transition: none !important; padding: 1rem; }
-     /* body.sidebar-collapsed .content-wrapper { margin-left: 0 !important; transition: none !important; } */ /* Eliminado wrapper */
-     .main-content h1, .main-content h2 { font-size: 1.5rem; margin-bottom: 1rem; }
-     .wallet-tracker-header { flex-direction: column; align-items: stretch; gap: 1rem; padding-bottom: 1rem; }
-     .info-boxes-container { flex-direction: column; gap: 1rem; }
-     .info-box { min-width: 100%; }
-     #transactions-table th, #transactions-table td { font-size: 0.8rem; padding: 0.6rem 0.4rem; }
-     .modal-content { width: 90%; margin: 20% auto; padding: 20px; }
-     .modal-content h2 { font-size: 1.3rem; }
 
-    footer { position: static; margin-left: 0; width: 100%; height: auto; padding: 1rem; margin-top: 2rem; transition: none; }
-    .footer-content { flex-direction: column; gap: 15px; }
-    .social-media ul { gap: 20px; } .social-media a { font-size: 1.6rem; }
+    .main-content {
+        margin-left: 0; /* Sin margen ya que no hay sidebar */
+        padding: 1rem; /* Reducir padding en móvil */
+        /* Quitar height si se definió */
+        height: auto;
+    }
+     .main-content h1, .main-content h2 { font-size: 1.5rem; margin-bottom: 1rem;}
+
+     /* Ajustes Wallet Tracker en móvil */
+      .wallet-tracker-header {
+         flex-direction: column; /* Apilar cuenta y búsqueda */
+         align-items: stretch; /* Ocupar todo el ancho */
+         gap: 1rem;
+         padding-bottom: 1rem; /* Menos padding */
+     }
+      .tracker-search-area {
+         justify-content: flex-start; /* Alinear búsqueda a la izquierda */
+         min-width: unset; /* Quitar ancho mínimo */
+     }
+      .info-boxes-container {
+         flex-direction: column; /* Apilar cajas de info */
+         gap: 1rem;
+     }
+      .info-box {
+         min-width: 100%; /* Cada caja ocupa todo el ancho */
+     }
+     /* Tabla responsive */
+      #transactions-table th, #transactions-table td {
+         font-size: 0.8rem;
+         padding: 0.6rem 0.4rem;
+     }
+
+
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+        padding: 20px;
+    }
+    .modal-content h2 { font-size: 1.3rem; }
+
+    footer {
+        position: static; /* ****** CAMBIO: Footer no fijo en móvil ****** */
+        margin-left: 0; /* Resetear margen */
+        width: 100%; /* Ocupar todo el ancho */
+        height: auto; /* Altura automática */
+        padding: 1rem;
+        margin-top: 2rem; /* Espacio antes del footer */
+    }
+    .footer-content { flex-direction: column; gap: 15px;}
+    .social-media ul { gap: 20px; }
+    .social-media a { font-size: 1.6rem; }
     .footer-bottom { font-size: 0.8rem; }
 }
 
 @media (max-width: 480px) {
-     .logo { display: none; } header { justify-content: flex-end; }
-     .header-icons { gap: 10px; } .header-icons .icon { font-size: 1.1rem; }
-     .sidebar .menu-item a { padding: 0.6rem 0.8rem; }
-     .main-content h1, .main-content h2 { font-size: 1.3rem; }
-     #transactions-table th, #transactions-table td { white-space: normal; }
-     .footer-content { gap: 15px;} .social-media h3 { margin-bottom: 0.5rem; }
+     .logo { display: none; } /* Ocultar logo si no cabe */
+     header { justify-content: flex-end; } /* Alinear iconos a la derecha */
+
+     .header-icons { gap: 10px; }
+     .header-icons .icon { font-size: 1.1rem; }
+
+      .sidebar .menu-item a { padding: 0.6rem 0.8rem; }
+
+      .main-content h1, .main-content h2 { font-size: 1.3rem; }
+
+       /* Ajustes finos tabla */
+        #transactions-table th, #transactions-table td {
+            white-space: normal; /* Permitir que el texto se rompa */
+        }
+        /* Opcional: Ocultar columnas menos importantes en móvil */
+        #transactions-table th:nth-child(3), /* Bloque */
+        #transactions-table td:nth-child(3),
+        #transactions-table th:nth-child(5), /* Instrucciones */
+        #transactions-table td:nth-child(5),
+        #transactions-table th:nth-child(9) /* Programa */
+         /* { display: none; } */ /* Descomentar para ocultar */
+
+
+     .footer-content { flex-direction: column; gap: 15px;}
+     .social-media h3 { margin-bottom: 0.5rem; }
 }
 
 /* Utilidad para texto copiado */
-.copied-feedback { position: absolute; background-color: var(--corp-green); color: var(--dark-background); padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 5px; white-space: nowrap; opacity: 0; transition: opacity 0.5s ease-out, transform 0.5s ease-out; pointer-events: none; z-index: 10; top: 50%; left: 105%; transform: translateY(-50%) translateX(-10px); }
-.copied-feedback.show { opacity: 1; transform: translateY(-50%) translateX(0); }
+.copied-feedback {
+    position: absolute;
+    background-color: var(--corp-green);
+    color: var(--dark-background);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    margin-left: 5px; /* Ajusta según sea necesario */
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    pointer-events: none; /* No interfiere con clicks */
+    z-index: 10; /* Sobre la línea de dirección */
+    /* Ajustar posicionamiento relativo al botón */
+    top: -25px; /* Posicionar arriba del botón */
+    left: 50%;
+    transform: translateX(-50%);
+}
+.copied-feedback.show {
+    opacity: 1;
+}
