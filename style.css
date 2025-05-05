@@ -23,6 +23,8 @@
     /* Variables para anchos de sidebar */
     --sidebar-width-expanded: 230px; /* Ancho normal del sidebar */
     --sidebar-width-collapsed: 80px;  /* Ancho colapsado del sidebar */
+    /* Variable para la transición */
+    --sidebar-transition-speed: 0.3s;
 }
 
 /* --- Estilos Generales --- */
@@ -237,7 +239,7 @@ header {
     width: var(--sidebar-width-expanded); /* Ancho inicial con variable */
     background-color: var(--medium-dark-background);
     padding: 1.5rem 0;
-    transition: width 0.3s ease; /* Transición para colapsar/expandir */
+    transition: width var(--sidebar-transition-speed) ease; /* Transición para colapsar/expandir */
     border-right: 1px solid var(--line-color);
     height: calc(100vh - var(--header-height)); /* Ocupa la altura restante */
     position: sticky; /* Se queda fijo en el scroll del body */
@@ -245,7 +247,7 @@ header {
     overflow-y: auto; /* Scroll interno si es necesario */
     overflow-x: hidden; /* Ocultar scroll horizontal si texto sobresale */
     z-index: 900; /* Debajo del header pero sobre el main */
-    cursor: pointer; /* Indicar que se puede hacer clic para expandir */
+    cursor: pointer; /* Indicar que se puede hacer clic para expandir (cuando está colapsado) */
 
     /* Ocultar scrollbar */
     -ms-overflow-style: none;  /* IE and Edge */
@@ -265,7 +267,7 @@ header {
     padding: 0.8rem 1.5rem; /* Padding normal */
     color: var(--soft-text-color);
     text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease, padding 0.3s ease; /* Añadir padding a transición */
+    transition: background-color 0.3s ease, color 0.3s ease, padding var(--sidebar-transition-speed) ease; /* padding en transición */
     font-size: 0.95rem;
     position: relative;
     overflow: hidden; /* Importante para ocultar texto */
@@ -292,12 +294,13 @@ header {
     text-align: center;
     font-size: 1.1rem;
     flex-shrink: 0; /* Evitar que el icono se encoja */
-    transition: margin 0.3s ease, font-size 0.3s ease; /* Transición para el centrado y tamaño */
+    transition: margin var(--sidebar-transition-speed) ease, font-size 0.3s ease; /* Transición para el centrado y tamaño */
 }
 
 .sidebar .menu-item a .menu-text {
     opacity: 1; /* Visible normal */
-    transition: opacity 0.2s 0.1s ease; /* Transición para ocultar texto (con pequeño delay) */
+    transition: opacity 0.2s ease; /* Transición para ocultar texto (más rápida) */
+    transition-delay: 0.1s; /* Pequeño delay antes de ocultar */
     white-space: nowrap; /* Evitar que el texto se rompa */
 }
 
@@ -321,7 +324,6 @@ header {
 /* --- ESTILOS SIDEBAR COLAPSADO (usando clase en body) --- */
 body.sidebar-collapsed .sidebar {
     width: var(--sidebar-width-collapsed); /* Ancho colapsado */
-    cursor: pointer; /* Cursor indica que se puede expandir */
 }
 
 body.sidebar-collapsed .sidebar .menu-item a {
@@ -345,7 +347,7 @@ body.sidebar-collapsed .sidebar .menu-item a .menu-text {
 .content-wrapper {
     flex-grow: 1; /* Ocupa el espacio restante */
     margin-left: var(--sidebar-width-expanded); /* Margen inicial */
-    transition: margin-left 0.3s ease; /* Transición al cambiar margen */
+    transition: margin-left var(--sidebar-transition-speed) ease; /* ****** Transición al cambiar margen ****** */
     display: flex;
     flex-direction: column;
     /* No necesita min-height aquí si body es flex column y este es flex-grow */
@@ -866,6 +868,9 @@ body.sidebar-collapsed .content-wrapper {
 #transactions-table td {
     color: var(--text-color);
 }
+/* Colores para transacciones (ejemplo) */
+.tx-sent { color: #ff8a80; } /* Rojo claro */
+.tx-received { color: #b9f6ca; } /* Verde claro */
 
 /* Icono de Ojo */
 .view-details-button {
@@ -1042,8 +1047,7 @@ footer {
     padding: 1rem 2rem;
     text-align: center;
     border-top: 1px solid var(--line-color);
-    margin-top: auto; /* Empuja al fondo en layout flex del body/content-wrapper */
-    /* No necesita position, left, width específicos si está en flujo flex */
+    /* Footer ya no es fijo, se posiciona después del main */
 }
 
 .footer-content {
@@ -1115,6 +1119,7 @@ footer {
           font-size: 1.2rem; /* Ajustar icono colapsado */
        }
 
+
       .content-wrapper {
           margin-left: var(--sidebar-width-expanded); /* Margen normal */
        }
@@ -1145,6 +1150,11 @@ footer {
     body {
         /* Body ya es flex column */
     }
+    /* Quitar clase colapsado en móvil para evitar efectos no deseados */
+    body.sidebar-collapsed {
+         /* No aplicar estilos de colapso aquí */
+    }
+
     .container {
         flex-direction: column; /* Apilar sidebar y contenido */
         margin-top: 0; /* Header ya no es fijo */
@@ -1172,7 +1182,7 @@ footer {
     .sidebar-toggle-desktop { display: none; }
 
     .sidebar {
-        width: 100%; /* Ocupa todo el ancho */
+        width: 100% !important; /* Forzar ancho completo */
         height: auto; /* Altura automática */
         position: static; /* Quitar sticky */
         border-right: none;
@@ -1181,10 +1191,9 @@ footer {
         overflow-x: auto; /* Scroll horizontal para menú */
         padding: 0.5rem 0;
         top: auto; /* Resetear top */
-        height: auto; /* Resetear height */
         z-index: auto;
-        /* Quitar transición de ancho en móvil */
-        transition: none !important;
+        transition: none !important; /* Desactivar transiciones en móvil */
+        cursor: default; /* Quitar cursor pointer */
     }
     .sidebar nav ul {
         display: flex;
@@ -1192,45 +1201,31 @@ footer {
         width: max-content; /* Evita que se rompa */
     }
      .sidebar .menu-item a {
-        padding: 0.8rem 1rem;
+        padding: 0.8rem 1rem !important; /* Forzar padding normal */
+        justify-content: flex-start !important; /* Alinear normal */
      }
       .sidebar .menu-item a i {
-        margin-right: 5px; /* Menos espacio icono-texto */
+        margin-right: 5px !important; /* Forzar margen normal */
+        font-size: 1.1rem !important; /* Forzar tamaño normal */
       }
      .sidebar .menu-item a .menu-text {
-         /* Mostrar texto en móvil */
-         opacity: 1;
-         width: auto;
-         overflow: visible;
-         transition-delay: 0s;
-     }
-
-    /* IGNORAR ESTADO COLAPSADO EN MÓVIL */
-     body.sidebar-collapsed .sidebar {
-          width: 100%; /* Siempre ancho completo */
-      }
-     body.sidebar-collapsed .sidebar .menu-item a {
-         padding: 0.8rem 1rem; /* Padding normal */
-         justify-content: flex-start; /* Alinear normal */
-     }
-      body.sidebar-collapsed .sidebar .menu-item a i {
-         margin-right: 5px; /* Margen normal */
-         font-size: 1.1rem; /* Tamaño normal */
-     }
-      body.sidebar-collapsed .sidebar .menu-item a .menu-text {
-         opacity: 1; /* Siempre visible */
-         width: auto;
-         overflow: visible;
+         /* Asegurar que esté visible */
+         opacity: 1 !important;
+         width: auto !important;
+         overflow: visible !important;
+         transition-delay: 0s !important;
      }
 
 
     .content-wrapper {
-        margin-left: 0 !important; /* ****** !important para sobreescribir ****** */
-        transition: none !important;
+        margin-left: 0 !important; /* ****** Forzar sin margen ****** */
+        transition: none !important; /* Quitar transición */
     }
+
 
     .main-content {
         padding: 1rem; /* Reducir padding en móvil */
+        height: auto;
     }
      .main-content h1, .main-content h2 { font-size: 1.5rem; margin-bottom: 1rem;}
 
