@@ -7,215 +7,259 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="favicon.ico" type="image/x-icon"> </head>
+</head>
 <body>
     <div class="background-animation"></div>
 
+    <header>
+        <div class="logo">
+            QUANTYX<span class="beta-tag">Beta</span>
+        </div>
+
+        <div class="price-ticker">
+            <div class="price-ticker-inner">
+                <div class="price-ticker-content">
+                    <span class="price-item"><i class="fab fa-btc"></i> BTC: $62,500</span>
+                    <span class="price-item"><i class="fab fa-ethereum"></i> ETH: $3,180</span>
+                    <span class="price-item"><i class="fab fa-solana"></i> SOL: $145</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> BNB: $590</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> NOT: $0.018</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> DOGE: $0.16</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> SHIB: $0.000025</span>
+                     <span class="price-item"><i class="fab fa-btc"></i> BTC: $62,500</span>
+                    <span class="price-item"><i class="fab fa-ethereum"></i> ETH: $3,180</span>
+                    <span class="price-item"><i class="fab fa-solana"></i> SOL: $145</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> BNB: $590</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> NOT: $0.018</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> DOGE: $0.16</span>
+                    <span class="price-item"><i class="fas fa-coins"></i> SHIB: $0.000025</span>
+                 </div>
+            </div>
+        </div>
+
+
+        <div class="header-icons">
+             <div id="language-switcher">
+                  <i class="fas fa-globe"></i>
+                  <div class="language-dropdown" style="display: none;">
+                     <span data-lang="es">ES</span>
+                     <span data-lang="en">EN</span>
+                     <span data-lang="fr">FR</span>
+                  </div>
+             </div>
+            <i class="fas fa-search" id="search-icon"></i>
+            <i class="fas fa-wallet" id="wallet-icon"></i>
+            <i class="fas fa-user" id="user-icon"></i>
+        </div>
+    </header>
+
     <div class="container">
         <aside class="sidebar">
-            <div class="logo">
-                QUANTYX <span class="beta-tag">Beta</span>
-            </div>
-            <nav class="menu">
-                <ul>
-                    <li class="menu-item">
-                        <a href="#" data-section="home" class="active-menu">
-                            <i class="fas fa-home"></i><span data-translate="menu_home">Inicio</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="dashboard">
-                            <i class="fas fa-chart-line"></i><span data-translate="menu_dashboard">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="wallet-tracker">
-                            <i class="fas fa-wallet"></i><span data-translate="menu_wallet_tracker">Wallet Tracker</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="token-analyzer">
-                            <i class="fas fa-search-dollar"></i><span data-translate="menu_token_analyzer">Analizador Token</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="nft-gallery">
-                            <i class="fas fa-image"></i><span data-translate="menu_nft_gallery">Galería NFT</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="settings">
-                            <i class="fas fa-cog"></i><span data-translate="menu_settings">Configuración</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="community">
-                           <i class="fas fa-users"></i><span data-translate="menu_community">Comunidad</span>
-                       </a>
-                    </li>
-                    <li class="menu-item">
-                       <a href="#" data-section="learning">
-                          <i class="fas fa-graduation-cap"></i><span data-translate="menu_learning">Aprender</span>
-                       </a>
-                    </li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <div class="language-selector">
-                    <button id="lang-es">ES</button> | <button id="lang-en">EN</button>
-                </div>
-                <div class="theme-switch">
-                    <i class="fas fa-sun"></i> / <i class="fas fa-moon"></i>
-                    <label class="switch">
-                        <input type="checkbox" id="theme-toggle">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-            </div>
-        </aside>
+             <nav class="menu">
+                 <ul>
+                     <li class="menu-item">
+                         <a href="#" data-section="home" class="active-menu">
+                             <i class="fas fa-home"></i>
+                             <span class="menu-text">Inicio</span>
+                         </a>
+                     </li>
+                     <li class="menu-item">
+                         <a href="#" data-section="sentiment-analyzer">
+                             <i class="fas fa-chart-line"></i>
+                             <span class="menu-text">Analizador de Sentimientos</span>
+                         </a>
+                     </li>
+                     <li class="menu-item">
+                         <a href="#" data-section="wallet-tracker">
+                             <i class="fas fa-search-dollar"></i>
+                             <span class="menu-text">Wallet Tracker</span>
+                         </a>
+                     </li>
+                     <li class="menu-item">
+                         <a href="#" data-section="bot-trading">
+                             <i class="fas fa-robot"></i>
+                             <span class="menu-text">Bot Trading</span>
+                         </a>
+                     </li>
+                      <li class="menu-item">
+                         <a href="#" data-section="sniper">
+                             <i class="fas fa-crosshairs"></i>
+                             <span class="menu-text">Sniper</span>
+                         </a>
+                     </li>
+                     <li class="menu-item">
+                         <a href="#" data-section="token-creator">
+                             <i class="fas fa-coins"></i>
+                             <span class="menu-text">Creador de Token</span>
+                         </a>
+                     </li>
+                     <li class="menu-item">
+                         <a href="#" data-section="staking">
+                             <i class="fas fa-layer-group"></i>
+                             <span class="menu-text">Staking</span>
+                         </a>
+                     </li>
+                     <li class="menu-item">
+                         <a href="#" data-section="gaming">
+                             <i class="fas fa-gamepad"></i>
+                             <span class="menu-text">Gaming</span>
+                         </a>
+                     </li>
+                     <li class="menu-item">
+                         <a href="#" data-section="nft-collection">
+                             <i class="fas fa-image"></i>
+                             <span class="menu-text">Colección NFTs</span>
+                         </a>
+                     </li>
+                     <li class="menu-item">
+                         <a href="#" data-section="detox-reclaim">
+                             <i class="fas fa-shield-virus"></i>
+                             <span class="menu-text">Detox & Reclaim</span>
+                         </a>
+                     </li>
+                     <li class="menu-item">
+                         <a href="#" data-section="knowledge-base">
+                             <i class="fas fa-book"></i>
+                             <span class="menu-text">Base de Conocimiento</span>
+                         </a>
+                     </li>
+                     <li class="menu-item">
+                         <a href="#" data-section="chatbot">
+                             <i class="fas fa-comments"></i>
+                             <span class="menu-text">ChatBot</span>
+                         </a>
+                     </li>
+                 </ul>
+             </nav>
+         </aside>
 
         <main class="main-content">
-            <header class="main-header">
-                <div class="header-left">
-                    <button id="search-button" class="icon-button" data-translate-title="tooltip_search">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-                <div class="price-ticker">
-                     <div class="price-ticker-inner">
-                         <div class="price-ticker-content" id="price-ticker-content">
-                             <span class="price-item loading" data-translate="loading_prices">Cargando precios...</span>
+             <section id="home" class="active">
+                 <h1>Bienvenido a QuantyX</h1>
+                 <p>Tu plataforma integral de IA para el ecosistema Crypto.</p>
+                 <div class="feature-highlights">
+                     </div>
+             </section>
+
+             <section id="sentiment-analyzer">
+                 <h2><i class="fas fa-chart-line"></i> Analizador de Sentimientos</h2>
+                 <p>Contenido del Analizador de Sentimientos...</p>
+             </section>
+
+             <section id="wallet-tracker">
+                 <h2><i class="fas fa-search-dollar"></i> Wallet Tracker</h2>
+                 <div class="wallet-input-area">
+                     <input type="text" id="solana-wallet-address" placeholder="Introduce la dirección de la billetera de Solana">
+                     <button id="track-wallet-btn">
+                          <i class="fas fa-search"></i> Rastrear
+                     </button>
+                 </div>
+                 <div id="wallet-data-display" class="hidden">
+                     <div id="initial-message" class="message">
+                         Introduce una dirección de billetera de Solana para ver sus detalles.
+                     </div>
+                     <div id="loading-indicator" class="message hidden">
+                         <i class="fas fa-spinner fa-spin"></i> Cargando datos de la billetera...
+                     </div>
+                     <div id="error-message" class="message error hidden">
                          </div>
-                         <div class="price-ticker-content" id="price-ticker-content-clone"></div>
+
+                     <div class="data-cards-container">
+                         <div class="data-card hidden" id="sol-balance-card">
+                             <h3><i class="fab fa-solana"></i> Saldo SOL</h3>
+                             <p><span id="sol-balance">-</span> SOL</p>
+                         </div>
+
+                         <div class="data-card hidden" id="token-balances-card">
+                             <h3><i class="fas fa-coins"></i> Tokens (SPL)</h3>
+                             <ul id="token-list">
+                                 </ul>
+                         </div>
+
+                         <div class="data-card hidden" id="nfts-card">
+                              <h3><i class="fas fa-image"></i> NFTs</h3>
+                              <div id="nft-gallery">
+                                   </div>
+                         </div>
+
+                         <div class="data-card full-width hidden" id="transactions-card">
+                              <h3><i class="fas fa-history"></i> Transacciones Recientes</h3>
+                              <ul id="transaction-list">
+                                   </ul>
+                         </div>
                      </div>
                  </div>
-                <div class="header-right">
-                    <button id="connect-wallet-button" class="button primary-button" data-translate="connect_wallet">
-                        <i class="fas fa-plug"></i> Conectar Wallet
-                    </button>
-                    <button id="user-profile-button" class="icon-button" data-translate-title="tooltip_user_profile">
-                        <i class="fas fa-user-circle"></i>
-                    </button>
-                    <button id="notifications-button" class="icon-button" data-translate-title="tooltip_notifications">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge" style="display: none;"></span>
-                    </button>
-                </div>
-            </header>
-
-            <section id="home" class="content-section active">
-                 <h1 data-translate="home_title">Bienvenido a QuantyX</h1>
-                 <p data-translate="home_subtitle">Tu plataforma IA para el análisis crypto.</p>
-                 </section>
-
-            <section id="dashboard" class="content-section">
-                 <h1 data-translate="dashboard_title">Dashboard</h1>
-                 <p data-translate="dashboard_content">Resumen general de tu portafolio y el mercado.</p>
-                 </section>
-
-            <section id="wallet-tracker" class="content-section">
-                <h1 data-translate="wallet_tracker_title">Rastreador de Wallet Solana</h1>
-                <div class="input-group">
-                    <input type="text" id="wallet-address-input" data-translate-placeholder="placeholder_wallet_address" placeholder="Introduce la dirección de la wallet Solana...">
-                    <button id="track-wallet-button" class="button primary-button" data-translate="track_button">
-                        <i class="fas fa-search"></i> Rastrear
-                    </button>
-                </div>
-
-                <div id="loading-indicator" class="loading-indicator" style="display: none;">
-                     <i class="fas fa-spinner fa-spin"></i> <span data-translate="loading_data">Cargando datos...</span>
-                 </div>
-                <div id="error-message" class="error-message" style="display: none;"></div>
-                <div id="initial-wallet-message" class="info-message" data-translate="initial_wallet_message">
-                    Introduce una dirección de wallet Solana válida para ver el balance, tokens, NFTs y transacciones recientes.
-                </div>
+             </section>
 
 
-                <div class="wallet-data-container">
-                     <div id="sol-balance-card" class="data-card" style="display: none;">
-                         <h2 data-translate="sol_balance_title">Balance SOL</h2>
-                         <p id="sol-balance">-- SOL</p>
-                     </div>
+             <section id="bot-trading">
+                 <h2><i class="fas fa-robot"></i> Bot Trading</h2>
+                 <p>Contenido del Bot Trading...</p>
+             </section>
 
-                     <div id="token-balances-card" class="data-card" style="display: none;">
-                         <h2 data-translate="token_balances_title">Tokens</h2>
-                         <ul id="token-list"><li><span data-translate="no_tokens_found">No se encontraron tokens.</span></li></ul>
-                     </div>
+             <section id="sniper">
+                 <h2><i class="fas fa-crosshairs"></i> Sniper</h2>
+                 <p>Contenido de Sniper...</p>
+             </section>
 
-                     <div id="nfts-card" class="data-card wide-card" style="display: none;">
-                         <h2 data-translate="nfts_title">NFTs</h2>
-                         <div id="nft-gallery-preview" class="nft-gallery-preview">
-                             <p data-translate="no_nfts_found">No se encontraron NFTs.</p>
-                             </div>
-                     </div>
+             <section id="token-creator">
+                 <h2><i class="fas fa-coins"></i> Creador de Token</h2>
+                 <p>Contenido del Creador de Token...</p>
+             </section>
 
-                     <div id="transactions-card" class="data-card wide-card" style="display: none;">
-                         <h2 data-translate="recent_transactions_title">Transacciones Recientes</h2>
-                         <ul id="transaction-list"><li><span data-translate="no_transactions_found">No se encontraron transacciones recientes.</span></li></ul>
-                     </div>
-                 </div>
-            </section>
+             <section id="staking">
+                 <h2><i class="fas fa-layer-group"></i> Staking</h2>
+                 <p>Contenido de Staking...</p>
+             </section>
 
-            <section id="token-analyzer" class="content-section">
-                 <h1 data-translate="token_analyzer_title">Analizador de Tokens</h1>
-                 <p data-translate="token_analyzer_content">Analiza métricas y seguridad de tokens específicos.</p>
-                 </section>
+             <section id="gaming">
+                 <h2><i class="fas fa-gamepad"></i> Gaming</h2>
+                 <p>Contenido de Gaming...</p>
+             </section>
 
-            <section id="nft-gallery" class="content-section">
-                 <h1 data-translate="nft_gallery_title">Galería NFT</h1>
-                 <p data-translate="nft_gallery_content">Explora y gestiona tus NFTs.</p>
-                 </section>
+             <section id="nft-collection">
+                 <h2><i class="fas fa-image"></i> Colección NFTs</h2>
+                 <p>Contenido de la Colección NFTs...</p>
+             </section>
 
-            <section id="settings" class="content-section">
-                 <h1 data-translate="settings_title">Configuración</h1>
-                 <p data-translate="settings_content">Ajusta las preferencias de tu cuenta y la plataforma.</p>
-                 </section>
+             <section id="detox-reclaim">
+                 <h2><i class="fas fa-shield-virus"></i> Detox & Reclaim</h2>
+                 <p>Contenido de Detox & Reclaim...</p>
+             </section>
 
-            <section id="community" class="content-section">
-                 <h1 data-translate="community_title">Comunidad</h1>
-                 <p data-translate="community_content">Conéctate con otros usuarios, comparte ideas y participa en debates.</p>
-                 </section>
+             <section id="knowledge-base">
+                 <h2><i class="fas fa-book"></i> Base de Conocimiento</h2>
+                 <p>Contenido de la Base de Conocimiento...</p>
+             </section>
 
-            <section id="learning" class="content-section">
-                 <h1 data-translate="learning_title">Centro de Aprendizaje</h1>
-                 <p data-translate="learning_content">Recursos educativos sobre crypto, blockchain e IA.</p>
-                 </section>
+             <section id="chatbot">
+                 <h2><i class="fas fa-comments"></i> ChatBot</h2>
+                 <p>Contenido del ChatBot...</p>
+             </section>
 
              <div id="search-modal" class="modal">
                  <div class="modal-content">
-                     <span class="close-button" data-translate-title="tooltip_close">&times;</span>
-                     <h2 data-translate="search_modal_title">Buscar en QuantyX</h2>
-                     <input type="text" id="search-input" data-translate-placeholder="placeholder_search" placeholder="Buscar funciones, tokens, ayuda...">
-                     <div id="search-results">
-                         <p data-translate="search_modal_initial">Escribe algo para buscar.</p>
-                         </div>
-                 </div>
+                     <span class="close-button">&times;</span>
+                     <h2>Buscar en QuantyX</h2>
+                     <input type="text" id="search-input" placeholder="Buscar...">
+                      <div id="search-results"></div>
+                     </div>
              </div>
 
              <div id="wallet-modal" class="modal">
                  <div class="modal-content">
-                     <span class="close-button" data-translate-title="tooltip_close">&times;</span>
-                     <h2 data-translate="wallet_modal_title">Conectar Wallet</h2>
-                     <p data-translate="wallet_modal_content">Aquí irán las opciones para conectar tu wallet (ej: Phantom, Solflare).</p>
+                     <span class="close-button">&times;</span>
+                     <h2>Conectar Wallet</h2>
+                     <p>Aquí irán las opciones para conectar tu wallet (ej: MetaMask, WalletConnect).</p>
                      </div>
              </div>
 
-             <div id="user-modal" class="modal">
+              <div id="user-modal" class="modal">
                  <div class="modal-content">
-                     <span class="close-button" data-translate-title="tooltip_close">&times;</span>
-                     <h2 data-translate="user_modal_title">Perfil de Usuario / Acceso</h2>
-                     <p data-translate="user_modal_content">Aquí irá el formulario de login/registro o la información del usuario.</p>
+                     <span class="close-button">&times;</span>
+                     <h2>Perfil de Usuario / Acceso</h2>
+                     <p>Aquí irá el formulario de login/registro o la información del usuario.</p>
                      </div>
-             </div>
-
-              <div id="notifications-modal" class="modal">
-                 <div class="modal-content">
-                     <span class="close-button" data-translate-title="tooltip_close">&times;</span>
-                     <h2 data-translate="notifications_modal_title">Notificaciones</h2>
-                     <ul id="notifications-list">
-                        <li data-translate="no_new_notifications">No tienes notificaciones nuevas.</li>
-                        </ul>
-                 </div>
              </div>
 
         </main>
@@ -224,21 +268,22 @@
     <footer>
         <div class="footer-content">
             <div class="social-media">
-                <h3 data-translate="follow_us">Síguenos</h3>
+                <h3>Síguenos</h3>
                 <ul>
-                    <li><a href="#" target="_blank" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a></li>
-                    <li><a href="#" target="_blank" aria-label="Youtube"><i class="fab fa-youtube"></i></a></li>
-                    <li><a href="#" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
-                    <li><a href="#" target="_blank" aria-label="Tiktok"><i class="fab fa-tiktok"></i></a></li>
-                    <li><a href="#" target="_blank" aria-label="Telegram"><i class="fab fa-telegram"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-x-twitter"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-youtube"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-tiktok"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-telegram"></i></a></li>
                 </ul>
             </div>
-             </div>
+        </div>
         <div class="footer-bottom">
-            &copy; <span id="current-year"></span> QuantyX. <span data-translate="rights_reserved">Todos los derechos reservados.</span>
+            &copy; 2025 QuantyX. Todos los derechos reservados.
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.3/web3.min.js"></script> <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script> <script src="script.js"></script>
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
