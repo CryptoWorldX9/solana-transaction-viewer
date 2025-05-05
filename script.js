@@ -1,4 +1,4 @@
-// script.js - Implementando API Helius y Sidebar Colapsable (Corregido v4)
+// script.js - Implementando API Helius y Sidebar Colapsable (Corregido v5 - Lógica Simplificada)
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -14,8 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Selección de Elementos DOM Generales ---
     const body = document.body;
     const sidebar = document.getElementById('sidebar');
-    const contentWrapper = document.getElementById('content-wrapper');
-    // const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn'); // Botón eliminado
+    const mainContent = document.getElementById('main-content'); // Seleccionar main directamente
+    const footer = document.querySelector('footer'); // Seleccionar footer
+    // const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn'); // Eliminado
     const menuLinks = document.querySelectorAll('.sidebar .menu-item a');
     const sections = document.querySelectorAll('.main-content > section');
     const searchIcon = document.getElementById('search-icon');
@@ -57,33 +58,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const transactionsTableBody = document.getElementById('transaction-list-body');
     const itemsPerPageSelector = document.getElementById('items-per-page');
 
-    // --- Lógica Sidebar Colapsable (CORREGIDA v4) ---
+    // --- Lógica Sidebar Colapsable (CORREGIDA v5) ---
     const collapseSidebar = () => {
-        // Solo colapsar si no estamos en móvil y si no está ya colapsado
         if (window.innerWidth > 768 && !body.classList.contains('sidebar-collapsed')) {
             body.classList.add('sidebar-collapsed');
-            console.log("Sidebar collapsed");
+            console.log("Sidebar collapsed by menu click");
         }
     };
 
     const expandSidebar = () => {
-        // Solo expandir si está colapsado
         if (body.classList.contains('sidebar-collapsed')) {
             body.classList.remove('sidebar-collapsed');
-            console.log("Sidebar expanded");
+            console.log("Sidebar expanded by click");
         }
     };
 
     // Colapsar al hacer clic en un item del menú
     menuLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevenir navegación default del link
+            e.preventDefault(); // Prevenir navegación default
 
             const targetSectionId = link.getAttribute('data-section');
             const targetSection = document.getElementById(targetSectionId);
 
             if (targetSection) {
-                // Mostrar sección correcta y actualizar menú activo
+                // Mostrar sección y actualizar menú activo
                 sections.forEach(s => s.classList.remove('active'));
                 targetSection.classList.add('active');
                 menuLinks.forEach(l => l.classList.remove('active-menu'));
@@ -102,14 +101,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Expandir al hacer clic en el sidebar (cuando está colapsado)
     sidebar?.addEventListener('click', () => {
-        // Verificar si está colapsado ANTES de expandir
-        // Esto es más simple y debería funcionar bien
+        // Solo expandir si está colapsado
         if (body.classList.contains('sidebar-collapsed')) {
             expandSidebar();
         }
     });
 
-    // --- Lógica Modales ---
+    // --- Lógica Modales (Sin cambios) ---
     const openModal = (modal) => { if (modal) modal.style.display = 'block'; };
     const closeModal = (modal) => { if (modal) modal.style.display = 'none'; };
     searchIcon?.addEventListener('click', () => openModal(searchModal));
@@ -117,13 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
     userIcon?.addEventListener('click', () => openModal(userModal));
     closeButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const modal = button.closest('.modal');
-            if (modal) closeModal(modal);
+            const modal = button.closest('.modal'); if (modal) closeModal(modal);
         });
     });
-    window.addEventListener('click', (event) => {
-        if (event.target.classList.contains('modal')) closeModal(event.target);
-    });
+    window.addEventListener('click', (event) => { if (event.target.classList.contains('modal')) closeModal(event.target); });
 
     // --- Lógica Idioma (Placeholder) ---
     const applyLanguage = (lang) => { console.log(`Idioma cambiado a: ${lang}`); document.documentElement.lang = lang; /* TODO */ };
@@ -141,106 +136,52 @@ document.addEventListener('DOMContentLoaded', () => {
         const existingFeedback = buttonElement.parentNode.querySelector('.copied-feedback');
         if(existingFeedback) existingFeedback.remove();
         const feedback = document.createElement('span');
-        feedback.textContent = 'Copiado!';
-        feedback.className = 'copied-feedback';
+        feedback.textContent = 'Copiado!'; feedback.className = 'copied-feedback';
         buttonElement.parentNode.insertBefore(feedback, buttonElement.nextSibling);
-        void feedback.offsetWidth;
-        setTimeout(() => { feedback.classList.add('show'); }, 10);
-        setTimeout(() => {
-            feedback.style.opacity = '0';
-            setTimeout(() => feedback.remove(), 500);
-        }, 1500);
+        void feedback.offsetWidth; setTimeout(() => { feedback.classList.add('show'); }, 10);
+        setTimeout(() => { feedback.style.opacity = '0'; setTimeout(() => feedback.remove(), 500); }, 1500);
     };
     const copyToClipboard = (text, buttonElement) => { /* ... (código anterior) */
         if (!text || text === '-' || text.includes('...')) return;
-        navigator.clipboard.writeText(text).then(() => {
-            showCopyFeedback(buttonElement);
-        }).catch(err => { console.error('Error al copiar: ', err); alert("Error al copiar."); });
+        navigator.clipboard.writeText(text).then(() => showCopyFeedback(buttonElement))
+        .catch(err => { console.error('Error al copiar: ', err); alert("Error al copiar."); });
     };
     const resetWalletTrackerVisuals = () => { /* ... (código anterior) */
         if (!walletTrackerSection) return;
-        displayWalletAddress.textContent = 'Introduce una dirección...';
-        displayWalletAddress.title = 'Dirección Completa';
-        displayWalletAddress.removeAttribute('data-full-address');
-        solBalanceValue.textContent = '-'; solBalanceUsd.textContent = '$ -.--';
-        tokenCount.textContent = '- Tokens'; ownerAddress.textContent = '-';
+        displayWalletAddress.textContent = 'Introduce una dirección...'; displayWalletAddress.title = 'Dirección Completa';
+        displayWalletAddress.removeAttribute('data-full-address'); solBalanceValue.textContent = '-';
+        solBalanceUsd.textContent = '$ -.--'; tokenCount.textContent = '- Tokens'; ownerAddress.textContent = '-';
         ownerAddress.title = 'Dirección Dueño'; ownerAddress.removeAttribute('data-full-address');
-        onCurveStatus.textContent = '-'; stakeAmount.textContent = '-';
-        tagsDisplay.innerHTML = '<small>(No implementado)</small>';
+        onCurveStatus.textContent = '-'; stakeAmount.textContent = '-'; tagsDisplay.innerHTML = '<small>(No implementado)</small>';
         tokenListDetailed.innerHTML = '<li>Introduce una dirección y rastrea.</li>';
         transactionsTableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Introduce una dirección y haz clic en Rastrear.</td></tr>';
         privateNoteDisplay.innerHTML = ''; privateNoteInput.value = '';
         addNoteForm?.classList.add('hidden'); addNoteLink?.classList.remove('hidden');
-        tokenDropdownDetails?.removeAttribute('open');
-        hideElement(trackerLoading); hideElement(trackerError);
+        tokenDropdownDetails?.removeAttribute('open'); hideElement(trackerLoading); hideElement(trackerError);
     };
 
     // --- Event Listeners Wallet Tracker ---
-    trackWalletButton?.addEventListener('click', () => { /* ... (código anterior) */
-        const address = trackerWalletInput?.value.trim();
-        if (address) trackWallet(address);
-        else { alert("Por favor, introduce una dirección de billetera de Solana."); trackerWalletInput?.focus();}
-    });
+    trackWalletButton?.addEventListener('click', () => { const address = trackerWalletInput?.value.trim(); if (address) trackWallet(address); else { alert("Dir. Solana?"); trackerWalletInput?.focus();} });
     trackerWalletInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); trackWalletButton.click(); }});
-    copyAddressButton?.addEventListener('click', (e) => { /* ... (código anterior con stopPropagation) */
-        e.stopPropagation(); const address = displayWalletAddress.dataset.fullAddress;
-        if (address) copyToClipboard(address, copyAddressButton);
-    });
-    copyOwnerAddressButton?.addEventListener('click', (e) => { /* ... (código anterior con stopPropagation) */
-        e.stopPropagation(); const address = ownerAddress.dataset.fullAddress;
-        if (address) copyToClipboard(address, copyOwnerAddressButton);
-    });
-    qrCodeButton?.addEventListener('click', (e) => { /* ... (código anterior con stopPropagation) */
-         e.stopPropagation(); const address = displayWalletAddress.dataset.fullAddress;
-        if (address) alert(`Mostrar código QR para: ${address} (funcionalidad pendiente)`);
-    });
-    addNoteLink?.addEventListener('click', (e) => { /* ... (código anterior con stopPropagation) */
-        e.preventDefault(); e.stopPropagation(); addNoteForm?.classList.remove('hidden');
-        addNoteLink.classList.add('hidden'); privateNoteInput?.focus();
-    });
-    cancelNoteButton?.addEventListener('click', (e) => { /* ... (código anterior con stopPropagation) */
-        e.stopPropagation(); addNoteForm?.classList.add('hidden');
-        addNoteLink?.classList.remove('hidden'); privateNoteInput.value = '';
-    });
-    saveNoteButton?.addEventListener('click', (e) => { /* ... (código anterior con stopPropagation) */
-         e.stopPropagation(); const noteText = privateNoteInput?.value.trim();
-        if (noteText) { /* ... Lógica de mostrar nota ... */
-            const noteElement = document.createElement('a'); noteElement.href = '#';
-            noteElement.textContent = noteText.substring(0, 30) + (noteText.length > 30 ? '...' : '');
-            noteElement.title = noteText; noteElement.classList.add('private-note-link');
-            noteElement.addEventListener('click', (ev) => {ev.preventDefault();ev.stopPropagation(); alert(`Nota guardada:\n\n${noteText}`);});
-            privateNoteDisplay?.appendChild(noteElement); privateNoteInput.value = '';
-            addNoteForm?.classList.add('hidden'); addNoteLink?.classList.remove('hidden');
-        }
-    });
-    transactionsTableBody?.addEventListener('click', (e) => { /* ... (código anterior con stopPropagation) */
-        const targetButton = e.target.closest('.view-details-button');
-        if (targetButton) { e.stopPropagation(); /* ... Lógica del ojo ... */
-            const row = targetButton.closest('tr'); const txDataString = row?.dataset.txData;
-            if (txDataString) { try { const txData = JSON.parse(txDataString); alert(`Mostrar detalles para firma: ${txData.signature} (funcionalidad pendiente)\nDatos:\n${JSON.stringify(txData, null, 2)}`); } catch (jsonError) { console.error("Error parsing transaction data:", jsonError); alert("Error al leer los datos."); } }
-        }
-    });
-    itemsPerPageSelector?.addEventListener('change', () => { /* ... (código anterior) */
-        const currentAddress = trackerWalletInput?.value.trim();
-        if (currentAddress) trackWallet(currentAddress);
-    });
-     document.body.addEventListener('click', (e) => { /* ... (código anterior con stopPropagation) */
-        if (e.target.matches('#token-creator-tag')) { e.preventDefault(); e.stopPropagation(); alert('Mostrar tokens creados (funcionalidad pendiente)'); }
-     });
+    copyAddressButton?.addEventListener('click', (e) => { e.stopPropagation(); const address = displayWalletAddress.dataset.fullAddress; if (address) copyToClipboard(address, copyAddressButton); });
+    copyOwnerAddressButton?.addEventListener('click', (e) => { e.stopPropagation(); const address = ownerAddress.dataset.fullAddress; if (address) copyToClipboard(address, copyOwnerAddressButton); });
+    qrCodeButton?.addEventListener('click', (e) => { e.stopPropagation(); const address = displayWalletAddress.dataset.fullAddress; if (address) alert(`QR para: ${address} (pendiente)`);});
+    addNoteLink?.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); addNoteForm?.classList.remove('hidden'); addNoteLink.classList.add('hidden'); privateNoteInput?.focus(); });
+    cancelNoteButton?.addEventListener('click', (e) => { e.stopPropagation(); addNoteForm?.classList.add('hidden'); addNoteLink?.classList.remove('hidden'); privateNoteInput.value = ''; });
+    saveNoteButton?.addEventListener('click', (e) => { e.stopPropagation(); const noteText = privateNoteInput?.value.trim(); if (noteText) { const noteElement = document.createElement('a'); noteElement.href = '#'; noteElement.textContent = noteText.substring(0, 30) + (noteText.length > 30 ? '...' : ''); noteElement.title = noteText; noteElement.classList.add('private-note-link'); noteElement.addEventListener('click', (ev) => {ev.preventDefault();ev.stopPropagation(); alert(`Nota:\n\n${noteText}`);}); privateNoteDisplay?.appendChild(noteElement); privateNoteInput.value = ''; addNoteForm?.classList.add('hidden'); addNoteLink?.classList.remove('hidden'); }});
+    transactionsTableBody?.addEventListener('click', (e) => { const btn = e.target.closest('.view-details-button'); if (btn) { e.stopPropagation(); const row = btn.closest('tr'); const data = row?.dataset.txData; if(data) { try { const tx = JSON.parse(data); alert(`Detalles TX: ${tx.signature}\n(pendiente)\n${JSON.stringify(tx, null, 2)}`); } catch(err){ alert('Error datos TX');}} }});
+    itemsPerPageSelector?.addEventListener('change', () => { const addr = trackerWalletInput?.value.trim(); if (addr) trackWallet(addr); });
+     document.body.addEventListener('click', (e) => { if (e.target.matches('#token-creator-tag')) { e.preventDefault(); e.stopPropagation(); alert('Mostrar tokens creados (pendiente)'); } });
 
     // --- Función Principal de Rastreo con API Helius ---
     const trackWallet = async (walletAddress) => {
-        if (!walletAddress) return;
-        console.log(`Iniciando rastreo para: ${walletAddress}`);
+        if (!walletAddress) return; console.log(`Rastreando: ${walletAddress}`);
         resetWalletTrackerVisuals(); showElement(trackerLoading); hideElement(trackerError);
-        let publicKey;
-        try { publicKey = new solanaWeb3.PublicKey(walletAddress); }
-        catch (error) { trackerError.textContent = "Dirección de billetera inválida."; showElement(trackerError); hideElement(trackerLoading); displayWalletAddress.textContent = 'Dirección Inválida'; return; }
+        let publicKey; try { publicKey = new solanaWeb3.PublicKey(walletAddress); } catch (error) { trackerError.textContent = "Dirección inválida."; showElement(trackerError); hideElement(trackerLoading); displayWalletAddress.textContent = 'Inválida'; return; }
         const shortAddress = `${walletAddress.substring(0, 4)}...${walletAddress.substring(walletAddress.length - 4)}`;
         displayWalletAddress.textContent = shortAddress; displayWalletAddress.title = walletAddress; displayWalletAddress.dataset.fullAddress = walletAddress;
-        const apiUrl = `${HELIUS_API_BASE}addresses/${walletAddress}`;
-        const itemsPerPage = parseInt(itemsPerPageSelector?.value || '10', 10);
-        await new Promise(resolve => setTimeout(resolve, 300)); // Delay visual
+        const apiUrl = `${HELIUS_API_BASE}addresses/${walletAddress}`; const itemsPerPage = parseInt(itemsPerPageSelector?.value || '10', 10);
+        await new Promise(resolve => setTimeout(resolve, 300)); // Delay
 
         try {
             const [balanceResult, accountInfoResult, transactionsResult] = await Promise.allSettled([
@@ -250,72 +191,21 @@ document.addEventListener('DOMContentLoaded', () => {
             ]);
 
             // Procesar Balances
-            if (balanceResult.status === 'fulfilled' && balanceResult.value.ok) { /* ... (código anterior) */
-                const balanceData = await balanceResult.value.json();
-                solBalanceValue.textContent = (balanceData.nativeBalance / LAMPORTS_PER_SOL).toFixed(4);
-                solBalanceUsd.textContent = balanceData.usdValue ? `$ ${balanceData.usdValue.toFixed(2)}` : '$ -.--';
-                tokenCount.textContent = `${balanceData.tokens.length} Tokens`;
-                tokenListDetailed.innerHTML = ''; let tokensDisplayed = 0;
-                if (balanceData.tokens.length > 0) {
-                    balanceData.tokens.forEach(token => {
-                        if (token.amount > 0) {
-                            tokensDisplayed++; const li = document.createElement('li');
-                            const iconSrc = `https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/${token.mint}/logo.png`;
-                            li.innerHTML = `
-                                <img src="${iconSrc}" alt="${token.symbol || 'TKN'}" class="token-icon" onerror="this.src='https://via.placeholder.com/20/333/ccc?text=?'; this.onerror=null;">
-                                <span class="token-name" title="${token.mint}">${token.symbol || token.mint.substring(0,6)} (${token.name || 'Nombre Desc.'})</span>
-                                <span class="token-amount">${(token.amount / Math.pow(10, token.decimals)).toLocaleString(undefined, {maximumFractionDigits: token.decimals})}</span>
-                            `; tokenListDetailed.appendChild(li); } }); }
-                if (tokensDisplayed === 0) tokenListDetailed.innerHTML = '<li>No se encontraron tokens con saldo.</li>';
-            } else { /* Manejar error balance */
-                 console.error("Error fetching balances:", balanceResult.reason || balanceResult.value?.status);
-                 solBalanceValue.textContent = 'Error'; solBalanceUsd.textContent = 'Error';
-                 tokenCount.textContent = 'Error'; tokenListDetailed.innerHTML = '<li>Error al cargar tokens.</li>';
-            }
+            if (balanceResult.status === 'fulfilled' && balanceResult.value.ok) { const d=await balanceResult.value.json(); solBalanceValue.textContent=(d.nativeBalance/LAMPORTS_PER_SOL).toFixed(4); solBalanceUsd.textContent=d.usdValue?`$ ${d.usdValue.toFixed(2)}`:'$ -.--'; tokenCount.textContent=`${d.tokens.length} Tokens`; tokenListDetailed.innerHTML=''; let n=0; if(d.tokens.length>0){ d.tokens.forEach(t=>{ if(t.amount>0){ n++; const li=document.createElement('li'); const i=`https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/${t.mint}/logo.png`; li.innerHTML=`<img src="${i}" alt="${t.symbol||'TKN'}" class="token-icon" onerror="this.src='https://via.placeholder.com/20/333/ccc?text=?'; this.onerror=null;"><span class="token-name" title="${t.mint}">${t.symbol||t.mint.substring(0,6)} (${t.name||'Desc.'})</span><span class="token-amount">${(t.amount/Math.pow(10,t.decimals)).toLocaleString(undefined,{maximumFractionDigits:t.decimals})}</span>`; tokenListDetailed.appendChild(li); }}); } if(n===0) tokenListDetailed.innerHTML='<li>No tokens con saldo.</li>'; }
+            else { console.error("Error balances:", balanceResult.reason||balanceResult.value?.status); solBalanceValue.textContent='Err'; solBalanceUsd.textContent='Err'; tokenCount.textContent='Err'; tokenListDetailed.innerHTML='<li>Error tokens.</li>'; }
 
             // Procesar Info Cuenta
-            if (accountInfoResult.status === 'fulfilled' && accountInfoResult.value) { /* ... (código anterior) */
-                 const accountInfoData = accountInfoResult.value; const ownerPk = accountInfoData.owner.toBase58();
-                 ownerAddress.textContent = `${ownerPk.substring(0, 5)}...${ownerPk.substring(ownerPk.length - 5)}`;
-                 ownerAddress.title = ownerPk; ownerAddress.dataset.fullAddress = ownerPk;
-                 onCurveStatus.textContent = !accountInfoData.executable ? 'Verdadero' : 'Falso (Programa)';
-            } else { /* Manejar error info cuenta */
-                  console.warn("Error fetching account info:", accountInfoResult.reason || "Account not found");
-                  ownerAddress.textContent = 'Error/No encontrado'; onCurveStatus.textContent = 'Error/No encontrado';
-            }
-            // Stake y Tags no implementados
-            stakeAmount.textContent = '-'; tagsDisplay.innerHTML = '<small>(No implementado)</small>';
+            if (accountInfoResult.status === 'fulfilled' && accountInfoResult.value) { const d=accountInfoResult.value; const o=d.owner.toBase58(); ownerAddress.textContent=`${o.substring(0,5)}...${o.substring(o.length-5)}`; ownerAddress.title=o; ownerAddress.dataset.fullAddress=o; onCurveStatus.textContent=!d.executable?'Verdadero':'Falso (Prog)'; }
+            else { console.warn("Error info cuenta:", accountInfoResult.reason||"No encontrada"); ownerAddress.textContent='Err/No Enc.'; onCurveStatus.textContent='Err/No Enc.'; }
+            stakeAmount.textContent='-'; tagsDisplay.innerHTML='<small>(No imp.)</small>';
 
             // Procesar Transacciones
-            if (transactionsResult.status === 'fulfilled' && transactionsResult.value.ok) { /* ... (código anterior) */
-                const transactionsData = await transactionsResult.value.json();
-                transactionsTableBody.innerHTML = '';
-                if (Array.isArray(transactionsData) && transactionsData.length > 0) {
-                    transactionsData.forEach(tx => { /* ... Lógica renderizado fila ... */
-                        const tr = document.createElement('tr'); const date = tx.timestamp ? new Date(tx.timestamp * 1000).toLocaleString('sv-SE') : '-';
-                        const signatureShort = `${tx.signature.substring(0, 4)}...${tx.signature.substring(tx.signature.length - 4)}`;
-                        const fee = tx.fee ? (tx.fee / LAMPORTS_PER_SOL).toFixed(9) : '0'; let source = tx.source || 'Desconocido';
-                        let program = tx.type || 'Desconocido'; if(tx.events?.nft?.source) source = tx.events.nft.source;
-                        if (tx.type === 'UNKNOWN' && tx.instructions?.length > 0) program = tx.instructions[0].programId?.substring(0, 10) + '...' || program;
-                        let mainValue = '---'; let valueClass = '';
-                        const nativeTransfer = tx.nativeTransfers?.find(t => t.fromUserAccount === walletAddress || t.toUserAccount === walletAddress);
-                        const tokenTransfer = tx.tokenTransfers?.find(t => t.fromUserAccount === walletAddress || t.toUserAccount === walletAddress);
-                         if (nativeTransfer) { const amount = (nativeTransfer.amount / LAMPORTS_PER_SOL).toFixed(4); const prefix = nativeTransfer.fromUserAccount === walletAddress ? '-' : '+'; mainValue = `<i class="fab fa-solana sol-icon-small"></i> ${prefix} ${amount} SOL`; valueClass = nativeTransfer.fromUserAccount === walletAddress ? 'tx-sent' : 'tx-received';
-                         } else if (tokenTransfer) { const amount = tokenTransfer.tokenAmount.toLocaleString(undefined, { maximumFractionDigits: tokenTransfer.tokenDecimals || 2 }); const symbol = tokenTransfer.tokenSymbol || tokenTransfer.mint?.substring(0,4) || '?'; const prefix = tokenTransfer.fromUserAccount === walletAddress ? '-' : '+'; mainValue = `${prefix} ${amount} ${symbol}`; valueClass = tokenTransfer.fromUserAccount === walletAddress ? 'tx-sent' : 'tx-received'; }
-                          const formattedType = program.replace(/([A-Z])/g, ' $1').trim().split(/[\s_]+/).map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
-                        tr.innerHTML = `<td><button class="icon-button view-details-button" title="Ver detalles"><i class="fas fa-eye"></i></button></td><td><span class="tx-signature" title="${tx.signature}">${signatureShort}</span></td><td>${tx.slot || '-'}</td><td>${date}</td><td>${tx.instructions?.length || '-'}</td><td>${source}</td><td class="${valueClass}">${mainValue}</td><td><i class="fab fa-solana sol-icon-small"></i> ${fee} SOL</td><td title="${tx.type}">${formattedType}</td>`;
-                        tr.dataset.txData = JSON.stringify(tx); transactionsTableBody.appendChild(tr); });
-                } else { transactionsTableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;">No se encontraron transacciones recientes.</td></tr>'; }
-            } else { /* Manejar error transacciones */
-                 console.error("Error fetching transactions:", transactionsResult.reason || transactionsResult.value.status);
-                 transactionsTableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Error al cargar transacciones.</td></tr>';
-            }
+            if (transactionsResult.status === 'fulfilled' && transactionsResult.value.ok) { const d=await transactionsResult.value.json(); transactionsTableBody.innerHTML=''; if(Array.isArray(d) && d.length>0){ d.forEach(tx=>{ const tr=document.createElement('tr'); const date=tx.timestamp?new Date(tx.timestamp*1000).toLocaleString('sv-SE'):'-'; const sigS=`${tx.signature.substring(0,4)}...${tx.signature.substring(tx.signature.length-4)}`; const fee=tx.fee?(tx.fee/LAMPORTS_PER_SOL).toFixed(9):'0'; let src=tx.source||'Desc.'; let prog=tx.type||'Desc.'; if(tx.events?.nft?.source) src=tx.events.nft.source; if(tx.type==='UNKNOWN'&&tx.instructions?.length>0) prog=tx.instructions[0].programId?.substring(0,10)+'...'; let val='---'; let vCls=''; const nt=tx.nativeTransfers?.find(t=>t.fromUserAccount===walletAddress||t.toUserAccount===walletAddress); const tt=tx.tokenTransfers?.find(t=>t.fromUserAccount===walletAddress||t.toUserAccount===walletAddress); if(nt){ const a=(nt.amount/LAMPORTS_PER_SOL).toFixed(4); const p=nt.fromUserAccount===walletAddress?'-':'+'; val=`<i class="fab fa-solana sol-icon-small"></i> ${p} ${a} SOL`; vCls=nt.fromUserAccount===walletAddress?'tx-sent':'tx-received'; } else if(tt){ const a=tt.tokenAmount.toLocaleString(undefined,{maximumFractionDigits:tt.tokenDecimals||2}); const s=tt.tokenSymbol||tt.mint?.substring(0,4)||'?'; const p=tt.fromUserAccount===walletAddress?'-':'+'; val=`${p} ${a} ${s}`; vCls=tt.fromUserAccount===walletAddress?'tx-sent':'tx-received'; } const fType=prog.replace(/([A-Z])/g,' $1').trim().split(/[\s_]+/).map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' '); tr.innerHTML=`<td><button class="icon-button view-details-button" title="Ver detalles"><i class="fas fa-eye"></i></button></td><td><span class="tx-signature" title="${tx.signature}">${sigS}</span></td><td>${tx.slot||'-'}</td><td>${date}</td><td>${tx.instructions?.length||'-'}</td><td>${src}</td><td class="${vCls}">${val}</td><td><i class="fab fa-solana sol-icon-small"></i> ${fee} SOL</td><td title="${tx.type}">${fType}</td>`; tr.dataset.txData=JSON.stringify(tx); transactionsTableBody.appendChild(tr); }); } else { transactionsTableBody.innerHTML='<tr><td colspan="9" style="text-align:center;">No Txs recientes.</td></tr>'; } }
+            else { console.error("Error Txs:", transactionsResult.reason||transactionsResult.value?.status); transactionsTableBody.innerHTML='<tr><td colspan="9" style="text-align:center;">Error Txs.</td></tr>'; }
+
             hideElement(trackerLoading);
         } catch (error) { // Catch errores inesperados
-            console.error("Error general al procesar datos de la billetera:", error);
-            trackerError.textContent = `Error inesperado: ${error.message}. Intenta de nuevo.`;
-            showElement(trackerError); hideElement(trackerLoading);
-            resetWalletTrackerVisuals(); displayWalletAddress.textContent = 'Error';
+            console.error("Error Gral Wallet:", error); trackerError.textContent=`Error: ${error.message}.`; showElement(trackerError); hideElement(trackerLoading); resetWalletTrackerVisuals(); displayWalletAddress.textContent='Error';
         }
     };
 
