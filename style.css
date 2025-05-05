@@ -20,6 +20,8 @@
 
     /* Definir altura del header fijo */
     --header-height: 70px; /* Ajustado ligeramente */
+    --sidebar-width-expanded: 230px; /* Ancho normal del sidebar */
+    --sidebar-width-collapsed: 80px;  /* Ancho colapsado del sidebar */
 }
 
 /* --- Estilos Generales --- */
@@ -39,7 +41,7 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     overflow-x: hidden; /* Prevenir scroll horizontal */
-    display: flex; /* ****** CAMBIO: Usar flexbox para controlar footer ****** */
+    display: flex; /* Usar flexbox para controlar footer */
     flex-direction: column; /* Dirección vertical */
     min-height: 100vh; /* Altura mínima del viewport */
 }
@@ -70,7 +72,7 @@ header {
     backdrop-filter: blur(10px); /* Efecto cristal */
     color: var(--text-color);
     padding: 0.8rem 2rem;
-    position: fixed; /* ****** CAMBIO: Header fijo ****** */
+    position: fixed; /* Header fijo */
     top: 0;
     left: 0;
     width: 100%;
@@ -167,17 +169,25 @@ header {
     gap: 20px; /* Espacio entre iconos */
 }
 
-.header-icons .icon {
+.header-icons .icon, .sidebar-toggle-desktop { /* Aplicar a botones también */
     font-size: 1.4rem; /* Tamaño de los iconos */
     color: var(--soft-text-color);
     cursor: pointer;
     transition: color 0.3s ease, text-shadow 0.3s ease;
     position: relative; /* Para el dropdown */
+    background: none; /* Estilo base botón */
+    border: none;
+    padding: 0;
 }
 
-.header-icons .icon:hover {
+.header-icons .icon:hover, .sidebar-toggle-desktop:hover {
     color: var(--corp-blue);
     text-shadow: var(--neon-glow-blue);
+}
+
+/* Ocultar botón toggle en móvil inicialmente */
+.sidebar-toggle-desktop {
+    display: block; /* Visible por defecto en desktop */
 }
 
 /* Language Switcher Dropdown */
@@ -217,33 +227,31 @@ header {
 /* --- Contenedor Principal --- */
 .container {
     display: flex;
-    flex-grow: 1; /* Hace que el container ocupe el espacio restante verticalmente */
+    flex-grow: 1; /* Ocupa el espacio restante verticalmente */
     margin-top: var(--header-height); /* Empieza justo después del header fijo */
-    /* Quitamos padding-bottom porque el footer ya no es fijo */
 }
 
 /* --- Sidebar --- */
 .sidebar {
-    width: 230px;
+    width: var(--sidebar-width-expanded); /* Ancho inicial */
     background-color: var(--medium-dark-background);
     padding: 1.5rem 0;
-    transition: width 0.3s ease;
+    transition: width 0.3s ease; /* Transición para colapsar/expandir */
     border-right: 1px solid var(--line-color);
     height: calc(100vh - var(--header-height)); /* Ocupa la altura restante */
     position: sticky; /* Se queda fijo en el scroll del body */
     top: var(--header-height); /* Se pega debajo del header */
     overflow-y: auto; /* Scroll interno si es necesario */
+    overflow-x: hidden; /* Ocultar scroll horizontal si texto sobresale */
     z-index: 900; /* Debajo del header pero sobre el main */
 
-    /* ****** CAMBIO: Ocultar scrollbar ****** */
+    /* Ocultar scrollbar */
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
-/* Ocultar scrollbar para Chrome, Safari, Opera */
 .sidebar::-webkit-scrollbar {
     display: none;
 }
-
 
 .sidebar nav ul {
     list-style: none;
@@ -252,13 +260,14 @@ header {
 .sidebar .menu-item a {
     display: flex;
     align-items: center;
-    padding: 0.8rem 1.5rem;
+    padding: 0.8rem 1.5rem; /* Padding normal */
     color: var(--soft-text-color);
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     font-size: 0.95rem;
     position: relative;
-    overflow: hidden; /* Para el efecto de borde */
+    overflow: hidden; /* Importante para ocultar texto */
+    white-space: nowrap; /* Evitar que el texto se rompa */
 }
 
 .sidebar .menu-item a::before {
@@ -276,11 +285,20 @@ header {
 
 
 .sidebar .menu-item a i {
-    margin-right: 15px; /* Espacio entre icono y texto */
+    margin-right: 15px; /* Espacio normal icono-texto */
     width: 20px; /* Ancho fijo para alinear texto */
     text-align: center;
     font-size: 1.1rem;
+    flex-shrink: 0; /* Evitar que el icono se encoja */
+    transition: margin 0.3s ease; /* Transición para el centrado */
 }
+
+.sidebar .menu-item a .menu-text {
+    opacity: 1; /* Visible normal */
+    transition: opacity 0.2s ease; /* Transición para ocultar texto */
+    white-space: nowrap; /* Evitar que el texto se rompa */
+}
+
 
 .sidebar .menu-item a:hover {
     background-color: var(--soft-highlight);
@@ -298,23 +316,57 @@ header {
      box-shadow: var(--neon-glow-blue);
 }
 
+/* --- ESTILOS SIDEBAR COLAPSADO --- */
+.sidebar-collapsed .sidebar {
+    width: var(--sidebar-width-collapsed); /* Ancho colapsado */
+}
+
+.sidebar-collapsed .sidebar .menu-item a {
+    padding: 0.8rem 0; /* Quitar padding lateral */
+    justify-content: center; /* Centrar contenido (icono) */
+}
+
+.sidebar-collapsed .sidebar .menu-item a i {
+    margin-right: 0; /* Quitar margen del icono */
+    font-size: 1.3rem; /* Iconos un poco más grandes */
+}
+
+.sidebar-collapsed .sidebar .menu-item a .menu-text {
+    opacity: 0; /* Ocultar texto */
+    width: 0;
+    overflow: hidden;
+}
+
+/* --- Wrapper para Main Content y Footer --- */
+.content-wrapper {
+    flex-grow: 1; /* Ocupa el espacio restante */
+    margin-left: var(--sidebar-width-expanded); /* Margen inicial */
+    transition: margin-left 0.3s ease; /* Transición al cambiar margen */
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - var(--header-height)); /* Asegura altura mínima */
+}
+
+/* Ajustar margen cuando el sidebar se colapsa */
+.sidebar-collapsed .content-wrapper {
+    margin-left: var(--sidebar-width-collapsed);
+}
+
 /* --- Main Content --- */
 .main-content {
-    flex-grow: 1;
+    flex-grow: 1; /* Ocupa espacio vertical dentro del wrapper */
     padding: 2rem;
-    /* Quitamos height porque el scroll es del body ahora */
-    /* overflow-y: auto; */
-    position: relative; /* Para contexto de apilamiento si es necesario */
-    z-index: 1; /* Por defecto debajo de sidebar/header */
+    position: relative;
+    z-index: 1;
 }
 
 .main-content section {
-    display: none; /* Ocultar todas las secciones por defecto */
-    animation: fadeIn 0.5s ease-in-out; /* Animación de entrada */
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .main-content section.active {
-    display: block; /* Mostrar la sección activa */
+    display: block;
 }
 
 @keyframes fadeIn {
@@ -328,8 +380,8 @@ header {
     font-weight: 600;
 }
 .main-content h2 {
-    color: var(--corp-green); /* Diferenciar h2 */
-     margin-bottom: 1.5rem;
+    color: var(--corp-green);
+    margin-bottom: 1.5rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--line-color);
 }
@@ -346,7 +398,7 @@ header {
     /* Contenedor principal de la sección */
 }
 
-/* ****** NUEVO: Estilos para Input/Botón de rastreo ****** */
+/* Input y Botón específicos del tracker */
 .tracker-input-area {
     display: flex;
     gap: 10px;
@@ -418,22 +470,22 @@ header {
     margin-right: 8px;
 }
 
-/* Fila Superior: Cuenta y Búsqueda */
+/* Fila Superior: Cuenta (Búsqueda Eliminada) */
 .wallet-tracker-header {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* Alinear arriba */
+    /* justify-content: space-between; (Ya no necesario si solo hay 1 item) */
+    align-items: flex-start;
     margin-bottom: 2rem;
     padding-bottom: 1.5rem;
     border-bottom: 1px solid var(--line-color);
-    flex-wrap: wrap; /* Para responsividad */
+    flex-wrap: wrap;
     gap: 1rem;
 }
 
-/* Info Cuenta (Izquierda) */
+/* Info Cuenta */
 .account-info {
-    flex: 1; /* Ocupa espacio disponible */
-    min-width: 250px; /* Ancho mínimo */
+    /* flex: 1; (Ya no necesario si es el único item) */
+    min-width: 250px;
 }
 
 .account-title {
@@ -446,12 +498,12 @@ header {
 .address-line, .address-line-small {
     display: flex;
     align-items: center;
-    gap: 0.5rem; /* Espacio entre dirección e iconos */
+    gap: 0.5rem;
     background-color: var(--medium-dark-background);
     padding: 0.5rem 0.8rem;
     border-radius: 4px;
     border: 1px solid var(--border-color);
-    position: relative; /* Para el feedback de copiado */
+    position: relative;
 }
 .address-line-small {
      padding: 0.3rem 0.6rem;
@@ -459,13 +511,13 @@ header {
 }
 
 #display-wallet-address, #owner-address {
-    font-family: 'Courier New', Courier, monospace; /* Fuente monoespaciada para direcciones */
+    font-family: 'Courier New', Courier, monospace;
     color: var(--corp-green);
     overflow: hidden;
-    text-overflow: ellipsis; /* Puntos suspensivos si es muy larga */
+    text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 200px; /* Límite de ancho para la dirección */
-    display: inline-block; /* Para que max-width funcione bien */
+    max-width: 200px;
+    display: inline-block;
     vertical-align: middle;
 }
 #owner-address {
@@ -476,11 +528,11 @@ header {
     background: none;
     border: none;
     color: var(--soft-text-color);
-    font-size: 1rem; /* Tamaño base iconos */
+    font-size: 1rem;
     cursor: pointer;
     padding: 0.3rem;
     transition: color 0.2s ease, transform 0.2s ease;
-    display: inline-flex; /* Para alinear bien el icono */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 }
@@ -490,50 +542,13 @@ header {
 }
 
 .icon-button.copy-button-small {
-    font-size: 0.9rem; /* Icono de copia más pequeño para owner */
-}
-
-/* Área de Búsqueda (Derecha) */
-.tracker-search-area {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-width: 300px; /* Ancho mínimo */
-    flex: 1.5; /* Ocupa un poco más de espacio */
-    justify-content: flex-end; /* Alinear a la derecha */
-}
-
-#transaction-search-input {
-    flex-grow: 1; /* Input ocupa espacio disponible */
-    padding: 0.6rem 0.8rem;
-    background-color: var(--medium-dark-background);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    color: var(--text-color);
     font-size: 0.9rem;
-    outline: none;
-}
-#transaction-search-input::placeholder {
-    color: var(--soft-text-color);
-}
-#transaction-search-input:focus {
-    border-color: var(--corp-blue);
-    box-shadow: 0 0 5px rgba(0, 176, 255, 0.5);
 }
 
-.search-button-wt {
-    font-size: 1.2rem;
-    padding: 0.6rem;
-    background-color: var(--corp-blue);
-    color: var(--dark-background);
-    border-radius: 4px;
-    border: none;
-}
-.search-button-wt:hover {
-    background-color: #0099e6; /* Azul un poco más oscuro */
-    transform: scale(1.05);
-    color: #fff;
-}
+/* ****** ELIMINADO: Área de Búsqueda ****** */
+/* .tracker-search-area { ... } */
+/* #transaction-search-input { ... } */
+/* .search-button-wt { ... } */
 
 
 /* Fila Media: 3 Cajas de Información */
@@ -1026,45 +1041,45 @@ header {
 
 /* --- Footer --- */
 footer {
-    background-color: var(--dark-background); /* ****** CAMBIO: Usar color base ****** */
+    background-color: var(--dark-background);
     color: var(--soft-text-color);
-    padding: 1rem 2rem; /* ****** CAMBIO: Padding reducido ****** */
+    padding: 1rem 2rem;
     text-align: center;
     border-top: 1px solid var(--line-color);
-    margin-top: auto; /* ****** CAMBIO: Empuja al fondo en layout flex ****** */
-    /* Quitar position fixed, left, width, height, z-index */
+    margin-top: auto; /* Empuja al fondo en layout flex del body */
+    /* No necesita position, left, width específicos si está en flujo flex */
 }
 
 .footer-content {
     display: flex;
-    justify-content: center; /* Centrar contenido del footer */
+    justify-content: center;
     align-items: center;
-    margin-bottom: 0.5rem; /* Reducir margen */
+    margin-bottom: 0.5rem;
 }
 
 .social-media h3 {
-    color: var(--text-color); /* ****** CAMBIO: Color menos brillante ****** */
+    color: var(--text-color);
     margin-bottom: 0.8rem;
-    font-size: 1rem; /* Reducir tamaño */
+    font-size: 1rem;
     font-weight: 600;
-    text-shadow: none; /* Quitar sombra */
+    text-shadow: none;
 }
 
 .social-media ul {
     list-style: none;
     display: flex;
     justify-content: center;
-    gap: 20px; /* Espacio entre iconos sociales */
+    gap: 20px;
 }
 
 .social-media a {
     color: var(--soft-text-color);
-    font-size: 1.5rem; /* Iconos sociales */
+    font-size: 1.5rem;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .social-media a:hover {
-    color: var(--corp-blue); /* O color específico de la red social */
+    color: var(--corp-blue);
     transform: scale(1.1);
 }
 /* Colores específicos para iconos sociales (ejemplo) */
@@ -1076,9 +1091,9 @@ footer {
 
 
 .footer-bottom {
-    font-size: 0.8rem; /* Reducir tamaño */
-    margin-top: 0.8rem; /* Reducir margen */
-    padding-top: 0.8rem; /* Reducir padding */
+    font-size: 0.8rem;
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
     border-top: 1px solid var(--line-color);
 }
 
@@ -1088,19 +1103,31 @@ footer {
      .price-ticker {
           display: none; /* Ocultar ticker en pantallas medianas */
      }
-     .sidebar {
-          width: 200px; /* Sidebar más estrecho */
-     }
-      .sidebar .menu-item a {
-        padding: 0.7rem 1rem;
-        font-size: 0.9rem;
+      /* Ajustar ancho colapsado si es necesario */
+      :root {
+          --sidebar-width-collapsed: 70px;
       }
-       .sidebar .menu-item a i {
-         margin-right: 10px;
+     .sidebar {
+          width: var(--sidebar-width-expanded); /* Mantiene ancho expandido */
+     }
+      /* Estilos colapsado para tablet */
+      .sidebar-collapsed .sidebar {
+           width: var(--sidebar-width-collapsed);
        }
-        .main-content {
+       .sidebar-collapsed .sidebar .menu-item a i {
+          font-size: 1.2rem; /* Ajustar icono colapsado */
+       }
+
+
+      .content-wrapper {
+          margin-left: var(--sidebar-width-expanded); /* Margen normal */
+       }
+       .sidebar-collapsed .content-wrapper {
+           margin-left: var(--sidebar-width-collapsed); /* Margen colapsado */
+       }
+
+       .main-content {
           padding: 1.5rem;
-          margin-left: 200px; /* ****** CAMBIO: Ajustar margen para nuevo ancho de sidebar ****** */
        }
        /* Ajustar cajas de info en tracker */
        .info-boxes-container {
@@ -1111,11 +1138,9 @@ footer {
            min-width: calc(50% - 0.5rem); /* Dos columnas */
        }
        footer {
-           /* ****** CAMBIO: No necesita left/width aquí si el body es flex ****** */
-           /* margin-left: 200px; */
            padding: 0.8rem 1.5rem;
        }
-
+       .sidebar-toggle-desktop { display: block; } /* Asegurar que se vea en tablet */
 
 }
 
@@ -1132,7 +1157,7 @@ footer {
     header {
         padding: 0.6rem 1rem;
         min-height: 60px;
-        position: static; /* ****** CAMBIO: Header no fijo en móvil ****** */
+        position: static; /* Header no fijo en móvil */
         z-index: auto;
     }
     .logo {
@@ -1148,6 +1173,9 @@ footer {
     .header-icons { gap: 15px; }
     .header-icons .icon { font-size: 1.2rem; }
 
+    /* Ocultar botón toggle sidebar en móvil */
+    .sidebar-toggle-desktop { display: none; }
+
     .sidebar {
         width: 100%; /* Ocupa todo el ancho */
         height: auto; /* Altura automática */
@@ -1160,6 +1188,8 @@ footer {
         top: auto; /* Resetear top */
         height: auto; /* Resetear height */
         z-index: auto;
+        /* Quitar transición de ancho en móvil */
+        transition: none;
     }
     .sidebar nav ul {
         display: flex;
@@ -1177,11 +1207,33 @@ footer {
         /* display: none; */
      }
 
+    /* Ignorar estado colapsado en móvil */
+     .sidebar-collapsed .sidebar {
+          width: 100%; /* Siempre ancho completo */
+      }
+     .sidebar-collapsed .sidebar .menu-item a {
+         padding: 0.8rem 1rem; /* Padding normal */
+         justify-content: flex-start; /* Alinear normal */
+     }
+      .sidebar-collapsed .sidebar .menu-item a i {
+         margin-right: 5px; /* Margen normal */
+         font-size: 1.1rem; /* Tamaño normal */
+     }
+      .sidebar-collapsed .sidebar .menu-item a .menu-text {
+         opacity: 1; /* Siempre visible */
+         width: auto;
+         overflow: visible;
+     }
+
+
+    .content-wrapper {
+        margin-left: 0; /* Sin margen ya que no hay sidebar fijo */
+        transition: none; /* Quitar transición */
+    }
 
     .main-content {
-        margin-left: 0; /* Sin margen ya que no hay sidebar */
+        margin-left: 0; /* Sin margen ya que no hay sidebar fijo */
         padding: 1rem; /* Reducir padding en móvil */
-        /* Quitar height si se definió */
         height: auto;
     }
      .main-content h1, .main-content h2 { font-size: 1.5rem; margin-bottom: 1rem;}
@@ -1193,10 +1245,7 @@ footer {
          gap: 1rem;
          padding-bottom: 1rem; /* Menos padding */
      }
-      .tracker-search-area {
-         justify-content: flex-start; /* Alinear búsqueda a la izquierda */
-         min-width: unset; /* Quitar ancho mínimo */
-     }
+      /* Ya no existe tracker-search-area */
       .info-boxes-container {
          flex-direction: column; /* Apilar cajas de info */
          gap: 1rem;
@@ -1219,12 +1268,13 @@ footer {
     .modal-content h2 { font-size: 1.3rem; }
 
     footer {
-        position: static; /* ****** CAMBIO: Footer no fijo en móvil ****** */
-        margin-left: 0; /* Resetear margen */
-        width: 100%; /* Ocupar todo el ancho */
-        height: auto; /* Altura automática */
+        position: static;
+        margin-left: 0;
+        width: 100%;
+        height: auto;
         padding: 1rem;
-        margin-top: 2rem; /* Espacio antes del footer */
+        margin-top: 2rem;
+        transition: none;
     }
     .footer-content { flex-direction: column; gap: 15px;}
     .social-media ul { gap: 20px; }
@@ -1268,17 +1318,18 @@ footer {
     padding: 3px 8px;
     border-radius: 4px;
     font-size: 0.75rem;
-    margin-left: 5px; /* Ajusta según sea necesario */
+    margin-left: 5px;
     white-space: nowrap;
     opacity: 0;
-    transition: opacity 0.5s ease-out;
-    pointer-events: none; /* No interfiere con clicks */
-    z-index: 10; /* Sobre la línea de dirección */
-    /* Ajustar posicionamiento relativo al botón */
-    top: -25px; /* Posicionar arriba del botón */
-    left: 50%;
-    transform: translateX(-50%);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Añadir transición transform */
+    pointer-events: none;
+    z-index: 10;
+    /* Posicionamiento inicial */
+    top: 50%;
+    left: 105%; /* Empezar justo a la derecha del contenedor del botón */
+    transform: translateY(-50%) translateX(-10px); /* Mover un poco a la izquierda y centrar V */
 }
 .copied-feedback.show {
     opacity: 1;
+    transform: translateY(-50%) translateX(0); /* Mover a la posición final */
 }
