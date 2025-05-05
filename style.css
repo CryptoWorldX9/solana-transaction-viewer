@@ -172,7 +172,8 @@ header {
     gap: 20px; /* Espacio entre iconos */
 }
 
-.header-icons .icon, .sidebar-toggle-desktop { /* Aplicar a botones también */
+/* ****** CAMBIO: Eliminado estilo de .sidebar-toggle-desktop ****** */
+.header-icons .icon {
     font-size: 1.4rem; /* Tamaño de los iconos */
     color: var(--soft-text-color);
     cursor: pointer;
@@ -183,14 +184,9 @@ header {
     padding: 0;
 }
 
-.header-icons .icon:hover, .sidebar-toggle-desktop:hover {
+.header-icons .icon:hover {
     color: var(--corp-blue);
     text-shadow: var(--neon-glow-blue);
-}
-
-/* Ocultar botón toggle en móvil inicialmente */
-.sidebar-toggle-desktop {
-    display: block; /* Visible por defecto en desktop */
 }
 
 /* Language Switcher Dropdown */
@@ -239,7 +235,7 @@ header {
     width: var(--sidebar-width-expanded); /* Ancho inicial con variable */
     background-color: var(--medium-dark-background);
     padding: 1.5rem 0;
-    transition: width var(--sidebar-transition-speed) ease; /* Transición para colapsar/expandir */
+    transition: width var(--sidebar-transition-speed) ease; /* ****** Transición CORREGIDA ****** */
     border-right: 1px solid var(--line-color);
     height: calc(100vh - var(--header-height)); /* Ocupa la altura restante */
     position: sticky; /* Se queda fijo en el scroll del body */
@@ -247,7 +243,7 @@ header {
     overflow-y: auto; /* Scroll interno si es necesario */
     overflow-x: hidden; /* Ocultar scroll horizontal si texto sobresale */
     z-index: 900; /* Debajo del header pero sobre el main */
-    cursor: pointer; /* Indicar que se puede hacer clic para expandir (cuando está colapsado) */
+    cursor: default; /* Cursor normal por defecto */
 
     /* Ocultar scrollbar */
     -ms-overflow-style: none;  /* IE and Edge */
@@ -272,6 +268,7 @@ header {
     position: relative;
     overflow: hidden; /* Importante para ocultar texto */
     white-space: nowrap; /* Evitar que el texto se rompa */
+    cursor: pointer; /* Indicar que los enlaces son clickables */
 }
 
 .sidebar .menu-item a::before {
@@ -324,6 +321,7 @@ header {
 /* --- ESTILOS SIDEBAR COLAPSADO (usando clase en body) --- */
 body.sidebar-collapsed .sidebar {
     width: var(--sidebar-width-collapsed); /* Ancho colapsado */
+    cursor: pointer; /* Cursor indica que se puede expandir al hacer clic */
 }
 
 body.sidebar-collapsed .sidebar .menu-item a {
@@ -341,13 +339,14 @@ body.sidebar-collapsed .sidebar .menu-item a .menu-text {
     width: 0;
     overflow: hidden;
     transition-delay: 0s; /* Ocultar inmediatamente */
+    pointer-events: none; /* Evitar interacción con texto oculto */
 }
 
 /* --- Wrapper para Main Content y Footer --- */
 .content-wrapper {
     flex-grow: 1; /* Ocupa el espacio restante */
     margin-left: var(--sidebar-width-expanded); /* Margen inicial */
-    transition: margin-left var(--sidebar-transition-speed) ease; /* ****** Transición al cambiar margen ****** */
+    transition: margin-left var(--sidebar-transition-speed) ease; /* ****** Transición CORREGIDA ****** */
     display: flex;
     flex-direction: column;
     /* No necesita min-height aquí si body es flex column y este es flex-grow */
@@ -849,7 +848,7 @@ body.sidebar-collapsed .content-wrapper {
     text-transform: uppercase; /* Mayúsculas para encabezados */
     font-size: 0.8rem;
     position: sticky; /* Encabezado fijo al hacer scroll */
-    top: 0px; /* Ajustar si el scroll es del main-content y no del body */
+    top: 0px; /* Se pega al borde superior del contenedor scrolleable */
     z-index: 10; /* Encima del contenido */
 }
 #transactions-table th:first-child, #transactions-table td:first-child {
@@ -1047,7 +1046,7 @@ footer {
     padding: 1rem 2rem;
     text-align: center;
     border-top: 1px solid var(--line-color);
-    /* Footer ya no es fijo, se posiciona después del main */
+    /* Footer ya no es fijo, se posiciona después del main en el wrapper */
 }
 
 .footer-content {
@@ -1141,7 +1140,11 @@ footer {
        footer {
            padding: 0.8rem 1.5rem;
        }
-       .sidebar-toggle-desktop { display: block; } /* Asegurar que se vea en tablet */
+       /* Mostrar botón toggle explícito en tablet */
+       /* .sidebar-toggle-desktop { display: block; } */
+       /* Ocultarlo si preferimos solo el click en menu/sidebar */
+       .sidebar-toggle-desktop { display: none; }
+
 }
 
 /* (Móviles) */
@@ -1218,14 +1221,13 @@ footer {
 
 
     .content-wrapper {
-        margin-left: 0 !important; /* ****** Forzar sin margen ****** */
+        margin-left: 0 !important; /* Forzar sin margen */
         transition: none !important; /* Quitar transición */
     }
 
 
     .main-content {
         padding: 1rem; /* Reducir padding en móvil */
-        height: auto;
     }
      .main-content h1, .main-content h2 { font-size: 1.5rem; margin-bottom: 1rem;}
 
