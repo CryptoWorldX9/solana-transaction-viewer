@@ -61,74 +61,73 @@
     </header>
 
     <div class="container">
-        <aside class="sidebar" id="sidebar">
+        <aside class="sidebar">
             <nav>
                 <ul>
                     <li class="menu-item">
-                        <a href="#" data-section="home" title="Inicio">
+                        <a href="#" data-section="home">
                             <i class="fas fa-home"></i> <span class="menu-text">Inicio</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" data-section="sentiment-analyzer" title="Analizador de Sentimientos">
+                        <a href="#" data-section="sentiment-analyzer">
                             <i class="fas fa-chart-line"></i>
                             <span class="menu-text">Analizador de Sentimientos</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" data-section="wallet-tracker" title="Wallet Tracker">
+                        <a href="#" data-section="wallet-tracker">
                             <i class="fas fa-wallet"></i>
                             <span class="menu-text">Wallet Tracker</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" data-section="bot-trading" title="Bot Trading">
+                        <a href="#" data-section="bot-trading">
                             <i class="fas fa-robot"></i>
                             <span class="menu-text">Bot Trading</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" data-section="sniper" title="Sniper">
+                        <a href="#" data-section="sniper">
                             <i class="fas fa-crosshairs"></i>
                             <span class="menu-text">Sniper</span>
                         </a>
                     </li>
                      <li class="menu-item">
-                        <a href="#" data-section="token-creator" title="Creador de Token">
+                        <a href="#" data-section="token-creator">
                             <i class="fas fa-coins"></i>
                             <span class="menu-text">Creador de Token</span>
                         </a>
                     </li>
                      <li class="menu-item">
-                        <a href="#" data-section="staking" title="Staking">
+                        <a href="#" data-section="staking">
                             <i class="fas fa-lock"></i>
                             <span class="menu-text">Staking</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" data-section="gaming" title="Gaming">
+                        <a href="#" data-section="gaming">
                             <i class="fas fa-gamepad"></i>
                             <span class="menu-text">Gaming</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                         <a href="#" data-section="nft-collection" title="Colección NFTs">
+                         <a href="#" data-section="nft-collection">
                              <i class="fas fa-image"></i> <span class="menu-text">Colección NFTs</span>
                          </a>
                      </li>
                       <li class="menu-item">
-                         <a href="#" data-section="detox-reclaim" title="Detox & Reclaim">
-                             <i class="fas fa-broom"></i> <span class="menu-text">Detox & Reclaim</span>
+                         <a href="#" data-section="detox-reclaim"> <i class="fas fa-broom"></i> <span class="menu-text">Detox & Reclaim</span>
                          </a>
                      </li>
                      <li class="menu-item">
-                        <a href="#" data-section="knowledge-base" title="Base de Conocimiento">
+                        <a href="#" data-section="knowledge-base">
                             <i class="fas fa-book"></i>
                             <span class="menu-text">Base de Conocimiento</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" data-section="chatbot" title="ChatBot">
+                        <a href="#" data-section="chatbot">
                              <i class="fas fa-comments"></i>
                             <span class="menu-text">ChatBot</span>
                         </a>
@@ -137,7 +136,7 @@
             </nav>
         </aside>
 
-        <main class="main-content" id="main-content">
+        <main class="main-content">
             <section id="home"> <h1>Bienvenido a QuantyX</h1>
                 <p>Tu centro neural impulsado por IA para herramientas Crypto.</p>
 
@@ -175,6 +174,13 @@
                              </button>
                          </div>
                      </div>
+
+                     <div class="tracker-search-area">
+                         <input type="search" id="transaction-search-input" placeholder="buscar transacciones, Bloques, programas y tokens.">
+                         <button id="transaction-search-button" class="icon-button search-button-wt" title="Buscar">
+                             <i class="fas fa-search"></i>
+                         </button>
+                     </div>
                  </div>
 
                  <div class="info-boxes-container">
@@ -198,7 +204,7 @@
                                  <i class="fas fa-chevron-down dropdown-arrow"></i>
                              </summary>
                              <ul id="token-list-detailed" class="token-list">
-                                 <li>Introduce una dirección y rastrea.</li>
+                                 <li>No hay tokens para mostrar.</li>
                              </ul>
                          </details>
                          <div class="wallet-details-link">
@@ -357,25 +363,27 @@
              </div>
 
         </main>
+    </div>
 
-        <footer>
-            <div class="footer-content">
-                <div class="social-media">
-                    <h3>Síguenos</h3>
-                    <ul>
-                        <li><a href="#" target="_blank"><i class="fab fa-x-twitter"></i></a></li>
-                        <li><a href="#" target="_blank"><i class="fab fa-youtube"></i></a></li>
-                        <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="#" target="_blank"><i class="fab fa-tiktok"></i></a></li>
-                        <li><a href="#" target="_blank"><i class="fab fa-telegram"></i></a></li>
-                    </ul>
-                </div>
+    <footer>
+        <div class="footer-content">
+            <div class="social-media">
+                <h3>Síguenos</h3>
+                <ul>
+                    <li><a href="#" target="_blank"><i class="fab fa-x-twitter"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-youtube"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-tiktok"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-telegram"></i></a></li>
+                </ul>
             </div>
-            <div class="footer-bottom">
-                &copy; 2025 QuantyX. Todos los derechos reservados.
-            </div>
-        </footer>
-        </div> <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 QuantyX. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
