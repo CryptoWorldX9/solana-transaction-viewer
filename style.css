@@ -9,47 +9,17 @@
     --text-color: #e0e0e0;   /* Color de texto general más claro */
     --soft-text-color: #a0a0a0; /* Color para texto secundario/placeholder */
     --soft-highlight: rgba(255, 255, 255, 0.08); /* Para fondos sutiles en hover */
+    --border-color: #333; /* Color de borde general */
     --neon-glow-blue: 0 0 8px var(--corp-blue); /* Glow más definido */
     --neon-glow-purple: 0 0 8px var(--corp-purple);
     --neon-glow-green: 0 0 8px var(--corp-green);
     --hover-glow: var(--neon-glow-blue), var(--neon-glow-purple), var(--neon-glow-green); /* Glow combinado */
 
-    /* Definir un color pink suave solo para el hover del botón cerrar */
-    --close-button-hover: #ffb6c1; /* LightPink para el hover de cerrar */
-
-    /* Definir altura del footer fijo */
-    --footer-height: 70px; /* Ajustado ligeramente */
-    /* Definir ancho del sidebar fijo */
-    --sidebar-width: 260px; /* Ajustado ligeramente */
-    /* Definir altura del header fijo */
-    --header-height: 70px; /* Ajustado ligeramente */
+    /* Definir un color pink suave solo para el tracker si se desea, o usar los corporativos */
+    --tracker-accent: var(--corp-blue); /* Usamos azul como acento principal en tracker */
 }
 
-/* Fondo Animado */
-.background-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center,
-                rgba(0, 176, 255, 0.06), /* Corp Blue */
-                rgba(179, 106, 255, 0.06), /* Corp Purple */
-                rgba(66, 230, 164, 0.06), /* Corp Green */
-                transparent 70%); /* Ajustar tamaño transparente */
-    background-size: 400% 400%;
-    animation: backgroundGlow 25s ease infinite alternate;
-    z-index: -1;
-}
-
-@keyframes backgroundGlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-
-/* Reset y Estilos Generales */
+/* --- Estilos Generales --- */
 * {
     margin: 0;
     padding: 0;
@@ -60,1119 +30,1071 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color: var(--dark-background);
     color: var(--text-color);
-    overflow-x: hidden;
     line-height: 1.6;
+    overflow-x: hidden; /* Prevenir scroll horizontal */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
+.container {
+    display: flex;
+    flex-grow: 1; /* Hace que el container crezca para llenar el espacio */
+    margin-top: 70px; /* Ajustar si la altura del header cambia */
 }
 
-ul {
-    list-style: none;
+/* --- Animación de Fondo --- */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(45deg, var(--corp-blue), var(--corp-purple), var(--corp-green), var(--dark-background));
+    background-size: 400% 400%;
+    animation: gradientBG 25s ease infinite;
+    opacity: 0.1; /* Muy sutil */
 }
 
-/* Header */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- Header --- */
 header {
-    background-color: rgba(11, 11, 11, 0.9); /* Fondo oscuro casi opaco */
-    backdrop-filter: blur(15px); /* Desenfoque ligeramente mayor */
-    padding: 0.8rem 2rem; /* Ajustar padding */
+    background-color: rgba(11, 11, 11, 0.8); /* Fondo oscuro semi-transparente */
+    backdrop-filter: blur(10px); /* Efecto cristal */
+    color: var(--text-color);
+    padding: 0.8rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky; /* ****** CAMBIO: Hacer el header pegajoso ****** */
-    width: 100%;
-    top: 0; /* ****** CAMBIO: Pegar al borde superior ****** */
-    left: 0;
-    z-index: 1000; /* ****** CAMBIO: Asegurar que esté por encima de otros elementos ****** */
     border-bottom: 1px solid var(--line-color);
-    height: var(--header-height);
+    min-height: 70px;
 }
 
 .logo {
-    font-size: 2.8rem; /* <-- Tamaño del logo (ajustado de 3rem) */
-    font-weight: 600;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
     color: var(--corp-blue);
-    /* Efecto de texto más profesional */
     text-shadow: var(--neon-glow-blue);
-    flex-shrink: 0;
-    display: block;
-    padding: 0;
 }
-
-
-/* Carrusel de Precios */
-.price-ticker {
-    display: flex;
-    align-items: center;
-    height: 30px;
-    overflow: hidden;
-    margin-left: 30px;
-    margin-right: 30px;
-    border: 1px solid var(--line-color);
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.05); /* Fondo más sutil */
-    flex-grow: 1;
-    max-width: 700px;
-}
-
-.price-ticker-inner {
-    display: flex;
-    width: 250%;
-    animation: scroll-left 45s linear infinite;
-}
-
-.price-ticker-content {
-    display: flex;
-    white-space: nowrap;
-    flex-shrink: 0;
-     align-items: center;
-}
-
-.price-item {
-    display: inline-flex;
-    align-items: center;
-    padding: 0 0;
-    margin-right: 25px; /* Aumentar un poco el espacio entre items */
-    color: var(--text-color);
-    font-size: 0.9rem;
-    flex-shrink: 0;
-    font-weight: 400;
-}
-
-.price-item i {
-    margin-right: 6px; /* Ajustar espacio con icono */
-    font-size: 1rem; /* Ajustar tamaño icono */
-    color: var(--corp-green);
-}
-
-.price-item-spacer {
-    display: inline-block;
-    width: 50px;
-    flex-shrink: 0;
-}
-
-@keyframes scroll-left {
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(-125%); }
-}
-
 
 .header-icons {
     display: flex;
     align-items: center;
-    gap: 1.2rem; /* Ajustar espacio entre iconos */
-    flex-shrink: 0;
+    gap: 20px; /* Espacio entre iconos */
 }
 
 .header-icons .icon {
-    font-size: 1.2rem; /* Ajustar tamaño icono */
+    font-size: 1.4rem; /* Tamaño de los iconos */
+    color: var(--soft-text-color);
     cursor: pointer;
-    color: var(--soft-text-color); /* Color por defecto más suave */
     transition: color 0.3s ease, text-shadow 0.3s ease;
-    position: relative;
+    position: relative; /* Para el dropdown */
 }
 
 .header-icons .icon:hover {
-    color: var(--text-color); /* Color más claro al pasar el mouse */
-    text-shadow: var(--hover-glow); /* Efecto de neón */
+    color: var(--corp-blue);
+    text-shadow: var(--neon-glow-blue);
 }
 
-/* Dropdown de Idioma */
-.language-switcher {
-    position: relative;
-}
-
-.language-dropdown {
+/* Language Switcher Dropdown */
+.language-switcher .language-dropdown {
+    display: none;
     position: absolute;
     top: 100%;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.98); /* Fondo casi opaco */
+    background-color: var(--medium-dark-background);
     border: 1px solid var(--line-color);
-    padding: 10px;
-    border-radius: 5px;
-    display: none;
-    flex-direction: column;
-    gap: 8px;
-    z-index: 1010; /* Mayor que el header para que se vea */
-    min-width: 120px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Sombra sutil */
+    border-radius: 4px;
+    padding: 5px 0;
+    min-width: 100px;
+    z-index: 1001;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .language-switcher:hover .language-dropdown {
-    display: flex;
+    display: block; /* Mostrar al hacer hover en el icono */
 }
 
 .language-dropdown span {
-    cursor: pointer;
-    padding: 5px;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+    display: block;
+    padding: 8px 15px;
     color: var(--soft-text-color);
+    cursor: pointer;
     font-size: 0.9rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .language-dropdown span:hover {
-     color: var(--corp-purple);
-     text-shadow: 0 0 3px var(--corp-purple);
+    background-color: var(--soft-highlight);
+    color: var(--text-color);
+}
+
+/* --- Price Ticker --- */
+.price-ticker {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0 2rem; /* Espacio a los lados */
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.price-ticker-inner {
+    display: flex; /* Permite que los dos contenidos estén en línea */
+    animation: ticker-scroll 40s linear infinite; /* Ajusta la duración según necesites */
+}
+
+.price-ticker-content {
+    display: inline-block; /* Hace que el contenido se comporte como un bloque pero fluya */
+    padding-right: 50px; /* Espacio entre las repeticiones */
+}
+
+.price-item {
+    margin-right: 25px; /* Espacio entre items */
+    font-size: 0.85rem;
+    color: var(--soft-text-color);
+}
+
+.price-item i {
+    margin-right: 5px;
+    color: var(--corp-green); /* Color para los iconos de monedas */
+}
+/* Iconos específicos si se quiere diferenciar */
+.price-item .fa-btc { color: #f7931a; }
+.price-item .fa-ethereum { color: #627eea; }
+.price-item .fa-solana { color: #00ffa3; }
+
+
+/* Pausar animación en hover */
+.price-ticker:hover .price-ticker-inner {
+    animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); } /* Se mueve la mitad porque hay dos contenidos idénticos */
 }
 
 
-/* Contenedor Principal (Sidebar + Main Content) */
-.container {
-    display: flex;
-    /* Eliminamos padding-top aquí porque el header es sticky */
-    /* padding-top: var(--header-height); */
-    padding-bottom: var(--footer-height);
-    min-height: 100vh;
-    position: relative;
-}
-
-/* Sidebar */
+/* --- Sidebar --- */
 .sidebar {
-    width: var(--sidebar-width);
-    background-color: rgba(0, 0, 0, 0.85); /* Fondo más opaco */
-    backdrop-filter: blur(12px); /* Desenfoque ligeramente mayor */
-    padding: 20px 15px; /* Ajustar padding */
-    padding-bottom: var(--footer-height);
+    width: 230px;
+    background-color: var(--medium-dark-background);
+    padding: 1.5rem 0;
+    transition: width 0.3s ease;
     border-right: 1px solid var(--line-color);
-    position: fixed;
-    top: var(--header-height); /* ****** CAMBIO: Empieza debajo del header sticky ****** */
-    left: 0;
-    bottom: 0;
-    height: calc(100vh - var(--header-height)); /* ****** CAMBIO: Altura ajustada para no superponerse al header ****** */
-    overflow-y: auto;
-    z-index: 900; /* Debajo del header pero sobre el contenido */
-
-    /* Ocultar barra de scroll en desktop */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-        display: none;
-    }
+    height: calc(100vh - 70px); /* Altura menos el header */
+    position: sticky; /* Para que se quede fijo al hacer scroll */
+    top: 70px; /* Debajo del header */
+    overflow-y: auto; /* Scroll si el contenido es largo */
 }
 
 .sidebar nav ul {
-    display: flex;
-    flex-direction: column;
-    gap: 12px; /* Ajustar espacio entre items */
+    list-style: none;
 }
 
 .sidebar .menu-item a {
     display: flex;
     align-items: center;
-    padding: 10px 12px; /* Ajustar padding */
-    border-radius: 4px; /* Ajustar radio */
-    transition: background-color 0.3s ease, color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    font-size: 0.95rem; /* Ajustar tamaño */
-    color: var(--soft-text-color); /* Color por defecto más suave */
-    text-shadow: none; /* Sin glow por defecto */
+    padding: 0.8rem 1.5rem;
+    color: var(--soft-text-color);
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 0.95rem;
+    position: relative;
+    overflow: hidden; /* Para el efecto de borde */
 }
+
+.sidebar .menu-item a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px; /* Ancho del borde izquierdo */
+    background-color: var(--corp-blue);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+    transform-origin: bottom; /* Animación desde abajo */
+}
+
 
 .sidebar .menu-item a i {
-    margin-right: 12px; /* Ajustar espacio */
-    font-size: 1.3rem; /* Ajustar tamaño */
-    color: var(--soft-text-color);
-    text-shadow: none;
-    transition: color 0.3s ease;
+    margin-right: 15px; /* Espacio entre icono y texto */
+    width: 20px; /* Ancho fijo para alinear texto */
+    text-align: center;
+    font-size: 1.1rem;
 }
 
-.sidebar .menu-item a:hover,
-.sidebar .menu-item a.active-menu { /* Estilo para hover y activo */
-    background-color: rgba(255, 255, 255, 0.08);
-    color: var(--text-color); /* Color más claro al pasar mouse/activo */
-    text-shadow: 0 0 3px var(--corp-blue); /* Glow sutil en texto */
-    transform: translateX(3px); /* Movimiento sutil */
+.sidebar .menu-item a:hover {
+    background-color: var(--soft-highlight);
+    color: var(--text-color);
 }
 
-.sidebar .menu-item a:hover i,
-.sidebar .menu-item a.active-menu i {
-     color: var(--corp-blue); /* Color del icono al pasar mouse/activo */
-     text-shadow: 0 0 3px var(--corp-blue); /* Glow sutil en icono */
+.sidebar .menu-item a.active-menu { /* Estilo para el enlace activo */
+    color: var(--text-color);
+    font-weight: 600;
+    background-color: var(--soft-highlight);
 }
 
+.sidebar .menu-item a.active-menu::before {
+     transform: scaleY(1); /* Muestra el borde */
+     box-shadow: var(--neon-glow-blue);
+}
 
-/* Main Content Area */
+/* --- Main Content --- */
 .main-content {
     flex-grow: 1;
-    margin-left: var(--sidebar-width);
     padding: 2rem;
-    /* ****** CAMBIO: Asegurar que el contenido principal empiece después del header sticky ****** */
-    /* Eliminamos padding-top de aquí ya que el header no ocupa espacio en el flujo */
-    padding-bottom: var(--footer-height); /* Mantenemos el padding para el footer */
-    position: relative; /* Ayuda a contener elementos posicionados absolutamente si los hubiera */
-    z-index: 1; /* ****** CAMBIO: Asegura que esté debajo del header y sidebar ****** */
-    overflow-y: auto; /* Permitir scroll si el contenido es largo */
-    /* min-height: calc(100vh - var(--header-height) - var(--footer-height)); */ /* Opcional: asegurar altura mínima */
+    overflow-y: auto; /* Permite scroll solo en el contenido principal si es necesario */
+    height: calc(100vh - 70px); /* Altura menos el header */
 }
 
-/* Secciones de herramientas (inicialmente ocultas) */
 .main-content section {
-    display: none;
-    padding-top: 20px; /* Espacio superior dentro de la sección */
+    display: none; /* Ocultar todas las secciones por defecto */
+    animation: fadeIn 0.5s ease-in-out; /* Animación de entrada */
 }
 
 .main-content section.active {
-    display: block;
-    animation: fadeIn 0.5s ease-in-out;
+    display: block; /* Mostrar la sección activa */
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Estilos generales para títulos y párrafos dentro de tool-section */
-.tool-section h2 {
-    color: var(--corp-green);
-    text-shadow: 0 0 4px var(--corp-green);
-    margin-bottom: 2rem; /* Aumentar espacio debajo */
-    font-size: 2rem; /* Aumentar tamaño */
-    font-weight: 600;
-    /* Opcional: text-align: center; si quieres centrarlos */
-}
-
-.tool-section p {
-    line-height: 1.7; /* Ajustar espaciado */
-    color: var(--text-color);
-    font-weight: 400;
-    margin-bottom: 1.5rem; /* Ajustar espacio */
-}
-
-/* Estilos específicos para la sección HOME */
-#home {
-    padding-top: 0; /* No necesita padding-top si es la primera sección */
-}
-#home h1 {
-    color: var(--corp-purple);
-    text-shadow: 0 0 6px var(--corp-purple);
-    margin-bottom: 1.5rem;
-    font-size: 2.5rem;
-    font-weight: 600;
-    /* Opcional: text-align: center; si quieres centrarlo */
-}
-
-/* --- AJUSTES PARA EL CARRUSEL (NUEVO) --- */
-.carousel-container {
-    /* Limita el ancho máximo del carrusel para que no sea extremo a extremo */
-    max-width: 1200px; /* Ajusta este valor según tu diseño preferido */
-    /* Centra el carrusel horizontalmente dentro del main-content */
-    margin-left: auto;
-    margin-right: auto;
-    /* Añade un margen superior si quieres separarlo del contenido anterior */
-    margin-top: 1rem;
-    /* Añade un margen inferior para separarlo del contenido siguiente */
-    margin-bottom: 2rem;
-    /* Asegúrate de que su ancho no exceda el 100% del contenedor padre */
-    width: 100%;
-    /* Es buena idea darle position relative si contiene elementos posicionados absolutamente */
-    position: relative;
-    /* z-index bajo para que no se superponga al header/sidebar */
-    z-index: 5;
-    /* Puedes añadir otros estilos como borde, fondo, etc. si lo necesitas */
-    /* background-color: #222; */ /* Ejemplo */
-    /* border-radius: 8px; */ /* Ejemplo */
-    overflow: hidden; /* Útil si el contenido interno se desborda */
-}
-
-/* Estilos específicos para el Wallet Tracker */
-#wallet-tracker .input-area {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-    align-items: center;
-    background-color: var(--medium-dark-background); /* Fondo para agrupar input/button */
-    padding: 15px 20px;
-    border-radius: 8px;
-    border: 1px solid var(--line-color);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-#wallet-tracker #solana-wallet-address {
-    flex-grow: 1;
-    padding: 12px 15px; /* Ajustar padding */
-    border: 1px solid var(--line-color);
-    background-color: var(--dark-background); /* Fondo más oscuro para el input */
-    color: var(--text-color);
-    border-radius: 5px;
-    outline: none;
-    font-size: 1rem;
-    min-width: 200px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-#wallet-tracker #solana-wallet-address::placeholder {
-    color: var(--soft-text-color); /* Color para el placeholder */
-}
-#wallet-tracker #solana-wallet-address:focus {
-    border-color: var(--corp-blue);
-    box-shadow: 0 0 8px rgba(0, 176, 255, 0.5); /* Glow al enfocar */
-}
-
-
-#wallet-tracker #track-wallet-btn {
-    padding: 12px 25px; /* Ajustar padding */
-    background-color: var(--corp-blue);
-    color: var(--dark-background); /* Texto oscuro sobre fondo azul */
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, opacity 0.3s ease, transform 0.1s ease;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-shadow: none; /* Quitar text-shadow por defecto si lo hay */
-}
-
-#wallet-tracker #track-wallet-btn:hover {
-    background-color: var(--corp-purple); /* Cambiar color al pasar mouse */
-    opacity: 1; /* Asegurar opacidad */
-}
-
-#wallet-tracker #track-wallet-btn:active {
-    transform: scale(0.98); /* Efecto click */
-    opacity: 0.8;
-}
-
-
-#wallet-data-display {
-     margin-top: 20px;
-}
-
-#initial-message {
-    text-align: center;
-    font-style: italic;
-    color: var(--soft-text-color);
-    margin-top: 20px;
-}
-
-#loading-indicator {
-    text-align: center;
+.main-content h1, .main-content h2 {
     color: var(--corp-blue);
+    margin-bottom: 1.5rem;
     font-weight: 600;
-    margin-top: 20px;
-    font-size: 1.1rem;
 }
-
-#loading-indicator i {
-    margin-left: 10px;
-}
-
-#error-message {
-    color: #ff6b6b; /* Color rojo ligeramente más suave */
-    text-align: center;
-    font-weight: 600;
-    margin-top: 20px;
-    font-size: 1.1rem;
+.main-content h2 {
+    color: var(--corp-green); /* Diferenciar h2 */
+     margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line-color);
 }
 
 
-/* Estilos para las tarjetas de datos (Balances, NFTs, Transacciones) */
-.data-card {
-    background-color: var(--medium-dark-background); /* Fondo para las tarjetas */
-    border: 1px solid var(--line-color); /* Borde más definido */
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Sombra más profesional */
+.main-content p {
+    margin-bottom: 1rem;
+    color: var(--text-color);
 }
 
-.data-card h3 {
-    color: var(--text-color); /* Títulos de tarjeta más claros */
-    text-shadow: none; /* Quitar glow en títulos */
-    margin-top: 0;
-    margin-bottom: 15px;
+
+/* --- Estilos específicos para Wallet Tracker --- */
+#wallet-tracker {
+    /* Contenedor principal de la sección */
+}
+
+/* Fila Superior: Cuenta y Búsqueda */
+.wallet-tracker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Alinear arriba */
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--line-color);
+    flex-wrap: wrap; /* Para responsividad */
+    gap: 1rem;
+}
+
+/* Info Cuenta (Izquierda) */
+.account-info {
+    flex: 1; /* Ocupa espacio disponible */
+    min-width: 250px; /* Ancho mínimo */
+}
+
+.account-title {
     font-size: 1.3rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
     font-weight: 600;
+}
+
+.address-line, .address-line-small {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding-bottom: 10px; /* Espacio debajo del título */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Separador bajo el título */
+    gap: 0.5rem; /* Espacio entre dirección e iconos */
+    background-color: var(--medium-dark-background);
+    padding: 0.5rem 0.8rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+.address-line-small {
+     padding: 0.3rem 0.6rem;
+     font-size: 0.9em;
 }
 
-.data-card h3 i {
-    font-size: 1.5rem;
-    color: var(--corp-green); /* Color del icono en el título de la tarjeta */
-    text-shadow: 0 0 4px var(--corp-green); /* Mantener glow en iconos de título */
-}
-
-/* Estilo específico para el saldo SOL */
-#sol-balance-card p {
-    font-size: 1.6rem; /* Tamaño ligeramente mayor */
-    font-weight: 600;
+#display-wallet-address, #owner-address {
+    font-family: 'Courier New', Courier, monospace; /* Fuente monoespaciada para direcciones */
     color: var(--corp-green);
-    text-shadow: 0 0 5px var(--corp-green); /* Glow en el valor */
-    margin: 0;
-    padding-top: 10px; /* Espacio arriba del valor */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Puntos suspensivos si es muy larga */
+    white-space: nowrap;
+    max-width: 200px; /* Límite de ancho para la dirección */
+}
+#owner-address {
+    max-width: 150px;
 }
 
-/* Estilos para listas dentro de tarjetas (Tokens, Transacciones) */
-.data-card ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    padding-top: 10px; /* Espacio arriba de la lista si el título tiene borde inferior */
+.icon-button {
+    background: none;
+    border: none;
+    color: var(--soft-text-color);
+    font-size: 1rem; /* Tamaño base iconos */
+    cursor: pointer;
+    padding: 0.3rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-flex; /* Para alinear bien el icono */
+    align-items: center;
+    justify-content: center;
+}
+.icon-button:hover {
+    color: var(--corp-blue);
+    transform: scale(1.1);
 }
 
-.data-card ul li {
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Separador entre ítems de lista */
+.icon-button.copy-button-small {
+    font-size: 0.9rem; /* Icono de copia más pequeño para owner */
+}
+
+/* Área de Búsqueda (Derecha) */
+.tracker-search-area {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 300px; /* Ancho mínimo */
+    flex: 1.5; /* Ocupa un poco más de espacio */
+    justify-content: flex-end; /* Alinear a la derecha */
+}
+
+#transaction-search-input {
+    flex-grow: 1; /* Input ocupa espacio disponible */
+    padding: 0.6rem 0.8rem;
+    background-color: var(--medium-dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    outline: none;
+}
+#transaction-search-input::placeholder {
+    color: var(--soft-text-color);
+}
+#transaction-search-input:focus {
+    border-color: var(--corp-blue);
+    box-shadow: 0 0 5px rgba(0, 176, 255, 0.5);
+}
+
+.search-button-wt {
+    font-size: 1.2rem;
+    padding: 0.6rem;
+    background-color: var(--corp-blue);
+    color: var(--dark-background);
+    border-radius: 4px;
+    border: none;
+}
+.search-button-wt:hover {
+    background-color: #0099e6; /* Azul un poco más oscuro */
+    transform: scale(1.05);
+    color: #fff;
+}
+
+
+/* Fila Media: 3 Cajas de Información */
+.info-boxes-container {
+    display: flex;
+    gap: 1.5rem; /* Espacio entre cajas */
+    margin-bottom: 2rem;
+    align-items: stretch; /* Asegura que todas las cajas tengan la misma altura */
+    flex-wrap: wrap; /* Para responsividad */
+}
+
+.info-box {
+    background-color: var(--medium-dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1.5rem;
+    flex: 1; /* Distribuye el espacio equitativamente */
+    min-width: 280px; /* Ancho mínimo para evitar que se aplasten demasiado */
+    display: flex;
+    flex-direction: column; /* Para alinear elementos internos verticalmente */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.info-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.info-box h4 {
+    color: var(--corp-green);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.info-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 0.8rem;
     font-size: 0.95rem;
-    color: var(--text-color); /* Color del texto principal del item */
+    flex-wrap: wrap; /* Para items largos */
+    gap: 0.5rem;
 }
 
-.data-card ul li:last-child {
-    border-bottom: none;
-}
-
-.data-card ul li .item-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--soft-text-color); /* Color más suave para la info del item (nombre/símbolo) */
-}
-
-.data-card ul li .item-info i {
-    font-size: 1.2rem;
-    color: var(--corp-purple);
-    text-shadow: 0 0 3px var(--corp-purple); /* Glow sutil en iconos de lista */
-}
-
-.data-card ul li .item-value {
-    font-weight: 600;
-    color: var(--text-color); /* Color más claro para el valor */
-}
-
-/* Estilos para la galería de NFTs */
-#nft-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Grilla ligeramente más grande */
-    gap: 20px; /* Aumentar espacio */
-    padding-top: 10px; /* Espacio arriba si el título tiene borde inferior */
-}
-
-#nft-gallery .nft-item {
-    background-color: var(--dark-background); /* Fondo más oscuro para items */
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 6px; /* Ajustar radio */
-    padding: 12px; /* Ajustar padding */
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-}
-
-#nft-gallery .nft-item:hover {
-    transform: translateY(-5px);
-     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(66, 230, 164, 0.3); /* Sombra con glow */
-}
-
-#nft-gallery .nft-item img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
-    margin-bottom: 8px;
-}
-
-#nft-gallery .nft-item p {
-    font-size: 0.9rem; /* Ajustar tamaño */
-    color: var(--text-color);
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.info-label {
+    color: var(--soft-text-color);
     font-weight: 400;
 }
 
-
-/* Utilería para ocultar elementos */
-.hidden {
-    display: none;
-}
-
-
-/* Footer */
-footer {
-    background-color: var(--dark-background);
-    padding: 0.8rem 2rem; /* Ajustar padding */
-    border-top: 1px solid var(--line-color);
-    text-align: center;
-    position: fixed;
-    bottom: 0;
-    left: var(--sidebar-width);
-    width: calc(100% - var(--sidebar-width));
-    height: var(--footer-height);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 950; /* Debajo del header pero sobre el contenido base */
-    flex-direction: column;
-    box-sizing: border-box;
-}
-
-.footer-content {
-    flex-wrap: wrap;
-    gap: 25px; /* Ajustar espacio */
-    margin-bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.social-media h3 {
-    color: var(--corp-blue);
-    margin-bottom: 8px; /* Ajustar espacio */
-    text-shadow: 0 0 3px var(--corp-blue); /* Ajustar glow */
+.info-value {
+    color: var(--text-color);
     font-weight: 600;
-    font-size: 1.1rem; /* Ajustar tamaño */
+    text-align: right;
 }
 
-.social-media ul {
+.sol-icon-small {
+    color: #00ffa3; /* Color Solana */
+    margin-right: 4px;
+    font-size: 0.9em; /* Un poco más pequeño que el texto */
+}
+
+/* Dropdown de Tokens */
+.token-dropdown {
+    margin-top: 1rem;
+}
+
+.token-summary {
+    cursor: pointer;
+    color: var(--corp-blue);
     display: flex;
-    justify-content: center;
-    gap: 18px; /* Ajustar espacio */
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--line-color);
+    margin-top: 0.5rem;
+}
+.token-summary:hover {
+    color: #33c6ff;
+}
+.token-summary .dropdown-arrow {
+    transition: transform 0.3s ease;
+}
+.token-dropdown[open] .token-summary .dropdown-arrow {
+    transform: rotate(180deg);
 }
 
-.social-media a {
-    font-size: 1.5rem; /* Ajustar tamaño */
-    color: var(--soft-text-color); /* Color por defecto más suave */
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+.token-list {
+    list-style: none;
+    margin-top: 0.5rem;
+    max-height: 150px; /* Altura máxima para scroll si hay muchos tokens */
+    overflow-y: auto;
+    padding-right: 5px; /* Espacio para la barra de scroll */
 }
 
-.social-media a:hover {
-    color: var(--text-color); /* Color más claro */
-    text-shadow: var(--hover-glow);
+.token-list li {
+    display: flex;
+    align-items: center;
+    padding: 0.4rem 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--line-color);
+}
+.token-list li:last-child {
+    border-bottom: none;
 }
 
-.footer-bottom {
-    color: #555;
-    font-size: 0.85rem; /* Ajustar tamaño */
-    margin-top: 8px; /* Ajustar espacio */
+.token-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    border-radius: 50%; /* Iconos redondos */
+}
+
+.token-name {
+    flex-grow: 1;
+    color: var(--text-color);
+}
+
+.token-amount {
+    color: var(--soft-text-color);
+    font-weight: 600;
+}
+
+.wallet-details-link {
+    margin-top: auto; /* Empuja este elemento al fondo de la caja */
+    padding-top: 1rem;
+    text-align: right;
+}
+
+/* Estilos Caja "Más Información" */
+.address-line-small .fa-copy {
+    font-size: 0.9em;
+}
+
+.tags-item {
+    align-items: flex-start; /* Alinear texto de "Etiquetas" arriba */
+}
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end; /* Alinear etiquetas a la derecha */
+}
+.tag {
+    background-color: #333;
+    color: var(--soft-text-color);
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px; /* Píldoras */
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.tag:hover {
+    background-color: var(--corp-blue);
+    color: var(--dark-background);
+}
+.tag.pump-tag { background-color: #e85d04; color: white; } /* Color naranja para pump.fun */
+.tag.creator-tag { cursor: pointer; } /* Indicar que es clickeable */
+
+
+/* Estilos Caja "Varios" - Notas */
+.private-note-area {
+    margin-top: 1rem;
+    border-top: 1px solid var(--line-color);
+    padding-top: 1rem;
+    flex-grow: 1; /* Ocupa el espacio restante en la caja */
+    display: flex;
+    flex-direction: column;
+}
+
+#private-note-display {
+    margin-bottom: 0.5rem;
+}
+
+.private-note-link {
+    display: block;
+    color: var(--corp-purple);
+    text-decoration: underline;
+    cursor: pointer;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+}
+.private-note-link:hover {
+    color: #c980ff;
+}
+
+.add-note-link {
+    color: var(--corp-blue);
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.add-note-link i {
+    font-size: 0.8em;
+}
+.add-note-link:hover {
+    text-decoration: underline;
+}
+
+.add-note-form {
+    margin-top: 0.5rem;
+    /* Inicialmente oculto por clase 'hidden' */
+}
+
+#add-note-form textarea {
     width: 100%;
+    min-height: 60px;
+    padding: 0.5rem;
+    background-color: var(--dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    resize: vertical; /* Permitir redimensionar verticalmente */
+    margin-bottom: 0.5rem;
+}
+#add-note-form textarea:focus {
+     outline: none;
+     border-color: var(--corp-purple);
+     box-shadow: 0 0 5px rgba(179, 106, 255, 0.5);
 }
 
-/* Modales */
+#add-note-form button {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+#save-note-button {
+    background-color: var(--corp-purple);
+    color: white;
+}
+#save-note-button:hover {
+    background-color: #a34ee1;
+}
+#cancel-note-button {
+    background-color: #555;
+    color: var(--text-color);
+}
+#cancel-note-button:hover {
+    background-color: #777;
+}
+
+.hidden {
+    display: none !important; /* Asegura que esté oculto */
+}
+
+
+/* Tabla de Transacciones */
+.transactions-table-container {
+    margin-top: 2rem;
+    overflow-x: auto; /* Scroll horizontal si la tabla es muy ancha */
+}
+
+#transactions-table {
+    width: 100%;
+    border-collapse: collapse; /* Bordes unidos */
+    font-size: 0.9rem;
+}
+
+#transactions-table th, #transactions-table td {
+    padding: 0.8rem 0.6rem; /* Más padding vertical */
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap; /* Evitar que el texto se rompa en varias líneas */
+}
+
+#transactions-table th {
+    background-color: var(--medium-dark-background);
+    color: var(--soft-text-color);
+    font-weight: 600;
+    text-transform: uppercase; /* Mayúsculas para encabezados */
+    font-size: 0.8rem;
+    position: sticky; /* Encabezado fijo al hacer scroll */
+    top: 0;
+    z-index: 10; /* Encima del contenido */
+}
+#transactions-table th:first-child, #transactions-table td:first-child {
+    text-align: center; /* Centrar icono de ojo/pregunta */
+    padding: 0.8rem 0.4rem;
+}
+#transactions-table th:first-child i {
+    color: var(--corp-blue);
+}
+
+#transactions-table tbody tr:hover {
+    background-color: var(--soft-highlight);
+}
+
+#transactions-table td {
+    color: var(--text-color);
+}
+
+/* Icono de Ojo */
+.view-details-button {
+    font-size: 1.1rem;
+}
+
+/* Firma (Acortar visualmente) */
+.tx-signature {
+    font-family: 'Courier New', Courier, monospace;
+    display: inline-block;
+    max-width: 100px; /* Ancho máximo visible */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle; /* Alinear mejor con texto */
+    cursor: help; /* Indicar que hay más info (tooltip o click) */
+}
+
+/* Icono Solana en tabla */
+#transactions-table td .sol-icon-small {
+    vertical-align: middle; /* Alinear icono con texto */
+    margin-bottom: 2px; /* Pequeño ajuste vertical */
+}
+
+/* Controles inferiores de la tabla */
+.table-footer-controls {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-start; /* Alinear a la izquierda */
+    align-items: center;
+}
+
+.items-per-page-selector label {
+    margin-right: 0.5rem;
+    color: var(--soft-text-color);
+    font-size: 0.9rem;
+}
+
+#items-per-page {
+    padding: 0.4rem 0.6rem;
+    background-color: var(--medium-dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    margin-right: 0.5rem;
+}
+
+.items-per-page-selector span {
+    font-size: 0.9rem;
+    color: var(--soft-text-color);
+}
+
+/* --- Fin Estilos Wallet Tracker --- */
+
+/* --- Estilos para Modales --- */
 .modal {
-    display: none;
+    display: none; /* Oculto por defecto */
     position: fixed;
-    z-index: 2000; /* Asegurar que esté sobre todo */
+    z-index: 1001; /* Encima de todo menos quizás el header */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.95); /* Fondo más opaco */
-    backdrop-filter: blur(10px); /* Desenfoque mayor */
-    justify-content: center;
-    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(5px);
+    animation: fadeInModal 0.3s ease-out;
 }
 
-.modal.show {
-    display: flex;
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
+
 
 .modal-content {
-    background-color: var(--medium-dark-background); /* Fondo más claro que el principal */
-    margin: auto;
-    padding: 30px;
-    border: 1px solid var(--corp-purple);
-    box-shadow: 0 0 20px rgba(179, 106, 255, 0.4); /* Sombra con color y opacidad */
-    border-radius: 10px;
+    background-color: var(--medium-dark-background);
+    margin: 10% auto; /* Centrado vertical y horizontal */
+    padding: 25px 30px;
+    border: 1px solid var(--line-color);
+    border-radius: 8px;
     width: 80%;
-    max-width: 600px; /* Ancho máximo ajustado */
+    max-width: 500px; /* Ancho máximo */
     position: relative;
-    animation: scaleIn 0.3s ease-out;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: slideInModal 0.4s ease-out;
 }
 
-@keyframes scaleIn {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+@keyframes slideInModal {
+     from { transform: translateY(-30px); opacity: 0; }
+     to { transform: translateY(0); opacity: 1; }
+}
+
+
+.modal-content h2 {
+    color: var(--corp-blue);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+.modal-content p {
+     color: var(--soft-text-color);
+     font-size: 0.95rem;
 }
 
 .close-button {
-    color: var(--soft-text-color); /* Color del botón cerrar */
-    font-size: 28px;
-    font-weight: bold;
+    color: var(--soft-text-color);
     position: absolute;
-    top: 10px;
+    top: 15px;
     right: 20px;
+    font-size: 1.8rem;
+    font-weight: bold;
     cursor: pointer;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .close-button:hover,
 .close-button:focus {
-     color: var(--close-button-hover);
-     text-shadow: 0 0 5px var(--close-button-hover);
+    color: var(--corp-red); /* O un color de cierre apropiado */
+    text-decoration: none;
+    transform: scale(1.1);
 }
 
-/* Estilos para el input de búsqueda dentro del modal */
+/* Específicos de Search Modal */
 #search-modal #search-input {
     width: 100%;
-    padding: 12px 15px; /* Ajustar padding */
-    margin-top: 10px;
+    padding: 12px;
     margin-bottom: 20px;
-    border: 1px solid var(--line-color);
-    background-color: var(--dark-background); /* Fondo más oscuro para el input */
+    background-color: var(--dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
     color: var(--text-color);
-    border-radius: 5px;
-    outline: none;
     font-size: 1rem;
-     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-#search-modal #search-input::placeholder {
-    color: var(--soft-text-color);
 }
 #search-modal #search-input:focus {
-    border-color: var(--corp-blue);
-    box-shadow: 0 0 8px rgba(0, 176, 255, 0.5); /* Glow al enfocar */
+     outline: none;
+     border-color: var(--corp-blue);
+     box-shadow: 0 0 5px rgba(0, 176, 255, 0.5);
 }
 
-
-/* Estilos para el contenedor de resultados de búsqueda */
 #search-results {
-    max-height: 300px;
+    max-height: 300px; /* Más altura para resultados */
     overflow-y: auto;
-    padding-right: 10px;
+    margin-top: 10px;
 }
 
-/* Estilos para cada resultado individual */
 #search-results a {
     display: block;
-    padding: 10px;
+    padding: 10px 15px;
     margin-bottom: 8px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 5px;
-    color: var(--text-color); /* Color del texto del resultado */
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-size: 0.95rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Separador */
+    background-color: var(--soft-highlight);
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    font-size: 0.9rem;
 }
-#search-results a:last-child {
-    border-bottom: none;
-}
-
 
 #search-results a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--corp-blue); /* Color del texto al pasar el mouse */
+    background-color: var(--corp-blue);
+    color: var(--dark-background);
 }
 
-#search-modal .modal-content h2 {
-    margin-top: 0;
-    color: var(--corp-green);
-    text-shadow: 0 0 4px var(--corp-green);
-    margin-bottom: 20px;
-    font-size: 1.8rem; /* Ajustar tamaño del título del modal */
-    font-weight: 600;
-     text-align: center; /* Centrar título del modal */
-}
-
-#search-results p { /* Estilo para el mensaje de "No resultados" */
+#search-results p { /* Mensaje de "no resultados" */
      color: var(--soft-text-color);
      text-align: center;
-     font-style: italic;
-     margin-top: 15px;
+     margin-top: 20px;
 }
 
 
-/* Responsive Design */
+/* --- Footer --- */
+footer {
+    background-color: var(--medium-dark-background);
+    color: var(--soft-text-color);
+    padding: 2rem;
+    text-align: center;
+    border-top: 1px solid var(--line-color);
+    margin-top: auto; /* Empuja el footer al fondo si el contenido es corto */
+}
 
-/* Ajustes para pantallas medianas donde el sidebar y footer son fijos */
-@media (min-width: 769px) and (max-width: 992px) {
-    .price-ticker {
-        margin-left: 15px;
-        margin-right: 15px;
-        max-width: 250px;
-    }
+.footer-content {
+    display: flex;
+    justify-content: center; /* Centra el contenido (solo redes sociales ahora) */
+    align-items: center;
+    margin-bottom: 1rem;
+}
 
-     .price-item {
-         padding: 0 8px;
-         margin-right: 15px;
-         font-size: 0.8rem;
-     }
+.social-media h3 {
+    color: var(--text-color);
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
 
-     .price-item i {
-         font-size: 1rem;
-     }
+.social-media ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 25px; /* Espacio entre iconos sociales */
+}
 
-     .price-ticker-inner {
-         width: 250%;
-         animation-duration: 40s;
-     }
-     /* Actualizar la animación para que coincida con la nueva lógica */
-     @keyframes scroll-left {
-        0% { transform: translateX(0%); }
-        100% { transform: translateX(-125%); } /* Esto funciona con width: 250% */
-     }
+.social-media a {
+    color: var(--soft-text-color);
+    font-size: 1.8rem; /* Iconos sociales más grandes */
+    transition: color 0.3s ease, transform 0.3s ease;
+}
 
-    /* Ajustes para Wallet Tracker en tablets */
-    #wallet-tracker .input-area {
-        gap: 10px;
-         padding: 12px 15px;
-    }
-    #wallet-tracker #solana-wallet-address {
-        min-width: 150px;
-         padding: 10px 12px;
-         font-size: 0.9rem;
-    }
-    #wallet-tracker #track-wallet-btn {
-         padding: 10px 20px;
-         font-size: 0.9rem;
-         gap: 6px;
-    }
-     .data-card {
-        padding: 15px;
-        margin-bottom: 15px;
+.social-media a:hover {
+    color: var(--corp-blue); /* O color específico de la red social */
+    transform: scale(1.1);
+}
+/* Colores específicos para iconos sociales (ejemplo) */
+.fa-x-twitter:hover { color: #1DA1F2; }
+.fa-youtube:hover { color: #FF0000; }
+.fa-instagram:hover { color: #E4405F; }
+.fa-tiktok:hover { color: #EE1D52; } /* Rosa TikTok */
+.fa-telegram:hover { color: #2AABEE; }
+
+
+.footer-bottom {
+    font-size: 0.85rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line-color);
+}
+
+
+/* --- Responsive Design --- */
+@media (max-width: 1024px) {
+     .price-ticker {
+          display: none; /* Ocultar ticker en pantallas medianas */
      }
-     .data-card h3 {
-        font-size: 1.2rem;
-        gap: 8px;
-         margin-bottom: 10px;
-         padding-bottom: 8px;
+     .sidebar {
+          width: 200px; /* Sidebar más estrecho */
      }
-     .data-card h3 i {
-        font-size: 1.4rem;
-     }
-      #sol-balance-card p {
-        font-size: 1.4rem;
-         padding-top: 8px;
-     }
-     .data-card ul {
-         padding-top: 8px;
-     }
-     .data-card ul li {
-        padding: 10px 0;
+      .sidebar .menu-item a {
+        padding: 0.7rem 1rem;
         font-size: 0.9rem;
-     }
-     .data-card ul li .item-info i {
-        font-size: 1.1rem;
-     }
-      #nft-gallery {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 15px;
-         padding-top: 8px;
-     }
-     #nft-gallery .nft-item {
-        padding: 10px;
-     }
-      #nft-gallery .nft-item img {
-        margin-bottom: 6px;
-     }
-     #nft-gallery .nft-item p {
-        font-size: 0.8rem;
-     }
-     #search-results {
-         max-height: 250px;
-         padding-right: 8px;
-     }
-     #search-results a {
-         padding: 8px;
-         margin-bottom: 6px;
-         font-size: 0.9rem;
-     }
-     .modal-content {
-         max-width: 500px;
-         padding: 25px;
-     }
-     #search-modal .modal-content h2 {
-         font-size: 1.6rem;
-     }
-
+      }
+       .sidebar .menu-item a i {
+         margin-right: 10px;
+       }
+        .main-content {
+          padding: 1.5rem;
+       }
+       /* Ajustar cajas de info en tracker */
+       .info-boxes-container {
+           gap: 1rem;
+       }
+       .info-box {
+           padding: 1rem;
+           min-width: calc(50% - 0.5rem); /* Dos columnas */
+       }
 
 }
 
 
-/* Ajustes para pantallas pequeñas (móviles) donde header, sidebar y footer NO son fijos */
 @media (max-width: 768px) {
-     header {
-        padding: 0.8rem 1rem;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-        height: auto; /* Altura automática */
-        position: static; /* ****** CAMBIO: No fijo ni pegajoso en móvil ****** */
-        z-index: auto; /* Resetear z-index */
-     }
-
-     .logo {
-         font-size: 2rem; /* Ajustar tamaño del logo en móvil */
-         text-shadow: 0 0 3px var(--corp-blue);
-         display: block;
-         padding: 0;
-     }
-
-    .header-icons {
-         width: 100%;
-         justify-content: space-around;
-         gap: 0.5rem;
+    header {
+        padding: 0.6rem 1rem;
+        min-height: 60px;
     }
-
-    .header-icons .icon {
-        font-size: 1.1rem;
-    }
-
-    .price-ticker {
-        margin: 0;
-        width: 100%;
-        max-width: none;
-    }
-
-    .price-ticker-inner {
-        width: 300%; /* Ancho relativo para animación */
-        animation-duration: 50s;
-    }
-    /* Actualizar animación para móvil */
-     @keyframes scroll-left-mobile { /* Usar un nombre diferente o redefinir */
-         0% { transform: translateX(0); }
-         100% { transform: translateX(-150%); } /* Funciona con width: 300% */
-     }
-     .price-ticker-inner {
-         animation-name: scroll-left-mobile; /* Aplicar animación móvil */
-     }
-
-     .price-item {
-         padding: 0 5px;
-         margin-right: 10px;
-         font-size: 0.8rem;
-     }
-     .price-item i {
-         font-size: 1rem;
-     }
-    .price-item-spacer {
-        width: 30px;
-    }
-
+    .logo { font-size: 1.5rem; }
+    .header-icons { gap: 15px; }
+    .header-icons .icon { font-size: 1.2rem; }
 
     .container {
-        flex-direction: column;
-        padding-top: 0; /* Resetear padding ya que header no es fijo */
-        padding-bottom: 0; /* Resetear padding ya que footer no es fijo */
+        flex-direction: column; /* Apilar sidebar y contenido */
+        margin-top: 60px;
     }
 
     .sidebar {
-        position: static; /* ****** CAMBIO: No fijo en móvil ****** */
-        width: 100%;
+        width: 100%; /* Ocupa todo el ancho */
         height: auto; /* Altura automática */
+        position: static; /* Quitar sticky */
         border-right: none;
         border-bottom: 1px solid var(--line-color);
-        overflow-y: visible; /* Permitir que se expanda */
-        padding: 10px 10px;
-        padding-bottom: 10px;
-        z-index: auto; /* Resetear z-index */
+        display: flex; /* Hacer horizontal el menú */
+        overflow-x: auto; /* Scroll horizontal para menú */
+        padding: 0.5rem 0;
     }
-
     .sidebar nav ul {
-        flex-direction: row; /* Menú horizontal */
-        overflow-x: auto; /* Scroll horizontal si no cabe */
-        padding-bottom: 10px;
-        gap: 8px;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+        display: flex;
+        flex-direction: row; /* Menú en fila */
+        width: max-content; /* Evita que se rompa */
     }
-
-     .sidebar nav ul::-webkit-scrollbar {
-        display: none;
+     .sidebar .menu-item a {
+        padding: 0.8rem 1rem;
+     }
+      .sidebar .menu-item a i {
+        margin-right: 5px; /* Menos espacio icono-texto */
+      }
+     .sidebar .menu-item a .menu-text {
+        /* Opcional: Ocultar texto y mostrar solo iconos */
+        /* display: none; */
      }
 
-    .sidebar .menu-item a {
-         flex-direction: column; /* Icono arriba, texto abajo */
-         text-align: center;
-         padding: 8px 5px;
-         font-size: 0.85rem; /* Ajustar tamaño menú móvil */
-         min-width: 60px; /* Ajustar ancho mínimo */
-         gap: 4px; /* Ajustar espacio */
-    }
-
-    .sidebar .menu-item a i {
-        margin-right: 0;
-        margin-bottom: 0;
-        font-size: 1.1rem; /* Ajustar tamaño icono menú móvil */
-    }
-
-    .sidebar .menu-item a .menu-text {
-        display: block; /* Asegurar que el texto sea visible */
-        font-size: 0.65rem; /* Texto más pequeño en móvil */
-    }
 
     .main-content {
-        margin-left: 0; /* Sin margen ya que no hay sidebar fijo */
-        padding: 1rem; /* Reducir padding en móvil */
-        padding-top: 1rem; /* Añadir padding superior normal */
-        padding-bottom: 1rem;
-        z-index: auto;
-    }
-
-    .tool-section h2 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-    }
-
-    #home h1 {
-        font-size: 2rem;
-    }
-
-     /* --- Ajustes para el Carrusel en móvil --- */
-     .carousel-container {
-         margin-top: 1rem;
-         margin-bottom: 1.5rem;
-         /* max-width: 100%; */ /* Podrías querer que ocupe todo el ancho disponible en móvil */
-     }
-
-     /* Ajustes para Wallet Tracker en móvil */
-     #wallet-tracker .input-area {
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 20px;
-        align-items: stretch;
-         padding: 10px 15px;
-    }
-    #wallet-tracker #solana-wallet-address {
-        min-width: auto;
-        width: 100%;
-        padding: 10px;
-        font-size: 0.9rem;
-    }
-    #wallet-tracker #track-wallet-btn {
-         padding: 10px 15px;
-         font-size: 0.9rem;
-         justify-content: center;
-         gap: 6px;
-    }
-     .data-card {
-        padding: 15px;
-        margin-bottom: 15px;
-     }
-     .data-card h3 {
-        font-size: 1.1rem;
-        gap: 6px;
-        margin-bottom: 10px;
-         padding-bottom: 8px;
-     }
-      .data-card h3 i {
-        font-size: 1.3rem;
-     }
-     #sol-balance-card p {
-        font-size: 1.2rem;
-        padding-top: 8px;
-     }
-      .data-card ul {
-        padding-top: 8px;
-     }
-      .data-card ul li {
-        padding: 8px 0;
-        font-size: 0.85rem;
-     }
-     .data-card ul li .item-info {
-         flex-direction: column;
-         align-items: flex-start;
-         gap: 4px;
-     }
-      .data-card ul li .item-info i {
-         font-size: 1rem;
-      }
-      .data-card ul li .item-value {
-         font-size: 0.9rem;
-      }
-      #nft-gallery {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-        gap: 10px;
-         padding-top: 8px;
-     }
-     #nft-gallery .nft-item {
-        padding: 8px;
-     }
-      #nft-gallery .nft-item img {
-        margin-bottom: 5px;
-     }
-     #nft-gallery .nft-item p {
-        font-size: 0.7rem;
-     }
-
-     #search-modal .modal-content h2 {
-         font-size: 1.5rem;
-         margin-bottom: 15px;
-     }
-     #search-modal #search-input {
-        margin-bottom: 15px;
-        padding: 10px;
-        font-size: 0.9rem;
-     }
-
-     #search-results {
-        max-height: 200px;
-        padding-right: 5px;
-    }
-
-    #search-results a {
-        padding: 8px;
-        margin-bottom: 6px;
-        font-size: 0.9rem;
-    }
-
-     #search-results p {
-         margin-top: 10px;
-     }
-
-
-    footer {
-        position: static; /* ****** CAMBIO: No fijo en móvil ****** */
-        left: 0;
-        width: 100%;
         height: auto; /* Altura automática */
         padding: 1rem;
-        margin-top: 2rem; /* Espacio antes del footer */
-        z-index: auto;
     }
+     .main-content h1, .main-content h2 { font-size: 1.5rem; margin-bottom: 1rem;}
 
-     .footer-content {
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .social-media ul {
-        gap: 15px;
-    }
-
-     .social-media a {
-         font-size: 1.5rem;
+     /* Ajustes Wallet Tracker en móvil */
+      .wallet-tracker-header {
+         flex-direction: column; /* Apilar cuenta y búsqueda */
+         align-items: stretch; /* Ocupar todo el ancho */
+         gap: 1rem;
      }
-     .footer-bottom {
-        font-size: 0.8rem;
+      .tracker-search-area {
+         justify-content: flex-start; /* Alinear búsqueda a la izquierda */
+         min-width: unset; /* Quitar ancho mínimo */
+     }
+      .info-boxes-container {
+         flex-direction: column; /* Apilar cajas de info */
+         gap: 1rem;
+     }
+      .info-box {
+         min-width: 100%; /* Cada caja ocupa todo el ancho */
+     }
+     /* Tabla responsive */
+      #transactions-table th, #transactions-table td {
+         font-size: 0.8rem;
+         padding: 0.6rem 0.4rem;
      }
 
 
-     /* Ocultar la línea animada en móvil */
-    .container::after {
-        display: none;
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+        padding: 20px;
     }
+    .modal-content h2 { font-size: 1.3rem; }
+
+    footer { padding: 1.5rem 1rem; }
+    .social-media ul { gap: 20px; }
+    .social-media a { font-size: 1.6rem; }
+    .footer-bottom { font-size: 0.8rem; }
 }
 
-/* Animación de las líneas de separación (solo visible en desktop) */
-.container::after {
-    content: '';
+@media (max-width: 480px) {
+     .logo { display: none; } /* Ocultar logo si no cabe */
+     header { justify-content: flex-end; } /* Alinear iconos a la derecha */
+
+     .header-icons { gap: 10px; }
+     .header-icons .icon { font-size: 1.1rem; }
+
+      .sidebar .menu-item a { padding: 0.6rem 0.8rem; }
+
+      .main-content h1, .main-content h2 { font-size: 1.3rem; }
+
+       /* Ajustes finos tabla */
+        #transactions-table th, #transactions-table td {
+            white-space: normal; /* Permitir que el texto se rompa */
+        }
+        /* Opcional: Ocultar columnas menos importantes en móvil */
+        #transactions-table th:nth-child(3), /* Bloque */
+        #transactions-table td:nth-child(3),
+        #transactions-table th:nth-child(5), /* Instrucciones */
+        #transactions-table td:nth-child(5),
+        #transactions-table th:nth-child(9), /* Programa */
+        #transactions-table td:nth-child(9) {
+            /* display: none; */ /* Descomentar para ocultar */
+        }
+
+     .footer-content { flex-direction: column; gap: 15px;}
+     .social-media h3 { margin-bottom: 0.5rem; }
+}
+
+/* Utilidad para texto copiado */
+.copied-feedback {
     position: absolute;
-    top: var(--header-height); /* Empezar debajo del header sticky */
-    left: var(--sidebar-width);
-    width: 1px;
-    height: calc(100% - var(--header-height)); /* Ajustar altura */
-    background: linear-gradient(to bottom, transparent, var(--corp-purple) 20%, var(--corp-blue) 80%, transparent);
-    animation: lineFlow 6s linear infinite;
-    z-index: 500; /* Detrás de sidebar/header pero sobre main content */
+    background-color: var(--corp-green);
+    color: var(--dark-background);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    margin-left: 5px; /* Ajusta según sea necesario */
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    pointer-events: none; /* No interfiere con clicks */
 }
-
-@keyframes lineFlow {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(100%); }
+.copied-feedback.show {
+    opacity: 1;
 }
