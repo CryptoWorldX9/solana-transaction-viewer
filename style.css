@@ -90,6 +90,7 @@ header {
     text-shadow: var(--neon-glow-blue);
     position: relative; /* Necesario para posicionar el tag beta */
     padding-right: 40px; /* Espacio para el tag beta */
+    display: inline-block; /* Para que el padding-right funcione bien */
 }
 .logo-x { /* Opcional: Para posible estilo diferente de la X */
     /* color: var(--corp-green); */
@@ -345,29 +346,77 @@ header {
     /* Contenedor principal de la sección */
 }
 
-/* --- AJUSTES PARA EL CARRUSEL (NUEVO) --- */
-.carousel-container {
-    /* Limita el ancho máximo del carrusel para que no sea extremo a extremo */
-    max-width: 1200px; /* Ajusta este valor según tu diseño preferido */
-    /* Centra el carrusel horizontalmente dentro del main-content */
-    margin-left: auto;
-    margin-right: auto;
-    /* Añade un margen superior si quieres separarlo del contenido anterior */
-    margin-top: 1rem;
-    /* Añade un margen inferior para separarlo del contenido siguiente */
+/* ****** NUEVO: Estilos para Input/Botón de rastreo ****** */
+.tracker-input-area {
+    display: flex;
+    gap: 10px;
     margin-bottom: 2rem;
-    /* Asegúrate de que su ancho no exceda el 100% del contenedor padre */
-    width: 100%;
-    /* Es buena idea darle position relative si contiene elementos posicionados absolutamente */
-    position: relative;
-    /* z-index bajo para que no se superponga al header/sidebar */
-    z-index: 5;
-    /* Puedes añadir otros estilos como borde, fondo, etc. si lo necesitas */
-    /* background-color: #222; */ /* Ejemplo */
-    /* border-radius: 8px; */ /* Ejemplo */
-    overflow: hidden; /* Útil si el contenido interno se desborda */
+    align-items: center;
+    flex-wrap: wrap; /* Para que se adapte */
 }
 
+#solana-wallet-address-input {
+    flex-grow: 1; /* Ocupa espacio */
+    padding: 10px 15px;
+    background-color: var(--medium-dark-background);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    min-width: 250px; /* Ancho mínimo */
+}
+#solana-wallet-address-input::placeholder {
+    color: var(--soft-text-color);
+}
+#solana-wallet-address-input:focus {
+    border-color: var(--corp-blue);
+    box-shadow: 0 0 5px rgba(0, 176, 255, 0.4);
+}
+
+#track-wallet-button {
+    padding: 10px 20px;
+    background: linear-gradient(90deg, var(--corp-blue), var(--corp-purple));
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-shadow: none;
+}
+#track-wallet-button i { font-size: 1em; }
+#track-wallet-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 176, 255, 0.3), 0 4px 15px rgba(179, 106, 255, 0.3);
+}
+#track-wallet-button:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 8px rgba(0, 176, 255, 0.2), 0 2px 8px rgba(179, 106, 255, 0.2);
+}
+
+/* Mensajes de estado del Tracker */
+.tracker-message {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    background-color: var(--medium-dark-background);
+}
+.tracker-message.error {
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+    background-color: rgba(255, 107, 107, 0.1);
+}
+.tracker-message .fa-spinner {
+    margin-right: 8px;
+}
 
 /* Fila Superior: Cuenta y Búsqueda */
 .wallet-tracker-header {
@@ -416,6 +465,8 @@ header {
     text-overflow: ellipsis; /* Puntos suspensivos si es muy larga */
     white-space: nowrap;
     max-width: 200px; /* Límite de ancho para la dirección */
+    display: inline-block; /* Para que max-width funcione bien */
+    vertical-align: middle;
 }
 #owner-address {
     max-width: 150px;
@@ -602,6 +653,8 @@ header {
     height: 20px;
     margin-right: 8px;
     border-radius: 50%; /* Iconos redondos */
+    object-fit: cover; /* Para que la imagen no se deforme */
+    background-color: #555; /* Fondo mientras carga o si falla */
 }
 
 .token-name {
@@ -783,7 +836,7 @@ header {
     text-transform: uppercase; /* Mayúsculas para encabezados */
     font-size: 0.8rem;
     position: sticky; /* Encabezado fijo al hacer scroll */
-    top: 0;
+    top: 0px; /* Ajustar si el scroll es del main-content y no del body */
     z-index: 10; /* Encima del contenido */
 }
 #transactions-table th:first-child, #transactions-table td:first-child {
@@ -1014,6 +1067,13 @@ footer {
     color: var(--corp-blue); /* O color específico de la red social */
     transform: scale(1.1);
 }
+/* Colores específicos para iconos sociales (ejemplo) */
+.fa-x-twitter:hover { color: #1DA1F2; }
+.fa-youtube:hover { color: #FF0000; }
+.fa-instagram:hover { color: #E4405F; }
+.fa-tiktok:hover { color: #EE1D52; } /* Rosa TikTok */
+.fa-telegram:hover { color: #2AABEE; }
+
 
 .footer-bottom {
     font-size: 0.8rem; /* Reducir tamaño */
@@ -1083,6 +1143,7 @@ footer {
         font-size: 0.5rem;
         padding: 1px 3px;
         top: -2px;
+        right: -5px; /* Ajustar posición */
     }
     .header-icons { gap: 15px; }
     .header-icons .icon { font-size: 1.2rem; }
@@ -1213,9 +1274,10 @@ footer {
     transition: opacity 0.5s ease-out;
     pointer-events: none; /* No interfiere con clicks */
     z-index: 10; /* Sobre la línea de dirección */
-    top: 50%; /* Centrado vertical */
-    transform: translateY(-50%);
-    right: -65px; /* Ajusta según necesites */
+    /* Ajustar posicionamiento relativo al botón */
+    top: -25px; /* Posicionar arriba del botón */
+    left: 50%;
+    transform: translateX(-50%);
 }
 .copied-feedback.show {
     opacity: 1;
