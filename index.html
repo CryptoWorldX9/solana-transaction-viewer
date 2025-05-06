@@ -1,254 +1,350 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuantyX - Crypto AI Platform</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="background-animation"></div>
-    <header>
-        <div class="logo">
-            QUANTY<span class="logo-x">X</span><span class="beta-tag">Beta</span>
-        </div>
-
-        <div class="price-ticker">
-            <div class="price-ticker-inner">
-                <div class="price-ticker-content">
-                    <span class="price-item"><i class="fab fa-btc"></i> BTC: $62,500</span>
-                    <span class="price-item"><i class="fab fa-ethereum"></i> ETH: $3,180</span>
-                    <span class="price-item"><i class="fab fa-solana"></i> SOL: $145</span>
-                    <span class="price-item"><i class="fas fa-coins"></i> BNB: $590</span>
-                    <span class="price-item"><i class="fas fa-coins"></i> NOT: $0.025</span>
-                    <span class="fab fa-xrp price-item"> XRP: $0.52</span>
-                    <span class="fab fa-ada price-item"> ADA: $0.70</span>
-                    <span class="fab fa-doge price-item"> DOGE: $0.15</span>
-                    <span class="fas fa-coins price-item"> SHIB: $0.00002</span>
-                    <span class="fas fa-dot-circle price-item"> DOT: $7.50</span>
-                    <span class="price-item-spacer"></span>
+<section id="sentiment-analyzer" class="tool-section">
+                <h2>Analizador de Sentimientos</h2>
+                <div class="sentiment-login-message data-card">
+                    <h3>Acceso Requerido</h3>
+                    <div class="card-content centered-value">
+                         <p>Debes iniciar sesión para analizar un token.</p>
+                         </div>
                 </div>
-                <div class="price-ticker-content">
-                    <span class="price-item"><i class="fab fa-btc"></i> BTC: $62,500</span>
-                    <span class="price-item"><i class="fab fa-ethereum"></i> ETH: $3,180</span>
-                    <span class="price-item"><i class="fab fa-solana"></i> SOL: $145</span>
-                    <span class="price-item"><i class="fas fa-coins"></i> BNB: $590</span>
-                    <span class="price-item"><i class="fas fa-coins"></i> NOT: $0.025</span>
-                    <span class="fab fa-xrp price-item"> XRP: $0.52</span>
-                    <span class="fab fa-ada price-item"> ADA: $0.70</span>
-                    <span class="fab fa-doge price-item"> DOGE: $0.15</span>
-                    <span class="fas fa-coins price-item"> SHIB: $0.00002</span>
-                    <span class="fas fa-dot-circle price-item"> DOT: $7.50</span>
-                    <span class="price-item-spacer"></span>
-                </div>
-            </div>
-        </div>
-        <div class="header-icons">
-            <div class="icon language-switcher" id="language-switcher">
-                <i class="fas fa-globe"></i>
-                <div class="language-dropdown">
-                    <span data-lang="es">Español</span>
-                    <span data-lang="en">English</span>
-                    <span data-lang="fr">Français</span>
-                </div>
-            </div>
-            <div class="icon search-icon" id="search-icon"><i class="fas fa-search"></i></div>
-            <div class="icon wallet-icon" id="wallet-icon"><i class="fas fa-wallet"></i></div>
-            <div class="icon user-icon" id="user-icon"><i class="fas fa-user-circle"></i></div>
-        </div>
-    </header>
 
-    <div class="container">
-        <aside class="sidebar" id="sidebar">
-            <nav>
-                <ul>
-                    <li class="menu-item">
-                        <a href="#" data-section="home" title="Inicio">
-                            <i class="fas fa-home"></i> <span class="menu-text">Inicio</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="sentiment-analyzer" title="Analizador de Sentimientos">
-                            <i class="fas fa-chart-line"></i>
-                            <span class="menu-text">Analizador de Sentimientos</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="wallet-tracker" title="Wallet Tracker">
-                            <i class="fas fa-wallet"></i>
-                            <span class="menu-text">Wallet Tracker</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="bot-trading" title="Bot Trading">
-                            <i class="fas fa-robot"></i>
-                            <span class="menu-text">Bot Trading</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="sniper" title="Sniper">
-                            <i class="fas fa-crosshairs"></i>
-                            <span class="menu-text">Sniper</span>
-                        </a>
-                    </li>
-                     <li class="menu-item">
-                        <a href="#" data-section="token-creator" title="Creador de Token">
-                            <i class="fas fa-coins"></i>
-                            <span class="menu-text">Creador de Token</span>
-                        </a>
-                    </li>
-                     <li class="menu-item">
-                        <a href="#" data-section="staking" title="Staking">
-                            <i class="fas fa-lock"></i>
-                            <span class="menu-text">Staking</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="gaming" title="Gaming">
-                            <i class="fas fa-gamepad"></i>
-                            <span class="menu-text">Gaming</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                         <a href="#" data-section="nft-collection" title="Colección NFTs">
-                             <i class="fas fa-image"></i> <span class="menu-text">Colección NFTs</span>
-                         </a>
-                     </li>
-                      <li class="menu-item">
-                         <a href="#" data-section="detox-reclaim" title="Detox & Reclaim">
-                             <i class="fas fa-broom"></i> <span class="menu-text">Detox & Reclaim</span>
-                         </a>
-                     </li>
-                     <li class="menu-item">
-                        <a href="#" data-section="knowledge-base" title="Base de Conocimiento">
-                            <i class="fas fa-book"></i>
-                            <span class="menu-text">Base de Conocimiento</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-section="chatbot" title="ChatBot">
-                             <i class="fas fa-comments"></i>
-                            <span class="menu-text">ChatBot</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <main class="main-content" id="main-content">
-            <section id="home"> <h1>Bienvenido a QuantyX</h1>
-                <p>Tu centro neural impulsado por IA para herramientas Crypto.</p>
-                <div class="carousel-container">
-                    </div>
-            </section>
-
-             <section id="sentiment-analyzer" class="tool-section">
-                 <h2>Analizador de Sentimientos</h2>
-                 <p>Aquí irá la herramienta de análisis de sentimientos. (Diseño pendiente)</p>
-                  </section>
-
-             <section id="wallet-tracker" class="tool-section">
-                 <div class="tracker-input-area">
-                     <input type="text" id="solana-wallet-address-input" placeholder="Introduce dirección Solana a rastrear...">
-                     <button id="track-wallet-button"><i class="fas fa-search"></i> Rastrear</button>
-                 </div>
-                 <div id="tracker-loading" class="tracker-message hidden"><i class="fas fa-spinner fa-spin"></i> Cargando datos...</div>
-                 <div id="tracker-error" class="tracker-message error hidden">Error al cargar datos.</div>
-                 <div class="wallet-tracker-header">
-                     <div class="account-info">
-                         <h3 class="account-title">Cuenta</h3>
-                         <div class="address-line">
-                             <span id="display-wallet-address" title="Dirección Completa">Introduce una dirección...</span>
-                             <button class="icon-button copy-button" title="Copiar dirección"><i class="fas fa-copy"></i></button>
-                             <button class="icon-button qr-button" title="Mostrar código QR"><i class="fas fa-qrcode"></i></button>
+                <div class="sentiment-analysis-container hidden"> <div class="sentiment-search-area data-card">
+                         <h3>BUSCAR TOKEN</h3>
+                         <div class="card-content input-area"> <input type="text" id="sentiment-search-input" placeholder="Introduce símbolo o dirección del token">
+                             <button id="sentiment-search-btn"><i class="fas fa-search"></i> Analizar</button>
                          </div>
                      </div>
-                 </div>
-                 <div class="info-boxes-container">
-                     <div class="info-box general-info-box">
-                         <h4>Descripción General</h4>
-                         <div class="info-item"><span class="info-label">Saldo SOL:</span><span class="info-value"><i class="fab fa-solana sol-icon-small"></i> <span id="sol-balance-value">-</span> SOL (<span id="sol-balance-usd">$ -.--</span>)</span></div>
-                         <div class="info-item"><span class="info-label">Saldo de token:</span><span class="info-value" id="token-count">- Tokens</span></div>
-                         <details class="token-dropdown"><summary class="token-summary">Mostrar Tokens <i class="fas fa-chevron-down dropdown-arrow"></i></summary><ul id="token-list-detailed" class="token-list"><li>Introduce una dirección y rastrea.</li></ul></details>
-                         <div class="wallet-details-link"><button class="icon-button" title="Más detalles"><i class="fas fa-wallet"></i></button></div>
-                     </div>
-                     <div class="info-box more-info-box">
-                          <h4>Más Información</h4>
-                          <div class="info-item"><span class="info-label">Dueño:</span><span class="info-value address-line-small"><i class="fab fa-solana sol-icon-small"></i><span id="owner-address" title="Dirección Dueño">-</span><button class="icon-button copy-button-small" title="Copiar dirección"><i class="fas fa-copy"></i></button></span></div>
-                          <div class="info-item"><span class="info-label">Está en la Curva:</span><span class="info-value" id="on-curve-status">-</span></div>
-                          <div class="info-item"><span class="info-label">Stake:</span><span class="info-value"><i class="fab fa-solana sol-icon-small"></i> <span id="stake-amount">-</span> SOL <small>(No imp.)</small></span></div>
-                          <div class="info-item tags-item"><span class="info-label">Etiquetas:</span><span class="info-value tags-container" id="tags-display"><small>(No imp.)</small></span></div>
-                     </div>
-                     <div class="info-box misc-info-box">
-                          <h4>Varios</h4>
-                          <div class="info-item"><span class="info-label">Nombre Privado:</span></div>
-                          <div class="private-note-area"><div id="private-note-display"></div><a href="#" id="add-note-link" class="add-note-link"><i class="fas fa-pencil-alt"></i> Añadir notas</a><div id="add-note-form" class="add-note-form hidden"><textarea id="private-note-input" placeholder="Escribe tu nota..."></textarea><button id="save-note-button">Guardar</button><button id="cancel-note-button" type="button">Cancelar</button></div></div>
-                     </div>
-                 </div>
-                 <div class="transactions-table-container">
-                     <table id="transactions-table">
-                         <thead><tr><th><i class="fas fa-question-circle" title="Detalles"></i></th><th>Firma</th><th>Bloque</th><th>Fecha (UTC)</th><th>Instrucciones</th><th>Por</th><th>Valor</th><th>Tarifa</th><th>Programa</th></tr></thead>
-                         <tbody id="transaction-list-body"><tr><td colspan="9" style="text-align:center;">Introduce una dirección y haz clic en Rastrear.</td></tr></tbody>
-                     </table>
-                 </div>
-                 <div class="table-footer-controls">
-                    <div class="items-per-page-selector"><label for="items-per-page">Mostrar:</label><select id="items-per-page" name="items-per-page"><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option></select><span>transacciones</span></div>
-                 </div>
-             </section>
-             <section id="bot-trading" class="tool-section"> <h2>Bot Trading</h2> <p>...</p> </section>
-             <section id="sniper" class="tool-section"> <h2>Sniper</h2> <p>...</p> </section>
-             <section id="token-creator" class="tool-section"> <h2>Creador de Token</h2> <p>...</p> </section>
-             <section id="staking" class="tool-section"> <h2>Staking</h2> <p>...</p> </section>
-             <section id="gaming" class="tool-section"> <h2>Gaming</h2> <p>...</p> </section>
-             <section id="nft-collection" class="tool-section"> <h2>Colección NFTs</h2> <p>...</p> </section>
-             <section id="detox-reclaim" class="tool-section"> <h2>Detox & Reclaim</h2> <p>...</p> </section>
-             <section id="knowledge-base" class="tool-section"> <h2>Base de Conocimiento</h2> <p>...</p> </section>
-             <section id="chatbot" class="tool-section"> <h2>ChatBot</h2> <p>...</p> </section>
 
-        </main>
-        <footer>
-            <div class="footer-content">
-                <div class="social-media">
-                    <h3>Síguenos</h3>
-                    <ul>
-                        <li><a href="#" target="_blank"><i class="fab fa-x-twitter"></i></a></li>
-                        <li><a href="#" target="_blank"><i class="fab fa-youtube"></i></a></li>
-                        <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="#" target="_blank"><i class="fab fa-tiktok"></i></a></li>
-                        <li><a href="#" target="_blank"><i class="fab fa-telegram"></i></a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                &copy; 2025 QuantyX. Todos los derechos reservados.
-            </div>
-        </footer>
-    </div> <div id="search-modal" class="modal">
-         <div class="modal-content">
-             <span class="close-button">&times;</span>
-             <h2>Buscar en QuantyX</h2>
-             <input type="text" id="search-input" placeholder="Escribe para buscar...">
-             <div id="search-results"></div>
-         </div>
-     </div>
-      <div id="wallet-modal" class="modal">
-         <div class="modal-content">
-             <span class="close-button">&times;</span>
-             <h2>Conectar Wallet</h2>
-             <p>Aquí irán las opciones para conectar tu wallet.</p>
-         </div>
-     </div>
-      <div id="user-modal" class="modal">
-         <div class="modal-content">
-             <span class="close-button">&times;</span>
-             <h2>Perfil de Usuario / Acceso</h2>
-             <p>Aquí irá el formulario de login/registro.</p>
-         </div>
-     </div>
+                     <div class="sentiment-data-layout">
 
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+                         <div class="sentiment-token-info data-card">
+                             <h3>TOKEN INFO</h3>
+                             <div class="card-content">
+                                  <p class="token-value-placeholder">$ 0</p> <p class="token-address-placeholder soft-text">Dirección: ---</p> </div>
+                         </div>
+
+                         <div class="sentiment-tabs-area data-card">
+                              <div class="card-content">
+                                  <div class="tabs-nav">
+                                      <button class="tab-button active" data-tab="analysis">ANÁLISIS</button>
+                                      <button class="tab-button" data-tab="prices">PRECIOS</button>
+                                  </div>
+                                  <div class="tabs-content">
+                                      <div id="sentiment-analysis-content" class="tab-pane active">
+                                          <p>Cargando análisis de sentimiento...</p>
+                                           </div>
+                                      <div id="sentiment-prices-content" class="tab-pane">
+                                          <p>Cargando datos de precios...</p>
+                                          </div>
+                                  </div>
+                              </div>
+                         </div>
+
+                         <div class="sentiment-tweets-area data-card">
+                              <h3>ÚLTIMOS TWEETS</h3>
+                               <div class="card-content">
+                                  <ul id="latest-tweets-list" class="data-list">
+                                      <li>Cargando tweets...</li> </ul>
+                               </div>
+                         </div>
+
+                     </div> <div class="sentiment-additional-elements">
+
+                          <div class="sentiment-date-message data-card">
+                             <h3>Hoy</h3>
+                             <div class="card-content centered-value">
+                                  <p id="current-date">---</p> <p class="soft-text">---</p> </div>
+                         </div>
+
+                         <div class="sentiment-chats-settings data-card">
+                             <h3>Chats & Ajustes</h3>
+                             <div class="card-content">
+                                  <p>Chats: Esperando mensajes...</p>
+                                   <p>Ajustes Rápidos:</p>
+                                   <ul>
+                                       <li>Opción 1</li> <li>Opción 2</li>
+                                   </ul>
+                             </div>
+                         </div>
+
+                     </div> </div> </section>
+            ```
+
+---
+
+**2. Archivo: `style.css` (MODIFICADO - Estilos para Analizador de Sentimientos)**
+
+Ahora, añade estas reglas CSS en tu archivo `style.css`. Puedes añadirlas después de los estilos del Wallet Tracker o integrarlas donde prefieras.
+
+```css
+/* --- Estilos para la sección Analizador de Sentimientos --- */
+
+#sentiment-analyzer h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+}
+
+/* Estilo para el mensaje de login - similar a otros mensajes de estado */
+.sentiment-login-message {
+     margin: 30px auto; /* Centrar la tarjeta */
+     max-width: 500px; /* Limitar su ancho */
+     text-align: center;
+}
+.sentiment-login-message h3 {
+     color: var(--secondary-color); /* Color diferente para este título */
+}
+.sentiment-login-message .centered-value p {
+     font-size: 1.1rem;
+     font-weight: normal;
+}
+
+
+/* Contenedor principal de las áreas de análisis (inicialmente oculto) */
+.sentiment-analysis-container {
+     /* display: grid; */ /* Usaremos grid o flexbox aquí más adelante */
+     gap: 20px; /* Espacio entre los principales bloques de contenido */
+}
+
+/* Layout para las principales áreas de datos (Token Info, Tabs, Tweets) */
+.sentiment-data-layout {
+     display: grid;
+     grid-template-columns: 1fr 2fr; /* Ejemplo: Info y Tweets en una columna, Tabs más ancha */
+     gap: 20px; /* Espacio entre estas áreas */
+     margin-bottom: 20px; /* Espacio debajo de este bloque */
+}
+
+/* Ajuste para pantallas más pequeñas: apilar en una sola columna */
+@media (max-width: 992px) { /* Ajusta el breakpoint si es necesario */
+     .sentiment-data-layout {
+         grid-template-columns: 1fr; /* Una sola columna en pantallas medianas/pequeñas */
+     }
+}
+
+
+/* Estilos para las tarjetas específicas */
+.sentiment-token-info h3,
+.sentiment-search-area h3,
+.sentiment-tweets-area h3,
+.sentiment-date-message h3,
+.sentiment-chats-settings h3 {
+     /* Reutiliza estilos de data-card h3 */
+     text-align: center;
+     color: var(--primary-color);
+     margin-top: 0;
+     margin-bottom: 15px;
+     font-size: 1.3rem;
+     font-weight: 600;
+     padding-bottom: 10px;
+     border-bottom: 1px solid var(--border-color);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 10px;
+}
+
+/* Estilo específico para el input de búsqueda de sentimientos */
+.sentiment-search-area .input-area {
+     /* Reutiliza estilos de input-area */
+     margin-bottom: 0; /* Remover margen extra si está en una tarjeta */
+     padding: 0; /* Ajustar padding si es necesario */
+}
+
+#sentiment-search-input {
+    /* Reutiliza estilos de input[type="text"] del Wallet Tracker */
+     padding: 12px 15px;
+     border: 1px solid var(--border-color);
+     border-radius: 8px;
+     background-color: var(--background-color);
+     color: var(--text-color);
+     font-size: 1rem;
+     flex-grow: 1;
+     max-width: none; /* No limitar ancho en este contenedor */
+     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+#sentiment-search-input::placeholder {
+    color: var(--soft-text-color);
+    opacity: 0.7;
+}
+#sentiment-search-input:focus {
+     border-color: var(--primary-color);
+     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(var(--primary-rgb), 0.3);
+     outline: none;
+}
+
+#sentiment-search-btn {
+    /* Reutiliza estilos de button del Wallet Tracker */
+     padding: 12px 25px;
+     background-color: var(--secondary-color);
+     color: var(--button-text-color);
+     border: none;
+     border-radius: 8px;
+     cursor: pointer;
+     font-size: 1rem;
+     font-weight: 600;
+     transition: background-color 0.3s ease, transform 0.1s ease;
+     display: flex;
+     align-items: center;
+     gap: 8px;
+}
+#sentiment-search-btn:hover {
+    background-color: var(--secondary-hover-color);
+}
+#sentiment-search-btn:active {
+     transform: scale(0.98);
+}
+
+
+/* Estilos para la sección de pestañas */
+.sentiment-tabs-area .card-content {
+     /* Elimina el padding extra del card-content si existe */
+     padding: 0;
+}
+
+.tabs-nav {
+     display: flex; /* Botones en línea */
+     border-bottom: 2px solid var(--border-color); /* Separador debajo de las pestañas */
+     margin-bottom: 15px; /* Espacio entre nav y contenido */
+}
+
+.tab-button {
+     padding: 10px 20px;
+     border: none;
+     background-color: transparent; /* Fondo transparente por defecto */
+     color: var(--soft-text-color); /* Color texto inactivo */
+     font-size: 1rem;
+     cursor: pointer;
+     transition: color 0.3s ease, border-bottom 0.3s ease;
+     border-bottom: 2px solid transparent; /* Borde inferior transparente por defecto */
+     font-weight: 600;
+}
+
+.tab-button:hover {
+     color: var(--text-color); /* Color texto en hover */
+}
+
+.tab-button.active {
+     color: var(--primary-color); /* Color texto de pestaña activa */
+     border-bottom-color: var(--primary-color); /* Borde inferior color primario */
+}
+
+.tabs-content .tab-pane {
+     display: none; /* Paneles de contenido ocultos por defecto */
+     padding: 15px 0; /* Padding interno para el contenido de la pestaña */
+}
+
+.tabs-content .tab-pane.active {
+     display: block; /* Mostrar panel activo */
+}
+
+
+/* Estilos para los elementos adicionales (Fecha, Chats, Ajustes) */
+.sentiment-additional-elements {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Dos columnas flexibles */
+     gap: 20px;
+     margin-top: 20px; /* Espacio arriba de este bloque */
+}
+
+/* Ajuste para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .sentiment-additional-elements {
+        grid-template-columns: 1fr; /* Una sola columna en pantallas pequeñas */
+    }
+}
+
+
+/* Estilo para la lista de tweets (reutiliza .data-list) */
+#latest-tweets-list {
+    /* Reutiliza estilos de .data-list */
+}
+
+#latest-tweets-list li {
+    /* Reutiliza estilos de .data-list li */
+     flex-direction: column; /* Apilar contenido del tweet */
+     align-items: flex-start;
+     padding: 10px 0;
+     font-size: 0.9rem;
+     word-break: break-word; /* Romper texto largo del tweet */
+}
+
+/* Estilo para placeholders de texto en Analizador (ej: precio, dirección, mensajes) */
+.token-value-placeholder {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--secondary-color); /* Color secundario para valores */
+    margin-bottom: 5px;
+    text-align: center; /* Centrar en Token Info */
+}
+
+.token-address-placeholder {
+     font-size: 0.9rem;
+     color: var(--soft-text-color);
+     word-break: break-all; /* Romper la dirección si es muy larga */
+     text-align: center; /* Centrar en Token Info */
+}
+
+.sentiment-chats-settings ul {
+     list-style: disc; /* Usar puntos de lista */
+     padding-left: 20px;
+     margin-top: 10px;
+     color: var(--text-color);
+     font-size: 0.95rem;
+}
+.sentiment-chats-settings li {
+     margin-bottom: 5px;
+}
+
+
+/* Asegúrate de que la clase .hidden oculte los elementos correctamente */
+.hidden {
+    display: none;
+}
+
+
+/* MEDIA QUERIES (Asegúrate de que las reglas responsive se apliquen correctamente) */
+/* ... (tus media queries existentes) ... */
+
+/* Ejemplo de ajuste para las nuevas secciones en responsive */
+@media (max-width: 768px) {
+     .sentiment-login-message,
+     .sentiment-search-area,
+     .sentiment-token-info,
+     .sentiment-tabs-area,
+     .sentiment-tweets-area,
+     .sentiment-date-message,
+     .sentiment-chats-settings {
+         padding: 15px; /* Ajustar padding en móvil */
+     }
+
+     .sentiment-data-layout {
+          gap: 15px; /* Ajustar gap en móvil */
+     }
+
+     .sentiment-additional-elements {
+          gap: 15px; /* Ajustar gap en móvil */
+          margin-top: 15px;
+     }
+
+     .tab-button {
+          padding: 8px 15px; /* Ajustar padding de botones de tab */
+          font-size: 0.9rem;
+     }
+
+     .tabs-content .tab-pane {
+          padding: 10px 0;
+     }
+
+     .token-value-placeholder {
+          font-size: 1.4rem;
+     }
+
+     .token-address-placeholder {
+          font-size: 0.85rem;
+     }
+
+     .sentiment-chats-settings ul {
+          padding-left: 15px;
+          font-size: 0.9rem;
+     }
+}
