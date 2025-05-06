@@ -1,22 +1,27 @@
 /* Variables para colores - Paleta corporativa/elegante refinada */
 :root {
-    --corp-blue: #00b0ff;    /* Un azul tecnológico más vibrante pero elegante */
-    --corp-purple: #b36aff;  /* Un púrpura más rico */
-    --corp-green: #42e6a4;   /* Un verde aqua brillante */
-    --dark-background: #0b0b0b; /* Negro muy oscuro */
-    --medium-dark-background: #1a1a1a; /* Fondo para tarjetas/modales */
-    --line-color: #2c2c2c;    /* Color para las líneas de separación más definidas */
-    --text-color: #e0e0e0;   /* Color de texto general más claro */
-    --soft-text-color: #a0a0a0; /* Color para texto secundario/placeholder */
-    --soft-highlight: rgba(255, 255, 255, 0.08); /* Para fondos sutiles en hover */
-    --border-color: #333; /* Color de borde general */
-    --neon-glow-blue: 0 0 8px var(--corp-blue); /* Glow más definido */
+    --corp-blue: #00b0ff;
+    --corp-purple: #b36aff;
+    --corp-green: #42e6a4;
+    --dark-background: #0b0b0b;
+    --medium-dark-background: #1a1a1a;
+    --line-color: #2c2c2c;
+    --text-color: #e0e0e0;
+    --soft-text-color: #a0a0a0;
+    --soft-highlight: rgba(255, 255, 255, 0.08);
+    --border-color: #333;
+    --neon-glow-blue: 0 0 8px var(--corp-blue);
     --neon-glow-purple: 0 0 8px var(--corp-purple);
     --neon-glow-green: 0 0 8px var(--corp-green);
-    --hover-glow: var(--neon-glow-blue), var(--neon-glow-purple), var(--neon-glow-green); /* Glow combinado */
-    --tracker-accent: var(--corp-blue); /* Usamos azul como acento principal en tracker */
+    /* Combinación para hover neón */
+    --neon-hover-shadow:
+        0 0 5px rgba(0, 176, 255, 0.8),  /* Azul */
+        0 0 10px rgba(179, 106, 255, 0.6), /* Púrpura */
+        0 0 15px rgba(66, 230, 164, 0.4);  /* Verde */
+
+    --tracker-accent: var(--corp-blue);
     --header-height: 70px;
-    --sidebar-width-expanded: 230px; /* Solo necesitamos el ancho expandido ahora */
+    --sidebar-width-expanded: 230px; /* Ancho Fijo Sidebar */
 }
 
 /* --- Estilos Generales --- */
@@ -59,37 +64,122 @@ header { background-color: rgba(11, 11, 11, 0.8); backdrop-filter: blur(10px); c
 
 /* --- Contenedor Principal --- */
 .container {
-    display: flex; /* Sidebar y Main Content lado a lado */
+    display: flex;
     flex-grow: 1;
-    margin-top: var(--header-height); /* Dejar espacio para el header fijo */
+    margin-top: var(--header-height);
+    position: relative; /* Necesario para la línea divisora animada */
 }
+
+/* --- Línea Divisora Animada --- */
+.container::after {
+    content: '';
+    position: absolute;
+    top: 0; /* Alineada con el top del container (que está bajo el header) */
+    left: var(--sidebar-width-expanded); /* Posicionada justo a la derecha del sidebar */
+    width: 2px; /* Grosor de la línea */
+    height: 100%; /* Altura completa del container */
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        var(--corp-blue) 25%,
+        var(--corp-purple) 50%,
+        var(--corp-green) 75%,
+        transparent 100%
+    );
+    background-size: 100% 300%; /* Tamaño del gradiente para la animación */
+    animation: flowLine 8s linear infinite; /* Animación */
+    z-index: 850; /* Detrás del sidebar pero sobre el fondo */
+    opacity: 0.6; /* Opacidad para sutileza */
+}
+
+@keyframes flowLine {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 0% 300%; } /* Mueve el gradiente hacia abajo */
+}
+
 
 /* --- Sidebar --- */
 .sidebar {
-    width: var(--sidebar-width-expanded); /* Ancho fijo */
+    width: var(--sidebar-width-expanded); /* Ancho fijo normal */
     flex-shrink: 0; /* No se encoje */
-    background-color: var(--medium-dark-background);
+    background-color: var(--medium-dark-background); /* Fondo un poco más claro que el body */
     padding: 1.5rem 0;
-    /* Sin transición de width */
     border-right: 1px solid var(--line-color);
     height: calc(100vh - var(--header-height));
     position: sticky; /* Fijo en scroll */
     top: var(--header-height);
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Ocultar posible desbordamiento horizontal del texto */
     z-index: 900;
-    cursor: default; /* Cursor normal */
-    -ms-overflow-style: none; scrollbar-width: none; /* Ocultar scrollbar */
+    cursor: default;
+    /* Ocultar scrollbar */
+    -ms-overflow-style: none; scrollbar-width: none;
 }
 .sidebar::-webkit-scrollbar { display: none; }
+
 .sidebar nav ul { list-style: none; }
-.sidebar .menu-item a { display: flex; align-items: center; padding: 0.8rem 1.5rem; color: var(--soft-text-color); text-decoration: none; transition: background-color 0.3s ease, color 0.3s ease; font-size: 0.95rem; position: relative; overflow: hidden; white-space: nowrap; cursor: pointer; }
-.sidebar .menu-item a::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background-color: var(--corp-blue); transform: scaleY(0); transition: transform 0.3s ease; transform-origin: bottom; }
-.sidebar .menu-item a i { margin-right: 15px; width: 20px; text-align: center; font-size: 1.1rem; flex-shrink: 0; /* Sin transición */ }
-.sidebar .menu-item a .menu-text { opacity: 1; transition: opacity 0.2s ease; white-space: nowrap; }
-.sidebar .menu-item a:hover { background-color: var(--soft-highlight); color: var(--text-color); }
-.sidebar .menu-item a.active-menu { color: var(--text-color); font-weight: 600; background-color: var(--soft-highlight); }
-.sidebar .menu-item a.active-menu::before { transform: scaleY(1); box-shadow: var(--neon-glow-blue); }
+
+.sidebar .menu-item a {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    color: var(--soft-text-color);
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, text-shadow 0.3s ease; /* Añadida transición para text-shadow */
+    font-size: 0.95rem;
+    position: relative;
+    overflow: visible; /* ****** CAMBIO: Permitir que el texto sea visible ****** */
+    white-space: nowrap; /* Mantenemos nowrap para que esté en una línea */
+    cursor: pointer;
+}
+
+.sidebar .menu-item a::before {
+    content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px;
+    background-color: var(--corp-blue); transform: scaleY(0);
+    transition: transform 0.3s ease; transform-origin: bottom;
+}
+
+.sidebar .menu-item a i {
+    margin-right: 15px; width: 20px; text-align: center;
+    font-size: 1.1rem; flex-shrink: 0;
+    transition: color 0.3s ease, text-shadow 0.3s ease; /* Añadido text-shadow */
+}
+
+.sidebar .menu-item a .menu-text {
+    opacity: 1;
+    transition: color 0.3s ease, text-shadow 0.3s ease; /* Añadido text-shadow */
+    white-space: nowrap; /* Asegurar que no se rompa */
+    overflow: hidden; /* Ocultar si excede */
+    text-overflow: ellipsis; /* Añadir puntos suspensivos si se corta */
+    flex-grow: 1; /* Permitir que ocupe espacio */
+}
+
+/* Efecto Hover Neón Futurista */
+.sidebar .menu-item a:hover {
+    background-color: var(--soft-highlight);
+    color: #ffffff; /* Texto blanco brillante */
+    text-shadow: var(--neon-hover-shadow); /* Sombra neón combinada */
+}
+.sidebar .menu-item a:hover i {
+    color: var(--corp-green); /* Icono verde brillante en hover */
+    text-shadow: 0 0 8px var(--corp-green);
+}
+
+/* Estilo Activo */
+.sidebar .menu-item a.active-menu {
+    color: #ffffff; /* Blanco brillante */
+    font-weight: 600;
+    background-color: var(--soft-highlight);
+    text-shadow: var(--neon-hover-shadow);
+}
+.sidebar .menu-item a.active-menu i {
+    color: var(--corp-green);
+    text-shadow: 0 0 8px var(--corp-green);
+}
+.sidebar .menu-item a.active-menu::before {
+     transform: scaleY(1);
+     box-shadow: var(--neon-glow-blue);
+}
 
 /* --- Main Content --- */
 .main-content {
@@ -97,8 +187,8 @@ header { background-color: rgba(11, 11, 11, 0.8); backdrop-filter: blur(10px); c
     padding: 2rem;
     position: relative;
     z-index: 1;
-    overflow-y: auto; /* Scroll para el contenido principal */
-    /* ****** CAMBIO CRÍTICO: Sin margin-left ****** */
+    overflow-y: auto; /* Scroll para el contenido principal si es necesario */
+    /* Sin margin-left fijo */
 }
 
 .main-content section { display: none; animation: fadeIn 0.5s ease-in-out; }
@@ -108,23 +198,9 @@ header { background-color: rgba(11, 11, 11, 0.8); backdrop-filter: blur(10px); c
 .main-content h2 { color: var(--corp-green); margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--line-color); }
 .main-content p { margin-bottom: 1rem; color: var(--text-color); }
 
-/* --- Estilos para Analizador de Sentimientos (Placeholder) --- */
-#sentiment-analyzer {
-    /* Puedes añadir estilos específicos aquí cuando lo desarrolles */
-}
-.sentiment-layout, .sentiment-main-content, .twitter-feed-sidebar,
-.sentiment-search-area, .sentiment-info-boxes, .sentiment-info-box,
-.dexscreener-embed-container {
-    border: 1px dashed rgba(255,255,255,0.1); /* Bordes punteados para ver estructura */
-    padding: 1rem;
-    margin-bottom: 1rem;
-}
-.twitter-feed-sidebar { min-height: 300px; }
-.sentiment-info-boxes { display: flex; gap: 1rem; }
-.sentiment-info-box { flex: 1; }
-.dexscreener-embed-container { min-height: 400px; }
 
-/* --- Estilos específicos para Wallet Tracker (Revisados) --- */
+/* --- Estilos específicos para Wallet Tracker --- */
+/* (Sin cambios respecto a la versión anterior, ya estaban bien) */
 .tracker-input-area { display: flex; gap: 10px; margin-bottom: 2rem; align-items: center; flex-wrap: wrap; }
 #solana-wallet-address-input { flex-grow: 1; padding: 10px 15px; background-color: var(--medium-dark-background); border: 1px solid var(--border-color); border-radius: 5px; color: var(--text-color); font-size: 0.95rem; outline: none; transition: border-color 0.3s ease, box-shadow 0.3s ease; min-width: 250px; }
 #solana-wallet-address-input::placeholder { color: var(--soft-text-color); }
@@ -237,7 +313,7 @@ footer {
     padding: 1rem 2rem;
     text-align: center;
     border-top: 1px solid var(--line-color);
-    margin-top: auto; /* Empuja al fondo */
+    margin-top: auto; /* Empuja al fondo del body flex */
     /* ****** CAMBIO: Añadido margin-left para alinear con main en desktop ****** */
     margin-left: var(--sidebar-width-expanded);
 }
@@ -253,18 +329,21 @@ footer {
 /* --- Responsive Design --- */
 @media (max-width: 1024px) {
      .price-ticker { display: none; }
-     .sidebar { width: 200px; }
+     .sidebar { width: 200px; } /* Sidebar más estrecho en tablet */
      .main-content { margin-left: 200px; padding: 1.5rem; }
      footer { margin-left: 200px; padding: 0.8rem 1.5rem; } /* Ajustar margen footer */
      .info-box { min-width: calc(50% - 0.5rem); }
+     .container::after { left: 200px; } /* Ajustar línea animada */
 }
 
 @media (max-width: 768px) {
+    /* Ajustes para estructura base */
     .container { flex-direction: column; margin-top: 0; }
     header { padding: 0.6rem 1rem; min-height: 60px; position: static; z-index: auto; }
     .logo { font-size: 1.5rem; padding-right: 35px; }
     .beta-tag { font-size: 0.5rem; padding: 1px 3px; top: -2px; right: -5px; }
     .header-icons { gap: 15px; } .header-icons .icon { font-size: 1.2rem; }
+
     .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--line-color); display: flex; overflow-x: auto; padding: 0.5rem 0; top: auto; z-index: auto; }
     .sidebar nav ul { flex-direction: row; width: max-content; }
     .sidebar .menu-item a { padding: 0.8rem 1rem; }
@@ -280,6 +359,7 @@ footer {
     .footer-content { flex-direction: column; gap: 15px;}
     .social-media ul { gap: 20px; } .social-media a { font-size: 1.6rem; }
     .footer-bottom { font-size: 0.8rem; }
+    .container::after { display: none; } /* Ocultar línea animada en móvil */
 }
 
 @media (max-width: 480px) {
@@ -290,7 +370,3 @@ footer {
      #transactions-table th, #transactions-table td { white-space: normal; }
      .footer-content { gap: 15px;} .social-media h3 { margin-bottom: 0.5rem; }
 }
-
-/* Utilidad para texto copiado */
-.copied-feedback { position: absolute; background-color: var(--corp-green); color: var(--dark-background); padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 5px; white-space: nowrap; opacity: 0; transition: opacity 0.5s ease-out, transform 0.5s ease-out; pointer-events: none; z-index: 10; top: 50%; left: 105%; transform: translateY(-50%) translateX(-10px); }
-.copied-feedback.show { opacity: 1; transform: translateY(-50%) translateX(0); }
