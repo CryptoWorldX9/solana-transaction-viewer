@@ -146,86 +146,9 @@
 
              <section id="sentiment-analyzer" class="tool-section">
                  <h2>Analizador de Sentimientos</h2>
-                 <div class="sentiment-layout"> <div class="sentiment-main-content">
-                         <div class="sentiment-search-area">
-                             <input type="text" id="sentiment-token-input" placeholder="Introduce la dirección del token (CA)...">
-                             <button id="sentiment-search-button" class="icon-button" title="Buscar Token">
-                                 <i class="fas fa-search"></i>
-                             </button>
-                         </div>
+                 <p>Aquí irá la herramienta de análisis de sentimientos. (Diseño pendiente)</p>
+                  </section>
 
-                         <div class="sentiment-info-boxes">
-                             <div class="sentiment-info-box">
-                                 <h4><i class="fas fa-info-circle"></i> Información del Token</h4>
-                                 <div class="info-item">
-                                     <span class="info-label">CA:</span>
-                                     <span class="info-value token-ca" id="sentiment-token-ca" title="Token Contract Address">Introduce CA...</span>
-                                 </div>
-                                 <div class="info-item">
-                                     <span class="info-label">Valor Actual:</span>
-                                     <span class="info-value" id="sentiment-token-value">0.00456 USD</span> </div>
-                                 </div>
-
-                             <div class="sentiment-info-box">
-                                 <h4><i class="fas fa-dollar-sign"></i> Precio</h4>
-                                 <div class="info-item">
-                                     <span class="info-label">Actual:</span>
-                                     <span class="info-value" id="sentiment-price-current">$0.00456</span> </div>
-                                 <div class="info-item">
-                                     <span class="info-label">Volumen 6H:</span>
-                                     <span class="info-value" id="sentiment-vol-6h">$1,234,567</span> </div>
-                                 <div class="info-item">
-                                     <span class="info-label">Volumen 12H:</span>
-                                     <span class="info-value" id="sentiment-vol-12h">$2,345,678</span> </div>
-                                 <div class="info-item">
-                                     <span class="info-label">Volumen 24H:</span>
-                                     <span class="info-value" id="sentiment-vol-24h">$4,567,890</span> </div>
-                             </div>
-
-                             <div class="sentiment-info-box sentiment-gauge-box">
-                                 <h4><i class="fas fa-smile-beam"></i> Sentimiento</h4>
-                                 <div class="sentiment-percentage">
-                                     <span id="sentiment-percentage-value">20</span>% </div>
-                                 <div class="sentiment-gauge-placeholder">
-                                     <div class="gauge-arrow" id="sentiment-gauge-arrow" style="--rotation: 18deg;"></div> <div class="gauge-bg"></div>
-                                     <span class="gauge-label extreme-fear">Miedo Extremo</span>
-                                     <span class="gauge-label moderate">Moderado</span>
-                                     <span class="gauge-label euphoria">Euforia</span>
-                                 </div>
-                                 <div class="sentiment-level-text" id="sentiment-level">Miedo Extremo</div> </div>
-                         </div>
-
-                         <div class="dexscreener-embed-container">
-                             <h4>Gráfico del Token (Dexscreener)</h4>
-                             <div class="dexscreener-placeholder" id="dexscreener-chart">
-                                 <p>Introduce una dirección de token para ver el gráfico.</p>
-                             </div>
-                         </div>
-                     </div><aside class="twitter-feed-sidebar">
-                         <h4><i class="fab fa-twitter"></i> Comentarios Recientes (X)</h4>
-                         <div class="twitter-feed-content" id="twitter-feed">
-                             <div class="tweet-item positive">
-                                 <p><strong>@usuario_feliz:</strong> ¡Este token va a la luna! 🚀 #Crypto #Gema</p>
-                                 <small>hace 5 min</small>
-                             </div>
-                             <div class="tweet-item negative">
-                                 <p><strong>@inversor_cauto:</strong> No me convence, parece mucho humo. Cuidado. #SCAM?</p>
-                                 <small>hace 15 min</small>
-                             </div>
-                             <div class="tweet-item neutral">
-                                 <p><strong>@analista_neutral:</strong> Interesante movimiento hoy, siguiendo de cerca el volumen. #Trading</p>
-                                 <small>hace 30 min</small>
-                             </div>
-                             <div class="tweet-item positive">
-                                 <p><strong>@otro_optimista:</strong> El equipo está trabajando duro, se nota el progreso.</p>
-                                 <small>hace 45 min</small>
-                             </div>
-                             <div class="tweet-item negative">
-                                 <p><strong>@realista_duro:</strong> Mmm... la liquidez es muy baja todavía.</p>
-                                 <small>hace 1 hora</small>
-                             </div>
-                             </div>
-                     </aside> </div> </section>
              <section id="wallet-tracker" class="tool-section">
                  <div class="tracker-input-area">
                      <input type="text" id="solana-wallet-address-input" placeholder="Introduce dirección Solana a rastrear...">
@@ -284,30 +207,7 @@
              <section id="knowledge-base" class="tool-section"> <h2>Base de Conocimiento</h2> <p>...</p> </section>
              <section id="chatbot" class="tool-section"> <h2>ChatBot</h2> <p>...</p> </section>
 
-            <div id="search-modal" class="modal">
-                 <div class="modal-content">
-                     <span class="close-button">&times;</span>
-                     <h2>Buscar en QuantyX</h2>
-                     <input type="text" id="search-input" placeholder="Escribe para buscar...">
-                     <div id="search-results"></div>
-                 </div>
-             </div>
-              <div id="wallet-modal" class="modal">
-                 <div class="modal-content">
-                     <span class="close-button">&times;</span>
-                     <h2>Conectar Wallet</h2>
-                     <p>Aquí irán las opciones para conectar tu wallet.</p>
-                 </div>
-             </div>
-              <div id="user-modal" class="modal">
-                 <div class="modal-content">
-                     <span class="close-button">&times;</span>
-                     <h2>Perfil de Usuario / Acceso</h2>
-                     <p>Aquí irá el formulario de login/registro.</p>
-                 </div>
-             </div>
         </main>
-
         <footer>
             <div class="footer-content">
                 <div class="social-media">
@@ -325,7 +225,30 @@
                 &copy; 2025 QuantyX. Todos los derechos reservados.
             </div>
         </footer>
-    </div> <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+    </div> <div id="search-modal" class="modal">
+         <div class="modal-content">
+             <span class="close-button">&times;</span>
+             <h2>Buscar en QuantyX</h2>
+             <input type="text" id="search-input" placeholder="Escribe para buscar...">
+             <div id="search-results"></div>
+         </div>
+     </div>
+      <div id="wallet-modal" class="modal">
+         <div class="modal-content">
+             <span class="close-button">&times;</span>
+             <h2>Conectar Wallet</h2>
+             <p>Aquí irán las opciones para conectar tu wallet.</p>
+         </div>
+     </div>
+      <div id="user-modal" class="modal">
+         <div class="modal-content">
+             <span class="close-button">&times;</span>
+             <h2>Perfil de Usuario / Acceso</h2>
+             <p>Aquí irá el formulario de login/registro.</p>
+         </div>
+     </div>
+
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
