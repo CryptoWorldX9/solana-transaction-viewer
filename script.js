@@ -1,4 +1,4 @@
-// script.js - Incluye funcionalidad de Sidebar Colapsable y placeholders para Analizador de Sentimientos
+// script.js - Incluye placeholders y listener para Analizador de Sentimientos
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -71,40 +71,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const dexscreenerChart = document.getElementById('dexscreener-chart');
     const twitterFeed = document.getElementById('twitter-feed');
 
+    // --- Lógica Sidebar Colapsable (Sin Cambios) ---
+    const collapseSidebar = () => { if (window.innerWidth > 768 && !body.classList.contains('sidebar-collapsed')) body.classList.add('sidebar-collapsed'); };
+    const expandSidebar = () => { if (body.classList.contains('sidebar-collapsed')) body.classList.remove('sidebar-collapsed'); };
+    menuLinks.forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); const targetId=link.dataset.section; const targetEl=document.getElementById(targetId); if(targetEl){ sections.forEach(s=>s.classList.remove('active')); targetEl.classList.add('active'); menuLinks.forEach(l=>l.classList.remove('active-menu')); link.classList.add('active-menu'); collapseSidebar(); if(targetId==='wallet-tracker')resetWalletTrackerVisuals(); if(targetId === 'sentiment-analyzer') resetSentimentAnalyzerVisuals();} }); });
+    sidebar?.addEventListener('click', () => { if (body.classList.contains('sidebar-collapsed')) expandSidebar(); });
 
-    // --- Lógica Sidebar Colapsable ---
-    const collapseSidebar = () => {
-        if (window.innerWidth > 768 && !body.classList.contains('sidebar-collapsed')) {
-            body.classList.add('sidebar-collapsed');
-        }
-    };
-    const expandSidebar = () => {
-        if (body.classList.contains('sidebar-collapsed')) {
-            body.classList.remove('sidebar-collapsed');
-        }
-    };
-    menuLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetSectionId = link.getAttribute('data-section');
-            const targetSection = document.getElementById(targetSectionId);
-            if (targetSection) {
-                sections.forEach(s => s.classList.remove('active'));
-                targetSection.classList.add('active');
-                menuLinks.forEach(l => l.classList.remove('active-menu'));
-                link.classList.add('active-menu');
-                collapseSidebar(); // Colapsar siempre en desktop/tablet
-                // Resetear trackers/analizadores al navegar a ellos
-                if(targetSectionId === 'wallet-tracker') resetWalletTrackerVisuals();
-                if(targetSectionId === 'sentiment-analyzer') resetSentimentAnalyzerVisuals();
-            }
-        });
-    });
-    sidebar?.addEventListener('click', () => {
-        if (body.classList.contains('sidebar-collapsed')) expandSidebar();
-    });
-
-    // --- Lógica Modales ---
+    // --- Lógica Modales (Sin Cambios) ---
     const openModal = (modal) => { if (modal) modal.style.display = 'block'; };
     const closeModal = (modal) => { if (modal) modal.style.display = 'none'; };
     searchIcon?.addEventListener('click', () => openModal(searchModal));
@@ -128,15 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { feedback.style.opacity = '0'; setTimeout(() => feedback.remove(), 500); }, 1500);
     };
     const copyToClipboard = (text, buttonElement) => { /* ... (igual que antes) ... */
-        if (!text || text === '-' || text.includes('...')) return;
-        navigator.clipboard.writeText(text).then(() => showCopyFeedback(buttonElement)).catch(err => { console.error('Error al copiar: ', err); alert("Error al copiar."); });
+        if (!text || text === '-' || text.includes('...') || text.includes('Introduce una dirección')) return; // Añadido chequeo extra
+        navigator.clipboard.writeText(text).then(() => showCopyFeedback(buttonElement))
+        .catch(err => { console.error('Error al copiar: ', err); alert("Error al copiar."); });
     };
 
     // ======================================================
     // ========= LÓGICA ANALIZADOR DE SENTIMIENTOS ==========
     // ======================================================
     const resetSentimentAnalyzerVisuals = () => {
-        if (!sentimentTokenInput) return; // Salir si la sección no existe
+        if (!sentimentTokenInput) return;
         sentimentTokenInput.value = '';
         sentimentTokenCa.textContent = 'Introduce CA...';
         sentimentTokenCa.title = 'Dirección Completa del Token';
@@ -163,86 +137,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         console.log(`Buscando sentimiento para: ${tokenAddress}`);
         resetSentimentAnalyzerVisuals(); // Limpiar antes de buscar
-        // showElement(sentimentLoading); // Mostrar carga si existe
-        // hideElement(sentimentError);
+        // TODO: showElement(sentimentLoading); // Mostrar carga si existe
+        // TODO: hideElement(sentimentError);
 
         // --- Placeholder para llamadas API ---
         try {
-            // TODO: 1. Llamar a API para obtener Info del Token (ej. CoinGecko por CA, o Helius)
-            // const tokenInfo = await fetchTokenInfo(tokenAddress);
+            // Simulación - Reemplazar con llamadas API reales
+            await new Promise(resolve => setTimeout(resolve, 500)); // Simular carga
+
+            // 1. Info Token
             const tokenInfo = { ca: tokenAddress, value: (Math.random() * 0.01).toFixed(6) }; // Simulado
             sentimentTokenCa.textContent = `${tokenInfo.ca.substring(0, 6)}...${tokenInfo.ca.substring(tokenInfo.ca.length - 6)}`;
             sentimentTokenCa.title = tokenInfo.ca;
             sentimentTokenValue.textContent = `${tokenInfo.value} USD`;
 
-            // TODO: 2. Llamar a API para obtener Precio y Volumen (ej. CoinGecko, Dexscreener API)
-            // const priceData = await fetchPriceData(tokenAddress);
-            const priceData = { // Simulado
-                current: parseFloat(tokenInfo.value),
-                vol6h: Math.floor(Math.random() * 2000000) + 500000,
-                vol12h: Math.floor(Math.random() * 4000000) + 1000000,
-                vol24h: Math.floor(Math.random() * 8000000) + 2000000
-            };
+            // 2. Precio y Volumen
+            const priceData = { current: parseFloat(tokenInfo.value), vol6h: Math.floor(Math.random() * 2000000) + 500000, vol12h: Math.floor(Math.random() * 4000000) + 1000000, vol24h: Math.floor(Math.random() * 8000000) + 2000000 };
             sentimentPriceCurrent.textContent = `$${priceData.current.toFixed(6)}`;
             sentimentVol6h.textContent = `$${priceData.vol6h.toLocaleString()}`;
             sentimentVol12h.textContent = `$${priceData.vol12h.toLocaleString()}`;
             sentimentVol24h.textContent = `$${priceData.vol24h.toLocaleString()}`;
 
-            // TODO: 3. Llamar a API para obtener Sentimiento y Tweets (API de X, API de análisis de sentimiento)
-            // const sentimentData = await fetchSentimentAndTweets(tokenAddress);
-            const sentimentData = { // Simulado
-                percentage: Math.floor(Math.random() * 101), // 0-100
-                tweets: [
-                    { user: '@cryptoMaxi', text: `¡Gran potencial en ${tokenAddress.substring(0,4)}! Comprando más. 🚀`, sentiment: 'positive', time: '2min'},
-                    { user: '@bearMarketBob', text: `Esto huele a rug pull, cuidado con ${tokenAddress.substring(0,4)}`, sentiment: 'negative', time: '10min'},
-                    { user: '@neutralNancy', text: `Observando ${tokenAddress.substring(0,4)}, volumen interesante.`, sentiment: 'neutral', time: '25min'},
-                    { user: '@traderJoe', text: `Hold! 💎🙌 #DYOR`, sentiment: 'positive', time: '1h'}
-                ]
-            };
+            // 3. Sentimiento y Tweets
+            const sentimentData = { percentage: Math.floor(Math.random() * 101), tweets: [ /* ... (datos simulados como antes) ... */
+                { user: '@criptoFan', text: `Creo que ${tokenAddress.substring(0,4)} tiene futuro! HOLD! 💎`, sentiment: 'positive', time: '1min'},
+                { user: '@miedoMax', text: `Uff, ${tokenAddress.substring(0,4)} está cayendo mucho... no sé qué hacer.`, sentiment: 'negative', time: '8min'},
+            ]};
             sentimentPercentageValue.textContent = sentimentData.percentage;
-            let level = 'Moderado';
-            let rotation = 90; // Grados (0-180)
-            if (sentimentData.percentage <= 25) {
-                level = 'Miedo Extremo';
-                rotation = (sentimentData.percentage / 25) * 45; // Mapear 0-25 a 0-45 grados
-            } else if (sentimentData.percentage <= 50) {
-                level = 'Miedo';
-                rotation = 45 + ((sentimentData.percentage - 25) / 25) * 45; // Mapear 26-50 a 46-90 grados
-            } else if (sentimentData.percentage <= 75) {
-                level = 'Codicia';
-                rotation = 90 + ((sentimentData.percentage - 50) / 25) * 45; // Mapear 51-75 a 91-135 grados
-            } else {
-                level = 'Euforia';
-                rotation = 135 + ((sentimentData.percentage - 75) / 25) * 45; // Mapear 76-100 a 136-180 grados
-            }
+            let level = 'Moderado'; let rotation = 90;
+            if (sentimentData.percentage <= 25) { level = 'Miedo Extremo'; rotation = (sentimentData.percentage / 25) * 45; }
+            else if (sentimentData.percentage <= 50) { level = 'Miedo'; rotation = 45 + ((sentimentData.percentage - 25) / 25) * 45; }
+            else if (sentimentData.percentage <= 75) { level = 'Codicia'; rotation = 90 + ((sentimentData.percentage - 50) / 25) * 45; }
+            else { level = 'Euforia'; rotation = 135 + ((sentimentData.percentage - 75) / 25) * 45; }
             sentimentLevel.textContent = level;
             if (sentimentGaugeArrow) sentimentGaugeArrow.style.setProperty('--rotation', `${rotation}deg`);
 
             // Poblar Tweets
             if (twitterFeed) {
-                twitterFeed.innerHTML = ''; // Limpiar placeholders
+                twitterFeed.innerHTML = '';
                 if (sentimentData.tweets.length > 0) {
                     sentimentData.tweets.forEach(tweet => {
                         const tweetDiv = document.createElement('div');
-                        tweetDiv.classList.add('tweet-item', tweet.sentiment); // Añadir clase de sentimiento
-                        tweetDiv.innerHTML = `
-                            <p><strong>${tweet.user}:</strong> ${tweet.text}</p>
-                            <small>hace ${tweet.time}</small>
-                        `;
+                        tweetDiv.classList.add('tweet-item', tweet.sentiment);
+                        tweetDiv.innerHTML = `<p><strong>${tweet.user}:</strong> ${tweet.text}</p><small>hace ${tweet.time}</small>`;
                         twitterFeed.appendChild(tweetDiv);
                     });
-                } else {
-                    twitterFeed.innerHTML = '<p>No se encontraron comentarios recientes.</p>';
-                }
+                } else { twitterFeed.innerHTML = '<p>No se encontraron comentarios recientes.</p>'; }
             }
 
-
-            // TODO: 4. Cargar gráfico de Dexscreener
+            // 4. Cargar gráfico Dexscreener
             if (dexscreenerChart) {
-                // Necesitas la cadena correcta de la red (ej. 'solana') y la dirección del par si es posible, o solo el token
-                // Ejemplo: https://dexscreener.com/solana/pairaddress?embed=1&theme=dark&trades=0&info=0
-                const dexscreenerUrl = `https://dexscreener.com/solana/${tokenAddress}?embed=1&theme=dark&info=0`; // URL Base, podría necesitar ajustes
-                dexscreenerChart.innerHTML = `<iframe src="${dexscreenerUrl}" ></iframe>`;
+                // TODO: Obtener la dirección del PAR (pair address) si es posible, si no, usar la del token puede funcionar a veces.
+                const dexscreenerUrl = `https://dexscreener.com/solana/${tokenAddress}?embed=1&theme=dark&info=0`;
+                dexscreenerChart.innerHTML = `<iframe src="${dexscreenerUrl}" loading="lazy"></iframe>`;
             }
 
             // hideElement(sentimentLoading); // Ocultar carga
@@ -252,34 +199,27 @@ document.addEventListener('DOMContentLoaded', () => {
             // showElement(sentimentError); // Mostrar error si existe
             // hideElement(sentimentLoading);
             alert("Error al buscar datos del token.");
+            resetSentimentAnalyzerVisuals(); // Resetear en caso de error
         }
     };
 
     // Listener para el botón de búsqueda de sentimiento
     sentimentSearchButton?.addEventListener('click', searchTokenSentiment);
     sentimentTokenInput?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            sentimentSearchButton.click();
-        }
+        if (e.key === 'Enter') { e.preventDefault(); sentimentSearchButton.click(); }
     });
+
 
     // ======================================================
     // ========= LÓGICA WALLET TRACKER (EXISTENTE) ==========
     // ======================================================
-
     const resetWalletTrackerVisuals = () => { /* ... (igual que antes) ... */
-        if (!walletTrackerSection) return;
-        displayWalletAddress.textContent = 'Introduce una dirección...'; displayWalletAddress.title = 'Dirección Completa';
-        displayWalletAddress.removeAttribute('data-full-address'); solBalanceValue.textContent = '-';
-        solBalanceUsd.textContent = '$ -.--'; tokenCount.textContent = '- Tokens'; ownerAddress.textContent = '-';
-        ownerAddress.title = 'Dirección Dueño'; ownerAddress.removeAttribute('data-full-address');
-        onCurveStatus.textContent = '-'; stakeAmount.textContent = '-'; tagsDisplay.innerHTML = '<small>(No implementado)</small>';
-        tokenListDetailed.innerHTML = '<li>Introduce una dirección y rastrea.</li>';
-        transactionsTableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Introduce una dirección y haz clic en Rastrear.</td></tr>';
-        privateNoteDisplay.innerHTML = ''; privateNoteInput.value = '';
-        addNoteForm?.classList.add('hidden'); addNoteLink?.classList.remove('hidden');
-        tokenDropdownDetails?.removeAttribute('open'); hideElement(trackerLoading); hideElement(trackerError);
+        if (!walletTrackerSection) return; displayWalletAddress.textContent = 'Introduce una dirección...'; displayWalletAddress.title = 'Dirección Completa';
+        displayWalletAddress.removeAttribute('data-full-address'); solBalanceValue.textContent = '-'; solBalanceUsd.textContent = '$ -.--'; tokenCount.textContent = '- Tokens'; ownerAddress.textContent = '-';
+        ownerAddress.title = 'Dirección Dueño'; ownerAddress.removeAttribute('data-full-address'); onCurveStatus.textContent = '-'; stakeAmount.textContent = '-'; tagsDisplay.innerHTML = '<small>(No implementado)</small>';
+        tokenListDetailed.innerHTML = '<li>Introduce una dirección y rastrea.</li>'; transactionsTableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Introduce una dirección y haz clic en Rastrear.</td></tr>';
+        privateNoteDisplay.innerHTML = ''; privateNoteInput.value = ''; addNoteForm?.classList.add('hidden'); addNoteLink?.classList.remove('hidden'); tokenDropdownDetails?.removeAttribute('open');
+        hideElement(trackerLoading); hideElement(trackerError);
     };
     trackWalletButton?.addEventListener('click', () => { const address = trackerWalletInput?.value.trim(); if (address) trackWallet(address); else { alert("Dir. Solana?"); trackerWalletInput?.focus();} });
     trackerWalletInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); trackWalletButton.click(); }});
@@ -326,7 +266,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) { /* ... (Manejo error general) ... */
              console.error("Error Gral Wallet:", error); trackerError.textContent=`Error: ${error.message}.`; showElement(trackerError); hideElement(trackerLoading); resetWalletTrackerVisuals(); displayWalletAddress.textContent='Error'; }
     };
-
 
     // --- Inicialización General ---
      const homeSection = document.getElementById('home');
