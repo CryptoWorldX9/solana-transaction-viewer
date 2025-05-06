@@ -137,179 +137,120 @@
             </nav>
         </aside>
 
-        <div class="content-wrapper" id="content-wrapper">
-            <main class="main-content" id="main-content">
-                <section id="home"> <h1>Bienvenido a QuantyX</h1>
-                    <p>Tu centro neural impulsado por IA para herramientas Crypto.</p>
-                    <div class="carousel-container">
-                        </div>
-                </section>
-
-                 <section id="sentiment-analyzer" class="tool-section">
-                     <h2>Analizador de Sentimientos</h2>
-                     <div class="sentiment-layout"> <div class="sentiment-main-content">
-                             <div class="sentiment-search-area">
-                                 <input type="text" id="sentiment-token-input" placeholder="Introduce la dirección del token (CA)...">
-                                 <button id="sentiment-search-button" class="icon-button" title="Buscar Token">
-                                     <i class="fas fa-search"></i>
-                                 </button>
-                             </div>
-
-                             <div class="sentiment-info-boxes">
-                                 <div class="sentiment-info-box">
-                                     <h4><i class="fas fa-info-circle"></i> Información del Token</h4>
-                                     <div class="info-item">
-                                         <span class="info-label">CA:</span>
-                                         <span class="info-value token-ca" id="sentiment-token-ca" title="Dirección Completa del Token">9qzJG...AbcdeF</span> </div>
-                                     <div class="info-item">
-                                         <span class="info-label">Valor Actual:</span>
-                                         <span class="info-value" id="sentiment-token-value">0.00456 USD</span> </div>
-                                     </div>
-
-                                 <div class="sentiment-info-box">
-                                     <h4><i class="fas fa-dollar-sign"></i> Precio</h4>
-                                     <div class="info-item">
-                                         <span class="info-label">Actual:</span>
-                                         <span class="info-value" id="sentiment-price-current">$0.00456</span> </div>
-                                     <div class="info-item">
-                                         <span class="info-label">Volumen 6H:</span>
-                                         <span class="info-value" id="sentiment-vol-6h">$1,234,567</span> </div>
-                                     <div class="info-item">
-                                         <span class="info-label">Volumen 12H:</span>
-                                         <span class="info-value" id="sentiment-vol-12h">$2,345,678</span> </div>
-                                     <div class="info-item">
-                                         <span class="info-label">Volumen 24H:</span>
-                                         <span class="info-value" id="sentiment-vol-24h">$4,567,890</span> </div>
-                                 </div>
-
-                                 <div class="sentiment-info-box sentiment-gauge-box">
-                                     <h4><i class="fas fa-smile-beam"></i> Sentimiento</h4>
-                                     <div class="sentiment-percentage">
-                                         <span id="sentiment-percentage-value">75</span>% <span id="sentiment-level">Euforia</span> </div>
-                                     <div class="sentiment-gauge-placeholder">
-                                         <div class="gauge-arrow" id="sentiment-gauge-arrow" style="--rotation: 135deg;"></div> <div class="gauge-bg"></div>
-                                         <span class="gauge-label extreme-fear">Miedo Extremo</span>
-                                         <span class="gauge-label moderate">Moderado</span>
-                                         <span class="gauge-label euphoria">Euforia</span>
-                                     </div>
-                                 </div>
-                             </div>
-
-                             <div class="dexscreener-embed-container">
-                                 <h4>Gráfico del Token (Dexscreener)</h4>
-                                 <div class="dexscreener-placeholder" id="dexscreener-chart">
-                                     <p>Introduce una dirección de token para ver el gráfico.</p>
-                                 </div>
-                             </div>
-                         </div><aside class="twitter-feed-sidebar">
-                             <h4><i class="fab fa-twitter"></i> Comentarios Recientes (X)</h4>
-                             <div class="twitter-feed-content" id="twitter-feed">
-                                 <div class="tweet-item positive">
-                                     <p><strong>@usuario_feliz:</strong> ¡Este token va a la luna! 🚀 #Crypto #Gema</p>
-                                     <small>hace 5 min</small>
-                                 </div>
-                                 <div class="tweet-item negative">
-                                     <p><strong>@inversor_cauto:</strong> No me convence, parece mucho humo. Cuidado. #SCAM?</p>
-                                     <small>hace 15 min</small>
-                                 </div>
-                                 <div class="tweet-item neutral">
-                                     <p><strong>@analista_neutral:</strong> Interesante movimiento hoy, siguiendo de cerca el volumen. #Trading</p>
-                                     <small>hace 30 min</small>
-                                 </div>
-                                 </div>
-                         </aside> </div> </section>
-                 <section id="wallet-tracker" class="tool-section">
-                    <div class="tracker-input-area">
-                         <input type="text" id="solana-wallet-address-input" placeholder="Introduce dirección Solana a rastrear...">
-                         <button id="track-wallet-button"><i class="fas fa-search"></i> Rastrear</button>
-                     </div>
-                     <div id="tracker-loading" class="tracker-message hidden">...</div>
-                     <div id="tracker-error" class="tracker-message error hidden">...</div>
-                     <div class="wallet-tracker-header">...</div>
-                     <div class="info-boxes-container">...</div>
-                     <div class="transactions-table-container">...</div>
-                     <div class="table-footer-controls">...</div>
-                 </section>
-
-                 <section id="bot-trading" class="tool-section">
-                     <h2>Bot Trading</h2>
-                     <p>Aquí irá la herramienta de trading automático.</p>
-                 </section>
-                 <section id="sniper" class="tool-section">
-                     <h2>Sniper</h2>
-                     <p>Aquí irá la herramienta Sniper.</p>
-                 </section>
-                 <section id="token-creator" class="tool-section">
-                     <h2>Creador de Token</h2>
-                     <p>Aquí irá la herramienta de creación de tokens.</p>
-                 </section>
-                 <section id="staking" class="tool-section">
-                     <h2>Staking</h2>
-                     <p>Aquí irá la herramienta de staking.</p>
-                 </section>
-                 <section id="gaming" class="tool-section">
-                     <h2>Gaming</h2>
-                     <p>Aquí irá la sección de gaming.</p>
-                 </section>
-                 <section id="nft-collection" class="tool-section">
-                     <h2>Colección NFTs</h2>
-                     <p>Aquí irá el contenido de tu colección de NFTs.</p>
-                 </section>
-                  <section id="detox-reclaim" class="tool-section">
-                     <h2>Detox & Reclaim</h2>
-                     <p>Aquí irá la herramienta combinada de Detox & Reclaim.</p>
-                 </section>
-                 <section id="knowledge-base" class="tool-section">
-                    <h2>Base de Conocimiento</h2>
-                    <p>Aquí irá la base de conocimiento.</p>
-                </section>
-                <section id="chatbot" class="tool-section">
-                     <h2>ChatBot</h2>
-                     <p>Aquí irá el ChatBot.</p>
-                 </section>
-
-                <div id="search-modal" class="modal">
-                     <div class="modal-content">
-                         <span class="close-button">&times;</span>
-                         <h2>Buscar en QuantyX</h2>
-                         <input type="text" id="search-input" placeholder="Escribe para buscar...">
-                         <div id="search-results"></div>
-                     </div>
-                 </div>
-                  <div id="wallet-modal" class="modal">
-                     <div class="modal-content">
-                         <span class="close-button">&times;</span>
-                         <h2>Conectar Wallet</h2>
-                         <p>Aquí irán las opciones para conectar tu wallet (ej: MetaMask, WalletConnect).</p>
-                         </div>
-                 </div>
-                  <div id="user-modal" class="modal">
-                     <div class="modal-content">
-                         <span class="close-button">&times;</span>
-                         <h2>Perfil de Usuario / Acceso</h2>
-                         <p>Aquí irá el formulario de login/registro o la información del usuario.</p>
-                         </div>
-                 </div>
-            </main>
-
-            <footer>
-                <div class="footer-content">
-                    <div class="social-media">
-                        <h3>Síguenos</h3>
-                        <ul>
-                            <li><a href="#" target="_blank"><i class="fab fa-x-twitter"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-youtube"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-tiktok"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-telegram"></i></a></li>
-                        </ul>
+        <main class="main-content" id="main-content">
+            <section id="home"> <h1>Bienvenido a QuantyX</h1>
+                <p>Tu centro neural impulsado por IA para herramientas Crypto.</p>
+                <div class="carousel-container">
                     </div>
-                </div>
-                <div class="footer-bottom">
-                    &copy; 2025 QuantyX. Todos los derechos reservados.
-                </div>
-            </footer>
-        </div> </div> <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+            </section>
+
+             <section id="sentiment-analyzer" class="tool-section">
+                 <h2>Analizador de Sentimientos</h2>
+                 <p>Aquí irá la herramienta de análisis de sentimientos. (Diseño pendiente)</p>
+             </section>
+
+             <section id="wallet-tracker" class="tool-section">
+                 <div class="tracker-input-area">
+                     <input type="text" id="solana-wallet-address-input" placeholder="Introduce dirección Solana a rastrear...">
+                     <button id="track-wallet-button"><i class="fas fa-search"></i> Rastrear</button>
+                 </div>
+                 <div id="tracker-loading" class="tracker-message hidden"><i class="fas fa-spinner fa-spin"></i> Cargando datos...</div>
+                 <div id="tracker-error" class="tracker-message error hidden">Error al cargar datos.</div>
+                 <div class="wallet-tracker-header">
+                     <div class="account-info">
+                         <h3 class="account-title">Cuenta</h3>
+                         <div class="address-line">
+                             <span id="display-wallet-address" title="Dirección Completa">Introduce una dirección...</span>
+                             <button class="icon-button copy-button" title="Copiar dirección"><i class="fas fa-copy"></i></button>
+                             <button class="icon-button qr-button" title="Mostrar código QR"><i class="fas fa-qrcode"></i></button>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="info-boxes-container">
+                     <div class="info-box general-info-box">
+                         <h4>Descripción General</h4>
+                         <div class="info-item"><span class="info-label">Saldo SOL:</span><span class="info-value"><i class="fab fa-solana sol-icon-small"></i> <span id="sol-balance-value">-</span> SOL (<span id="sol-balance-usd">$ -.--</span>)</span></div>
+                         <div class="info-item"><span class="info-label">Saldo de token:</span><span class="info-value" id="token-count">- Tokens</span></div>
+                         <details class="token-dropdown"><summary class="token-summary">Mostrar Tokens <i class="fas fa-chevron-down dropdown-arrow"></i></summary><ul id="token-list-detailed" class="token-list"><li>Introduce una dirección y rastrea.</li></ul></details>
+                         <div class="wallet-details-link"><button class="icon-button" title="Más detalles"><i class="fas fa-wallet"></i></button></div>
+                     </div>
+                     <div class="info-box more-info-box">
+                          <h4>Más Información</h4>
+                          <div class="info-item"><span class="info-label">Dueño:</span><span class="info-value address-line-small"><i class="fab fa-solana sol-icon-small"></i><span id="owner-address" title="Dirección Dueño">-</span><button class="icon-button copy-button-small" title="Copiar dirección"><i class="fas fa-copy"></i></button></span></div>
+                          <div class="info-item"><span class="info-label">Está en la Curva:</span><span class="info-value" id="on-curve-status">-</span></div>
+                          <div class="info-item"><span class="info-label">Stake:</span><span class="info-value"><i class="fab fa-solana sol-icon-small"></i> <span id="stake-amount">-</span> SOL <small>(No imp.)</small></span></div>
+                          <div class="info-item tags-item"><span class="info-label">Etiquetas:</span><span class="info-value tags-container" id="tags-display"><small>(No imp.)</small></span></div>
+                     </div>
+                     <div class="info-box misc-info-box">
+                          <h4>Varios</h4>
+                          <div class="info-item"><span class="info-label">Nombre Privado:</span></div>
+                          <div class="private-note-area"><div id="private-note-display"></div><a href="#" id="add-note-link" class="add-note-link"><i class="fas fa-pencil-alt"></i> Añadir notas</a><div id="add-note-form" class="add-note-form hidden"><textarea id="private-note-input" placeholder="Escribe tu nota..."></textarea><button id="save-note-button">Guardar</button><button id="cancel-note-button" type="button">Cancelar</button></div></div>
+                     </div>
+                 </div>
+                 <div class="transactions-table-container">
+                     <table id="transactions-table">
+                         <thead><tr><th><i class="fas fa-question-circle" title="Detalles"></i></th><th>Firma</th><th>Bloque</th><th>Fecha (UTC)</th><th>Instrucciones</th><th>Por</th><th>Valor</th><th>Tarifa</th><th>Programa</th></tr></thead>
+                         <tbody id="transaction-list-body"><tr><td colspan="9" style="text-align:center;">Introduce una dirección y haz clic en Rastrear.</td></tr></tbody>
+                     </table>
+                 </div>
+                 <div class="table-footer-controls">
+                    <div class="items-per-page-selector"><label for="items-per-page">Mostrar:</label><select id="items-per-page" name="items-per-page"><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option></select><span>transacciones</span></div>
+                 </div>
+             </section>
+             <section id="bot-trading" class="tool-section"> <h2>Bot Trading</h2> <p>...</p> </section>
+             <section id="sniper" class="tool-section"> <h2>Sniper</h2> <p>...</p> </section>
+             <section id="token-creator" class="tool-section"> <h2>Creador de Token</h2> <p>...</p> </section>
+             <section id="staking" class="tool-section"> <h2>Staking</h2> <p>...</p> </section>
+             <section id="gaming" class="tool-section"> <h2>Gaming</h2> <p>...</p> </section>
+             <section id="nft-collection" class="tool-section"> <h2>Colección NFTs</h2> <p>...</p> </section>
+             <section id="detox-reclaim" class="tool-section"> <h2>Detox & Reclaim</h2> <p>...</p> </section>
+             <section id="knowledge-base" class="tool-section"> <h2>Base de Conocimiento</h2> <p>...</p> </section>
+             <section id="chatbot" class="tool-section"> <h2>ChatBot</h2> <p>...</p> </section>
+
+            <div id="search-modal" class="modal">
+                 <div class="modal-content">
+                     <span class="close-button">&times;</span>
+                     <h2>Buscar en QuantyX</h2>
+                     <input type="text" id="search-input" placeholder="Escribe para buscar...">
+                     <div id="search-results"></div>
+                 </div>
+             </div>
+              <div id="wallet-modal" class="modal">
+                 <div class="modal-content">
+                     <span class="close-button">&times;</span>
+                     <h2>Conectar Wallet</h2>
+                     <p>Aquí irán las opciones para conectar tu wallet.</p>
+                 </div>
+             </div>
+              <div id="user-modal" class="modal">
+                 <div class="modal-content">
+                     <span class="close-button">&times;</span>
+                     <h2>Perfil de Usuario / Acceso</h2>
+                     <p>Aquí irá el formulario de login/registro.</p>
+                 </div>
+             </div>
+        </main>
+
+        </div> <footer>
+        <div class="footer-content">
+            <div class="social-media">
+                <h3>Síguenos</h3>
+                <ul>
+                    <li><a href="#" target="_blank"><i class="fab fa-x-twitter"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-youtube"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-tiktok"></i></a></li>
+                    <li><a href="#" target="_blank"><i class="fab fa-telegram"></i></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 QuantyX. Todos los derechos reservados.
+        </div>
+    </footer>
+
+
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
