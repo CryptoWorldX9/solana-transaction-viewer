@@ -14,63 +14,29 @@
     --neon-glow-purple: 0 0 8px var(--corp-purple);
     --neon-glow-green: 0 0 8px var(--corp-green);
     --hover-glow: var(--neon-glow-blue), var(--neon-glow-purple), var(--neon-glow-green); /* Glow combinado */
-
-    /* Definir un color pink suave solo para el tracker si se desea, o usar los corporativos */
     --tracker-accent: var(--corp-blue); /* Usamos azul como acento principal en tracker */
-
-    /* Definir altura del header fijo */
-    --header-height: 70px; /* Ajustado ligeramente */
-    /* Variable para ancho de sidebar */
-    --sidebar-width-expanded: 230px;
+    --header-height: 70px;
+    --sidebar-width-expanded: 230px; /* Solo necesitamos el ancho expandido ahora */
 }
 
 /* --- Estilos Generales --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    height: 100%;
-}
-
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { height: 100%; }
 body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: var(--dark-background);
-    color: var(--text-color);
-    line-height: 1.6;
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    font-family: 'Montserrat', sans-serif; background-color: var(--dark-background);
+    color: var(--text-color); line-height: 1.6; overflow-x: hidden;
+    display: flex; flex-direction: column; min-height: 100vh;
 }
 
 /* --- Animación de Fondo --- */
-.background-animation {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-    background: linear-gradient(45deg, var(--corp-blue), var(--corp-purple), var(--corp-green), var(--dark-background));
-    background-size: 400% 400%; animation: gradientBG 25s ease infinite; opacity: 0.1;
-}
+.background-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: linear-gradient(45deg, var(--corp-blue), var(--corp-purple), var(--corp-green), var(--dark-background)); background-size: 400% 400%; animation: gradientBG 25s ease infinite; opacity: 0.1; }
 @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
 /* --- Header --- */
-header {
-    background-color: rgba(11, 11, 11, 0.8); backdrop-filter: blur(10px); color: var(--text-color);
-    padding: 0.8rem 2rem; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-    display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid var(--line-color); min-height: var(--header-height);
-}
-.logo {
-    font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; color: var(--corp-blue);
-    text-shadow: var(--neon-glow-blue); position: relative; padding-right: 40px; display: inline-block;
-}
+header { background-color: rgba(11, 11, 11, 0.8); backdrop-filter: blur(10px); color: var(--text-color); padding: 0.8rem 2rem; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line-color); min-height: var(--header-height); }
+.logo { font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; color: var(--corp-blue); text-shadow: var(--neon-glow-blue); position: relative; padding-right: 40px; display: inline-block; }
 .logo-x { /* Opcional */ }
-.beta-tag {
-    position: absolute; top: -5px; right: 0; background-color: var(--corp-purple); color: var(--dark-background);
-    padding: 2px 5px; border-radius: 4px; font-size: 0.6rem; font-weight: bold; line-height: 1;
-    text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.3); z-index: 1; text-shadow: none;
-}
+.beta-tag { position: absolute; top: -5px; right: 0; background-color: var(--corp-purple); color: var(--dark-background); padding: 2px 5px; border-radius: 4px; font-size: 0.6rem; font-weight: bold; line-height: 1; text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.3); z-index: 1; text-shadow: none; }
 
 /* --- Price Ticker --- */
 .price-ticker { flex-grow: 1; overflow: hidden; white-space: nowrap; margin: 0 2rem; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
@@ -91,52 +57,48 @@ header {
 .language-dropdown span { display: block; padding: 8px 15px; color: var(--soft-text-color); cursor: pointer; font-size: 0.9rem; transition: background-color 0.2s ease, color 0.2s ease; }
 .language-dropdown span:hover { background-color: var(--soft-highlight); color: var(--text-color); }
 
-
 /* --- Contenedor Principal --- */
 .container {
-    display: flex; /* Usa Flexbox */
+    display: flex; /* Sidebar y Main Content lado a lado */
     flex-grow: 1;
-    margin-top: var(--header-height);
+    margin-top: var(--header-height); /* Dejar espacio para el header fijo */
 }
 
 /* --- Sidebar --- */
 .sidebar {
-    width: var(--sidebar-width-expanded); /* Ancho fijo normal */
-    flex-shrink: 0; /* Evita que el sidebar se encoja */
+    width: var(--sidebar-width-expanded); /* Ancho fijo */
+    flex-shrink: 0; /* No se encoje */
     background-color: var(--medium-dark-background);
     padding: 1.5rem 0;
+    /* Sin transición de width */
     border-right: 1px solid var(--line-color);
     height: calc(100vh - var(--header-height));
-    position: sticky; /* Se queda fijo */
+    position: sticky; /* Fijo en scroll */
     top: var(--header-height);
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 900;
-    cursor: default;
-    -ms-overflow-style: none; scrollbar-width: none;
+    cursor: default; /* Cursor normal */
+    -ms-overflow-style: none; scrollbar-width: none; /* Ocultar scrollbar */
 }
 .sidebar::-webkit-scrollbar { display: none; }
 .sidebar nav ul { list-style: none; }
 .sidebar .menu-item a { display: flex; align-items: center; padding: 0.8rem 1.5rem; color: var(--soft-text-color); text-decoration: none; transition: background-color 0.3s ease, color 0.3s ease; font-size: 0.95rem; position: relative; overflow: hidden; white-space: nowrap; cursor: pointer; }
 .sidebar .menu-item a::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background-color: var(--corp-blue); transform: scaleY(0); transition: transform 0.3s ease; transform-origin: bottom; }
-.sidebar .menu-item a i { margin-right: 15px; width: 20px; text-align: center; font-size: 1.1rem; flex-shrink: 0; }
+.sidebar .menu-item a i { margin-right: 15px; width: 20px; text-align: center; font-size: 1.1rem; flex-shrink: 0; /* Sin transición */ }
 .sidebar .menu-item a .menu-text { opacity: 1; transition: opacity 0.2s ease; white-space: nowrap; }
 .sidebar .menu-item a:hover { background-color: var(--soft-highlight); color: var(--text-color); }
 .sidebar .menu-item a.active-menu { color: var(--text-color); font-weight: 600; background-color: var(--soft-highlight); }
 .sidebar .menu-item a.active-menu::before { transform: scaleY(1); box-shadow: var(--neon-glow-blue); }
 
-
 /* --- Main Content --- */
 .main-content {
-    flex-grow: 1; /* ****** CAMBIO CLAVE: Ocupa el espacio restante ****** */
+    flex-grow: 1; /* Ocupa el espacio restante */
     padding: 2rem;
     position: relative;
     z-index: 1;
-    overflow-y: auto; /* Permitir scroll aquí si es necesario */
-    /* ****** CAMBIO CLAVE: Eliminado margin-left ****** */
-    /* margin-left: var(--sidebar-width-expanded); */
-    /* Asegurar que el contenido no se vaya debajo del header fijo */
-    /* height: calc(100vh - var(--header-height)); */ /* Quitar esto si el scroll es del body */
+    overflow-y: auto; /* Scroll para el contenido principal */
+    /* ****** CAMBIO CRÍTICO: Sin margin-left ****** */
 }
 
 .main-content section { display: none; animation: fadeIn 0.5s ease-in-out; }
@@ -146,9 +108,23 @@ header {
 .main-content h2 { color: var(--corp-green); margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--line-color); }
 .main-content p { margin-bottom: 1rem; color: var(--text-color); }
 
+/* --- Estilos para Analizador de Sentimientos (Placeholder) --- */
+#sentiment-analyzer {
+    /* Puedes añadir estilos específicos aquí cuando lo desarrolles */
+}
+.sentiment-layout, .sentiment-main-content, .twitter-feed-sidebar,
+.sentiment-search-area, .sentiment-info-boxes, .sentiment-info-box,
+.dexscreener-embed-container {
+    border: 1px dashed rgba(255,255,255,0.1); /* Bordes punteados para ver estructura */
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+.twitter-feed-sidebar { min-height: 300px; }
+.sentiment-info-boxes { display: flex; gap: 1rem; }
+.sentiment-info-box { flex: 1; }
+.dexscreener-embed-container { min-height: 400px; }
 
-/* --- Estilos específicos para Wallet Tracker --- */
-/* Input y Botón específicos del tracker */
+/* --- Estilos específicos para Wallet Tracker (Revisados) --- */
 .tracker-input-area { display: flex; gap: 10px; margin-bottom: 2rem; align-items: center; flex-wrap: wrap; }
 #solana-wallet-address-input { flex-grow: 1; padding: 10px 15px; background-color: var(--medium-dark-background); border: 1px solid var(--border-color); border-radius: 5px; color: var(--text-color); font-size: 0.95rem; outline: none; transition: border-color 0.3s ease, box-shadow 0.3s ease; min-width: 250px; }
 #solana-wallet-address-input::placeholder { color: var(--soft-text-color); }
@@ -157,13 +133,9 @@ header {
 #track-wallet-button i { font-size: 1em; }
 #track-wallet-button:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0, 176, 255, 0.3), 0 4px 15px rgba(179, 106, 255, 0.3); }
 #track-wallet-button:active { transform: translateY(0px); box-shadow: 0 2px 8px rgba(0, 176, 255, 0.2), 0 2px 8px rgba(179, 106, 255, 0.2); }
-
-/* Mensajes de estado del Tracker */
 .tracker-message { padding: 1rem; margin-bottom: 1.5rem; border-radius: 5px; text-align: center; border: 1px solid var(--border-color); background-color: var(--medium-dark-background); }
 .tracker-message.error { color: #ff6b6b; border-color: #ff6b6b; background-color: rgba(255, 107, 107, 0.1); }
 .tracker-message .fa-spinner { margin-right: 8px; }
-
-/* Fila Superior: Cuenta (Búsqueda Eliminada) */
 .wallet-tracker-header { display: flex; align-items: flex-start; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line-color); flex-wrap: wrap; gap: 1rem; }
 .account-info { min-width: 250px; }
 .account-title { font-size: 1.3rem; color: var(--text-color); margin-bottom: 0.5rem; font-weight: 600; }
@@ -174,8 +146,6 @@ header {
 .icon-button { background: none; border: none; color: var(--soft-text-color); font-size: 1rem; cursor: pointer; padding: 0.3rem; transition: color 0.2s ease, transform 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
 .icon-button:hover { color: var(--corp-blue); transform: scale(1.1); }
 .icon-button.copy-button-small { font-size: 0.9rem; }
-
-/* Fila Media: 3 Cajas de Información */
 .info-boxes-container { display: flex; gap: 1.5rem; margin-bottom: 2rem; align-items: stretch; flex-wrap: wrap; }
 .info-box { background-color: var(--medium-dark-background); border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem; flex: 1; min-width: 280px; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; }
 .info-box:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); }
@@ -184,8 +154,6 @@ header {
 .info-label { color: var(--soft-text-color); font-weight: 400; }
 .info-value { color: var(--text-color); font-weight: 600; text-align: right; }
 .sol-icon-small { color: #00ffa3; margin-right: 4px; font-size: 0.9em; }
-
-/* Dropdown de Tokens */
 .token-dropdown { margin-top: 1rem; }
 .token-summary { cursor: pointer; color: var(--corp-blue); display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-top: 1px solid var(--line-color); margin-top: 0.5rem; }
 .token-summary:hover { color: #33c6ff; }
@@ -199,8 +167,6 @@ header {
 .token-name { flex-grow: 1; color: var(--text-color); }
 .token-amount { color: var(--soft-text-color); font-weight: 600; }
 .wallet-details-link { margin-top: auto; padding-top: 1rem; text-align: right; }
-
-/* Estilos Caja "Más Información" */
 .address-line-small .fa-copy { font-size: 0.9em; }
 .tags-item { align-items: flex-start; }
 .tags-container { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: flex-end; }
@@ -208,8 +174,6 @@ header {
 .tag:hover { background-color: var(--corp-blue); color: var(--dark-background); }
 .tag.pump-tag { background-color: #e85d04; color: white; }
 .tag.creator-tag { cursor: pointer; }
-
-/* Estilos Caja "Varios" - Notas */
 .private-note-area { margin-top: 1rem; border-top: 1px solid var(--line-color); padding-top: 1rem; flex-grow: 1; display: flex; flex-direction: column; }
 #private-note-display { margin-bottom: 0.5rem; flex-grow: 1; overflow-y: auto; max-height: 100px; -ms-overflow-style: none; scrollbar-width: none; }
 #private-note-display::-webkit-scrollbar { display: none; }
@@ -227,9 +191,6 @@ header {
 #cancel-note-button { background-color: #555; color: var(--text-color); }
 #cancel-note-button:hover { background-color: #777; }
 .hidden { display: none !important; }
-
-
-/* Tabla de Transacciones */
 .transactions-table-container { margin-top: 2rem; overflow-x: auto; }
 #transactions-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 #transactions-table th, #transactions-table td { padding: 0.8rem 0.6rem; text-align: left; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
@@ -246,103 +207,69 @@ header {
 .items-per-page-selector label { margin-right: 0.5rem; color: var(--soft-text-color); font-size: 0.9rem; }
 #items-per-page { padding: 0.4rem 0.6rem; background-color: var(--medium-dark-background); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-color); margin-right: 0.5rem; }
 .items-per-page-selector span { font-size: 0.9rem; color: var(--soft-text-color); }
+.copied-feedback { position: absolute; background-color: var(--corp-green); color: var(--dark-background); padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 5px; white-space: nowrap; opacity: 0; transition: opacity 0.5s ease-out, transform 0.5s ease-out; pointer-events: none; z-index: 10; top: 50%; left: 105%; transform: translateY(-50%) translateX(-10px); }
+.copied-feedback.show { opacity: 1; transform: translateY(-50%) translateX(0); }
 
 /* --- Fin Estilos Wallet Tracker --- */
 
-/* --- ESTILOS ANALIZADOR DE SENTIMIENTOS --- */
-.sentiment-layout { display: flex; gap: 2rem; align-items: flex-start; }
-.sentiment-main-content { flex: 3; display: flex; flex-direction: column; gap: 1.5rem; }
-.sentiment-search-area { display: flex; gap: 0.5rem; background-color: var(--medium-dark-background); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); }
-#sentiment-token-input { flex-grow: 1; padding: 0.7rem 1rem; background-color: var(--dark-background); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-color); font-size: 0.9rem; outline: none; }
-#sentiment-token-input::placeholder { color: var(--soft-text-color);}
-#sentiment-token-input:focus { border-color: var(--corp-purple); box-shadow: 0 0 5px rgba(179, 106, 255, 0.5); }
-#sentiment-search-button { padding: 0.7rem 1rem; background-color: var(--corp-purple); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
-#sentiment-search-button:hover { background-color: #a34ee1; }
-
-.sentiment-info-boxes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
-.sentiment-info-box { background-color: var(--medium-dark-background); border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem; display: flex; flex-direction: column; min-height: 180px; }
-.sentiment-info-box h4 { color: var(--corp-blue); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--line-color); font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
-.sentiment-info-box h4 i { font-size: 1.1em; }
-.sentiment-info-box .info-item { margin-bottom: 0.7rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
-.sentiment-info-box .info-label { color: var(--soft-text-color); }
-.sentiment-info-box .info-value { font-weight: 600; }
-.sentiment-info-box .token-ca { font-family: 'Courier New', Courier, monospace; color: var(--corp-green); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: bottom;}
-
-/* Sentiment Gauge Styles */
-.sentiment-gauge-box { align-items: center; }
-.sentiment-percentage { font-size: 2rem; font-weight: 700; color: var(--text-color); margin-bottom: 0.5rem; }
-.sentiment-percentage span:last-child { font-size: 1rem; font-weight: 400; color: var(--soft-text-color); margin-left: 5px; text-transform: capitalize; }
-.sentiment-gauge-placeholder { width: 150px; height: 75px; border-radius: 150px 150px 0 0; background: conic-gradient( from -90deg, var(--sentiment-red) 0% 33.3%, var(--sentiment-orange) 33.3% 66.6%, var(--sentiment-green) 66.6% 100% ); position: relative; overflow: hidden; margin-top: 1rem; border: 1px solid var(--border-color); }
-.gauge-bg { position: absolute; width: 120px; height: 60px; background: var(--medium-dark-background); border-radius: 120px 120px 0 0; bottom: 0; left: 15px; }
-.gauge-arrow { width: 2px; height: 70px; background-color: var(--text-color); position: absolute; bottom: 0; left: 50%; transform-origin: bottom center; transform: translateX(-50%) rotate(var(--rotation, 90deg)); /* Start at neutral */ transition: transform 0.5s ease-out; border-radius: 2px 2px 0 0; z-index: 5; }
-.gauge-label { position: absolute; bottom: 5px; font-size: 0.7rem; color: rgba(255, 255, 255, 0.7); font-weight: 600; z-index: 6; }
-.gauge-label.extreme-fear { left: 10px; } .gauge-label.moderate { left: 50%; transform: translateX(-50%); } .gauge-label.euphoria { right: 10px; }
-
-/* Dexscreener Embed Styles */
-.dexscreener-embed-container { margin-top: 1rem; background-color: var(--medium-dark-background); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; }
-.dexscreener-embed-container h4 { color: var(--corp-green); margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
-.dexscreener-placeholder { min-height: 450px; background-color: var(--dark-background); border-radius: 4px; display: flex; justify-content: center; align-items: center; color: var(--soft-text-color); font-style: italic; }
-.dexscreener-placeholder iframe { width: 100%; height: 450px; border: none; border-radius: 4px; }
-
-/* Twitter Sidebar Styles */
-.twitter-feed-sidebar { flex: 1; min-width: 280px; max-width: 350px; background-color: var(--medium-dark-background); padding: 1.5rem; border-left: 1px solid var(--line-color); border-radius: 6px; position: sticky; top: var(--header-height); height: calc(100vh - var(--header-height) - 4rem); /* Altura - header - padding main */ overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none; }
-.twitter-feed-sidebar::-webkit-scrollbar { display: none; }
-.twitter-feed-sidebar h4 { color: var(--corp-blue); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--line-color); font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
-.twitter-feed-sidebar h4 .fa-twitter { color: #1DA1F2; }
-.tweet-item { border-bottom: 1px solid var(--line-color); padding: 1rem 0; font-size: 0.9rem; }
-.tweet-item:last-child { border-bottom: none; }
-.tweet-item p { margin-bottom: 0.3rem; line-height: 1.4; }
-.tweet-item strong { color: var(--text-color); }
-.tweet-item small { color: var(--soft-text-color); font-size: 0.8rem; }
-.tweet-item.positive p::before { content: "✅ "; color: var(--sentiment-green); }
-.tweet-item.negative p::before { content: "❌ "; color: var(--sentiment-red); }
-.tweet-item.neutral p::before { content: "➖ "; color: #aaa; }
-
-/* --- FIN ESTILOS ANALIZADOR DE SENTIMIENTOS --- */
-
-
 /* --- Estilos para Modales --- */
-.modal { /* ... (sin cambios) ... */ }
-.modal-content { /* ... (sin cambios) ... */ }
-.close-button { /* ... (sin cambios) ... */ }
-#search-modal #search-input { /* ... (sin cambios) ... */ }
-#search-results { /* ... (sin cambios) ... */ }
-#search-results a { /* ... (sin cambios) ... */ }
-#search-results p { /* ... (sin cambios) ... */ }
+.modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); animation: fadeInModal 0.3s ease-out; }
+@keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+.modal.show { display: flex; justify-content: center; align-items: center; }
+.modal-content { background-color: var(--medium-dark-background); margin: 10% auto; padding: 25px 30px; border: 1px solid var(--line-color); border-radius: 8px; width: 80%; max-width: 500px; position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: slideInModal 0.4s ease-out; }
+@keyframes slideInModal { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-content h2 { color: var(--corp-blue); margin-top: 0; margin-bottom: 1.5rem; font-size: 1.5rem; }
+.modal-content p { color: var(--soft-text-color); font-size: 0.95rem; }
+.close-button { color: var(--soft-text-color); position: absolute; top: 15px; right: 20px; font-size: 1.8rem; font-weight: bold; cursor: pointer; transition: color 0.2s ease, transform 0.2s ease; }
+.close-button:hover, .close-button:focus { color: #ff6b6b; text-decoration: none; transform: scale(1.1); }
+#search-modal #search-input { width: 100%; padding: 12px; margin-bottom: 20px; background-color: var(--dark-background); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-color); font-size: 1rem; }
+#search-modal #search-input:focus { outline: none; border-color: var(--corp-blue); box-shadow: 0 0 5px rgba(0, 176, 255, 0.5); }
+#search-results { max-height: 300px; overflow-y: auto; margin-top: 10px; }
+#search-results a { display: block; padding: 10px 15px; margin-bottom: 8px; background-color: var(--soft-highlight); color: var(--text-color); text-decoration: none; border-radius: 4px; transition: background-color 0.2s ease; font-size: 0.9rem; }
+#search-results a:hover { background-color: var(--corp-blue); color: var(--dark-background); }
+#search-results p { color: var(--soft-text-color); text-align: center; margin-top: 20px; }
+
 
 /* --- Footer --- */
-footer { /* ... (sin cambios) ... */ }
-.footer-content { /* ... (sin cambios) ... */ }
-.social-media h3 { /* ... (sin cambios) ... */ }
-.social-media ul { /* ... (sin cambios) ... */ }
-.social-media a { /* ... (sin cambios) ... */ }
+footer {
+    background-color: var(--dark-background);
+    color: var(--soft-text-color);
+    padding: 1rem 2rem;
+    text-align: center;
+    border-top: 1px solid var(--line-color);
+    margin-top: auto; /* Empuja al fondo */
+    /* ****** CAMBIO: Añadido margin-left para alinear con main en desktop ****** */
+    margin-left: var(--sidebar-width-expanded);
+}
+.footer-content { display: flex; justify-content: center; align-items: center; margin-bottom: 0.5rem; }
+.social-media h3 { color: var(--text-color); margin-bottom: 0.8rem; font-size: 1rem; font-weight: 600; text-shadow: none; }
+.social-media ul { list-style: none; display: flex; justify-content: center; gap: 20px; }
+.social-media a { color: var(--soft-text-color); font-size: 1.5rem; transition: color 0.3s ease, transform 0.3s ease; }
+.social-media a:hover { color: var(--corp-blue); transform: scale(1.1); }
 .fa-x-twitter:hover { color: #1DA1F2; } .fa-youtube:hover { color: #FF0000; } .fa-instagram:hover { color: #E4405F; } .fa-tiktok:hover { color: #EE1D52; } .fa-telegram:hover { color: #2AABEE; }
-.footer-bottom { /* ... (sin cambios) ... */ }
+.footer-bottom { font-size: 0.8rem; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid var(--line-color); }
+
 
 /* --- Responsive Design --- */
-@media (max-width: 1024px) { /* ... (Ajustes generales, ocultar ticker y sidebar twitter) ... */
+@media (max-width: 1024px) {
      .price-ticker { display: none; }
      .sidebar { width: 200px; }
      .main-content { margin-left: 200px; padding: 1.5rem; }
-     footer { margin-left: 200px; padding: 0.8rem 1.5rem; }
-     .sentiment-layout { flex-direction: column; }
-     .twitter-feed-sidebar { display: none; }
-     .sentiment-main-content { width: 100%; flex: none; }
+     footer { margin-left: 200px; padding: 0.8rem 1.5rem; } /* Ajustar margen footer */
      .info-box { min-width: calc(50% - 0.5rem); }
 }
 
-@media (max-width: 768px) { /* ... (Ajustes generales móvil, quitar margen main, sidebar horizontal) ... */
+@media (max-width: 768px) {
     .container { flex-direction: column; margin-top: 0; }
     header { padding: 0.6rem 1rem; min-height: 60px; position: static; z-index: auto; }
     .logo { font-size: 1.5rem; padding-right: 35px; }
     .beta-tag { font-size: 0.5rem; padding: 1px 3px; top: -2px; right: -5px; }
     .header-icons { gap: 15px; } .header-icons .icon { font-size: 1.2rem; }
-    .sidebar { width: 100% !important; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--line-color); display: flex; overflow-x: auto; padding: 0.5rem 0; top: auto; z-index: auto; transition: none !important; cursor: default; }
-    .sidebar nav ul { display: flex; flex-direction: row; width: max-content; }
-    .sidebar .menu-item a { padding: 0.8rem 1rem !important; justify-content: flex-start !important; }
-    .sidebar .menu-item a i { margin-right: 5px !important; font-size: 1.1rem !important; }
-    .sidebar .menu-item a .menu-text { opacity: 1 !important; width: auto !important; overflow: visible !important; transition-delay: 0s !important; }
-    .main-content { margin-left: 0 !important; padding: 1rem; }
+    .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--line-color); display: flex; overflow-x: auto; padding: 0.5rem 0; top: auto; z-index: auto; }
+    .sidebar nav ul { flex-direction: row; width: max-content; }
+    .sidebar .menu-item a { padding: 0.8rem 1rem; }
+    .sidebar .menu-item a i { margin-right: 5px; font-size: 1.1rem; }
+    .main-content { margin-left: 0 !important; padding: 1rem; } /* Forzar sin margen */
     .main-content h1, .main-content h2 { font-size: 1.5rem; margin-bottom: 1rem;}
     .info-boxes-container { flex-direction: column; gap: 1rem; }
     .info-box { min-width: 100%; }
@@ -353,14 +280,9 @@ footer { /* ... (sin cambios) ... */ }
     .footer-content { flex-direction: column; gap: 15px;}
     .social-media ul { gap: 20px; } .social-media a { font-size: 1.6rem; }
     .footer-bottom { font-size: 0.8rem; }
-    /* Layout Sentimientos en móvil */
-    .sentiment-layout { flex-direction: column; }
-    .twitter-feed-sidebar { display: none; }
-    .sentiment-main-content { width: 100%; flex: none; }
-     .sentiment-info-boxes { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 480px) { /* ... (Ajustes finos) ... */
+@media (max-width: 480px) {
      .logo { display: none; } header { justify-content: flex-end; }
      .header-icons { gap: 10px; } .header-icons .icon { font-size: 1.1rem; }
      .sidebar .menu-item a { padding: 0.6rem 0.8rem; }
