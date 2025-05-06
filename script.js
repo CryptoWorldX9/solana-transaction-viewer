@@ -1,4 +1,4 @@
-// script.js - Versión Revertida: Sin colapso automático, con API directa y layout corregido
+// script.js - Versión Estable sin Colapso Automático
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -12,11 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const LAMPORTS_PER_SOL = solanaWeb3.LAMPORTS_PER_SOL;
 
     // --- Selección de Elementos DOM Generales ---
-    const body = document.body; // Necesario si usamos clases en body
+    const body = document.body;
     const sidebar = document.getElementById('sidebar');
-    // const contentWrapper = document.getElementById('content-wrapper'); // Eliminado wrapper
-    const mainContent = document.getElementById('main-content'); // Seleccionar main directamente
-    // const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn'); // Eliminado
+    const mainContent = document.getElementById('main-content');
     const menuLinks = document.querySelectorAll('.sidebar .menu-item a');
     const sections = document.querySelectorAll('.main-content > section');
     const searchIcon = document.getElementById('search-icon');
@@ -58,15 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const transactionsTableBody = document.getElementById('transaction-list-body');
     const itemsPerPageSelector = document.getElementById('items-per-page');
 
-    // --- Lógica Sidebar Colapsable (ELIMINADA) ---
-    // const collapseSidebar = () => { ... };
-    // const expandSidebar = () => { ... };
-    // const toggleSidebar = () => { ... };
-    // menuLinks.forEach(link => { link.addEventListener('click', (e) => { ... collapseSidebar(); ... }); });
-    // sidebar?.addEventListener('click', () => { ... expandSidebar(); ... });
-    // sidebarToggleBtn?.addEventListener('click', (e) => { ... });
-
-    // --- Lógica Navegación Menú (Simplificada) ---
+    // --- Lógica Navegación Menú ---
     menuLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -84,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Lógica Modales (Sin cambios) ---
+    // --- Lógica Modales ---
     const openModal = (modal) => { if (modal) modal.style.display = 'block'; };
     const closeModal = (modal) => { if (modal) modal.style.display = 'none'; };
     searchIcon?.addEventListener('click', () => openModal(searchModal));
@@ -101,8 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const showElement = (el) => { if(el) el.classList.remove('hidden'); };
     const hideElement = (el) => { if(el) el.classList.add('hidden'); };
     const showCopyFeedback = (buttonElement) => {
-        const existingFeedback = buttonElement.parentNode.querySelector('.copied-feedback');
-        if(existingFeedback) existingFeedback.remove();
+        const existingFeedback = buttonElement.parentNode.querySelector('.copied-feedback'); if(existingFeedback) existingFeedback.remove();
         const feedback = document.createElement('span'); feedback.textContent = 'Copiado!'; feedback.className = 'copied-feedback';
         buttonElement.parentNode.insertBefore(feedback, buttonElement.nextSibling); void feedback.offsetWidth;
         setTimeout(() => { feedback.classList.add('show'); }, 10);
@@ -119,23 +108,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // ======================================================
     const resetSentimentAnalyzerVisuals = () => {
         console.log("Reseteando vista Analizador de Sentimientos (Placeholder)");
-        // Aquí iría la lógica para limpiar los campos de esta sección si fuera necesario
         const sentimentInput = document.getElementById('sentiment-token-input');
         if (sentimentInput) sentimentInput.value = '';
         // ... limpiar otros elementos ...
     };
-
-    // Listener para el botón de búsqueda de sentimiento (Placeholder)
-     const sentimentSearchButton = document.getElementById('sentiment-search-button');
+    const sentimentSearchButton = document.getElementById('sentiment-search-button');
      sentimentSearchButton?.addEventListener('click', () => {
           const tokenAddress = document.getElementById('sentiment-token-input')?.value.trim();
-          if(tokenAddress){
-               alert(`Buscar sentimiento para ${tokenAddress} (funcionalidad pendiente)`);
-          } else {
-               alert("Introduce una dirección de token.");
-          }
+          if(tokenAddress){ alert(`Buscar sentimiento para ${tokenAddress} (funcionalidad pendiente)`); }
+          else { alert("Introduce una dirección de token."); }
      });
-
 
     // ======================================================
     // ========= LÓGICA WALLET TRACKER (EXISTENTE) ==========
@@ -200,14 +182,13 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error Gral Wallet:", error); trackerError.textContent=`Error: ${error.message}.`; showElement(trackerError); hideElement(trackerLoading); resetWalletTrackerVisuals(); displayWalletAddress.textContent='Error'; }
     };
 
-
     // --- Inicialización General ---
      const homeSection = document.getElementById('home');
      const homeMenuItemLink = document.querySelector('.sidebar .menu-item a[data-section="home"]');
      sections.forEach(s => s.classList.remove('active'));
      menuLinks.forEach(l => l.classList.remove('active-menu'));
-     if (homeSection) homeSection.classList.add('active');
-     if (homeMenuItemLink) homeMenuItemLink.classList.add('active-menu');
+     if (homeSection) homeSection.classList.add('active'); // Activar 'home' por defecto
+     if (homeMenuItemLink) homeMenuItemLink.classList.add('active-menu'); // Marcar 'home' activo en menú
      applyLanguage(document.documentElement.lang || 'es');
      // body.classList.remove('sidebar-collapsed'); // No necesario, el estado por defecto es expandido
 
