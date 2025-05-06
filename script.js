@@ -1,4 +1,4 @@
-// script.js - Versión Estable sin Colapso Automático
+// script.js - Versión Estable sin Colapso + Placeholder Sentiment Analyzer
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -56,6 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const transactionsTableBody = document.getElementById('transaction-list-body');
     const itemsPerPageSelector = document.getElementById('items-per-page');
 
+    // --- Selección de Elementos DOM para Analizador de Sentimientos ---
+    const sentimentTokenInput = document.getElementById('sentiment-token-input');
+    const sentimentSearchButton = document.getElementById('sentiment-search-button');
+    // ... (seleccionar otros IDs del sentiment analyzer si se añaden)
+
     // --- Lógica Navegación Menú ---
     menuLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -69,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 link.classList.add('active-menu');
                 // Resetear vistas si es necesario
                 if(targetSectionId === 'wallet-tracker') resetWalletTrackerVisuals();
-                // if(targetSectionId === 'sentiment-analyzer') resetSentimentAnalyzerVisuals(); // Descomentar cuando exista
+                if(targetSectionId === 'sentiment-analyzer') resetSentimentAnalyzerVisuals(); // Añadido reset
             }
         });
     });
@@ -104,36 +109,64 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ======================================================
-    // ========= LÓGICA ANALIZADOR DE SENTIMIENTOS (Placeholder) ==========
+    // ========= LÓGICA ANALIZADOR DE SENTIMIENTOS ==========
     // ======================================================
     const resetSentimentAnalyzerVisuals = () => {
-        console.log("Reseteando vista Analizador de Sentimientos (Placeholder)");
-        const sentimentInput = document.getElementById('sentiment-token-input');
-        if (sentimentInput) sentimentInput.value = '';
-        // ... limpiar otros elementos ...
+        // Seleccionar elementos dentro de esta función para asegurar que existen
+        const tokenCa = document.getElementById('sentiment-token-ca');
+        const tokenValue = document.getElementById('sentiment-token-value');
+        const priceCurrent = document.getElementById('sentiment-price-current');
+        const vol6h = document.getElementById('sentiment-vol-6h');
+        const vol12h = document.getElementById('sentiment-vol-12h');
+        const vol24h = document.getElementById('sentiment-vol-24h');
+        const percentageValue = document.getElementById('sentiment-percentage-value');
+        const level = document.getElementById('sentiment-level');
+        const gaugeArrow = document.getElementById('sentiment-gauge-arrow');
+        const chart = document.getElementById('dexscreener-chart');
+        const feed = document.getElementById('twitter-feed');
+
+        if (sentimentTokenInput) sentimentTokenInput.value = '';
+        if (tokenCa) { tokenCa.textContent = 'Introduce CA...'; tokenCa.title = 'Dirección Completa del Token'; }
+        if (tokenValue) tokenValue.textContent = '- USD';
+        if (priceCurrent) priceCurrent.textContent = '-';
+        if (vol6h) vol6h.textContent = '-';
+        if (vol12h) vol12h.textContent = '-';
+        if (vol24h) vol24h.textContent = '-';
+        if (percentageValue) percentageValue.textContent = '-';
+        if (level) level.textContent = 'Neutral';
+        if (gaugeArrow) gaugeArrow.style.setProperty('--rotation', '90deg'); // Neutral
+        if (chart) chart.innerHTML = '<p>Introduce una dirección de token para ver el gráfico.</p>';
+        if (feed) feed.innerHTML = '<p>Introduce una dirección de token para ver comentarios.</p>';
     };
-    const sentimentSearchButton = document.getElementById('sentiment-search-button');
-     sentimentSearchButton?.addEventListener('click', () => {
-          const tokenAddress = document.getElementById('sentiment-token-input')?.value.trim();
-          if(tokenAddress){ alert(`Buscar sentimiento para ${tokenAddress} (funcionalidad pendiente)`); }
-          else { alert("Introduce una dirección de token."); }
-     });
+
+    const searchTokenSentiment = async () => {
+        const tokenAddress = sentimentTokenInput?.value.trim();
+        if (!tokenAddress) {
+            alert("Introduce la dirección del contrato (CA) del token.");
+            return;
+        }
+        console.log(`Buscando sentimiento para: ${tokenAddress}`);
+        // TODO: Aquí iría la lógica real para buscar datos de sentimiento
+        alert(`Búsqueda de sentimiento para ${tokenAddress} iniciada (funcionalidad pendiente).`);
+        // Por ahora, puedes llamar a reset para limpiar o dejar los placeholders
+        // resetSentimentAnalyzerVisuals(); // Opcional: Limpiar antes de mostrar (si la búsqueda real tarda)
+    };
+
+    // Listener para el botón de búsqueda de sentimiento
+    sentimentSearchButton?.addEventListener('click', searchTokenSentiment);
+    sentimentTokenInput?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); sentimentSearchButton.click(); }
+    });
 
     // ======================================================
     // ========= LÓGICA WALLET TRACKER (EXISTENTE) ==========
     // ======================================================
-    const resetWalletTrackerVisuals = () => {
-        if (!walletTrackerSection) return;
-        displayWalletAddress.textContent = 'Introduce una dirección...'; displayWalletAddress.title = 'Dirección Completa';
-        displayWalletAddress.removeAttribute('data-full-address'); solBalanceValue.textContent = '-';
-        solBalanceUsd.textContent = '$ -.--'; tokenCount.textContent = '- Tokens'; ownerAddress.textContent = '-';
-        ownerAddress.title = 'Dirección Dueño'; ownerAddress.removeAttribute('data-full-address');
-        onCurveStatus.textContent = '-'; stakeAmount.textContent = '-'; tagsDisplay.innerHTML = '<small>(No implementado)</small>';
-        tokenListDetailed.innerHTML = '<li>Introduce una dirección y rastrea.</li>';
-        transactionsTableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Introduce una dirección y haz clic en Rastrear.</td></tr>';
-        privateNoteDisplay.innerHTML = ''; privateNoteInput.value = '';
-        addNoteForm?.classList.add('hidden'); addNoteLink?.classList.remove('hidden');
-        tokenDropdownDetails?.removeAttribute('open');
+    const resetWalletTrackerVisuals = () => { /* ... (igual que antes) ... */
+        if (!walletTrackerSection) return; displayWalletAddress.textContent = 'Introduce una dirección...'; displayWalletAddress.title = 'Dirección Completa';
+        displayWalletAddress.removeAttribute('data-full-address'); solBalanceValue.textContent = '-'; solBalanceUsd.textContent = '$ -.--'; tokenCount.textContent = '- Tokens'; ownerAddress.textContent = '-';
+        ownerAddress.title = 'Dirección Dueño'; ownerAddress.removeAttribute('data-full-address'); onCurveStatus.textContent = '-'; stakeAmount.textContent = '-'; tagsDisplay.innerHTML = '<small>(No implementado)</small>';
+        tokenListDetailed.innerHTML = '<li>Introduce una dirección y rastrea.</li>'; transactionsTableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Introduce una dirección y haz clic en Rastrear.</td></tr>';
+        privateNoteDisplay.innerHTML = ''; privateNoteInput.value = ''; addNoteForm?.classList.add('hidden'); addNoteLink?.classList.remove('hidden'); tokenDropdownDetails?.removeAttribute('open');
         hideElement(trackerLoading); hideElement(trackerError);
     };
     trackWalletButton?.addEventListener('click', () => { const address = trackerWalletInput?.value.trim(); if (address) trackWallet(address); else { alert("Dir. Solana?"); trackerWalletInput?.focus();} });
@@ -182,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error Gral Wallet:", error); trackerError.textContent=`Error: ${error.message}.`; showElement(trackerError); hideElement(trackerLoading); resetWalletTrackerVisuals(); displayWalletAddress.textContent='Error'; }
     };
 
+
     // --- Inicialización General ---
      const homeSection = document.getElementById('home');
      const homeMenuItemLink = document.querySelector('.sidebar .menu-item a[data-section="home"]');
@@ -190,6 +224,5 @@ document.addEventListener('DOMContentLoaded', () => {
      if (homeSection) homeSection.classList.add('active'); // Activar 'home' por defecto
      if (homeMenuItemLink) homeMenuItemLink.classList.add('active-menu'); // Marcar 'home' activo en menú
      applyLanguage(document.documentElement.lang || 'es');
-     // body.classList.remove('sidebar-collapsed'); // No necesario, el estado por defecto es expandido
 
 }); // Fin de DOMContentLoaded
