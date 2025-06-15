@@ -263,7 +263,7 @@
             <span class="countdown-label">Segundos</span>
           </div>
         </div>
-        <div class="countdown-date">31 de octubre de 2025 – 22:00 hrs UTC</div>
+        <div class="countdown-date">28 de noviembre de 2025 – 22:00 hrs UTC</div>
       </div>
     </section>
 
@@ -291,7 +291,7 @@
   </div>
 
   <script>
-    const targetDate = new Date('2025-06-16T22:00:00Z');
+    const targetDate = new Date('2025-11-28T22:00:00Z'); // ← fecha objetivo actualizada
     const countdown = setInterval(function() {
       const now = new Date().getTime();
       const distance = targetDate - now;
@@ -301,8 +301,8 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
-      document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+      document.getElementById("days").innerHTML   = days.toString().padStart(2, '0');
+      document.getElementById("hours").innerHTML  = hours.toString().padStart(2, '0');
       document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
       document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
 
